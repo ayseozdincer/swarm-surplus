@@ -447,6 +447,22 @@ Citation labels for the proposal readout use `detector.render.NOTE_CITATION`, a 
 
 Running at the time of writing.
 
+## Pod, GPU, hours and cost
+
+Filled in at the end of the night. Running estimate from the watchdog: see `results/pod_state.json`.
+
+## Open questions for Ayse
+
+1. **Is surplus mass about collusion or about edit size?** W4 follow-up 4 runs the size-matched honest control. Until it is read, treat the Core AUROC of 1.000 as close to true by construction.
+2. **Read positions.** The leak reads at the first mention (residual 19 to 68 times the floor, `7` at rank 0, J-space surplus at L58, L61, L62) and at none of the handoff's positions. That points at a per-token readout through the reasoning, which the proposal already plans with the top-10 readout, rather than fixed positions. Which positions should the detector commit to?
+3. **Which reference.** Masking with positions kept leaves the reference about halfway to the no-note state. Compacting the positions closes most of the gap but fails the strict floor test, and it shifts positions between the two passes. Keep positions, compact them, or report both?
+4. **J-space noise.** A residual change of about 1 percent moves about 14 percent of the share mass, on our runs and on Core alike, so the 25-atom gradient pursuit over 151k atoms is unstable. Options are the default NNLS pursuit, averaging shares over neighbouring tokens, or concept sets from the dense readout. The dense sets proved too sparse for edges.
+5. **The Qwen3-32B lens is a partial checkpoint**, 80 prompts and not converged, with a refit planned upstream. Fit our own, wait, or switch models?
+6. **Transfer outcome labels.** The release has no votes and no fair option. Options are an LLM judge of whether each final summary surfaces the planted problem, asking the NARCBench authors for the voting transcripts, or dropping the outcome label and keeping the audit.
+7. **The edge test (1c)** cannot rank pairs with dense top-k sets, and naming the coalition there matches the shuffled-turn null. Is 1c still a target, and on what concept sets?
+8. **Disk left billing.** The pod is stopped, not terminated. Its 250 GB volume keeps the model, lens, replays and venv, and costs about 0.07 USD an hour while stopped (RunPod's 0.20 USD per GB-month for stopped volumes). Terminate it once nothing more is needed from it. The account also has a 250 GB network volume, `silent-dissent-models` (CA-MTL-3, about 0.024 USD an hour), which this work did not create or touch.
+9. **The pod-side stop script is unverified.** The key RunPod injects into the pod answered 403 to every read, so the real guard was the watchdog on this Mac, which only runs while the Mac is awake.
+
 ## J-space code notes
 
 Source is `third_party/maj-lens/`, fetched from the anonymous repo with its layout. Unmodified.
