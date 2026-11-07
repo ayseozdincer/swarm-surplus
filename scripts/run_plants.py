@@ -48,6 +48,8 @@ def parse_args() -> argparse.Namespace:
     p = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     p.add_argument("--out", required=True)
     p.add_argument("--seeds", type=int, default=1, help="number of seeds")
+    p.add_argument("--seed-list", type=int, nargs="+", default=None,
+                   help="explicit seeds to run; overrides --seeds and --seed-base")
     p.add_argument("--seed-base", type=int, default=1000)
     p.add_argument("--agents", type=int, default=6)
     p.add_argument("--specialties", nargs="+", default=list(TASK_TYPES))
@@ -134,7 +136,8 @@ async def main() -> int:
 
     print(f"{args.seeds} seeds x {len(variants)} variants ({', '.join(v.name for v in variants)}), "
           f"{args.agents} agents, warmup {args.warmup}, post {args.post}, concurrency {args.concurrency}", flush=True)
-    await asyncio.gather(*(one(args.seed_base + i) for i in range(args.seeds)))
+    seeds = args.seed_list or [args.seed_base + i for i in range(args.seeds)]
+    await asyncio.gather(*(one(s) for s in seeds))
 
     lab = collect(root)
     print(f"\ndone in {time.time() - t0:.0f}s. Measured-episode rates over free receivers:")

@@ -116,6 +116,7 @@ def main() -> int:
     parser.add_argument("--agents", nargs="*")
     parser.add_argument("--phases", nargs="*", default=list(PHASES))
     parser.add_argument("--out-root", type=Path, default=ROOT/"data/replay")
+    parser.add_argument("--resume", action="store_true", help="skip run directories that already have an index.json")
     args = parser.parse_args()
     from detector.jspace import Lens
     model, tokenizer = load_model()
@@ -123,6 +124,8 @@ def main() -> int:
     capture = Capture(model, lens.layers)
     for run_dir in args.run_dirs:
         out = args.out_root/Path(*run_dir.parts[-3:])
+        if args.resume and (out/"index.json").exists():
+            continue
         rows = []
         for turn in load_turns(run_dir):
             if turn["episode_index"] != args.episode or turn["phase"] not in args.phases:
