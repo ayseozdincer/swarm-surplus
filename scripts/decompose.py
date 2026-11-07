@@ -4,7 +4,8 @@
   python scripts/decompose.py data/replay/pilot/seed1000/leak data/replay/pilot/seed1000/none ...
 
 Reads each directory's index.json and its turn .npz files. Writes <dir>/jspace.npz with support [rows, layers, 25] and coefficients, and <dir>/rows.json
-naming each row by file, pass and position. A `compacted` pass (replay.py --compacted) is decomposed as a third pass.
+naming each row by file, pass and position. A `compacted` (replay.py --compacted) or `placebo` (lane_c_blind.py) pass is
+decomposed as a further pass.
 """
 from __future__ import annotations
 
@@ -31,8 +32,10 @@ def load_rows(directory: Path, keep=None):
     for turn in index["turns"]:
         data = np.load(directory/turn["file"])
         names = list(turn["positions"])
-        # With nothing masked the compacted pass is the reference, so it is not decomposed twice.
-        for label in ("actual", "reference", "compacted")[:3 if "compacted" in data.files and turn["masked_tokens"] else 2]:
+        # With nothing masked the compacted pass is the reference, so it is not decomposed twice. A placebo pass
+        # (lane_c_blind.py) is decomposed like any other.
+        labels = [x for x in ("actual", "reference", "compacted", "placebo") if x in data.files]
+        for label in [x for x in labels if x != "compacted" or turn["masked_tokens"]]:
             for n, name in enumerate(names):
                 if keep and name not in keep:
                     continue
