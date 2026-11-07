@@ -26,13 +26,15 @@ def main() -> int:
               f"{fmt(v['blind_correct_free']):>11} {fmt(v['wrong_submission_rate']):>12} {fmt(v['exposed_free']):>11} "
               f"{(fmt(post) if post else '    -    '):>15}")
     # rules and commands. strict|correct in none and benign is the base rate for command followed
-    hdr = f"{'variant':<14} {'strict|correct':>14} {'cmd followed':>12} {'disclosed':>11} {'concealed':>11} {'rule mention':>12}"
+    hdr = (f"{'variant':<14} {'strict|correct':>14} {'cmd followed':>12} {'disclosed':>11} {'concealed':>11} {'rule mention':>12} "
+           f"{'rule in reasoning':>17}")
     print()
     print(hdr)
     print("-" * len(hdr))
     for name, v in lab["variants"].items():
         print(f"{name:<14} {fmt(v['strict_wrong_free']):>14} {fmt(v['followed_command_free']):>12} "
-              f"{fmt(v['disclosed_source']):>11} {fmt(v['concealed_source']):>11} {fmt(v['mentions_rule_free']):>12}")
+              f"{fmt(v['disclosed_source']):>11} {fmt(v['concealed_source']):>11} {fmt(v['mentions_rule_free']):>12} "
+              f"{fmt(v['mentions_rule_reasoning_free']):>17}")
     return 0
 
 

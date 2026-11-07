@@ -31,7 +31,7 @@ def load_rows(directory: Path):
     for turn in index["turns"]:
         data = np.load(directory/turn["file"])
         names = list(turn["positions"])
-        for label in ("actual", "reference"):
+        for label in (p for p in ("actual", "reference", "compacted") if p in data.files):
             for n, name in enumerate(names):
                 rows.append({"file": turn["file"], "pass": label, "position": name})
                 residuals.append(data[label][n])
