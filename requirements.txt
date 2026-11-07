@@ -1,0 +1,4 @@
+openai>=1.40,<2
+# optional
+# pytest
+# transformers>=4.51  tokenizers   (only for scripts/check_render.py)
