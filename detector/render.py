@@ -29,6 +29,16 @@ def find_turn(turns: list[dict], agent: str, episode: int, phase: str) -> dict:
     return hits[0]
 
 
+def compacted_positions(mask: list[int]) -> list[int]:
+    """Position ids a token would have had if the masked tokens were not there. Masked tokens keep their own id, since
+    nothing attends to them."""
+    out, removed = [], 0
+    for i, keep in enumerate(mask):
+        out.append(i - removed if keep else i)
+        removed += 0 if keep else 1
+    return out
+
+
 def assistant_message(response: dict) -> dict:
     message = {"role": "assistant", "content": response.get("content") or "",
                "reasoning_content": response.get("reasoning") or ""}

@@ -70,12 +70,12 @@ class Capture:
             self.saved[layer] = h[0, self.index].float().cpu()
         return hook
 
-    def run(self, model, ids, positions, mask=None):
+    def run(self, model, ids, positions, mask=None, position_ids=None):
         import torch
         device = model.device
         self.index = torch.as_tensor(positions, device=device)
         input_ids = torch.tensor([ids], device=device)
-        position_ids = torch.arange(len(ids), device=device)[None]
+        position_ids = torch.arange(len(ids), device=device)[None] if position_ids is None else torch.tensor([position_ids], device=device)
         attention_mask = None if mask is None else mask.to(device)
         with torch.no_grad():
             model.model(input_ids=input_ids, position_ids=position_ids, attention_mask=attention_mask, use_cache=False)

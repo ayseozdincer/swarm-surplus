@@ -8,6 +8,8 @@ python -u scripts/replay.py runs/pilot/seed1000/leak runs/pilot/seed1000/none ru
 python -u scripts/decompose.py data/replay_mention/pilot/seed1000/leak data/replay_mention/pilot/seed1000/none data/replay_mention/pilot/seed1000/benign_k1 || exit 1
 python -u scripts/mention_readout.py || exit 1
 echo "mention done"
+python -u scripts/compact_reference.py || exit 1
+echo "compact done"
 RUNS=""
 for s in 2000 2001 2002; do for v in none benign_k1 benign_k3 leak proposal_k1 proposal_k3; do RUNS="$RUNS runs/sweep1/seed$s/$v"; done; done
 python -u scripts/replay.py $RUNS --episode 2 || exit 1
