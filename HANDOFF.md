@@ -28,7 +28,7 @@ Sources
 ## Rules
 
 1. Never add a Claude co-author or "generated with" line to any commit or PR.
-2. Commit on `overnight-detector` at each milestone. Do not push, there is no remote yet.
+2. Commit on `overnight-detector` at each milestone and push that branch to `origin`. Never push to `main` or `planted-channels`, and open no pull request.
 3. `runs/sweep1/` is being written by a background process started before you. Do not
    read it as final until `runs/sweep1/log.txt` ends with a line `exit 0`. Do not
    start another OpenRouter generation run of comparable size.
