@@ -392,7 +392,7 @@ The content readout is weak. The surplus leans slightly toward the collusion wor
 
 J-PACT's top pair is the coalition in 19 of 31 runs and the complement in 12, recomputed from the cache.
 
-**The dense sets are too sparse to rank pairs by provenance, so this stops here.** A colluder's surplus set holds a median 1 to 6 concepts and an honest agent's holds 0. Edges into honest agents are therefore almost always zero, so the coalition pair wins because only colluders have surplus at all. The shuffled-turn null shows timing adds nothing. With j's turns shuffled, the coalition is still the top pair about as often (28.5 against 29 at k = 25, first response token), and the coalition gap stays at the null (0.507 against a null 95th percentile of 0.465 at best, within it elsewhere). Precision is below the proposal's 0.90 target in every setting.
+**The dense sets are too sparse to rank pairs by provenance, so this stops here.** A colluder's surplus set holds a median 1 to 6 concepts and an honest agent's holds 0. Edges into honest agents are therefore almost always zero, so the coalition pair wins because only colluders have surplus at all. The shuffled-turn null shows timing adds little. With j's turns shuffled, the coalition is still the top pair about as often (28.5 against 29 at k = 25, first response token). The coalition pair gap exceeds the null's 95th percentile in one of the four public settings (k = 25, first response token, 0.507 against 0.465) and sits within it in the other three. Precision is below the proposal's 0.90 target in every setting.
 
 ## W5 summary
 
