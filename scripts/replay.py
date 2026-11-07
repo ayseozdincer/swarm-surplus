@@ -23,7 +23,8 @@ so every script that imports MODEL_DIR, LENS_FILE and LENS_LAYERS from here foll
 continues from a copy of that cache, also on the 4D-mask kernel. Those tokens are identical in every pass, so this changes
 no pass's inputs, only skips recomputing them. --compacted adds a third pass, the reference with position ids closed up
 after each masked span (detector.render.compacted_positions), saved as `compacted`; an unmasked turn copies its reference.
---blind-only keeps the agents blind at the replayed episode. Turns whose .npz exists are skipped and index.json is merged,
+--blind-only keeps the agents blind at the replayed episode. A blind agent's turn also reads where its reasoning first
+writes its task's withheld answer (positions planted_pre and planted_0), whether or not it submits it. Turns whose .npz exists are skipped and index.json is merged,
 so separate calls can add phases or agents to one run directory.
 """
 from __future__ import annotations
@@ -130,8 +131,8 @@ class Capture:
         return torch.stack([self.saved[layer] for layer in self.layers], dim=1)
 
 
-def replay_turn(model, tokenizer, capture, turn, lens, out_path, shared_prefix=False, compacted=False):
-    r = render_turn(tokenizer, turn)
+def replay_turn(model, tokenizer, capture, turn, lens, out_path, shared_prefix=False, compacted=False, mentions=None):
+    r = render_turn(tokenizer, turn, mentions)
     names = list(r["positions"])
     positions = [r["positions"][n] for n in names]
     started = time.perf_counter()
@@ -177,6 +178,19 @@ def blind_agents(run_dir: Path, episode: int) -> set[str]:
     return {agent for ep, agent in config["blind_plan"] if ep == episode}
 
 
+def planted_answers(run_dir: Path, episode: int) -> dict[str, str]:
+    """Blind agent -> the withheld answer of its task at `episode`, from the experiment's task manifests. In a leak branch
+    this is the planted value; in the others it is what the agent could only write by computing it."""
+    run = json.loads((Path(run_dir)/"run.json").read_text())
+    out = {}
+    for agent, record in run["results"][episode]["agents"].items():
+        if record["blind"]:
+            manifest = Path(run_dir).parent.parent/"tasks"/f"manifest_{record['task_type']}.json"
+            task = next(t for t in json.loads(manifest.read_text()) if t["task_id"] == record["task_id"])
+            out[agent] = task["answer_key"][0]
+    return out
+
+
 def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     parser.add_argument("run_dirs", nargs="+", type=Path)
@@ -200,6 +214,7 @@ def main() -> int:
         old = json.loads((out/"index.json").read_text())["turns"] if (out/"index.json").exists() else []
         done = {row["file"] for row in old}
         blind = blind_agents(run_dir, args.episode) if args.blind_only else None
+        planted = planted_answers(run_dir, args.episode)
         rows = []
         for turn in load_turns(run_dir):
             if turn["episode_index"] != args.episode or turn["phase"] not in args.phases:
@@ -209,7 +224,8 @@ def main() -> int:
             path = out/f"{turn['agent']}_e{turn['episode_index']}_{turn['phase']}.npz"
             if path.name in done and path.exists():
                 continue
-            rows.append(replay_turn(model, tokenizer, capture, turn, lens, path, args.shared_prefix, args.compacted))
+            mentions = {"planted": planted[turn["agent"]]} if turn["agent"] in planted else None
+            rows.append(replay_turn(model, tokenizer, capture, turn, lens, path, args.shared_prefix, args.compacted, mentions))
             print(run_dir, turn["agent"], turn["phase"], rows[-1]["tokens"], rows[-1]["shared_prefix_tokens"], rows[-1]["seconds"], flush=True)
         if rows or not old:
             out.mkdir(parents=True, exist_ok=True)

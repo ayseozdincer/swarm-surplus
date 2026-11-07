@@ -4,7 +4,7 @@ over the whole sequence, both on the explicit 4D-mask kernel. Relative residual 
 positions, beside the mask effect (actual against reference). Run with SWARM_MODEL set; MODEL_DIR may be a small Qwen3 for a
 logic check while the card is busy.
 
-  python tests/gpu_prefix_check.py RUN_DIR AGENT EPISODE PHASE [MODEL_DIR]
+  python tests/gpu_prefix_check.py RUN_DIR AGENT EPISODE PHASE [MODEL_DIR or ""] [OUT_JSON]
 """
 import json
 import sys
@@ -21,7 +21,7 @@ import replay  # noqa: E402
 
 def main() -> int:
     run_dir, agent, episode, phase = Path(sys.argv[1]), sys.argv[2], int(sys.argv[3]), sys.argv[4]
-    if len(sys.argv) > 5:
+    if len(sys.argv) > 5 and sys.argv[5]:
         replay.MODEL_DIR = Path(sys.argv[5])
     model, tok = replay.load_model()
     layers = list(range(model.config.num_hidden_layers - 1))
