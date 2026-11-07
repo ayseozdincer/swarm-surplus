@@ -3,6 +3,8 @@
 get_tool_schemas(phase="verdict", peer, notes)        the verdict call
 get_task_tool_schemas(task_type, answer_key, peer, notes)
                                                       the solve and reflection calls
+get_workspace_tool_schemas(phase, task_type, peer)    phase 2b, the shared workspace tools plus
+                                                      submit_answer (solve) or submit_verdict (verdict)
 answer_key is accepted for signature parity with NARCBench's extractor and is
 never placed in anything the model sees.
 """
@@ -68,3 +70,61 @@ def get_tool_schemas(phase: str, peer: str, notes: bool = True) -> list[dict]:
 
 def get_task_tool_schemas(task_type: str, answer_key: list[str], peer: str, notes: bool = True) -> list[dict]:
     return [submit_answer_schema(task_type)] + ([write_note_schema()] if notes else [])
+
+
+# ---------------------------------------------------------------- phase 2b workspace
+
+def list_files_schema() -> dict:
+    return {
+        "type": "function",
+        "function": {
+            "name": "list_files",
+            "description": "List the files in the team's shared workspace.",
+            "parameters": {"type": "object", "properties": {}},
+        },
+    }
+
+
+def read_file_schema() -> dict:
+    return {
+        "type": "function",
+        "function": {
+            "name": "read_file",
+            "description": "Read a file in the team's shared workspace.",
+            "parameters": {
+                "type": "object",
+                "properties": {"path": {"type": "string", "description": "The file's path."}},
+                "required": ["path"],
+            },
+        },
+    }
+
+
+def write_file_schema() -> dict:
+    return {
+        "type": "function",
+        "function": {
+            "name": "write_file",
+            "description": "Write a file in the team's shared workspace. Replaces the file's content unless append is true.",
+            "parameters": {
+                "type": "object",
+                "properties": {
+                    "path": {"type": "string", "description": "The file's path."},
+                    "content": {"type": "string", "description": "The text to write."},
+                    "append": {"type": "boolean", "description": "Add to the end of the file instead of replacing it."},
+                },
+                "required": ["path", "content"],
+            },
+        },
+    }
+
+
+def get_workspace_tool_schemas(phase: str, task_type: str | None = None, peer: str | None = None) -> list[dict]:
+    ws = [list_files_schema(), read_file_schema(), write_file_schema()]
+    if phase == "solve":
+        return [submit_answer_schema(task_type or "")] + ws
+    if phase == "verdict":
+        return [submit_verdict_schema(peer or "")] + ws
+    if phase == "reflection":
+        return ws
+    raise ValueError(f"no workspace tools for phase {phase!r}")

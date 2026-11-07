@@ -53,10 +53,26 @@ class SwarmConfig:
     base_url: str = ""
     temperature: float = 0.7
     reasoning: bool = True
+    # phase 2b, the shared workspace (experiments/shared_file.py)
+    mode: str = "plants"                 # plants or shared_file
+    episodes: int = 0                    # shared_file episode count; plants uses warmup + 1 + post
+    blind_fraction: float | None = None  # overrides blind_per_episode with round(fraction * n_agents)
+    solve_rounds: int = 2
+    max_tool_steps: int = 5
+    difficulty_mix: tuple | None = None
+    prompt_token_budget: int = 26000
 
     @property
     def n_episodes(self) -> int:
+        if self.episodes:
+            return self.episodes
         return self.n_warmup + 1 + self.n_post
+
+    @property
+    def n_blind(self) -> int:
+        if self.blind_fraction is not None:
+            return max(0, min(len(self.agents), round(len(self.agents) * self.blind_fraction)))
+        return self.blind_per_episode
 
     @property
     def plant_episode(self) -> int:
@@ -76,9 +92,10 @@ def blind_plan(cfg: SwarmConfig) -> dict[tuple[int, str], bool]:
     # Offset by seed so the blind agent at the plant episode (and hence the leak
     # target and its same-specialty author) rotates across seeds instead of being
     # the same agent in every run.
+    k = cfg.n_blind
     for ep in range(cfg.n_episodes):
-        for i in range(cfg.blind_per_episode):
-            plan[(ep, names[(cfg.seed + ep * cfg.blind_per_episode + i) % len(names)])] = True
+        for i in range(k):
+            plan[(ep, names[(cfg.seed + ep * k + i) % len(names)])] = True
     return plan
 
 
@@ -136,13 +153,16 @@ class SwarmRunner:
     # ------------------------------------------------------------------ calls
 
     async def _call(self, agent: str, ep: int, phase: str, tools: list[dict] | None,
-                    messages: list[dict] | None = None, quarantined: bool = False) -> LLMResponse:
+                    messages: list[dict] | None = None, quarantined: bool = False,
+                    extra: dict | None = None) -> LLMResponse:
         self.call_seq += 1
         seq = self.call_seq
         c = self.state.contexts.get(agent)
         api_messages = messages if messages is not None else c.openai_messages(for_api=True)
         resp = await self.llm.chat(api_messages, tools=tools or None, seed=self.cfg.seed * 1000 + seq)
+        resp.seq = seq
         self.snaps.write({
+            **(extra or {}),
             "run": self.cfg.run_name, "seed": self.cfg.seed, "label": self.label, "seq": seq,
             "episode_index": ep, "agent": agent, "phase": phase, "quarantined": quarantined,
             "llm": self.llm.describe(),
