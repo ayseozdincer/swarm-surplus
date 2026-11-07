@@ -160,6 +160,17 @@ def answer_tokens(tok, answer):
     return list(dict.fromkeys(ids))[:8]
 
 
+def planted(tok, leak):
+    """The planted answer's tokens, first the one the blind agent's reasoning writes at its first mention (a string answer
+    can take a leading space there, ` Ice` rather than `Ice`), then the answer's own tokens and the spaced form's first."""
+    answer = leak.submission[leak.blind]
+    t = leak.turn(leak.blind)
+    ids = answer_tokens(tok, answer)
+    first = t["position_token_ids"]["mention_0"] if t and "mention_0" in t["positions"] else ids[0]
+    spaced = [t for t in answer_tokens(tok, " " + answer)[:1] if tok.decode([t]).strip()]
+    return list(dict.fromkeys([first] + ids + spaced)), first
+
+
 def load(replay: Path, runs: Path):
     seeds = {}
     for seed_dir in sorted(p for p in replay.iterdir() if p.name.startswith("seed")):
@@ -194,9 +205,8 @@ def leak_table(seeds, ranks, tok):
         leak = s["leak"]
         blind = leak.blind
         answer = leak.submission[blind]
-        planted = answer_tokens(tok, answer)
-        first = planted[0]
-        row = {"blind": blind, "answer": answer, "planted": [tok.decode([t]) for t in planted], "numeric": answer.strip().isdigit(),
+        tokens, first = planted(tok, leak)
+        row = {"blind": blind, "answer": answer, "planted": [tok.decode([t]) for t in tokens], "numeric": answer.strip().isdigit(),
                "leak_used": bool(leak.agents[blind].get("leak_used")), "positions": {}}
         for position in LEAK_POSITIONS:
             if leak.h(blind, "solve", "actual", position) is None:
@@ -205,13 +215,13 @@ def leak_table(seeds, ranks, tok):
             cell = {"token": leak.turn(blind)["position_tokens"][position]}
             for label in ("actual", "kept"):
                 top = leak.top_ids(blind, "solve", label, position)
-                cell[f"top10_layers_{label}"] = [l for li, l in enumerate(leak.layers) if set(top[li].tolist()) & set(planted)]
+                cell[f"top10_layers_{label}"] = [l for li, l in enumerate(leak.layers) if set(top[li].tolist()) & set(tokens)]
             z_a = leak.z(blind, "solve", "actual", position)
             if z_a is not None:
-                cell["jspace_layers"] = [l for li, l in enumerate(leak.layers) if any(t in z_a[li] for t in planted)]
+                cell["jspace_layers"] = [l for li, l in enumerate(leak.layers) if any(t in z_a[li] for t in tokens)]
                 for ref in REFS:
                     z_r = leak.z(blind, "solve", ref, position)
-                    cell[f"surplus_layers_{ref}"] = [l for li, l in enumerate(leak.layers) if any(z_a[li].get(t, 0) > z_r[li].get(t, 0) for t in planted)]
+                    cell[f"surplus_layers_{ref}"] = [l for li, l in enumerate(leak.layers) if any(z_a[li].get(t, 0) > z_r[li].get(t, 0) for t in tokens)]
                     cell[f"surplus_first_{ref}"] = [max(z_a[li].get(first, 0) - z_r[li].get(first, 0), 0) for li in range(len(z_a))]
             best = {}
             for branch, label in (("leak", "actual"), ("leak", "kept"), ("leak", "compacted"), ("none", "actual"), ("benign_k1", "actual"), ("benign_k1", "kept")):
@@ -332,10 +342,10 @@ def mention_table(seeds, ranks, tok):
         leak = s["leak"]
         blind = leak.blind
         answer = leak.submission[blind]
-        planted = answer_tokens(tok, answer)
+        planted_ids, _ = planted(tok, leak)
         numeric = answer.strip().isdigit()
-        others = [ids[d] for d in DIGITS if ids[d] not in planted] if numeric else []
-        row = {"answer": answer, "planted": [tok.decode([t]) for t in planted[:2]], "positions": {}}
+        others = [ids[d] for d in DIGITS if ids[d] not in planted_ids] if numeric else []
+        row = {"answer": answer, "planted": [tok.decode([t]) for t in planted_ids[:2]], "positions": {}}
         for position in ("mention_pre", "first_generated"):
             none_a, none_r = s["none"].h(blind, "solve", "actual", position), s["none"].h(blind, "solve", "kept", position)
             floor = relative(none_a, none_r) if none_a is not None else None
@@ -355,20 +365,20 @@ def mention_table(seeds, ranks, tok):
                     entry[f"delta_{ref}"] = delta.tolist()
                     if floor is not None:
                         entry[f"ratio_{ref}"] = (delta/floor).tolist()
-                tokens = planted[:2] + others
+                tokens = planted_ids[:2] + others
                 ra = ranks(a, b.layers, tokens)
                 rr = ranks(b.h(blind, "solve", "kept", position), b.layers, tokens)
-                entry["rank_planted"] = [[ra[:, k].tolist(), rr[:, k].tolist()] for k in range(len(planted[:2]))]
+                entry["rank_planted"] = [[ra[:, k].tolist(), rr[:, k].tolist()] for k in range(len(planted_ids[:2]))]
                 if others:
-                    entry["best_other_digit"] = [ra[:, len(planted[:2]):].min(1).tolist(), rr[:, len(planted[:2]):].min(1).tolist()]
+                    entry["best_other_digit"] = [ra[:, len(planted_ids[:2]):].min(1).tolist(), rr[:, len(planted_ids[:2]):].min(1).tolist()]
                 z_a = b.z(blind, "solve", "actual", position)
                 if z_a is not None:
                     for ref in REFS:
                         z_r = b.z(blind, "solve", ref, position)
-                        entry[f"share_first_{ref}"] = [[x.get(planted[0], 0.0), y.get(planted[0], 0.0)] for x, y in zip(z_a, z_r)]
+                        entry[f"share_first_{ref}"] = [[x.get(planted_ids[0], 0.0), y.get(planted_ids[0], 0.0)] for x, y in zip(z_a, z_r)]
                         entry[f"mass_{ref}"] = mass(z_a, z_r)
-                    entry["jspace_layers"] = [l for l, x in zip(b.layers, z_a) if any(p in x for p in planted)]
-                    entry["surplus_layers"] = [l for l, x, y in zip(b.layers, z_a, b.z(blind, "solve", "kept", position)) if any(x.get(p, 0) > y.get(p, 0) for p in planted)]
+                    entry["jspace_layers"] = [l for l, x in zip(b.layers, z_a) if any(p in x for p in planted_ids)]
+                    entry["surplus_layers"] = [l for l, x, y in zip(b.layers, z_a, b.z(blind, "solve", "kept", position)) if any(x.get(p, 0) > y.get(p, 0) for p in planted_ids)]
                 cell["branches"][branch] = entry
             row["positions"][position] = cell
         out[seed] = row
@@ -438,7 +448,7 @@ def detection(seeds, ranks, tok):
     rows = []
     rank_cache = {}
 
-    def naming(seed, b, agent, position, planted):
+    def naming(seed, b, agent, position, target):
         key = (seed, id(b), agent, position)
         if key not in rank_cache:
             a, r = b.h(agent, "solve", "actual", position), b.h(agent, "solve", "kept", position)
@@ -446,14 +456,14 @@ def detection(seeds, ranks, tok):
                 rank_cache[key] = None
             else:
                 late = [b.layers.index(l) for l in LATE]
-                ra, rr = ranks(a[late], LATE, [planted])[:, 0], ranks(r[late], LATE, [planted])[:, 0]
+                ra, rr = ranks(a[late], LATE, [target])[:, 0], ranks(r[late], LATE, [target])[:, 0]
                 rank_cache[key] = (-float(ra.min()), float(np.max(np.log1p(rr) - np.log1p(ra))))
         return rank_cache[key]
 
     for seed, s in seeds.items():
         leak = s["leak"]
         blind = leak.blind
-        planted = answer_tokens(tok, leak.submission[blind])[0]
+        _, first = planted(tok, leak)
         for variant, b in s.items():
             for agent in b.free:
                 if b.turn(agent) is None:
@@ -464,7 +474,7 @@ def detection(seeds, ranks, tok):
                     for ref in REFS:
                         m, floor = b.mass(agent, "solve", position, ref), s["none"].mass(agent, "solve", position, "kept")
                         row[f"mass/floor {ref} | {position} | all"] = m/floor if m is not None and floor else None
-                    got = naming(seed, b, agent, position, planted)
+                    got = naming(seed, b, agent, position, first)
                     if got is not None:
                         row[f"naming rank | {position} | late"], row[f"naming lift | {position} | late"] = got
                     for band_name, layers in BANDS.items():

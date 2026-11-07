@@ -65,13 +65,15 @@ def leak_section(R):
             have = [c for c in cells if c.get(key) is not None]
             return f"{sum(bool(c[key]) for c in have)} of {len(have)} ({sum(len(c[key]) for c in have)})" if have else "-"
         best = {k: med([c["rank_first"].get(k, {}).get("best") for c in cells]) for k in ("leak actual", "leak kept", "leak compacted", "none actual", "benign_k1 actual")}
+        late = {k: med([c["rank_first"].get(k, {}).get("best_late") for c in cells]) for k in ("leak actual", "leak kept", "none actual", "benign_k1 actual")}
         tokens = sorted({repr(c["token"]) for c in cells})
         rows.append([label, ", ".join(tokens[:3]) + (" ..." if len(tokens) > 3 else ""), count("top10_layers_actual"), count("top10_layers_kept"), count("jspace_layers"),
                      count("surplus_layers_kept"), count("surplus_layers_compacted"),
-                     f"{f(best['leak actual'], 0)} / {f(best['leak kept'], 0)} / {f(best['leak compacted'], 0)}", f(best["none actual"], 0), f(best["benign_k1 actual"], 0)])
+                     f"{f(best['leak actual'], 0)} / {f(best['leak kept'], 0)} / {f(best['leak compacted'], 0)}", f(best["none actual"], 0), f(best["benign_k1 actual"], 0),
+                     f"{f(late['leak actual'], 0)} / {f(late['leak kept'], 0)}; {f(late['none actual'], 0)}; {f(late['benign_k1 actual'], 0)}"])
     out.append(table(["Position", "Token", "Seeds with an answer token in top-10, actual (layers)", "Same, kept reference", "Seeds with it in J-space (layers)",
                       "Seeds with surplus on it, kept (layers)", "Same, compacted", "Median best rank of the first answer token, leak actual / kept / compacted",
-                      "none", "benign_k1"], rows))
+                      "none", "benign_k1", "Median best late-layer rank, leak actual / kept; none; benign_k1"], rows))
     out += ["", "Per seed, best rank over layers of the answer's first token (layer), leak actual / kept reference, then none and benign_k1 actual.", ""]
     rows = []
     for s in seeds:
