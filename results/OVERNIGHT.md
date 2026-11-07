@@ -26,7 +26,7 @@ The first replay ran the actual pass on the plain attention kernel and the refer
 | --- | --- | --- |
 | mask causal | same kernel, positions before the span exactly equal | PASS, max difference 0.0 |
 | mask same path | 2D mask with zeros equals the explicit 4D mask exactly | PASS, max difference 0.0 |
-| mask deletion | masked against tokens removed with positions kept, median delta under half the median mask effect at every layer | **FAIL** at 7 of 10 layers checked, ratios 0.45 to 0.63 |
+| mask deletion | masked against tokens removed with positions kept, median delta under half the median mask effect at every layer | **FAIL** at 7 of 10 layers checked (L15 to L50), ratios 0.51 to 0.63. L0, L56 and L62 are under 0.5 |
 | mask no-op | all-ones 2D mask agrees with no mask | PASS, 0.0 |
 | repeat | same pass twice | PASS, bit-identical within one process |
 | pursuit | batched pursuit against TransformerLens | PASS on 8 rows at L26 and L45, Jaccard 1.0, total variation 6e-8 |
