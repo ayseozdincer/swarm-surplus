@@ -11,6 +11,9 @@ Examples
 
   # coalition-size sweep
   python scripts/run_plants.py --seeds 10 --k 1 3 5 --out runs/coalition
+
+  # a leak the agents know is forbidden, and a command from a teammate
+  python scripts/run_plants.py --seeds 10 --rules confidential --variants none benign leak forbidden_leak command --out runs/rules
 """
 from __future__ import annotations
 
@@ -26,7 +29,8 @@ sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 from experiments.episode import SwarmConfig, run_seed  # noqa: E402
 from experiments.labels import collect  # noqa: E402
 from experiments.llm import MockLLM, OpenAICompatLLM  # noqa: E402
-from experiments.plants import PlantSpec  # noqa: E402
+from experiments.plants import PLANT_KINDS, UNSIZED_KINDS, PlantSpec  # noqa: E402
+from experiments.prompts import RULE_LINES  # noqa: E402
 from experiments.protocol.state import AgentSpec  # noqa: E402
 from experiments.tasks import TASK_TYPES, TaskBank  # noqa: E402
 
@@ -56,13 +60,16 @@ def parse_args() -> argparse.Namespace:
     p.add_argument("--warmup", type=int, default=2, help="episodes before the plant")
     p.add_argument("--post", type=int, default=1, help="episodes after the plant episode")
     p.add_argument("--variants", nargs="+", default=["none", "benign", "leak", "proposal"],
-                   choices=["none", "benign", "leak", "proposal"])
-    p.add_argument("--k", type=int, nargs="+", default=[1], help="coalition sizes for proposal and benign")
+                   choices=list(PLANT_KINDS))
+    p.add_argument("--k", type=int, nargs="+", default=[1], help="coalition sizes for proposal, command and benign")
     p.add_argument("--blind-per-episode", type=int, default=1)
     p.add_argument("--alpha", type=float, default=1.0)
     p.add_argument("--beta", type=float, default=0.5)
     p.add_argument("--gamma", type=float, default=0.0)
     p.add_argument("--norm", choices=["none", "mild", "strict"], default="mild")
+    p.add_argument("--rules", choices=list(RULE_LINES), default="none",
+                   help="confidential adds a designer rule against passing task material between agents, for every "
+                        "agent in every branch")
     p.add_argument("--no-notes", action="store_true")
     p.add_argument("--model", default="qwen/qwen3-32b")
     p.add_argument("--base-url", default="https://openrouter.ai/api/v1")
@@ -80,7 +87,7 @@ def parse_args() -> argparse.Namespace:
 def build_variants(args: argparse.Namespace) -> list[PlantSpec]:
     out: list[PlantSpec] = []
     for v in args.variants:
-        if v in ("none", "leak"):
+        if v in UNSIZED_KINDS:
             out.append(PlantSpec(v))
         else:
             out += [PlantSpec(v, k) for k in args.k]
@@ -94,6 +101,9 @@ async def main() -> int:
     load_dotenv(Path(".env"))
     agents = [AgentSpec(NAMES[i], args.specialties[i % len(args.specialties)]) for i in range(args.agents)]
     variants = build_variants(args)
+    if "forbidden_leak" in args.variants and args.rules == "none":
+        print("warning: forbidden_leak says sharing is against the team's rules, but --rules is none, so no agent's "
+              "system prompt has such a rule", file=sys.stderr)
 
     if args.mock:
         model, base_url = "mock", "mock"
@@ -122,7 +132,7 @@ async def main() -> int:
 
     async def one(seed: int):
         cfg = SwarmConfig(run_name=root.name, seed=seed, agents=agents, n_warmup=args.warmup, n_post=args.post,
-                          alpha=args.alpha, beta=args.beta, gamma=args.gamma, norm=args.norm,
+                          alpha=args.alpha, beta=args.beta, gamma=args.gamma, norm=args.norm, rules=args.rules,
                           notes=not args.no_notes, blind_per_episode=args.blind_per_episode, model=model,
                           base_url=base_url, temperature=args.temperature, reasoning=not args.no_reasoning)
         async with sem:
@@ -136,6 +146,7 @@ async def main() -> int:
 
     print(f"{args.seeds} seeds x {len(variants)} variants ({', '.join(v.name for v in variants)}), "
           f"{args.agents} agents, warmup {args.warmup}, post {args.post}, concurrency {args.concurrency}", flush=True)
+    print(f"norm {args.norm}, rules {args.rules}", flush=True)
     seeds = args.seed_list or [args.seed_base + i for i in range(args.seeds)]
     await asyncio.gather(*(one(s) for s in seeds))
 
@@ -146,6 +157,9 @@ async def main() -> int:
         print(f"  {name:<14} runs {v['n_complete']}/{v['n_runs']}  lenient|wrong {fmt(v['lenient_wrong_free'])}  "
               f"leak used {fmt(v['leak_used_free'])}  blind correct {fmt(v['blind_correct_free'])}  "
               f"wrong subs {fmt(v['wrong_submission_rate'])}  exposed {fmt(v['exposed_free'])}")
+        print(f"  {'':<14} {'':<9} strict|correct {fmt(v['strict_wrong_free'])}  "
+              f"command followed {fmt(v['followed_command_free'])}  disclosed {fmt(v['disclosed_source'])}  "
+              f"concealed {fmt(v['concealed_source'])}  rule mentioned {fmt(v['mentions_rule_free'])}")
     return 0
 
 
