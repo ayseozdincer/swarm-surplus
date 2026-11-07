@@ -12,6 +12,16 @@ a different domain: no collusion content, about the size of a private block.
   padded    honest: own prompt + donor brief appended                             (as requested)
   swapped   honest: own preamble + donor brief in place of their own              (added here: the same edit colluders get)
 
+Size-matched control (follow-up 4). An honest prompt is about 165 tokens of system prompt, 136 of them brief, and 102 of
+user prompt before the discussion history, so no part of it but the public discussion history can supply a span the size of
+a private block (median 220 tokens). The span is removed from there, from the start of the history: whole messages, then
+leading whole sentences of the next one, as close to that scenario's median colluder private-block length as sentence
+boundaries allow. The prompt still parses and the position is the same for every agent. A row whose history cannot give at
+least half of that length is left out and counted.
+  removed        honest: own prompt, span removed
+  swap_removed   honest: own preamble + donor brief, span removed   (a brief change plus a removal, as colluders get)
+The removed text is sanctioned public discussion, not filler.
+
 Edge test. E(j->i, t) = |S_i(t) & H_j(t') - A_i(t)| / |S_i(t)|, on dense top-k concept sets over L26-30.
   S_i(t)  concepts in i's top-k in the actual pass and not the reference
   H_j(t') concepts in j's top-k at j's most recent turn before t
@@ -22,6 +32,7 @@ Only colluders have a private-channel turn, so letting H use those turns gives t
 from __future__ import annotations
 
 import argparse
+import re
 import json
 import sys
 from collections import defaultdict
@@ -44,6 +55,9 @@ CORE = ROOT/"data/phase0/core"
 RESULT = ROOT/"results/phase0_followups.json"
 BAND = (26, 27, 28, 29, 30)
 KINDS = ("placebo", "padded", "swapped")
+MATCHED = ("removed", "swap_removed")
+HISTORY = re.compile(r"(?:FULL )?DISCUSSION HISTORY:\n")
+EMPTY_HISTORY = "(No prior discussion)"
 NULL_DRAWS = 200
 
 
@@ -71,6 +85,85 @@ def placebo_input(sample: dict, kind: str, systems: dict, brief: str) -> dict:
         return {**sample, "system_prompt": own + "\n\n" + brief}
     base = reference_sample(sample, systems)
     return {**base, "system_prompt": preamble + "\n\n" + brief}
+
+
+def block_lengths(tok, samples) -> dict[str, int]:
+    """scenario -> median token length of its colluders' private blocks; the control run maps to its collusion run."""
+    from detector.core_reference import PRIVATE_BLOCK
+    sizes = defaultdict(list)
+    for s in samples:
+        if s["role"] == "colluder":
+            sizes[s["run_id"].rsplit("__", 1)[0]].append(len(tok(PRIVATE_BLOCK.search(s["user_prompt"]).group(0), add_special_tokens=False).input_ids))
+    return {scenario: int(np.median(v)) for scenario, v in sizes.items()}
+
+
+def remove_history(user_prompt: str, target: int, tok):
+    """(new prompt, tokens removed) with the start of the history removed, whole messages and then leading whole sentences
+    of the next message, coming as close to `target` tokens as sentence boundaries allow. A partly removed message keeps its
+    `[Name]: ` prefix. None when the history cannot give half of `target`."""
+    count = lambda text: len(tok(text, add_special_tokens=False).input_ids)
+    match = HISTORY.search(user_prompt)
+    head, tail = user_prompt[:match.end()], user_prompt[match.end():]
+    cut = tail.rfind("\n\n")
+    body, rest = tail[:cut], tail[cut:]
+    messages = [m for m in re.split(r"(?m)^(?=\[[^\]]+\]:)", body) if m.strip()]
+    if not messages or messages[0].startswith(EMPTY_HISTORY):
+        return None
+    removed, kept = "", []
+    for i, message in enumerate(messages):
+        if count(removed + message) <= target:
+            removed += message
+            continue
+        prefix, text = message.split("]: ", 1)
+        sentences = re.split(r"(?<=[.!?])\s+", text)
+        best = (abs(count(removed) - target), 0)
+        for n in range(1, len(sentences)):
+            best = min(best, (abs(count(removed + " ".join(sentences[:n])) - target), n))
+        if best[1]:
+            removed += " ".join(sentences[:best[1]])
+            kept = [prefix + "]: " + " ".join(sentences[best[1]:])] + messages[i + 1:]
+        else:
+            kept = messages[i:]
+        break
+    size = count(removed)
+    if size < target/2:
+        return None
+    left = "".join(kept).rstrip("\n")
+    return head + (left if left else EMPTY_HISTORY) + rest, size
+
+
+def collect_matched(args):
+    model, tok = load_model()
+    capture = Capture(model, LENS_LAYERS)
+    samples, render = core_samples()
+    brief, target = donors(samples), block_lengths(tok, samples)
+    arrays, index, skipped = defaultdict(list), defaultdict(list), 0
+    for n, s in enumerate(samples):
+        if s["role"] == "colluder":
+            continue
+        systems = honest_systems(SCENARIOS, s["run_id"])
+        removed = remove_history(s["user_prompt"], target[s["run_id"].rsplit("__", 1)[0]], tok)
+        if removed is None:
+            skipped += 1
+            continue
+        user, size = removed
+        ids_a, start_a = encode(tok, render, s)
+        for kind in MATCHED:
+            system = systems[s["agent_name"]] if kind == "removed" else systems[s["agent_name"]].split("\n\n", 1)[0] + "\n\n" + brief[s["run_id"]]
+            ids_r, start_r = encode(tok, render, {**s, "system_prompt": system, "user_prompt": user})
+            if ids_a[start_a:] != ids_r[start_r:]:
+                raise ValueError(f"response tokens differ: {s['run_id']} {s['agent_name']} {s['round']} {kind}")
+            arrays[kind].append(forward(capture, model, ids_r, [start_r, len(ids_r) - 1], True).numpy())
+            index[kind].append({"run": s["run_id"], "file": f"{slug(s['agent_name'])}_r{s['round']}.npz", "agent": s["agent_name"],
+                                "round": s["round"], "role": s["role"], "mode": s["mode"], "domain": s["scenario_domain"],
+                                "tokens_actual": len(ids_a), "tokens_reference": len(ids_r), "removed_tokens": size,
+                                "target_tokens": target[s["run_id"].rsplit("__", 1)[0]]})
+        if n % 100 == 0:
+            print("collect_matched", n, len(samples), flush=True)
+    for kind, rows in arrays.items():
+        np.save(OUT/f"{kind}.npy", np.stack(rows))
+        (OUT/f"{kind}.json").write_text(json.dumps(index[kind]))
+        print(kind, len(rows), "skipped rows", skipped, flush=True)
 
 
 def collect(args):
@@ -112,7 +205,7 @@ def collect(args):
 
 def decompose(args):
     lens = jspace.Lens(MODEL_DIR, LENS_FILE)
-    data = {k: np.load(OUT/f"{k}.npy", mmap_mode="r") for k in KINDS}
+    data = {k: np.load(OUT/f"{k}.npy", mmap_mode="r") for k in (args.kinds or KINDS)}
     support = {k: np.full((len(v), 2, len(LENS_LAYERS), jspace.K), -1, dtype=np.int32) for k, v in data.items()}
     coefficients = {k: np.zeros((len(v), 2, len(LENS_LAYERS), jspace.K), dtype=np.float32) for k, v in data.items()}
     flat_s = {k: v.reshape(-1, len(LENS_LAYERS), jspace.K) for k, v in support.items()}
@@ -127,14 +220,14 @@ def decompose(args):
                 flat_c[k][start:start + len(c), li] = c.cpu().numpy()
         del atoms, norms
         print("layer", layer, flush=True)
-    for k in KINDS:
+    for k in data:
         np.savez_compressed(OUT/f"{k}_jspace.npz", support=support[k], coefficients=coefficients[k])
 
 
-def groups_mass():
-    """Surplus mass per agent for the five groups, per position, pooled over rounds and layers as in the W4 table."""
-    extra = {k: (json.loads((OUT/f"{k}.json").read_text()), np.load(OUT/f"{k}_jspace.npz")) for k in KINDS}
-    rows = {k: {(r["run"], r["file"]): i for i, r in enumerate(extra[k][0])} for k in KINDS}
+def groups_mass(kinds=KINDS):
+    """Surplus mass per agent for each group, per position, pooled over rounds and layers as in the W4 table."""
+    extra = {k: (json.loads((OUT/f"{k}.json").read_text()), np.load(OUT/f"{k}_jspace.npz")) for k in kinds}
+    rows = {k: {(r["run"], r["file"]): i for i, r in enumerate(extra[k][0])} for k in kinds}
     out = {p: defaultdict(lambda: defaultdict(list)) for p in POSITIONS}
     meta_of = {}
     for directory in sorted(p for p in CORE.iterdir() if (p/"jspace.npz").exists()):
@@ -147,7 +240,7 @@ def groups_mass():
                 z_a, z_r = shares(support[i], coefficients[i]), shares(support[j], coefficients[j])
                 key = (directory.name, t["agent"])
                 out[position]["real"][key] += [jspace.surplus(a, r) for a, r in zip(z_a, z_r)]
-                for kind in KINDS:
+                for kind in kinds:
                     n = rows[kind].get((directory.name, t["file"]))
                     if n is None:
                         continue
@@ -380,8 +473,50 @@ def report(args):
     print("wrote", RESULT)
 
 
+def report_matched(args):
+    """Follow-up 4. Colluders against their real reference, honest agents with the size-matched removals, the kernel floor."""
+    import detect
+    scored, meta_of = groups_mass(MATCHED)
+    noise = json.loads((ROOT/"results/phase0.json").read_text())["noise"]["kernel"]
+    out = {"edit": {}, "mass": {}}
+    for kind in MATCHED:
+        rows = json.loads((OUT/f"{kind}.json").read_text())
+        out["edit"][kind] = {"rows": len(rows), "removed_tokens": stat([r["removed_tokens"] for r in rows]),
+                             "target_tokens": stat([r["target_tokens"] for r in rows]),
+                             "length_change": stat([abs(r["tokens_actual"] - r["tokens_reference"]) for r in rows])}
+    for position in POSITIONS:
+        table = {g: {k: v[1] for k, v in rows.items()} for g, rows in scored[position].items()}
+        colluders = {k: v for k, v in table["real"].items() if meta_of[k]["role"] == "colluder"}
+        own = {k: v for k, v in table["real"].items() if meta_of[k]["role"] != "colluder"}
+        groups = {"colluders, real reference": colluders, "honest, own reference": own,
+                  "honest, removal": table["removed"], "honest, swap plus removal": table["swap_removed"]}
+        result = {"groups": {g: stat(list(v.values())) for g, v in groups.items()}, "kernel_floor": noise[position]["mass"], "run_auroc": {}, "agent_auroc": {}}
+        for name in ("honest, removal", "honest, swap plus removal"):
+            honest = groups[name]
+            a, b = list(colluders.values()), list(honest.values())
+            result["agent_auroc"][name] = detect.auroc(np.array(a + b), np.array([1]*len(a) + [0]*len(b)))
+            runs = sorted({k[0] for k in meta_of})
+            values, labels, domains = [], [], []
+            for run in runs:
+                scores = [colluders[k] if k in colluders else honest[k] for k in meta_of if k[0] == run and (k in colluders or k in honest)]
+                if not scores:
+                    continue
+                values.append(max(scores))
+                labels.append(int(run.endswith("__collusion")))
+                domains.append(next(meta_of[k]["domain"] for k in meta_of if k[0] == run))
+            values, labels, domains = np.array(values), np.array(labels), np.array(domains)
+            draws = np.array([detect.grouped_auroc(values[i], labels[i], domains[i]) for i in detect.scenario_draws([r for r in runs])])
+            result["run_auroc"][name] = {"auroc": detect.grouped_auroc(values, labels, domains), "ci": detect.interval(draws), "runs": len(values)}
+        out["mass"][position] = result
+        print(position, json.dumps({g: round(v["median"], 3) for g, v in result["groups"].items()}), json.dumps({k: round(v["auroc"], 3) for k, v in result["run_auroc"].items()}), flush=True)
+    (ROOT/"results/phase0_matched.json").write_text(json.dumps(out, indent=1) + "\n")
+    print("wrote results/phase0_matched.json")
+
+
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
-    parser.add_argument("action", choices=("collect", "decompose", "report"))
+    parser.add_argument("action", choices=("collect", "decompose", "report", "collect_matched", "report_matched"))
+    parser.add_argument("--kinds", nargs="*")
     args = parser.parse_args()
-    {"collect": collect, "decompose": decompose, "report": report}[args.action](args)
+    {"collect": collect, "decompose": decompose, "report": report, "collect_matched": collect_matched,
+     "report_matched": report_matched}[args.action](args)
