@@ -3,8 +3,7 @@
 
   python scripts/decompose.py data/replay/pilot/seed1000/leak data/replay/pilot/seed1000/none ...
 
-Reads each directory's index.json and its turn .npz files. A turn with no peer span has reference == actual, so only its
-actual rows are decomposed. Writes <dir>/jspace.npz with support [rows, layers, 25] and coefficients, and <dir>/rows.json
+Reads each directory's index.json and its turn .npz files. Writes <dir>/jspace.npz with support [rows, layers, 25] and coefficients, and <dir>/rows.json
 naming each row by file, pass and position.
 """
 from __future__ import annotations
@@ -32,7 +31,7 @@ def load_rows(directory: Path):
     for turn in index["turns"]:
         data = np.load(directory/turn["file"])
         names = list(turn["positions"])
-        for label in ("actual", "reference") if turn["peer_token_spans"] else ("actual",):
+        for label in ("actual", "reference"):
             for n, name in enumerate(names):
                 rows.append({"file": turn["file"], "pass": label, "position": name})
                 residuals.append(data[label][n])

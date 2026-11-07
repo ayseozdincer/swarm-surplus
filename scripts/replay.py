@@ -4,8 +4,13 @@
   python scripts/replay.py runs/pilot/seed1000/leak --episode 2 --out data/replay/pilot/seed1000/leak
 
 For each agent and phase of the episode, the actual pass and the reference pass read the residual stream at every
-lens layer at the positions of detector.render. The reference pass uses the same token ids and position_ids and a 2D
-attention_mask with zeros over every peer message, so nothing can attend to those tokens and no position shifts.
+lens layer at the positions of detector.render. The reference pass uses the same token ids and position_ids with every
+peer message masked as keys, so nothing can attend to those tokens and no position shifts.
+
+Both passes run through one attention kernel, an explicit 4D mask (tests/gpu_checks.py: the same result as a 2D mask with
+zeros, exactly). The plain kernel differs from it by 0.1 to 5 percent by layer, the size of the mask effect, so comparing
+across kernels would read kernel noise as surplus. A turn with no peer message has nothing to mask: its `reference` is the
+plain kernel instead, marked reference_kind plain_kernel, which measures that noise on the same turn.
 
 Writes <out>/<agent>_e<episode>_<phase>.npz, arrays actual and reference [positions, layers, d_model] float32 and the
 top-10 readout ids and logits for each, and <out>/index.json with the positions, the masked spans and the token text.
@@ -41,6 +46,15 @@ def load_model():
     return model, tokenizer
 
 
+def attention_mask_4d(n: int, keep=None):
+    """Causal [1, 1, n, n] boolean mask; `keep` zeros mark keys nothing may attend to."""
+    import torch
+    mask = torch.ones(n, n, dtype=torch.bool).tril()
+    if keep is not None:
+        mask = mask & torch.tensor(keep, dtype=torch.bool)[None, :]
+    return mask[None, None]
+
+
 class Capture:
     """Forward hooks on every lens layer; after a pass, `take` stacks the residual at the given positions."""
 
@@ -62,10 +76,7 @@ class Capture:
         self.index = torch.as_tensor(positions, device=device)
         input_ids = torch.tensor([ids], device=device)
         position_ids = torch.arange(len(ids), device=device)[None]
-        if mask is None or torch.is_tensor(mask):
-            attention_mask = None if mask is None else mask.to(device)
-        else:
-            attention_mask = torch.tensor([mask], device=device)
+        attention_mask = None if mask is None else mask.to(device)
         with torch.no_grad():
             model.model(input_ids=input_ids, position_ids=position_ids, attention_mask=attention_mask, use_cache=False)
         return torch.stack([self.saved[layer] for layer in self.layers], dim=1)
@@ -76,8 +87,9 @@ def replay_turn(model, tokenizer, capture, turn, lens, out_path):
     names = list(r["positions"])
     positions = [r["positions"][n] for n in names]
     started = time.perf_counter()
-    actual = capture.run(model, r["ids"], positions)
-    reference = capture.run(model, r["ids"], positions, r["mask"]) if r["peer_token_spans"] else actual.clone()
+    masked = bool(r["peer_token_spans"])
+    actual = capture.run(model, r["ids"], positions, attention_mask_4d(len(r["ids"])))
+    reference = capture.run(model, r["ids"], positions, attention_mask_4d(len(r["ids"]), r["mask"]) if masked else None)
     arrays = {"actual": actual.numpy(), "reference": reference.numpy()}
     for label, H in (("actual", actual), ("reference", reference)):
         ids = np.zeros((len(names), len(capture.layers), 10), dtype=np.int32)
@@ -90,6 +102,7 @@ def replay_turn(model, tokenizer, capture, turn, lens, out_path):
     np.savez_compressed(out_path, **arrays)
     return {"agent": turn["agent"], "episode_index": turn["episode_index"], "phase": turn["phase"], "file": out_path.name,
             "tokens": len(r["ids"]), "prompt_tokens": r["prompt_tokens"], "masked_tokens": len(r["mask"]) - sum(r["mask"]),
+            "reference_kind": "masked" if masked else "plain_kernel",
             "peer_token_spans": r["peer_token_spans"], "positions": dict(zip(names, positions)),
             "position_tokens": {n: tokenizer.decode([r["ids"][p]]) for n, p in zip(names, positions)},
             "max_abs_delta_at_layer": float((actual - reference).abs().max()), "seconds": round(time.perf_counter() - started, 2)}

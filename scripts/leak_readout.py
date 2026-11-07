@@ -42,9 +42,7 @@ class Shares:
         self.support, self.coefficients = data["support"], data["coefficients"]
 
     def z(self, file: str, label: str, position: str) -> list[dict[int, float]]:
-        i = self.index.get((file, label, position))
-        if i is None:
-            i = self.index[(file, "actual", position)]
+        i = self.index[(file, label, position)]
         return jspace.shares(self.support[i], self.coefficients[i])
 
 

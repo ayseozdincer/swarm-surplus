@@ -4,10 +4,10 @@
 Run from third_party/maj-lens on the pod. Rows and rendering are the J-space repo's and NARCBench's own (`_aligned`,
 `_build_gen_text`). The reference for each row is detector.core_reference, teacher-forced on the same response tokens.
 
-Every reference pass goes through an explicit causal 4D mask, a different attention kernel from the actual pass. For
-agents whose reference input equals their actual input (all control agents, honest agents in collusion runs) the two
-passes would otherwise be the same computation and surplus would be exactly zero by construction. This way those agents
-carry real replay noise, the same floor a threshold has to sit on.
+Actual and reference run through the same attention kernel, an explicit causal 4D mask, so a colluder's surplus holds no
+kernel noise. Agents whose reference input equals their actual input (all control agents, honest agents in collusion runs)
+would then be the same computation with surplus exactly zero by construction. Their reference pass runs on the plain kernel
+instead, so they carry real replay noise. That is the conservative direction: the noise sits on the honest side.
 
   python ../../scripts/phase0.py replay --out ../../data/phase0/core
   python ../../scripts/phase0.py noise  --out ../../data/phase0/noise --n 20
@@ -27,7 +27,7 @@ ROOT = Path(__file__).resolve().parents[1]
 sys.path[:0] = [str(ROOT), str(ROOT/"third_party/maj-lens"), str(ROOT/"scripts")]
 from detector.core_reference import honest_systems, reference_sample  # noqa: E402
 from detector.render import token_at  # noqa: E402
-from replay import LENS_LAYERS, Capture, load_model  # noqa: E402
+from replay import LENS_LAYERS, Capture, attention_mask_4d, load_model  # noqa: E402
 
 DATASET = Path("artifacts/narcbench")
 SCENARIOS = DATASET/"scenarios/qwen3_32b/core"
@@ -49,12 +49,8 @@ def encode(tok, render, sample):
     return ids, start
 
 
-def causal_mask(n: int) -> torch.Tensor:
-    return torch.ones(n, n, dtype=torch.bool).tril()[None, None]
-
-
 def forward(capture, model, ids, positions, explicit: bool):
-    return capture.run(model, ids, positions, causal_mask(len(ids)) if explicit else None)
+    return capture.run(model, ids, positions, attention_mask_4d(len(ids)) if explicit else None)
 
 
 def slug(name: str) -> str:
@@ -78,13 +74,14 @@ def replay(args, model, tok, capture):
             ids_r, start_r = encode(tok, render, reference_sample(s, systems))
             if ids_a[start_a:] != ids_r[start_r:]:
                 raise ValueError(f"response tokens differ: {run} {s['agent_name']} {s['round']}")
-            actual = forward(capture, model, ids_a, [start_a, len(ids_a) - 1], False)
-            reference = forward(capture, model, ids_r, [start_r, len(ids_r) - 1], True)
+            same_input = ids_a == ids_r
+            actual = forward(capture, model, ids_a, [start_a, len(ids_a) - 1], True)
+            reference = forward(capture, model, ids_r, [start_r, len(ids_r) - 1], not same_input)
             name = f"{slug(s['agent_name'])}_r{s['round']}.npz"
             np.savez(directory/name, actual=actual.numpy(), reference=reference.numpy())
             turns.append({"file": name, "agent": s["agent_name"], "round": s["round"], "role": s["role"], "mode": s["mode"],
                           "domain": s["scenario_domain"], "tokens": len(ids_a), "reference_tokens": len(ids_r),
-                          "response_tokens": len(ids_a) - start_a, "same_input": ids_a == ids_r,
+                          "response_tokens": len(ids_a) - start_a, "same_input": same_input,
                           "positions": dict(zip(POSITIONS, (start_a, len(ids_a) - 1))), "peer_token_spans": [[0, 0]]})
         (directory/"index.json").write_text(json.dumps({"run": run, "layers": capture.layers, "turns": turns}, indent=1))
         print(run, len(turns), f"{time.time() - started:.0f}s", flush=True)
