@@ -80,6 +80,8 @@ def parse_args() -> argparse.Namespace:
     p.add_argument("--no-reasoning", action="store_true")
     p.add_argument("--concurrency", type=int, default=2, help="seeds in flight at once")
     p.add_argument("--max-concurrency", type=int, default=24, help="model calls in flight at once")
+    p.add_argument("--timeout", type=float, default=600.0,
+                   help="seconds per request; raise it on a busy self-served endpoint, where long calls queue")
     p.add_argument("--mock", action="store_true")
     return p.parse_args()
 
@@ -120,7 +122,7 @@ async def main() -> int:
             return 2
         shared = OpenAICompatLLM(args.model, args.base_url, api_key, temperature=args.temperature,
                                  max_tokens=args.max_tokens, reasoning=not args.no_reasoning,
-                                 provider_pin=args.provider_pin, max_concurrency=args.max_concurrency,
+                                 provider_pin=args.provider_pin, max_concurrency=args.max_concurrency, timeout=args.timeout,
                                  extra_headers={"HTTP-Referer": "https://github.com/", "X-Title": "swarm-plants"})
         model, base_url = args.model, args.base_url
 
