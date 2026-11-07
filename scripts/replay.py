@@ -74,7 +74,9 @@ def attention_mask_4d(n: int, keep=None):
 
 
 class Capture:
-    """Forward hooks on every lens layer; after a pass, `take` stacks the residual at the given positions."""
+    """Forward hooks on every lens layer; after a pass, `take` stacks the residual at the given positions. The hooks keep
+    their copies on the GPU and the pass moves them to the CPU once at the end: a copy to the CPU in every hook synchronises
+    each layer, which made a 14B pass about six times slower, with bit-identical values."""
 
     def __init__(self, model, layers):
         self.layers, self.saved, self.handles = list(layers), {}, []
@@ -85,7 +87,7 @@ class Capture:
     def _hook(self, layer):
         def hook(_module, _inputs, output):
             h = output[0] if isinstance(output, tuple) else output
-            self.saved[layer] = h[0, self.index].float().cpu()
+            self.saved[layer] = h[0, self.index].float()
         return hook
 
     def run(self, model, ids, positions, mask=None, position_ids=None):
@@ -97,10 +99,10 @@ class Capture:
         attention_mask = None if mask is None else mask.to(device)
         with torch.no_grad():
             model.model(input_ids=input_ids, position_ids=position_ids, attention_mask=attention_mask, use_cache=False)
-        return torch.stack([self.saved[layer] for layer in self.layers], dim=1)
+        return torch.stack([self.saved[layer] for layer in self.layers], dim=1).cpu()
 
 
-def replay_turn(model, tokenizer, capture, turn, lens, out_path, compacted=False):
+def replay_turn(model, tokenizer, capture, turn, lens, out_path, compacted=False, compress=True):
     r = render_turn(tokenizer, turn)
     names = list(r["positions"])
     positions = [r["positions"][n] for n in names]
@@ -123,7 +125,7 @@ def replay_turn(model, tokenizer, capture, turn, lens, out_path, compacted=False
             ids[:, li], logits[:, li] = top.indices.cpu().numpy(), top.values.cpu().numpy()
         arrays[f"{label}_top_ids"], arrays[f"{label}_top_logits"] = ids, logits
     out_path.parent.mkdir(parents=True, exist_ok=True)
-    np.savez_compressed(out_path, **arrays)
+    (np.savez_compressed if compress else np.savez)(out_path, **arrays)
     return {"agent": turn["agent"], "episode_index": turn["episode_index"], "phase": turn["phase"], "file": out_path.name,
             "tokens": len(r["ids"]), "prompt_tokens": r["prompt_tokens"], "masked_tokens": len(r["mask"]) - sum(r["mask"]),
             "reference_kind": "masked" if masked else "plain_kernel",
@@ -143,10 +145,14 @@ def main() -> int:
     parser.add_argument("--resume", action="store_true", help="skip run directories that already have an index.json")
     parser.add_argument("--compacted", action="store_true", help="also run the compacted reference, saved as `compacted`")
     parser.add_argument("--free-only", action="store_true", help="only agents not instructed in the episode (run.json)")
+    parser.add_argument("--uncompressed", action="store_true", help="plain .npz; compression costs about 9 s a turn on a network volume")
+    parser.add_argument("--lens-on-gpu", action="store_true", help="keep every J on the GPU instead of copying one per readout")
     args = parser.parse_args()
     from detector.jspace import Lens
     model, tokenizer = load_model()
     lens = Lens(MODEL_DIR, LENS_FILE)
+    if args.lens_on_gpu:
+        lens.J = {layer: J.to(lens.device) for layer, J in lens.J.items()}
     capture = Capture(model, lens.layers)
     for run_dir in args.run_dirs:
         out = args.out_root/Path(*run_dir.parts[-3:])
@@ -163,7 +169,7 @@ def main() -> int:
             if (args.agents and turn["agent"] not in args.agents) or turn["agent"] in instructed:
                 continue
             path = out/f"{turn['agent']}_e{turn['episode_index']}_{turn['phase']}.npz"
-            rows.append(replay_turn(model, tokenizer, capture, turn, lens, path, args.compacted))
+            rows.append(replay_turn(model, tokenizer, capture, turn, lens, path, args.compacted, not args.uncompressed))
             print(run_dir, turn["agent"], turn["phase"], rows[-1]["tokens"], rows[-1]["seconds"], flush=True)
         (out/"index.json").write_text(json.dumps({"run": str(run_dir), "model": MODEL, "layers": capture.layers, "turns": rows}, indent=1))
     return 0
