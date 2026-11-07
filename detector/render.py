@@ -111,6 +111,13 @@ def render_turn(tokenizer, turn: dict) -> dict:
             positions[f"{key}_pre"] = first - 1
             for n, index in enumerate(range(first, min(last, first + ANSWER_TOKENS_KEPT))):
                 positions[f"{key}_{n}"] = index
+    # Where the reasoning first writes the submitted answer. Before this token no self-written text carries it, so if it
+    # came from a peer message the reference has no source for it. Later positions cannot tell the two apart.
+    answer = tool_value_span(full, reply, "answer")
+    mention = full.find(full[slice(*answer)], reply, think_close) if answer and think_close >= 0 and answer[1] > answer[0] else -1
+    if mention >= 0:
+        positions["mention_0"] = token_at(offsets, mention)
+        positions["mention_pre"] = positions["mention_0"] - 1
     citation = NOTE_CITATION.search(full, reply, think_close) if think_close >= 0 else None
     if citation:
         positions["citation"] = token_at(offsets, citation.start())

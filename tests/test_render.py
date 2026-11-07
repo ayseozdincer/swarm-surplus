@@ -31,6 +31,8 @@ def test_leak_turn(tokenizer):
     assert decode(r["positions"]["prompt_last"] - 1) == "assistant"
     assert decode(r["positions"]["after_think"] - 1) == "</think>"
     assert "".join(decode(r["positions"][k]) for k in ("answer_0", "answer_1")) == "73"
+    assert decode(r["positions"]["mention_0"]) == "7"
+    assert r["positions"]["first_generated"] < r["positions"]["mention_pre"] < r["positions"]["after_think"]
     assert len(r["peer_token_spans"]) == 1
     a, b = r["peer_token_spans"][0]
     masked = tokenizer.decode(r["ids"][a:b])
