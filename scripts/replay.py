@@ -14,12 +14,15 @@ plain kernel instead, marked reference_kind plain_kernel, which measures that no
 
 Writes <out>/<agent>_e<episode>_<phase>.npz, arrays actual and reference [positions, layers, d_model] float32 and the
 top-10 readout ids and logits for each, and <out>/index.json with the positions, the masked spans and the token text.
+--compacted adds a third pass, `compacted`, the reference with position ids closed up after the masked spans.
+SWARM_MODEL=qwen3_14b replays Qwen3-14B with its own lens; the default is Qwen3-32B.
 Run with --decompose to add the J-space shares (detector.jspace.pursuit) to index.json.
 """
 from __future__ import annotations
 
 import argparse
 import json
+import os
 import sys
 import time
 from pathlib import Path
@@ -28,13 +31,28 @@ import numpy as np
 
 ROOT = Path(__file__).resolve().parents[1]
 sys.path[:0] = [str(ROOT), str(ROOT/"third_party/maj-lens")]
-from detector.render import load_turns, render_turn  # noqa: E402
+from detector.render import compacted_positions, load_turns, render_turn  # noqa: E402
 
 ARTIFACTS = Path("/workspace/artifacts")
-MODEL_DIR = ARTIFACTS/"qwen3_32b"
-LENS_FILE = ARTIFACTS/"lens_candidate/qwen3-32b/jlens/Salesforce-wikitext/Qwen3-32B_jacobian_lens.pt"
+# The model replayed, chosen by SWARM_MODEL (default qwen3_32b). Every script that imports MODEL_DIR, LENS_FILE or
+# LENS_LAYERS from here follows it. Each released lens covers every block but the last.
+MODELS = {"qwen3_32b": (ARTIFACTS/"qwen3_32b", ARTIFACTS/"lens_candidate/qwen3-32b/jlens/Salesforce-wikitext/Qwen3-32B_jacobian_lens.pt", 64),
+          "qwen3_14b": (ARTIFACTS/"qwen3_14b", ARTIFACTS/"lens_candidate/qwen3-14b/jlens/Salesforce-wikitext/Qwen3-14B_jacobian_lens.pt", 40)}
+MODEL = os.environ.get("SWARM_MODEL", "qwen3_32b")
+MODEL_DIR, LENS_FILE, BLOCKS = MODELS[MODEL]
 PHASES = ("solve", "verdict", "reflection")
-LENS_LAYERS = tuple(range(63))         # the released lens covers blocks 0 to 62 of 64
+LENS_LAYERS = tuple(range(BLOCKS - 1))
+
+
+def on_model(layer: int) -> int:
+    """A Qwen3-32B lens layer (0 to 62) at the same relative depth of this model's lens, so bands chosen on 32B carry over.
+    The identity on 32B."""
+    return round(layer*(len(LENS_LAYERS) - 1)/62)
+
+
+def band(first: int, last: int) -> list[int]:
+    """The 32B band first..last, both included, on this model."""
+    return sorted({on_model(l) for l in range(first, last + 1)})
 
 
 def load_model():
@@ -82,7 +100,7 @@ class Capture:
         return torch.stack([self.saved[layer] for layer in self.layers], dim=1)
 
 
-def replay_turn(model, tokenizer, capture, turn, lens, out_path):
+def replay_turn(model, tokenizer, capture, turn, lens, out_path, compacted=False):
     r = render_turn(tokenizer, turn)
     names = list(r["positions"])
     positions = [r["positions"][n] for n in names]
@@ -90,8 +108,14 @@ def replay_turn(model, tokenizer, capture, turn, lens, out_path):
     masked = bool(r["peer_token_spans"])
     actual = capture.run(model, r["ids"], positions, attention_mask_4d(len(r["ids"])))
     reference = capture.run(model, r["ids"], positions, attention_mask_4d(len(r["ids"]), r["mask"]) if masked else None)
-    arrays = {"actual": actual.numpy(), "reference": reference.numpy()}
-    for label, H in (("actual", actual), ("reference", reference)):
+    passes = [("actual", actual), ("reference", reference)]
+    if compacted:
+        # Same mask and kernel as the reference, position ids closed up after the masked spans. With nothing masked it is
+        # the reference itself.
+        passes.append(("compacted", capture.run(model, r["ids"], positions, attention_mask_4d(len(r["ids"]), r["mask"]),
+                                                position_ids=compacted_positions(r["mask"])) if masked else reference))
+    arrays = {label: H.numpy() for label, H in passes}
+    for label, H in passes:
         ids = np.zeros((len(names), len(capture.layers), 10), dtype=np.int32)
         logits = np.zeros((len(names), len(capture.layers), 10), dtype=np.float32)
         for li, layer in enumerate(capture.layers):
@@ -117,6 +141,8 @@ def main() -> int:
     parser.add_argument("--phases", nargs="*", default=list(PHASES))
     parser.add_argument("--out-root", type=Path, default=ROOT/"data/replay")
     parser.add_argument("--resume", action="store_true", help="skip run directories that already have an index.json")
+    parser.add_argument("--compacted", action="store_true", help="also run the compacted reference, saved as `compacted`")
+    parser.add_argument("--free-only", action="store_true", help="only agents not instructed in the episode (run.json)")
     args = parser.parse_args()
     from detector.jspace import Lens
     model, tokenizer = load_model()
@@ -127,15 +153,19 @@ def main() -> int:
         if args.resume and (out/"index.json").exists():
             continue
         rows = []
+        instructed = set()
+        if args.free_only:
+            agents = json.loads((run_dir/"run.json").read_text())["results"][args.episode]["agents"]
+            instructed = {a for a, r in agents.items() if r.get("instructed")}
         for turn in load_turns(run_dir):
             if turn["episode_index"] != args.episode or turn["phase"] not in args.phases:
                 continue
-            if args.agents and turn["agent"] not in args.agents:
+            if (args.agents and turn["agent"] not in args.agents) or turn["agent"] in instructed:
                 continue
             path = out/f"{turn['agent']}_e{turn['episode_index']}_{turn['phase']}.npz"
-            rows.append(replay_turn(model, tokenizer, capture, turn, lens, path))
+            rows.append(replay_turn(model, tokenizer, capture, turn, lens, path, args.compacted))
             print(run_dir, turn["agent"], turn["phase"], rows[-1]["tokens"], rows[-1]["seconds"], flush=True)
-        (out/"index.json").write_text(json.dumps({"run": str(run_dir), "layers": capture.layers, "turns": rows}, indent=1))
+        (out/"index.json").write_text(json.dumps({"run": str(run_dir), "model": MODEL, "layers": capture.layers, "turns": rows}, indent=1))
     return 0
 
 

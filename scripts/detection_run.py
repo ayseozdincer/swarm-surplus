@@ -27,16 +27,17 @@ import numpy as np
 
 ROOT = Path(__file__).resolve().parents[1]
 sys.path[:0] = [str(ROOT), str(ROOT/"third_party/maj-lens"), str(ROOT/"scripts")]
+from replay import LENS_LAYERS, band, on_model  # noqa: E402
 from surplus_table import mass, shares  # noqa: E402
 
 REPLAY = ROOT/"data/replay/sweep1"
 RUNS = ROOT/"runs/sweep1"
 RESULT = ROOT/"results/detection_run.json"
 POSITIONS = ("prompt_last", "first_generated", "first_thought")
-BANDS = {"L26-30": list(range(26, 31)), "L50-62": list(range(50, 63)), "all": list(range(63))}
+BANDS = {"L26-30": band(26, 30), "L50-62": band(50, 62), "all": list(LENS_LAYERS)}   # 32B names, same depth on other models
 PRIMARY = ("first_generated", "L50-62")
 NOTES = ("leak", "benign_k1", "proposal_k1")
-LATE = (52, 54, 56, 58, 60, 61, 62)
+LATE = tuple(sorted({on_model(l) for l in (52, 54, 56, 58, 60, 61, 62)}))
 
 
 def unit(x):

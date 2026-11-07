@@ -17,7 +17,8 @@ from pathlib import Path
 import numpy as np
 
 ROOT = Path(__file__).resolve().parents[1]
-sys.path.insert(0, str(ROOT))
+sys.path[:0] = [str(ROOT), str(ROOT/"scripts")]
+from replay import band as depth_band  # noqa: E402
 
 
 def shares(support, coefficients):
@@ -40,7 +41,7 @@ def main() -> int:
         data = np.load(directory/"jspace.npz")
         support, coefficients = data["support"], data["coefficients"]
         index = {(r["file"], r["pass"], r["position"]): i for i, r in enumerate(meta["rows"])}
-        band = {meta["layers"].index(l) for l in range(26, 31)}
+        band = {meta["layers"].index(l) for l in depth_band(26, 30)}
         for (file, label, position), i in index.items():
             if label != "actual":
                 continue

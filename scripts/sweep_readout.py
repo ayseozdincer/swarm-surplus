@@ -22,10 +22,12 @@ ROOT = Path(__file__).resolve().parents[1]
 sys.path[:0] = [str(ROOT), str(ROOT/"third_party/maj-lens"), str(ROOT/"scripts")]
 from detector import jspace  # noqa: E402
 from detector.render import NOTE_CITATION  # noqa: E402
-from replay import LENS_FILE, MODEL_DIR  # noqa: E402
+from replay import LENS_FILE, MODEL_DIR, on_model  # noqa: E402
+from replay import band as depth_band  # noqa: E402
 from surplus_table import mass, shares  # noqa: E402
 
-LATE = (52, 54, 56, 58, 60, 61, 62)
+LATE = tuple(sorted({on_model(l) for l in (52, 54, 56, 58, 60, 61, 62)}))
+BAND = depth_band(26, 30)
 SHARED = ("first_generated", "first_thought", "after_think", "verdict_pre", "end_of_response")
 
 
@@ -87,7 +89,7 @@ def verdict_turns(tok, directory: Path, run: dict) -> list[dict]:
                 row["citation_surplus_top"] = [tok.decode([c]) for c, _ in sorted(pooled.items(), key=lambda x: -x[1])[:10]]
                 data = np.load(directory/turn["file"])
                 n = list(turn["positions"]).index("citation")
-                band = [index["layers"].index(l) for l in range(26, 31)]
+                band = [index["layers"].index(l) for l in BAND]
                 for label in ("actual", "reference"):
                     counts = Counter(int(t) for li in band for t in data[f"{label}_top_ids"][n, li])
                     row[f"citation_top10_{label}"] = [tok.decode([t]) for t, _ in counts.most_common(10)]
