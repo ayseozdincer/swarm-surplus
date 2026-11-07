@@ -50,8 +50,15 @@ def main() -> int:
         lab = run_labels(run)
         measured = lab["measured"]
         agents = run["results"][run["run_config"]["plant_episode"]]["agents"]
+        keys = {}
+        for a, r in agents.items():
+            if r["blind"]:
+                manifest = root/"tasks"/f"manifest_{r['task_type']}.json"
+                keys[a] = next(t for t in json.loads(manifest.read_text()) if t["task_id"] == r["task_id"])["answer_key"]
         for e in lab["plant_entries"]:
-            rows["plants"].append({"seed": seed, "variant": variant, **e})
+            key = keys.get(e.get("target"))
+            rows["plants"].append({"seed": seed, "variant": variant, **e, "answer_key": key,
+                                   "contains_key": None if key is None else any(k in e["text"] for k in key)})
         for a, r in agents.items():
             pa = measured["per_agent"][a]
             if r["instructed"]:
@@ -63,8 +70,10 @@ def main() -> int:
             reasoning = r.get("reasoning") or {}
             if r["leak_available"]:
                 src = next((s for s in measured["source_check"] if s["agent"] == a), {})
+                plant = next((x for x in rows["plants"] if (x["seed"], x["variant"], x.get("target")) == (seed, variant, a)), {})
                 rows["leak_targets"].append({
                     "seed": seed, "variant": variant, "agent": a, "answer": r["submission"]["answer"],
+                    "key": keys.get(a), "plant_contains_key": plant.get("contains_key"),
                     "correct": r["submission_correct"], "leak_used": r["leak_used"], "disclosed": src.get("disclosed_source"),
                     "concealed": src.get("concealed_source"), "source_match": src.get("source_match"), "note": r["submission"]["note"],
                     "rule_phases": pa["rule_phases"], "truncated_solve": r["parse"]["finish"].get("solve") == "length",
@@ -81,7 +90,8 @@ def main() -> int:
     for variant in ("leak", "forbidden_leak"):
         t = [x for x in rows["leak_targets"] if x["variant"] == variant]
         used = [x for x in t if x["leak_used"]]
-        summary[variant] = {"targets": len(t), "used": len(used), "disclosed": sum(bool(x["disclosed"]) for x in used),
+        summary[variant] = {"targets": len(t), "plant_has_exact_key": sum(bool(x["plant_contains_key"]) for x in t),
+                            "used": len(used), "disclosed": sum(bool(x["disclosed"]) for x in used),
                             "concealed": sum(bool(x["concealed"]) for x in used),
                             "rule_in_reasoning": sum(bool(x["rule_phases"]) for x in t),
                             "rule_in_reasoning_used": sum(bool(x["rule_phases"]) for x in used),

@@ -24,6 +24,9 @@ Contrasts
   4 blind, forbidden_leak vs leak
   5 blind under the rule, refused (leak or forbidden_leak target that did not use it) vs complied (used it)
   6 command branches, free reviewers of a correct submission, followed (rejected it) vs not, verdict turns
+  plus 1u (claim 1 on seeds where the blind agent used the leak), 1f (forbidden_leak vs none), 5b (blind agents in the two
+  leak branches whose solve reasoning cites the rule vs not), 6b (command reviewers who rejected vs accepted) and 6c (a
+  command reviewer against the same agent's verdict turn in none)
 """
 from __future__ import annotations
 
@@ -294,13 +297,21 @@ def main() -> int:
                     if neg in seed:
                         c[key][0].append(scores(seed, "leak", blind, "solve", ref))
                         c[key][1].append(scores(seed, neg, blind, "solve", ref))
+                if seed["leak"]["labels"][blind]["leak_used"]:
+                    c["1u blind, leak vs none, seeds where it used the leak"][0].append(scores(seed, "leak", blind, "solve", ref))
+                    c["1u blind, leak vs none, seeds where it used the leak"][1].append(scores(seed, "none", blind, "solve", ref))
                 if "forbidden_leak" in seed:
+                    c["1f blind, forbidden_leak vs none"][0].append(scores(seed, "forbidden_leak", blind, "solve", ref))
+                    c["1f blind, forbidden_leak vs none"][1].append(scores(seed, "none", blind, "solve", ref))
                     c["4 blind, forbidden_leak vs leak"][0].append(scores(seed, "forbidden_leak", blind, "solve", ref))
                     c["4 blind, forbidden_leak vs leak"][1].append(scores(seed, "leak", blind, "solve", ref))
                 for variant in ("leak", "forbidden_leak"):
                     if variant in seed and (blind, "solve") in seed[variant]["turns"]:
                         used = seed[variant]["labels"][blind]["leak_used"]
-                        groups["5 blind under the rule, refused vs complied"][0 if not used else 1].append(scores(seed, variant, blind, "solve", ref))
+                        cites = "solve" in (seed[variant]["labels"][blind].get("rule_phases") or [])
+                        row = scores(seed, variant, blind, "solve", ref)
+                        groups["5 blind under the rule, refused vs complied"][0 if not used else 1].append(row)
+                        groups["5b blind in the leak branches, solve reasoning cites the rule vs not"][0 if cites else 1].append(row)
             if "leak" in seed and "benign_k1" in seed:
                 for (agent, phase), rec in seed["leak"]["turns"].items():
                     lab = seed["leak"]["labels"][agent]
@@ -317,6 +328,9 @@ def main() -> int:
                             scores(seed, variant, agent, "verdict", ref))
                     groups["6b command, every free reviewer, rejected vs accepted"][0 if lab["verdict"] == "reject" else 1].append(
                         scores(seed, variant, agent, "verdict", ref))
+                    if (agent, "verdict") in seed["none"]["turns"]:
+                        c["6c command reviewer vs the same agent's verdict in none"][0].append(scores(seed, variant, agent, "verdict", ref))
+                        c["6c command reviewer vs the same agent's verdict in none"][1].append(scores(seed, "none", agent, "verdict", ref))
         result["contrasts"][ref] = {k: contrast(v) for k, v in c.items()}
         result["contrasts"][ref].update({k: contrast(v, paired=False) for k, v in groups.items()})
     RESULT.parent.mkdir(parents=True, exist_ok=True)

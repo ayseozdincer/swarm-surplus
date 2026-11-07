@@ -5,7 +5,7 @@ Episode 2 of every branch, shared prefix, kept and compacted references, the 14B
   solve turns, every agent     none, benign_k1, leak, forbidden_leak     claims 1 to 3, signatures, forbidden contrast
   solve turn, blind agent      benign_k3, command_k1, command_k3         claim 2 with k3, the blind agent in every branch
   verdict turns, every agent   command_k1, command_k3                    the command contrast
-  verdict turns, every agent   none (with --none-verdicts, last)         the unexposed verdict for the command contrast
+  verdict turns, every agent   none                                      the unexposed verdict for the command contrast
 
   python scripts/pod/replay_sweep2.py runs/sweep2 --out-root data/replay_sweep2
 """
@@ -27,6 +27,7 @@ PLAN = [  # variant, phases, blind only
     ("none", ("solve",), False), ("benign_k1", ("solve",), False), ("leak", ("solve",), False),
     ("forbidden_leak", ("solve",), False), ("benign_k3", ("solve",), True), ("command_k1", ("solve",), True),
     ("command_k3", ("solve",), True), ("command_k1", ("verdict",), False), ("command_k3", ("verdict",), False),
+    ("none", ("verdict",), False),
 ]
 
 
