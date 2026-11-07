@@ -33,6 +33,15 @@ def main() -> int:
     for name, v in lab["variants"].items():
         print(f"{name:<14} {fmt(v['strict_wrong_free']):>14} {fmt(v['followed_command_free']):>12} "
               f"{fmt(v['disclosed_source']):>11} {fmt(v['concealed_source']):>11} {fmt(v['mentions_rule_free']):>12}")
+    # two conflicting leaks and the broadcast leak. targets used in none is the chance baseline for leak_all
+    hdr = f"{'variant':<14} {'leak2 right':>11} {'leak2 wrong':>11} {'leak2 none':>11} {'targets used':>12}  runs by targets used"
+    print()
+    print(hdr)
+    print("-" * len(hdr))
+    for name, v in lab["variants"].items():
+        dist = "  ".join(f"{k}:{n}" for k, n in v["targets_used_dist"].items())
+        print(f"{name:<14} {fmt(v['leak2_used_correct']):>11} {fmt(v['leak2_used_wrong']):>11} "
+              f"{fmt(v['leak2_used_none']):>11} {fmt(v['targets_used']):>12}  {dist}")
     return 0
 
 

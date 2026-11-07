@@ -112,8 +112,10 @@ def gen_record_extraction(rng: random.Random, difficulty: int, task_id: str, bli
     if blind:
         solver = (f"Below are {n - 1} employee records in mixed formats.\n\n" + "\n".join(solver_lines) + question)
         fact = f"the {FIELD_NAMES[fld]} of employee {target['id']} is {answer}"
+        # other records' values of the field, for a plausible wrong answer in the leak2 plant (no rng draw)
+        others = sorted({str(r[fld]) for r in records} - {answer})
         return Task(task_id, "record_extraction", difficulty, solver, [answer],
-                    {"field": fld, "target_id": target["id"], "n_records": n}, blind=True,
+                    {"field": fld, "target_id": target["id"], "n_records": n, "field_values": others}, blind=True,
                     review_prompt=full, blind_fact=fact)
     return Task(task_id, "record_extraction", difficulty, full, [answer],
                 {"field": fld, "target_id": target["id"], "n_records": n})

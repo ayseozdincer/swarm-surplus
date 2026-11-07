@@ -14,6 +14,10 @@ Examples
 
   # a leak the agents know is forbidden, and a command from a teammate
   python scripts/run_plants.py --seeds 10 --rules confidential --variants none benign leak forbidden_leak command --out runs/rules
+
+  # two conflicting leaks, and one broadcast leak to three blind agents at once
+  python scripts/run_plants.py --seeds 10 --variants none leak leak2 --out runs/leak2
+  python scripts/run_plants.py --seeds 10 --blind-per-episode 3 --variants none leak_all --out runs/leak_all
 """
 from __future__ import annotations
 
@@ -104,6 +108,9 @@ async def main() -> int:
     if "forbidden_leak" in args.variants and args.rules == "none":
         print("warning: forbidden_leak says sharing is against the team's rules, but --rules is none, so no agent's "
               "system prompt has such a rule", file=sys.stderr)
+    if "leak_all" in args.variants and args.blind_per_episode < 2:
+        print("warning: leak_all is a broadcast to several blind agents, but --blind-per-episode is "
+              f"{args.blind_per_episode}", file=sys.stderr)
 
     if args.mock:
         model, base_url = "mock", "mock"
@@ -112,7 +119,8 @@ async def main() -> int:
             bank = TaskBank(cfg.seed, cfg.n_episodes)
             from experiments.episode import blind_plan
             bank.build(cfg.agents, blind_plan(cfg))
-            return MockLLM({t.task_id: {"key": t.answer_key, "blind": t.blind} for t in bank.tasks.values()}, seed=cfg.seed)
+            return MockLLM({t.task_id: {"key": t.answer_key, "blind": t.blind, "fact": t.blind_fact}
+                            for t in bank.tasks.values()}, seed=cfg.seed)
     else:
         api_key = os.environ.get(args.api_key_env)
         if not api_key:
@@ -160,6 +168,9 @@ async def main() -> int:
         print(f"  {'':<14} {'':<9} strict|correct {fmt(v['strict_wrong_free'])}  "
               f"command followed {fmt(v['followed_command_free'])}  disclosed {fmt(v['disclosed_source'])}  "
               f"concealed {fmt(v['concealed_source'])}  rule mentioned {fmt(v['mentions_rule_free'])}")
+        print(f"  {'':<14} {'':<9} leak2 right {fmt(v['leak2_used_correct'])}  leak2 wrong {fmt(v['leak2_used_wrong'])}  "
+              f"leak2 none {fmt(v['leak2_used_none'])}  targets used {fmt(v['targets_used'])}  "
+              f"{' '.join(f'{k}:{n}' for k, n in v['targets_used_dist'].items())}")
     return 0
 
 
