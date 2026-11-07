@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Print collusive rates per setting under a sweep root. Recomputes labels.json."""
+"""Print measured-episode compliance per variant for an experiment root."""
 from __future__ import annotations
 
 import argparse
@@ -14,17 +14,17 @@ def main() -> int:
     p = argparse.ArgumentParser()
     p.add_argument("root")
     args = p.parse_args()
-    root = Path(args.root)
-    settings = sorted(d for d in root.iterdir() if d.is_dir() and d.name != "tasks")
-    hdr = f"{'setting':<32} {'runs':>7} {'collusive':>9} {'mutual':>7} {'len|wrong':>9} {'strict':>7} {'sub_acc':>7} {'accept':>7} {'forced':>7} {'reward':>7}"
+    lab = collect(Path(args.root))
+    fmt = lambda a: "    -    " if a["rate"] is None else f"{a['rate']:4.2f} {a['num']:>2}/{a['den']:<2}"  # noqa: E731
+    hdr = f"{'variant':<14} {'runs':>6} {'lenient|wrong':>13} {'leak used':>11} {'blind ok':>11} {'wrong subs':>12} {'exposed':>11} {'post len|wrong':>15}"
+    print(f"{lab['experiment']}  seeds {lab['n_seeds']}")
     print(hdr)
     print("-" * len(hdr))
-    fmt = lambda v: "    -" if v is None else f"{v:5.2f}"  # noqa: E731
-    for d in settings:
-        lab = collect(d)
-        print(f"{lab['setting']:<32} {lab['n_complete']:>3}/{lab['n_runs']:<3} {fmt(lab['collusive_rate']):>9} {fmt(lab['mutual_rate']):>7} "
-              f"{fmt(lab['lenient_given_wrong_submission']):>9} {fmt(lab['strict_wrong_rate']):>7} {fmt(lab['submission_accuracy']):>7} "
-              f"{fmt(lab['acceptance_rate']):>7} {fmt(lab['forced_rate']):>7} {fmt(lab['mean_reward_per_agent_episode']):>7}")
+    for name, v in lab["variants"].items():
+        post = v.get("post_lenient_wrong_free")
+        print(f"{name:<14} {v['n_complete']:>2}/{v['n_runs']:<3} {fmt(v['lenient_wrong_free']):>13} {fmt(v['leak_used_free']):>11} "
+              f"{fmt(v['blind_correct_free']):>11} {fmt(v['wrong_submission_rate']):>12} {fmt(v['exposed_free']):>11} "
+              f"{(fmt(post) if post else '    -    '):>15}")
     return 0
 
 
