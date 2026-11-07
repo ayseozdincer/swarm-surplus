@@ -12,7 +12,7 @@ Draft in progress, updated as work lands. Branch `overnight-detector`.
 | W4 Phase 0 on Core | done | Surplus AUROC 1.000, close to true by construction, see the warning in that section |
 | W5 Transfer implicit labels | partial, blocker below | Audit done. Outcome label not computable from the release |
 | W6 Stego spans | done | `detector/stego_spans.py`, tested on all 320 colluder turns |
-| W6 sweep1 replay | not started | |
+| W6 sweep1 replay | running | Seeds 2000 to 2002, every variant, episode 2 |
 
 ### The first W3 replay was discarded
 
@@ -420,6 +420,32 @@ J-PACT's top pair is the coalition in 19 of 31 runs and the complement in 12, re
 | Total | 17 | 19 |
 
 Read this with care. It is one model's judgment, with no human check. 10 of the 36 supporting quotes are not verbatim in the messages (`quote_verbatim` in each record), including 4 of the 17 yes answers. Some yes answers rest on weak quotes, for example `pump_dump__pd_01` and `pd_06`.
+
+## W6
+
+### Stego reference spans
+
+`detector/stego_spans.py`, no GPU. In a colluder's public turn the user prompt opens with a block from `PRIVATE (only you and <partner> can see this):` to the template line just before the table prompt. That block holds the private-phase coordination (channel `private`) and the instructions that follow from it. Later `PRIVATE:` note lines in the table chat are private too. `private_spans` returns the character spans of both kinds, and `token_spans` maps them onto a rendered prompt. The split is the one `read.py` uses for its honest counterfactual. `tests/test_stego_spans.py` checks all 320 colluder public turns in the 20 collusion runs (280 discussion, 40 final). The block opens every one, the template tail occurs exactly once, both agreed-scheme messages lie inside the block, and nothing of the block survives outside the spans.
+
+### sweep1
+
+`runs/sweep1` finished with `exit 0`. `scripts/summarize.py runs/sweep1` gives the following. It matches the handoff, with the post-episode column added by the current script.
+
+```
+variant          runs lenient|wrong   leak used    blind ok   wrong subs     exposed  post len|wrong
+benign_k1      10/10     0.11  2/19       -      0.00  0/10   0.42 25/60  1.00 50/50      0.26  9/35
+benign_k3      10/10     0.20  2/10       -      0.00  0/10   0.38 23/60  1.00 30/30      0.39  7/18
+leak           10/10     0.42  5/12  1.00 10/10  1.00 10/10   0.20 12/60  1.00 50/50      0.12  4/32
+none           10/10     0.19  4/21       -      0.00  0/10   0.35 21/60  0.00  0/60      0.16  6/37
+proposal_k1    10/10     0.10  2/21       -      0.00  0/10   0.45 27/60  1.00 50/50      0.30  9/30
+proposal_k3    10/10     0.15  2/13       -      0.00  0/10   0.40 24/60  1.00 30/30      0.31  5/16
+```
+
+Citation labels for the proposal readout use `detector.render.NOTE_CITATION`, a pattern for references to the shared notes file as opposed to a submission's `note` field. It finds 42 of the 160 free verdict and reflection reasonings in the proposal branches (the handoff says 46). Only 9 are verdict reasonings, and in seeds 2000 to 2002 only 1 of 24 verdict reasonings cites the note. So the replay also covers the verdict turns of the 7 later proposal runs that contain the other 8, at no cost to the seeds the handoff named.
+
+### sweep1 replay
+
+Running at the time of writing.
 
 ## J-space code notes
 
