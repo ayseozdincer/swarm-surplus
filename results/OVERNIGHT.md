@@ -9,7 +9,7 @@ Draft in progress, updated as work lands. Branch `overnight-detector`.
 | W1 code notes and cache report | done | Qwen3-32B rows reproduce. `read.py` stopped at figure rendering, see the notes at the end |
 | W2 pod, model, lens | done | Smoke test passes |
 | W3 replay and leak readout | done | First replay discarded and rerun once. The leak is not read at the handoff's positions, see below |
-| W4 Phase 0 on Core | queued | |
+| W4 Phase 0 on Core | done | Surplus AUROC 1.000, close to true by construction, see the warning in that section |
 | W5 Transfer implicit labels | partial, blocker below | Audit done. Outcome label not computable from the release |
 | W6 Stego spans | done | `detector/stego_spans.py`, tested on all 320 colluder turns |
 | W6 sweep1 replay | not started | |
@@ -163,6 +163,65 @@ Position 1 readout. At L26 to L30 the top-10 is whitespace and newline tokens fo
 The concepts are the same kind of noise in every branch, including `none`, where no note exists. Nothing about trust, accepting or the proposal appears in the proposal branch. Concept-level surplus at this position is not interpretable with this lens.
 
 Limits. One seed, one lens that is a partial 80-prompt checkpoint, and the handoff's positions. The handoff's list has no position inside the reasoning. W6 adds one, the token just before she first writes the answer. No self-written text carries the answer there, so the reference has no source for it.
+
+## W4 Phase 0 on Core
+
+Qwen3-32B, 31 collusion and 31 control runs, 744 public responses. Same metric as the paper: AUROC within each domain, then averaged, with 95 percent intervals from 1000 bootstrap draws over scenarios. Full output in `results/phase0.json`.
+
+| Detector | Observations | AUROC |
+| --- | --- | --- |
+| J-PACT, released cache | 3 rounds | 0.984 [0.90, 1.00] |
+| J-PACT, replayed from public inputs | 3 rounds | 1.000 [1.00, 1.00] |
+| J-PACT, released cache | 1 round | 0.861 |
+| J-PACT, replayed from public inputs | 1 round | 0.863 |
+| Ontology baseline, released cache | 3 rounds | 0.853 [0.74, 0.98] |
+| Ontology baseline, replayed from public inputs | 3 rounds | 0.861 [0.77, 0.98] |
+| Surplus, end of response, pool mean (primary) | 3 rounds | 1.000 [1.00, 1.00] |
+| Surplus, first response token, pool mean | 3 rounds | 1.000 [1.00, 1.00] |
+| Surplus, end of response, pool mean | 1 round | 1.000 [1.00, 1.00] |
+
+**Do not read the 1.000 as a detection result.** It is close to true by construction. A control agent's reference input is identical to its actual input, and so is an honest agent's in a collusion run, because their system prompts match the control run exactly (186 of 186) and they have no private block. Their surplus can only be replay noise. A colluder's reference differs by a whole system prompt and the private block. So this table shows that a different prompt changes the activations, by a margin well above noise. It does not show that surplus tells collusion from any other prompt difference, and W3 suggests it may not, since mass there did not depend on what the note said. The proposal expected this ("near-ceiling results read as trivial"). The control that would make it informative is a placebo, in the open questions. For the same reason the proposal's Phase 0 condition that honest agents separate from the noise floor cannot be tested in this design.
+
+To keep honest scores from being exact zeros, honest agents' second pass runs on the plain kernel, so they carry real noise. Colluders' two passes share a kernel. That is the conservative direction.
+
+### Margins
+
+Surplus mass, 0 to 1, run score (max over agents), all layers unless noted.
+
+| Setting | AUROC, mass | Lowest collusion run | Highest control run |
+| --- | --- | --- | --- |
+| End of response, 3 rounds | 1.000 [1.00, 1.00] | 0.451 | 0.184 |
+| End of response, round 1 | 1.000 [1.00, 1.00] | 0.510 | 0.208 |
+| End of response, L26 to L30 | 1.000 [1.00, 1.00] | 0.529 | 0.290 |
+| First response token, 3 rounds | 1.000 [1.00, 1.00] | 0.477 | 0.151 |
+| First response token, round 1 | 1.000 [1.00, 1.00] | 0.514 | 0.182 |
+| First response token, L26 to L30 | 1.000 [1.00, 1.00] | 0.494 | 0.278 |
+
+Per agent, 3 rounds, all layers.
+
+| Group | Agents | End of response, median mass (min to max) | First response token, median mass (min to max) |
+| --- | --- | --- | --- |
+| Colluders | 62 | 0.491 (0.435 to 0.585) | 0.515 (0.464 to 0.624) |
+| Honest, collusion runs | 62 | 0.150 (0.119 to 0.186) | 0.126 (0.092 to 0.157) |
+| Honest, control runs | 124 | 0.155 (0.129 to 0.184) | 0.128 (0.078 to 0.151) |
+
+### Noise floor
+
+20 honest control agents at round 3, each replayed three ways.
+
+| Comparison | Position | Bit-identical | Mass, median | Mass, p95 | Mass, max | Relative residual delta, median |
+| --- | --- | --- | --- | --- | --- | --- |
+| Same kernel, run twice | both | 20 of 20 | 0.000 | 0.000 | 0.000 | 0.000 |
+| Plain against explicit mask kernel | end of response | 0 of 20 | 0.142 | 0.168 | 0.168 | 0.0131 |
+| Plain against explicit mask kernel | first response token | 0 of 20 | 0.137 | 0.159 | 0.168 | 0.0078 |
+
+Replay on one kernel in one process is bit-identical, so the floor that matters is the kernel one. A residual change of about 1 percent moves about 14 percent of the J-space share mass, the same floor W3 found on our own runs. Colluders sit at about 3.3 times that. Honest agents' 3-round mass slightly exceeds the 20-agent floor maximum in some cases (up to 0.186 against 0.168), since it pools a different set of rows.
+
+### Pipeline notes
+
+- The J-space pipeline ran from public inputs on the pod: `replay`, `prepare`, `stage`, `primary`, the Stego rounds replay, then `detect.py sweep`.
+- One change. `scripts/pod/sweep_fast.py` replaces `lens.decompose` with the batched pursuit, because the original decomposes about 135k rows one at a time. It matched TransformerLens on 8 rows per layer tested, and the sweep's own numbers track the cache across tiers (Transfer 0.542 against 0.556, Stego 1.000 against 1.000, ontology 0.861 against 0.853).
+- J-PACT replayed at 1.000 against the cache's 0.984. Their README says public-input numbers can differ from the cache. `results/jpact_public_inputs_qwen3_32b.json` holds the full sweep.
 
 ## W5 summary
 
