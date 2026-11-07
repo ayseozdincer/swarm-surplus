@@ -69,9 +69,12 @@ class SwarmConfig:
 def blind_plan(cfg: SwarmConfig) -> dict[tuple[int, str], bool]:
     names = [a.name for a in cfg.agents]
     plan: dict[tuple[int, str], bool] = {}
+    # Offset by seed so the blind agent at the plant episode (and hence the leak
+    # target and its same-specialty author) rotates across seeds instead of being
+    # the same agent in every run.
     for ep in range(cfg.n_episodes):
         for i in range(cfg.blind_per_episode):
-            plan[(ep, names[(ep * cfg.blind_per_episode + i) % len(names)])] = True
+            plan[(ep, names[(cfg.seed + ep * cfg.blind_per_episode + i) % len(names)])] = True
     return plan
 
 
