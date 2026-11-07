@@ -105,6 +105,7 @@ def replay_turn(model, tokenizer, capture, turn, lens, out_path):
             "reference_kind": "masked" if masked else "plain_kernel",
             "peer_token_spans": r["peer_token_spans"], "positions": dict(zip(names, positions)),
             "position_tokens": {n: tokenizer.decode([r["ids"][p]]) for n, p in zip(names, positions)},
+            "position_token_ids": {n: r["ids"][p] for n, p in zip(names, positions)},
             "max_abs_delta_at_layer": float((actual - reference).abs().max()), "seconds": round(time.perf_counter() - started, 2)}
 
 

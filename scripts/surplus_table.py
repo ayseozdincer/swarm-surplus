@@ -5,7 +5,7 @@ Mass is the sum over concepts of the mean over layers of [z - z~]+, half the L1 
 averaged over layers, so it runs from 0 to 1. A branch with no peer message has reference_kind plain_kernel: its mass is what
 kernel noise alone produces, measured by the same decomposition.
 
-  python scripts/surplus_table.py data/replay/pilot/seed1000 results/surplus_by_position.json
+  python scripts/surplus_table.py results/surplus_by_position.json data/replay/pilot/seed1000 [more seed directories]
 """
 from __future__ import annotations
 
@@ -33,9 +33,9 @@ def mass(z_a, z_r, keep=None):
 
 
 def main() -> int:
-    root, out = Path(sys.argv[1]), Path(sys.argv[2])
+    out, roots = Path(sys.argv[1]), [Path(p) for p in sys.argv[2:]]
     table = defaultdict(lambda: defaultdict(list))
-    for directory in sorted(p for p in root.iterdir() if (p/"jspace.npz").exists()):
+    for directory in sorted(p for root in roots for p in root.iterdir() if (p/"jspace.npz").exists()):
         meta = json.loads((directory/"rows.json").read_text())
         data = np.load(directory/"jspace.npz")
         support, coefficients = data["support"], data["coefficients"]

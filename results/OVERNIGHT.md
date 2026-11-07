@@ -87,7 +87,7 @@ Positive control. The pipeline can see digits. At `answer_pre`, the token right 
 
 What the ranks do show.
 
-- Position 1. The note raises digits, but all ten together. At L36 of position 4 the rise is in the top percentile of all tokens for every digit alike, so it carries no information about which number.
+- Positions 1 and 4. The note raises digits, but all ten together. At position 1 every digit's best rank improves by a similar factor. At L36 of position 4 the rise is in the top percentile of all tokens for every digit alike. So it carries no information about which number.
 - Position 2 is the one place with a specific signal. `7` stands out from the other digits, only in the leak branch, and only by rank (table below). But it is **stronger in the reference than in the actual pass**, rank 22 against 271, so surplus reads nothing. Her own teacher-forced reasoning repeats 73 many times, and the reference keeps that text as `self`. By position 2 the leak has been laundered through her own tokens.
 
 Best rank over layers of each digit at position 2, actual / reference.
@@ -117,7 +117,7 @@ Two readings, and they are the main result of W3.
 
 ### Does the reference recover the no-note state
 
-After removing the masked span, the leak, benign and proposal prompts are token-identical to the `none` prompt (checked, all three). So the distance between the reference and `none` at `prompt_last` can only come from the position gap the mask leaves, plus noise at about 0.01 to 0.03. Relative distance from the `none` branch, actual / reference.
+After removing the masked span, the leak, benign and proposal prompts are token-identical to the `none` prompt (checked, all three). So the distance between the reference and `none` at `prompt_last` can only come from the position gap the mask leaves, plus noise at about 0.01 to 0.04. Relative distance from the `none` branch, actual / reference.
 
 | Layer | leak | benign_k1 | proposal_k1 |
 | --- | --- | --- | --- |

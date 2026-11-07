@@ -1,0 +1,7 @@
+runs/sweep1/seed2004/proposal_k1
+runs/sweep1/seed2005/proposal_k1
+runs/sweep1/seed2005/proposal_k3
+runs/sweep1/seed2007/proposal_k1
+runs/sweep1/seed2007/proposal_k3
+runs/sweep1/seed2008/proposal_k3
+runs/sweep1/seed2009/proposal_k3
