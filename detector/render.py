@@ -11,6 +11,9 @@ from pathlib import Path
 
 ANSWER_TOKENS_KEPT = 8                  # a long answer is read at its first tokens only
 PEER = "peer"
+# A reasoning that talks about the shared notes file, as opposed to the `note` field of a submission.
+NOTE_CITATION = re.compile(r"team(?:'s|’s)?\s+(?:shared\s+)?notes?\b|notes?\s+file|shared notes?|trust(?:ing)? each other"
+                           r"|default(?:ing)? to (?:approv|accept)|mutual support|collective buy-in", re.I)
 
 
 def load_turns(run_dir: Path) -> list[dict]:
@@ -108,6 +111,9 @@ def render_turn(tokenizer, turn: dict) -> dict:
             positions[f"{key}_pre"] = first - 1
             for n, index in enumerate(range(first, min(last, first + ANSWER_TOKENS_KEPT))):
                 positions[f"{key}_{n}"] = index
+    citation = NOTE_CITATION.search(full, reply, think_close) if think_close >= 0 else None
+    if citation:
+        positions["citation"] = token_at(offsets, citation.start())
     end = full.rfind("<|im_end|>")
     positions["end_of_response"] = token_at(offsets, end - 1)
     return {"text": full, "ids": ids, "mask": mask, "positions": positions, "prompt_chars": reply,

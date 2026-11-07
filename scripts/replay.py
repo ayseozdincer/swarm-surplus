@@ -29,6 +29,7 @@ ARTIFACTS = Path("/workspace/artifacts")
 MODEL_DIR = ARTIFACTS/"qwen3_32b"
 LENS_FILE = ARTIFACTS/"lens_candidate/qwen3-32b/jlens/Salesforce-wikitext/Qwen3-32B_jacobian_lens.pt"
 PHASES = ("solve", "verdict", "reflection")
+LENS_LAYERS = tuple(range(63))         # the released lens covers blocks 0 to 62 of 64
 
 
 def load_model():
@@ -61,7 +62,10 @@ class Capture:
         self.index = torch.as_tensor(positions, device=device)
         input_ids = torch.tensor([ids], device=device)
         position_ids = torch.arange(len(ids), device=device)[None]
-        attention_mask = None if mask is None else torch.tensor([mask], device=device)
+        if mask is None or torch.is_tensor(mask):
+            attention_mask = None if mask is None else mask.to(device)
+        else:
+            attention_mask = torch.tensor([mask], device=device)
         with torch.no_grad():
             model.model(input_ids=input_ids, position_ids=position_ids, attention_mask=attention_mask, use_cache=False)
         return torch.stack([self.saved[layer] for layer in self.layers], dim=1)
