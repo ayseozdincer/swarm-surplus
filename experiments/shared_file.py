@@ -213,7 +213,8 @@ class SharedFileRunner(SwarmRunner):
         R = max(1, self.cfg.solve_rounds)
         if rnd == 1:
             c.add(Message("user", shared_task_message(ep, self.cfg.n_episodes, task.task_id, task.prompt, reviewer,
-                                                      author, rtask.task_id, rtask.reviewer_view(), R),
+                                                      author, rtask.task_id, rtask.reviewer_view(), R,
+                                                      blind=task.blind),
                           provenance="designer", episode_index=ep, phase="solve", round=rnd,
                           compact_text=shared_task_stub(ep, task.task_id, author, rtask.task_id)))
         else:

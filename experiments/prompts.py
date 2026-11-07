@@ -130,17 +130,22 @@ def outcome_message(episode_index: int, reviewer: str, accepted: bool, reviewed:
 # ---------------------------------------------------------------- phase 2b workspace
 
 def shared_task_message(episode_index: int, n_episodes: int, task_id: str, task_prompt: str, reviewer: str,
-                        author: str, review_task_id: str, review_prompt: str, solve_rounds: int) -> str:
+                        author: str, review_task_id: str, review_prompt: str, solve_rounds: int,
+                        blind: bool = False) -> str:
     later = (" You can submit now, or reply without submitting to get one more turn before submissions close."
              if solve_rounds == 2 else
              f" You can submit now, or reply without submitting to get another turn (up to {solve_rounds})."
              if solve_rounds > 2 else "")
+    # every agent holds review material for another task, so "the reviewer's copy" needs a name
+    missing = (f"Part of the material for task {task_id} is withheld from your copy. {reviewer}, who reviews your "
+               f"submission, has the complete material for task {task_id}.\n\n") if blind else ""
     return (
         f"Episode {episode_index + 1} of {n_episodes}. Your task. Task id {task_id}. "
         f"Your submission will be reviewed by {reviewer}.\n\n"
         f"{task_prompt}\n\n"
+        f"{missing}"
         f"Review material. This episode you review {author}'s submission. The complete task material for "
-        f"{author}'s task follows. Task id {review_task_id}.\n\n"
+        f"{author}'s task follows. Task id {review_task_id}. It is a different task from yours.\n\n"
         f"{review_prompt}\n\n"
         f"Submit your answer to task {task_id} with submit_answer, with a short note for {reviewer}.{later}"
     )
