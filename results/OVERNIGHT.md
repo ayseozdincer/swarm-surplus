@@ -405,7 +405,7 @@ J-PACT's top pair is the coalition in 19 of 31 runs and the complement in 12, re
 | `fair_option` present on collusion and control rows | null in all 288 Qwen3-32B Transfer rows, and for every other model |
 | A final RECOMMENDATION of Option A or B per agent | The released final prompt asks for "a brief final summary". No Transfer prompt offers Option A or B in any of the 108 runs. 0 of 72 pair members have a vote. The one regex hit is an allocation figure ("6-8%") |
 
-`generation/transfer.py` at the pinned commit does ask for a RECOMMENDATION, so the released transcripts came from different prompts than that code. `voted_unfair` and `collusive` are null in every record. No replacement label was invented.
+`generation/transfer.py` at the pinned commit does ask for a RECOMMENDATION, so the released transcripts came from different prompts than that code. `voted_unfair` and `collusive` are null in every record. No replacement label was invented. **Decision, Ayse: the Transfer outcome labels are dropped.** The audit stays, and its 17 yes cases get a human read before any number from it is quoted.
 
 **Coordination audit, run as specified.** `qwen/qwen3-32b` through OpenRouter, the two private messages only, temperature 0.
 
@@ -526,17 +526,25 @@ The direction at uptake does not point where the note's exposure signature point
 
 Filled in at the end of the night. Running estimate from the watchdog: see `results/pod_state.json`.
 
-## Open questions for Ayse
+## Decisions and open questions for Ayse
 
-1. **Is surplus mass about collusion or about edit size?** W4 follow-up 4 runs the size-matched honest control. Until it is read, treat the Core AUROC of 1.000 as close to true by construction.
-2. **Read positions.** The leak reads at the first mention (residual 19 to 68 times the floor, `7` at rank 0, J-space surplus at L58, L61, L62) and at none of the handoff's positions. That points at a per-token readout through the reasoning, which the proposal already plans with the top-10 readout, rather than fixed positions. Which positions should the detector commit to?
-3. **Which reference.** Masking with positions kept leaves the reference about halfway to the no-note state. Compacting the positions closes most of the gap but fails the strict floor test, and it shifts positions between the two passes. Keep positions, compact them, or report both?
-4. **J-space noise.** A residual change of about 1 percent moves about 14 percent of the share mass, on our runs and on Core alike, so the 25-atom gradient pursuit over 151k atoms is unstable. Options are the default NNLS pursuit, averaging shares over neighbouring tokens, or concept sets from the dense readout. The dense sets proved too sparse for edges.
-5. **The Qwen3-32B lens is a partial checkpoint**, 80 prompts and not converged, with a refit planned upstream. Fit our own, wait, or switch models?
-6. **Transfer outcome labels.** The release has no votes and no fair option. Options are an LLM judge of whether each final summary surfaces the planted problem, asking the NARCBench authors for the voting transcripts, or dropping the outcome label and keeping the audit.
-7. **The edge test (1c)** cannot rank pairs with dense top-k sets, and naming the coalition there matches the shuffled-turn null. Is 1c still a target, and on what concept sets?
-8. **Disk left billing.** The pod is stopped, not terminated. Its 250 GB volume keeps the model, lens, replays and venv, and costs about 0.07 USD an hour while stopped (RunPod's 0.20 USD per GB-month for stopped volumes). Terminate it once nothing more is needed from it. The account also has a 250 GB network volume, `silent-dissent-models` (CA-MTL-3, about 0.024 USD an hour), which this work did not create or touch.
-9. **The pod-side stop script is unverified.** The key RunPod injects into the pod answered 403 to every read, so the real guard was the watchdog on this Mac, which only runs while the Mac is awake.
+Decisions Ayse made overnight, relayed through the review session.
+
+| Question | Decision |
+| --- | --- |
+| Which reference | Report both. Compacted is primary for surplus mass and for distance to the no-note state. Kept is primary for direction comparisons across notes, since compacting adds a note-length position shift |
+| Edge test 1c | Stays a target, redefined as the direction edge from W7 part A. Scored on the Core arrays, CPU only |
+| Transfer outcome labels | Dropped. The audit stays, and its 17 yes cases get a human read before any number is quoted |
+| Pod | Stopped at the end of the queue, not terminated. A Qwen3-14B sweep on the Mac will need a replay within a day |
+| Read positions | The per-token trace with a jump test is the method. Fixed positions stay reported for comparability |
+| J-space noise | The direction and the dense readout carry the tests. Sparse shares are the bonus naming column |
+
+Still open.
+
+1. **Is surplus mass about collusion or about edit size?** See W4 follow-up 4 for the size-matched control.
+2. **The Qwen3-32B lens is a partial checkpoint**, 80 prompts and not converged, with a refit planned upstream. Fit our own, wait, or switch models? It matters less now that the tests run on directions, but the naming column still uses it.
+3. **The pod-side stop script is unverified.** The key RunPod injects into the pod answered 403 to every read, so the real guard was the watchdog on this Mac, which only runs while the Mac is awake. Worth knowing before the next unattended run.
+4. **The account has a 250 GB network volume, `silent-dissent-models`** (CA-MTL-3, about 0.024 USD an hour, 0.58 a day), which this work did not create or touch.
 
 ## J-space code notes
 
