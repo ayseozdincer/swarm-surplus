@@ -5,3 +5,7 @@
 __pycache__/
 data/
 runs/
+third_party/maj-lens/artifacts
+third_party/maj-lens/logs/
+third_party/maj-lens/narcbench/
+third_party/maj-lens/jacobian-lens/

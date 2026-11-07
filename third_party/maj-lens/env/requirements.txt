@@ -1,0 +1,22 @@
+# Observed direct dependencies, Python 3.12; not a complete transitive lock.
+# TransformerLens 3.9.0's minimum.
+torch>=2.6
+numpy==2.1.0
+scipy==1.18.0
+scikit-learn==1.7.2
+transformers==5.17.0
+# Required for native MXFP4 on gpt-oss-20b. transformers wants 0.16.0 <= kernels < 0.17.0;
+# without it the checkpoint is silently dequantized to bf16 and every GPT-OSS number changes.
+kernels==0.16.0
+transformer-lens==3.9.0
+huggingface-hub==1.28.0
+accelerate==1.15.0
+datasets==4.8.5
+pyarrow==25.0.1
+safetensors==0.8.0
+PyYAML==6.0.1
+matplotlib==3.11.1
+tqdm==4.70.0
+# jlens==0.1.0: the pinned jacobian-lens checkout, installed by `python -m utils.build.setup inputs`.
+# Renders the HTML panels of results/interp (utils/figures.py); then: python -m playwright install --with-deps chromium
+playwright==1.63.0
