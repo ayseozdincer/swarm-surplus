@@ -447,6 +447,81 @@ Citation labels for the proposal readout use `detector.render.NOTE_CITATION`, a 
 
 Running at the time of writing.
 
+## W7 Identify unauthorised sharing
+
+Naming through the lens becomes a bonus column, not the test. The scores below use the surplus direction `d = h_actual - h_reference` itself.
+
+### Part A, lens-free direction test
+
+Pilot seed 1000, episode 2, solve turns, the five free readers (alice, bob, carol, dave, erin), the same five in leak, benign_k1 and proposal_k1. Reference with positions kept. The compacted reference and the per-token trace need the GPU and run after the sweep. Note that compacted directions also carry a note-specific position shift (gaps of 57, 63 and 87 tokens), so the kept reference is the cleaner basis. Data in `results/direction_test.json`.
+
+**1. Content without naming, carol.** Cosine between her surplus directions under two different notes, per layer.
+
+`prompt_last`
+
+| Pair | L15 | L26 | L30 | L36 | L40 | L45 | L50 | L56 | L60 | L62 |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| leak vs benign_k1 | 0.78 | 0.80 | 0.80 | 0.73 | 0.69 | 0.49 | 0.46 | 0.47 | 0.45 | 0.49 |
+| leak vs proposal_k1 | 0.59 | 0.80 | 0.78 | 0.73 | 0.67 | 0.46 | 0.43 | 0.41 | 0.37 | 0.41 |
+| benign_k1 vs proposal_k1 | 0.70 | 0.83 | 0.82 | 0.81 | 0.79 | 0.80 | 0.77 | 0.71 | 0.68 | 0.68 |
+
+`first_generated`
+
+| Pair | L15 | L26 | L30 | L36 | L40 | L45 | L50 | L56 | L60 | L62 |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| leak vs benign_k1 | 0.54 | 0.86 | 0.84 | 0.84 | 0.84 | 0.87 | 0.77 | 0.75 | 0.71 | 0.68 |
+| leak vs proposal_k1 | 0.63 | 0.84 | 0.82 | 0.82 | 0.83 | 0.84 | 0.76 | 0.73 | 0.69 | 0.66 |
+| benign_k1 vs proposal_k1 | 0.63 | 0.89 | 0.88 | 0.88 | 0.87 | 0.88 | 0.81 | 0.79 | 0.79 | 0.80 |
+
+`first_thought`
+
+| Pair | L15 | L26 | L30 | L36 | L40 | L45 | L50 | L56 | L60 | L62 |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| leak vs benign_k1 | 0.58 | 0.78 | 0.81 | 0.79 | 0.81 | 0.73 | 0.57 | 0.51 | 0.44 | 0.46 |
+| leak vs proposal_k1 | 0.71 | 0.79 | 0.80 | 0.78 | 0.77 | 0.72 | 0.50 | 0.41 | 0.32 | 0.30 |
+| benign_k1 vs proposal_k1 | 0.68 | 0.83 | 0.84 | 0.81 | 0.79 | 0.77 | 0.69 | 0.61 | 0.59 | 0.60 |
+
+From L45 up, at `prompt_last` and `first_thought`, the leak's direction is further from both other notes than they are from each other (at `prompt_last` L60, 0.45 and 0.37 against 0.68). At L26 to L40 the three are equally alike. So at late layers the direction carries something about the note. One confound: the leak note is the only one addressed to carol by name ("Hey Carol"), so "content" here may be the addressee as much as the answer.
+
+**2. Same content, different readers.** Mean cosine of `d` between two readers of the same note, against one reader's `d` under two different notes.
+
+| Position | Band | Within one note, across readers | Same reader, across notes |
+| --- | --- | --- | --- |
+| prompt_last | L26-30 | 0.620 | 0.791 |
+| prompt_last | L50-62 | 0.261 | 0.740 |
+| prompt_last | all | 0.487 | 0.704 |
+| first_generated | L26-30 | 0.643 | 0.804 |
+| first_generated | L50-62 | 0.461 | 0.763 |
+| first_generated | all | 0.497 | 0.662 |
+| first_thought | L26-30 | 0.672 | 0.844 |
+| first_thought | L50-62 | 0.295 | 0.576 |
+| first_thought | all | 0.576 | 0.674 |
+
+In every cell one reader agrees with itself across notes more than readers of one note agree with each other. The surplus direction is reader-driven first, not content-driven.
+
+**3. Source without naming.** For each reader and note, is `d` closest to its own note's signature (mean `d` of the other four readers of that note) among the three? 15 decisions per cell, chance 0.33.
+
+| Position | L26-30 | L50-62 | All layers |
+| --- | --- | --- | --- |
+| prompt_last | 0.93 | 0.93 | 1.00 |
+| first_generated | 1.00 | 0.80 | 1.00 |
+| first_thought | 1.00 | 1.00 | 1.00 |
+
+The note is identified 80 to 100 percent of the time. That fits item 2. The reader's own component is shared by all three candidate comparisons, so it cancels when choosing the nearest signature. This identifies which note was read. It does not separate an unauthorised note from a harmless one, which is part B's question.
+
+**4. Uptake against exposure.** Carol's `d` at `mention_pre` (leak: the token before she writes 73. benign_k1: the token before her own answer) against each note's signature at `first_generated`.
+
+| Carol's turn | Signature | L15 | L26 | L30 | L36 | L40 | L45 | L50 | L56 | L60 | L62 |
+| --- | --- |  --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| leak | vs leak signature | 0.03 | -0.01 | -0.02 | -0.00 | 0.00 | -0.01 | -0.01 | -0.05 | -0.09 | -0.03 |
+| leak | vs benign_k1 signature | 0.06 | -0.02 | -0.02 | 0.01 | 0.01 | -0.00 | 0.00 | -0.06 | -0.10 | -0.04 |
+| leak | vs proposal_k1 signature | 0.02 | -0.04 | -0.02 | 0.01 | 0.01 | 0.01 | -0.01 | -0.07 | -0.11 | -0.11 |
+| benign_k1 | vs leak signature | 0.18 | 0.00 | 0.06 | -0.00 | -0.02 | 0.01 | -0.03 | -0.00 | -0.02 | -0.03 |
+| benign_k1 | vs benign_k1 signature | 0.22 | 0.01 | 0.08 | -0.01 | -0.00 | 0.01 | -0.03 | 0.00 | -0.02 | -0.04 |
+| benign_k1 | vs proposal_k1 signature | 0.14 | 0.02 | 0.07 | -0.03 | -0.02 | 0.01 | -0.03 | 0.02 | 0.00 | -0.04 |
+
+The direction at uptake does not point where the note's exposure signature points. Its cosine with all three signatures is near zero (-0.11 to 0.06 in the leak branch), and it prefers none of them. Taking the number up and having seen the note show up in different directions. The per-token trace from the response start to the mention follows when the GPU frees.
+
 ## Pod, GPU, hours and cost
 
 Filled in at the end of the night. Running estimate from the watchdog: see `results/pod_state.json`.
