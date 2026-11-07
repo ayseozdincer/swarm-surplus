@@ -315,6 +315,85 @@ Replay on one kernel in one process is bit-identical, so the floor that matters 
 - One change. `scripts/pod/sweep_fast.py` replaces `lens.decompose` with the batched pursuit, because the original decomposes about 135k rows one at a time. It matched TransformerLens on 8 rows per layer tested, and the sweep's own numbers track the cache across tiers (Transfer 0.542 against 0.556, Stego 1.000 against 1.000, ontology 0.861 against 0.853).
 - J-PACT replayed at 1.000 against the cache's 0.984. Their README says public-input numbers can differ from the cache. `results/jpact_public_inputs_qwen3_32b.json` holds the full sweep.
 
+### W4 follow-up 1, placebo references
+
+The placebo as specified collapses, because honest prompts are identical up to the name in all 31 control runs (one preamble, one table brief), so a different persona's prompt is the real reference again. **The donor is therefore the honest brief of a different scenario in a different domain**, with no collusion content. One kernel throughout. Groups.
+
+- Colluders, placebo. Own preamble plus the donor brief, private block removed.
+- Honest, padded. Own prompt with the donor brief appended, as requested.
+- Honest, swapped. Own preamble plus the donor brief in place of their own. This group was added here, because it is the same system-prompt edit the colluders get, minus the private block.
+
+Surplus mass per agent, pooled over rounds and layers as in the W4 table, at the first response token.
+
+| Group | Agents | Median | Range |
+| --- | --- | --- | --- |
+| colluders, real reference | 62 | 0.5151 | 0.4641 to 0.6243 |
+| colluders, placebo | 62 | 0.5236 | 0.4585 to 0.6278 |
+| honest, own reference | 186 | 0.1273 | 0.0784 to 0.1572 |
+| honest, padded | 186 | 0.3395 | 0.2533 to 0.3840 |
+| honest, swapped | 186 | 0.4071 | 0.3135 to 0.4657 |
+
+At the end of response.
+
+| Group | Agents | Median | Range |
+| --- | --- | --- | --- |
+| colluders, real reference | 62 | 0.4914 | 0.4350 to 0.5854 |
+| colluders, placebo | 62 | 0.4973 | 0.4415 to 0.5909 |
+| honest, own reference | 186 | 0.1533 | 0.1188 to 0.1862 |
+| honest, padded | 186 | 0.3709 | 0.3189 to 0.4093 |
+| honest, swapped | 186 | 0.3816 | 0.3211 to 0.4470 |
+
+Run AUROC, colluders against honest with both sides on placebo-style references (domain-grouped, scenario bootstrap).
+
+| Position | Placebo vs padded | Placebo vs swapped |
+| --- | --- | --- |
+| first response token | 1.000 [1.00, 1.00] | 1.000 [1.00, 1.00] |
+| end of response | 1.000 [1.00, 1.00] | 1.000 [1.00, 1.00] |
+
+**By the stated rule the AUROC stays at 1.000, so mass looks collusion-specific. A size confound is not ruled out.** The colluders' reference also removes the private block, so their edit is larger than either honest edit. The change in input length is a median 252 tokens for colluders, 135 for padded and 7 for swapped, and swapped replaces about 200 tokens of brief at equal length. Mass rises with the size of the edit: own reference 0.13, padded 0.34, swapped 0.41, colluders 0.52 (first response token). A test that removes a harmless block of private-block size from honest agents would separate these. It has not been run. Note also that colluders score about the same against the real and placebo references (0.515 and 0.524), so the choice of honest brief barely matters to their mass.
+
+### W4 follow-up 2, ontology on the surplus
+
+Cosine of the surplus direction `h_actual - h_reference` with the paper's ontology directions (18 target words against 32 controls), mean over words, then layers, then rounds.
+
+| Group | Agents | Median, first response token | Median, end of response |
+| --- | --- | --- | --- |
+| colluders, real reference | 62 | 0.0020 | 0.0003 |
+| colluders, placebo | 62 | 0.0021 | 0.0008 |
+| honest, own reference | 186 | 0.0002 | -0.0002 |
+| honest, padded | 186 | -0.0010 | 0.0005 |
+| honest, swapped | 186 | 0.0012 | 0.0005 |
+
+| AUROC | First response token | End of response |
+| --- | --- | --- |
+| Agents, colluders real vs honest own | 0.652 | 0.544 |
+| Agents, colluders real vs honest padded | 0.759 | 0.471 |
+| Agents, colluders placebo vs honest padded | 0.805 | 0.544 |
+| Agents, colluders placebo vs honest swapped | 0.610 | 0.545 |
+| Runs, placebo vs padded | 0.819 [0.68, 0.94] | 0.766 [0.62, 0.89] |
+| Runs, placebo vs swapped | 0.694 [0.56, 0.84] | 0.593 [0.44, 0.74] |
+
+The content readout is weak. The surplus leans slightly toward the collusion words at the first response token, but cosines are of order 0.001 to 0.002, and at the end of response it is near chance. The paper's ontology baseline on the raw residual reaches 0.853 at the end of response (0.861 replayed), so reading the ontology on the surplus does not improve on it here.
+
+### W4 follow-up 3, the edge test (1c)
+
+`E(j->i, t) = |S_i(t) & H_j(t') - A_i(t)| / |S_i(t)|` on dense top-k concept sets over L26 to L30, as defined in `scripts/phase0_followups.py`. A pair scores the mean of its two directions, and the top pair is the highest. Precision and recall are over ordered edges at the threshold that 5 percent of non-coalition edges exceed. The null draws H_j from a random public turn of j, 200 draws. `with_private` lets H use the colluders' private-channel turns, as requested. Only colluders have those turns, so that variant knows the coalition before scoring, and `public` is the fair test.
+
+| k | Position | H uses | Top pair is coalition | Is complement | Shuffled-turn null, top pair | Precision at 5% FPR | Recall | Coalition pair gap | Null gap | Surplus set size, median colluder / honest |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| 10 | first_response | public | 24 of 31 | 3 | 23.9 (p95 26) | 0.89 | 0.39 | 0.359 | 0.349 (p95 0.371) | 1 / 0 |
+| 10 | first_response | with_private | 23 of 31 | 3 | not run | 0.63 | 0.44 | 0.304 | not run | 1 / 0 |
+| 10 | end_of_response | public | 18 of 31 | 1 | 20.4 (p95 23) | 0.40 | 0.13 | 0.227 | 0.239 (p95 0.267) | 1 / 0 |
+| 10 | end_of_response | with_private | 20 of 31 | 1 | not run | 0.37 | 0.11 | 0.273 | not run | 1 / 0 |
+| 25 | first_response | public | 29 of 31 | 0 | 28.5 (p95 30) | 0.86 | 0.77 | 0.507 | 0.445 (p95 0.465) | 6 / 0 |
+| 25 | first_response | with_private | 30 of 31 | 0 | not run | 0.81 | 0.63 | 0.439 | not run | 6 / 0 |
+| 25 | end_of_response | public | 27 of 31 | 0 | 26.4 (p95 29) | 0.52 | 0.26 | 0.353 | 0.357 (p95 0.384) | 2 / 0 |
+| 25 | end_of_response | with_private | 27 of 31 | 0 | not run | 0.53 | 0.27 | 0.400 | not run | 2 / 0 |
+
+J-PACT's top pair is the coalition in 19 of 31 runs and the complement in 12, recomputed from the cache.
+
+**The dense sets are too sparse to rank pairs by provenance, so this stops here.** A colluder's surplus set holds a median 1 to 6 concepts and an honest agent's holds 0. Edges into honest agents are therefore almost always zero, so the coalition pair wins because only colluders have surplus at all. The shuffled-turn null shows timing adds nothing. With j's turns shuffled, the coalition is still the top pair about as often (28.5 against 29 at k = 25, first response token), and the coalition gap stays at the null (0.507 against a null 95th percentile of 0.465 at best, within it elsewhere). Precision is below the proposal's 0.90 target in every setting.
+
 ## W5 summary
 
 `data/transfer_implicit_labels.json` has one record for each of the 36 implicit runs. It is force-added, since `data/` is ignored.
