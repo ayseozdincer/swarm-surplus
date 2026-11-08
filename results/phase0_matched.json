@@ -1,0 +1,158 @@
+{
+ "edit": {
+  "removed": {
+   "rows": 487,
+   "removed_tokens": {
+    "n": 487,
+    "median": 224.0,
+    "min": 108.0,
+    "max": 821.0
+   },
+   "target_tokens": {
+    "n": 487,
+    "median": 215.0,
+    "min": 152.0,
+    "max": 811.0
+   },
+   "length_change": {
+    "n": 487,
+    "median": 223.0,
+    "min": 103.0,
+    "max": 821.0
+   }
+  },
+  "swap_removed": {
+   "rows": 487,
+   "removed_tokens": {
+    "n": 487,
+    "median": 224.0,
+    "min": 108.0,
+    "max": 821.0
+   },
+   "target_tokens": {
+    "n": 487,
+    "median": 215.0,
+    "min": 152.0,
+    "max": 811.0
+   },
+   "length_change": {
+    "n": 487,
+    "median": 220.0,
+    "min": 89.0,
+    "max": 826.0
+   }
+  }
+ },
+ "mass": {
+  "first_response": {
+   "groups": {
+    "colluders, real reference": {
+     "n": 62,
+     "median": 0.5151148891354034,
+     "min": 0.46406054997626733,
+     "max": 0.6243154357366335
+    },
+    "honest, own reference": {
+     "n": 186,
+     "median": 0.12732925257981675,
+     "min": 0.07842327262904097,
+     "max": 0.15720386646604417
+    },
+    "honest, removal": {
+     "n": 186,
+     "median": 0.3868709537919507,
+     "min": 0.30411117682379624,
+     "max": 0.515445180692677
+    },
+    "honest, swap plus removal": {
+     "n": 186,
+     "median": 0.46029661872049543,
+     "min": 0.39944013649854915,
+     "max": 0.5682291395412021
+    }
+   },
+   "kernel_floor": {
+    "median": 0.1369813568541075,
+    "p95": 0.158630729445628,
+    "max": 0.16800741104508046
+   },
+   "run_auroc": {
+    "honest, removal": {
+     "auroc": 0.9761904761904763,
+     "ci": [
+      0.898989898989899,
+      1.0
+     ],
+     "runs": 62
+    },
+    "honest, swap plus removal": {
+     "auroc": 0.8928571428571427,
+     "ci": [
+      0.7855375,
+      0.9791666666666666
+     ],
+     "runs": 62
+    }
+   },
+   "agent_auroc": {
+    "honest, removal": 0.985952133194589,
+    "honest, swap plus removal": 0.8937738466874783
+   }
+  },
+  "end_of_response": {
+   "groups": {
+    "colluders, real reference": {
+     "n": 62,
+     "median": 0.49136258412636424,
+     "min": 0.4350310443971391,
+     "max": 0.5853973352442641
+    },
+    "honest, own reference": {
+     "n": 186,
+     "median": 0.15325935740306618,
+     "min": 0.11883509810909695,
+     "max": 0.18615161915079315
+    },
+    "honest, removal": {
+     "n": 186,
+     "median": 0.4147331616861934,
+     "min": 0.3276292309385021,
+     "max": 0.5520531640655116
+    },
+    "honest, swap plus removal": {
+     "n": 186,
+     "median": 0.46899225108797704,
+     "min": 0.36510179944931775,
+     "max": 0.5745715084581522
+    }
+   },
+   "kernel_floor": {
+    "median": 0.14187282478965174,
+    "p95": 0.16774932089440653,
+    "max": 0.16835738954571675
+   },
+   "run_auroc": {
+    "honest, removal": {
+     "auroc": 0.8412698412698413,
+     "ci": [
+      0.7452148919753085,
+      0.9523854910714286
+     ],
+     "runs": 62
+    },
+    "honest, swap plus removal": {
+     "auroc": 0.4484126984126983,
+     "ci": [
+      0.3066215277777778,
+      0.6028327546296295
+     ],
+     "runs": 62
+    }
+   },
+   "agent_auroc": {
+    "honest, removal": 0.8590010405827263,
+    "honest, swap plus removal": 0.6617238987166146
+   }
+  }
+ }
+}

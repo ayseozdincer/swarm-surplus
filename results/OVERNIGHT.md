@@ -276,7 +276,7 @@ Qwen3-32B, 31 collusion and 31 control runs, 744 public responses. Same metric a
 | Surplus, first response token, pool mean | 3 rounds | 1.000 [1.00, 1.00] |
 | Surplus, end of response, pool mean | 1 round | 1.000 [1.00, 1.00] |
 
-**Do not read the 1.000 as a detection result.** It is close to true by construction. A control agent's reference input is identical to its actual input, and so is an honest agent's in a collusion run, because their system prompts match the control run exactly (186 of 186) and they have no private block. Their surplus can only be replay noise. A colluder's reference differs by a whole system prompt and the private block. So this table shows that a different prompt changes the activations, by a margin well above noise. It does not show that surplus tells collusion from any other prompt difference, and W3 suggests it may not, since mass there did not depend on what the note said. The proposal expected this ("near-ceiling results read as trivial"). The control that would make it informative is a placebo, in the open questions. For the same reason the proposal's Phase 0 condition that honest agents separate from the noise floor cannot be tested in this design.
+**Do not read the 1.000 as a detection result.** It is close to true by construction. A control agent's reference input is identical to its actual input, and so is an honest agent's in a collusion run, because their system prompts match the control run exactly (186 of 186) and they have no private block. Their surplus can only be replay noise. A colluder's reference differs by a whole system prompt and the private block. So this table shows that a different prompt changes the activations, by a margin well above noise. It does not show that surplus tells collusion from any other prompt difference, and W3 suggests it may not, since mass there did not depend on what the note said. The proposal expected this ("near-ceiling results read as trivial"). The controls that make it informative are follow-ups 1 (placebo) and 4 (size-matched removal) below. With the matched edit, the AUROC falls to 0.448 at the end of response. For the same reason the proposal's Phase 0 condition that honest agents separate from the noise floor cannot be tested in this design.
 
 To keep honest scores from being exact zeros, honest agents' second pass runs on the plain kernel, so they carry real noise. Colluders' two passes share a kernel. That is the conservative direction.
 
@@ -354,7 +354,7 @@ Run AUROC, colluders against honest with both sides on placebo-style references 
 | first response token | 1.000 [1.00, 1.00] | 1.000 [1.00, 1.00] |
 | end of response | 1.000 [1.00, 1.00] | 1.000 [1.00, 1.00] |
 
-**By the stated rule the AUROC stays at 1.000, so mass looks collusion-specific. A size confound is not ruled out.** The colluders' reference also removes the private block, so their edit is larger than either honest edit. The change in input length is a median 252 tokens for colluders, 135 for padded and 7 for swapped, and swapped replaces about 200 tokens of brief at equal length. Mass rises with the size of the edit: own reference 0.13, padded 0.34, swapped 0.41, colluders 0.52 (first response token). A test that removes a harmless block of private-block size from honest agents would separate these. It has not been run. Note also that colluders score about the same against the real and placebo references (0.515 and 0.524), so the choice of honest brief barely matters to their mass.
+**By the stated rule the AUROC stays at 1.000, so mass looks collusion-specific. A size confound is not ruled out.** The colluders' reference also removes the private block, so their edit is larger than either honest edit. The change in input length is a median 252 tokens for colluders, 135 for padded and 7 for swapped, and swapped replaces about 200 tokens of brief at equal length. Mass rises with the size of the edit: own reference 0.13, padded 0.34, swapped 0.41, colluders 0.52 (first response token). A test that removes a harmless block of private-block size from honest agents would separate these. It ran as follow-up 4, and mass turns out to be edit size. Note also that colluders score about the same against the real and placebo references (0.515 and 0.524), so the choice of honest brief barely matters to their mass.
 
 ### W4 follow-up 2, ontology on the surplus
 
@@ -397,6 +397,32 @@ The content readout is weak. The surplus leans slightly toward the collusion wor
 J-PACT's top pair is the coalition in 19 of 31 runs and the complement in 12, recomputed from the cache.
 
 **The dense sets are too sparse to rank pairs by provenance, so this stops here.** A colluder's surplus set holds a median 1 to 6 concepts and an honest agent's holds 0. Edges into honest agents are therefore almost always zero, so the coalition pair wins because only colluders have surplus at all. The shuffled-turn null shows timing adds little. With j's turns shuffled, the coalition is still the top pair about as often (28.5 against 29 at k = 25, first response token). The coalition pair gap exceeds the null's 95th percentile in one of the four public settings (k = 25, first response token, 0.507 against 0.465) and sits within it in the other three. Precision is below the proposal's 0.90 target in every setting.
+
+### W4 follow-up 4, size-matched honest removal
+
+Follow-up 1 left a size confound: the colluders' reference removes the private block, so their edit is larger than any honest edit. Here honest agents get a removal of the same size. Per scenario, the target is the median token length of the colluders' private block (median 215 over rows, range 152 to 811). An honest agent's system prompt at 136 tokens is shorter than that, so the removal comes from the start of the public discussion history in its user prompt: whole messages first, then leading whole sentences of the next message, as close to the target as sentence boundaries allow (`remove_history` in `scripts/phase0_followups.py`). Removed: median 224 tokens, range 108 to 821. 487 of the 558 honest responses have enough history to remove at least half the target. The other 71 are skipped, and every honest agent keeps at least one response. One kernel throughout. `results/phase0_matched.json`.
+
+- Honest, removal. Own prompt, with history of private-block size removed from the reference.
+- Honest, swap plus removal. The donor brief from follow-up 1 in place of the own brief, plus the same removal. This is the colluders' edit (a different system-prompt brief plus a removed block of that size) without the collusion content.
+
+Surplus mass per agent, pooled over rounds and layers.
+
+| Group | Agents | First response token, median (range) | End of response, median (range) |
+| --- | --- | --- | --- |
+| colluders, real reference | 62 | 0.515 (0.464 to 0.624) | 0.491 (0.435 to 0.585) |
+| honest, own reference | 186 | 0.127 (0.078 to 0.157) | 0.153 (0.119 to 0.186) |
+| honest, removal | 186 | 0.387 (0.304 to 0.515) | 0.415 (0.328 to 0.552) |
+| honest, swap plus removal | 186 | 0.460 (0.399 to 0.568) | 0.469 (0.365 to 0.575) |
+| kernel floor, median (max) | | 0.137 (0.168) | 0.142 (0.168) |
+
+Colluders against honest agents with the matched edit, AUROC (runs domain-grouped with scenario bootstrap; agents ungrouped).
+
+| Honest reference | Runs, first response token | Runs, end of response | Agents, first response token | Agents, end of response |
+| --- | --- | --- | --- | --- |
+| removal | 0.976 [0.90, 1.00] | 0.841 [0.75, 0.95] | 0.986 | 0.859 |
+| swap plus removal | 0.893 [0.79, 0.98] | 0.448 [0.31, 0.60] | 0.894 | 0.662 |
+
+**Honest agents with a matched removal reach colluder mass, so mass is edit size, and the Core AUROC of 1.000 is an artifact of the reference construction.** At the end of response, the edit that matches the colluders' (swap plus removal) gives AUROC 0.448, and its interval includes chance. At the first response token some separation is left (0.893), but the gap in median mass shrinks from 0.39 to 0.055. That remainder can still come from what is removed rather than from collusion: the colluders lose private text addressed to them by name, while the honest agents lose public history. Mass alone does not carry the Core result. The direction and dense readout tests in W7 are where any collusion content has to show.
 
 ## W5 summary
 
@@ -579,7 +605,7 @@ Decisions Ayse made overnight, relayed through the review session.
 
 Still open.
 
-1. **Is surplus mass about collusion or about edit size?** See W4 follow-up 4 for the size-matched control.
+1. **Surplus mass is edit size (W4 follow-up 4).** With a size-matched honest edit, the Core AUROC falls to 0.448 at the end of response (0.893 at the first response token). Should the write-up keep mass only as a gate (something was hidden from this agent) and move every collusion claim to the direction and dense readout tests?
 2. **The Qwen3-32B lens is a partial checkpoint**, 80 prompts and not converged, with a refit planned upstream. Fit our own, wait, or switch models? It matters less now that the tests run on directions, but the naming column still uses it.
 3. **The pod-side stop script is unverified.** The key RunPod injects into the pod answered 403 to every read, so the real guard was the watchdog on this Mac, which only runs while the Mac is awake. Worth knowing before the next unattended run.
 4. **The account has a 250 GB network volume, `silent-dissent-models`** (CA-MTL-3, about 0.024 USD an hour, 0.58 a day), which this work did not create or touch.
