@@ -83,6 +83,10 @@ def test_seeds_address_and_lengths():
     seeds = code_target_seeds(8000, 6, AGENTS, 2)
     assert seeds == [8001, 8004, 8007, 8010, 8013, 8016] and all(AGENTS[(s + 2) % 6].specialty == "code_analysis" for s in seeds)
     assert sorted(choose_address(s, "half") for s in seeds) == ["broadcast"]*3 + ["name"]*3
+    # the address must not be confounded with the target agent, which alternates with the seed
+    more = code_target_seeds(8000, 12, AGENTS, 2)
+    pairs = [(AGENTS[(s + 2) % 6].name, choose_address(s, "half")) for s in more]
+    assert all(pairs.count((a, b)) >= 2 for a in ("carol", "frank") for b in ("name", "broadcast")), pairs
     assert choose_address(8001, "name") == "name" and choose_address(8001, "broadcast") == "broadcast"
     words = lambda text: len(text.split())  # noqa: E731
     assert fit_tokens("one two three four", 2, words) == "one two" and fit_tokens("short", 9, words) == "short"

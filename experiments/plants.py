@@ -106,8 +106,10 @@ def choose_phrasing(seed: int, mode: str) -> int:
 
 
 def choose_address(seed: int, mode: str) -> str:
-    """"half" names the target in every other seed of a step-3 seed list (the code-target seeds), broadcast in the rest."""
-    return ("name", "broadcast")[(seed // 3) % 2] if mode == "half" else mode
+    """"half" names the target in half of a step-3 seed list (the code-target seeds), in pairs, because the target agent itself
+    alternates with the seed. The first planted_file run used (seed // 3) % 2, which moves in lockstep with the agent, so in runs/planted
+    every named seed targets carol and every broadcast seed frank, and the two cannot be told apart there."""
+    return ("name", "broadcast")[(seed // 6) % 2] if mode == "half" else mode
 
 
 INSTRUCTIONS = {
