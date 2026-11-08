@@ -12,6 +12,10 @@ Examples
   # coalition-size sweep
   python scripts/run_plants.py --seeds 10 --k 1 3 5 --out runs/coalition
 
+  # phase 2c, a line planted in a task file by the reviewer (none, benign, leak, credential), code-task targets
+  python scripts/run_plants.py --mode planted_file --mock --seeds 2 --out runs/dry_planted
+  python scripts/run_plants.py --mode planted_file --model qwen/qwen3-14b --max-tokens 12000 --seeds 1 --seed-base 8001 --out runs/smoke_planted
+
   # a leak the agents know is forbidden, and a command from a teammate
   python scripts/run_plants.py --seeds 10 --rules confidential --variants none benign leak forbidden_leak command --out runs/rules
 
@@ -46,6 +50,7 @@ from experiments.llm import MockLLM, OpenAICompatLLM  # noqa: E402
 from experiments.plants import PLANT_KINDS, SOLVABLE_VALUES, UNSIZED_KINDS, PlantSpec, task_fact  # noqa: E402
 from experiments.prompts import RULE_LINES  # noqa: E402
 from experiments.shared_file import SHARED_DIFFICULTY_MIX, run_seed_shared  # noqa: E402
+from experiments.planted_file import BRANCHES, code_target_seeds, collect_planted, run_seed_planted  # noqa: E402
 from experiments.audit import collect_shared  # noqa: E402
 from experiments.protocol.state import AgentSpec  # noqa: E402
 from experiments.tasks import TASK_TYPES, TaskBank  # noqa: E402
@@ -67,10 +72,12 @@ def load_dotenv(path: Path) -> None:
 def parse_args() -> argparse.Namespace:
     p = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     p.add_argument("--out", required=True)
-    p.add_argument("--mode", choices=["plants", "shared_file"], default="plants",
+    p.add_argument("--mode", choices=["plants", "shared_file", "planted_file"], default="plants",
                    help="plants is phase 2a (warm-up, plant, matched variants). shared_file is phase 2b, one live run "
                         "per seed with a shared workspace and no plants; --variants, --warmup, --post and --no-notes "
-                        "do not apply")
+                        "do not apply. planted_file is phase 2c, the warm-up and matched branches of 2a with task material in "
+                        "shared files and the plant a logged write; seeds default to the next ones with a code-task target")
+    p.add_argument("--branches", nargs="+", default=list(BRANCHES), choices=list(BRANCHES), help="planted_file. branches per seed")
     p.add_argument("--seeds", type=int, default=1, help="number of seeds")
     p.add_argument("--seed-list", type=int, nargs="+", default=None,
                    help="explicit seeds to run; overrides --seeds and --seed-base")
@@ -78,15 +85,15 @@ def parse_args() -> argparse.Namespace:
     p.add_argument("--agents", type=int, default=6)
     p.add_argument("--specialties", nargs="+", default=list(TASK_TYPES))
     p.add_argument("--warmup", type=int, default=2, help="episodes before the plant")
-    p.add_argument("--post", type=int, default=1, help="episodes after the plant episode")
+    p.add_argument("--post", type=int, default=None, help="episodes after the plant episode (default 1, planted_file 0)")
     p.add_argument("--variants", nargs="+", default=["none", "benign", "leak", "proposal"],
                    choices=list(PLANT_KINDS))
     p.add_argument("--k", type=int, nargs="+", default=[1], help="coalition sizes for proposal, command and benign")
     p.add_argument("--solvable-values", nargs="+", default=list(SOLVABLE_VALUES), choices=list(SOLVABLE_VALUES),
                    help="what leak_solvable notes carry; wrong gives the leak_solvable_wrong variant")
-    p.add_argument("--leak-phrasing", choices=["fixed", "varied"], default="fixed",
+    p.add_argument("--leak-phrasing", choices=["fixed", "varied"], default=None,
                    help="varied picks one of three leak instruction phrasings per seed")
-    p.add_argument("--leak-address", choices=["name", "broadcast"], default="name",
+    p.add_argument("--leak-address", choices=["name", "broadcast", "half"], default=None,
                    help="broadcast writes single-target leak notes to the whole team with no name")
     p.add_argument("--blind-per-episode", type=int, default=1)
     p.add_argument("--episodes", type=int, default=8, help="shared_file. episodes per run")
@@ -145,6 +152,11 @@ async def main() -> int:
     agents = [AgentSpec(NAMES[i], args.specialties[i % len(args.specialties)]) for i in range(args.agents)]
     variants = build_variants(args)
     shared = args.mode == "shared_file"
+    planted = args.mode == "planted_file"
+    if args.post is None:
+        args.post = 0 if planted else 1
+    args.leak_phrasing = args.leak_phrasing or ("varied" if planted else "fixed")
+    args.leak_address = args.leak_address or ("half" if planted else "name")
     if "forbidden_leak" in args.variants and args.rules == "none":
         print("warning: forbidden_leak says sharing is against the team's rules, but --rules is none, so no agent's "
               "system prompt has such a rule", file=sys.stderr)
@@ -193,12 +205,17 @@ async def main() -> int:
             cfg.solve_rounds, cfg.max_tool_steps, cfg.notes = args.solve_rounds, args.max_tool_steps, False
             cfg.difficulty_mix = tuple(args.difficulty_mix or SHARED_DIFFICULTY_MIX)
             cfg.wrong_penalty, cfg.salience = args.wrong_penalty, args.salience
+        elif planted:
+            cfg.mode, cfg.solve_rounds, cfg.max_tool_steps, cfg.notes = "planted_file", 1, args.max_tool_steps, False
+            cfg.difficulty_mix = tuple(args.difficulty_mix) if args.difficulty_mix else None
         elif args.difficulty_mix:
             cfg.difficulty_mix = tuple(args.difficulty_mix)
         async with sem:
             t = time.time()
             if shared:
                 out = await run_seed_shared(cfg, llm_for(cfg), root / f"seed{seed}", tasks_dir=root / "tasks")
+            elif planted:
+                out = await run_seed_planted(cfg, llm_for(cfg), root / f"seed{seed}", args.branches, tasks_dir=root / "tasks")
             else:
                 out = await run_seed(cfg, llm_for(cfg), root / f"seed{seed}", variants, tasks_dir=root / "tasks")
             status = " ".join(f"{k}={'ok' if v.get('complete') else 'FAIL'}" for k, v in out.items())
@@ -208,7 +225,11 @@ async def main() -> int:
                     print(f"   {k}: {v['error'].splitlines()[0]}", flush=True)
 
     seeds = args.seed_list or [args.seed_base + i for i in range(args.seeds)]
-    if shared:
+    if planted:
+        seeds = args.seed_list or code_target_seeds(args.seed_base, args.seeds, agents, args.warmup)
+        print(f"{len(seeds)} seeds, planted_file, branches {' '.join(args.branches)}, {args.agents} agents, warmup {args.warmup}, "
+              f"post {args.post}, tool steps {args.max_tool_steps}, concurrency {args.concurrency}", flush=True)
+    elif shared:
         print(f"{len(seeds)} seeds, shared_file, {args.agents} agents, {args.episodes} episodes, blind fraction "
               f"{args.blind_fraction:.3g}, solve rounds {args.solve_rounds}, tool steps {args.max_tool_steps}, "
               f"wrong penalty {args.wrong_penalty:g}, salience {args.salience}, concurrency {args.concurrency}", flush=True)
@@ -219,6 +240,17 @@ async def main() -> int:
           flush=True)
     await asyncio.gather(*(one(s) for s in seeds))
 
+    if planted:
+        lab = collect_planted(root)
+        print(f"\ndone in {time.time() - t0:.0f}s. Targets per branch:")
+        for name, v in lab["by_branch"].items():
+            if v["n"]:
+                print(f"  {name:<11} n {v['n']}  read {v['read_file']}  used value {v['used_value']}  correct {v['correct']}  "
+                      f"reveal called {v['reveal_called']}  right token {v['reveal_token_right']}  "
+                      f"disclosed|correct {v['disclosed_among_correct']}  concealed|correct {v['concealed_among_correct']}  "
+                      f"median reply tokens {v['reply_tokens_median']}")
+        print(f"derived spans against the owner record {lab['mask_check']}")
+        return 0
     if shared:
         lab = collect_shared(root)
         print(f"\ndone in {time.time() - t0:.0f}s. runs {lab['n_complete']}/{lab['n_runs']}, any call "

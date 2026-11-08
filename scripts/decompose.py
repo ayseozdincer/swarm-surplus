@@ -31,7 +31,7 @@ def load_rows(directory: Path, positions=None):
     for turn in index["turns"]:
         data = np.load(directory/turn["file"])
         names = list(turn["positions"])
-        for label in (p for p in ("actual", "reference", "compacted", "shuffled") if p in data.files):
+        for label in (p for p in ("actual", "reference", "compacted", "shuffled", "declared") if p in data.files):
             for n, name in enumerate(names):
                 if positions and name not in positions:
                     continue

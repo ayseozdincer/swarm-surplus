@@ -14,7 +14,13 @@ The derived tag uses only the write log's bytes and writers, never the owner rec
 or the path. A read_file result is tagged peer_artifact when the returned content
 exactly matches, contains, or is contained in an earlier write by another agent. That
 is what one can do for a resource nobody declared a channel (the Hugging Face
-package case), and the owner record says how well it does.
+package case), and the owner record says how well it does. Each match also gives the
+character ranges of the written bytes in the returned content, the sub-span a replay
+masks when the rest of the message is sanctioned (phase 2c).
+
+The harness can seed files as the designer (task material in phase 2c). Those are
+logged as seed_file with the agent "designer", so they are in the owner record and
+never in a derived match, and nobody counts as their peer reader.
 """
 from __future__ import annotations
 
@@ -30,6 +36,7 @@ MAX_FILE_CHARS = 4000
 MAX_FILES = 64
 MAX_PATH_CHARS = 80
 MIN_CONTAIN_CHARS = 8   # a containing match needs at least this many characters on the shorter side
+DESIGNER = "designer"
 
 PATH_RE = re.compile(r"^[\w.\- /]+$")
 
@@ -75,9 +82,30 @@ class WsFile:
         return out
 
 
+def locate_write(written: str, returned: str) -> list[tuple[int, int]]:
+    """Character ranges of the written bytes in the returned text: every exact occurrence of the bytes without their
+    outer whitespace, else one occurrence up to whitespace, else all of the returned text if it is a piece of the write."""
+    needle = (written or "").strip()
+    if not needle:
+        return []
+    out, at = [], returned.find(needle)
+    while at >= 0:
+        out.append((at, at + len(needle)))
+        at = returned.find(needle, at + len(needle))
+    if out:
+        return out
+    loose = re.search(r"\s+".join(map(re.escape, needle.split())), returned)
+    if loose:
+        return [loose.span()]
+    if _flat(returned) and _flat(returned) in _flat(written):
+        start = len(returned) - len(returned.lstrip())
+        return [(start, len(returned.rstrip()))]
+    return []
+
+
 def derive_authors(log: list[dict], reader: str, returned: str, before_seq: int,
                    min_len: int = MIN_CONTAIN_CHARS) -> list[dict]:
-    """Earlier writes by other agents that the returned content matches. Uses only the
+    """Earlier writes by other agents that the returned content matches, with the matched character ranges. Uses only the
     write log (writer and bytes), not the file it came from."""
     ret = _flat(returned)
     if not ret:
@@ -99,7 +127,7 @@ def derive_authors(log: list[dict], reader: str, returned: str, before_seq: int,
             kind = "contained"
         else:
             continue
-        hits.append({"writer": e["agent"], "log_seq": e["seq"], "match": kind})
+        hits.append({"writer": e["agent"], "log_seq": e["seq"], "match": kind, "spans": locate_write(e["bytes"], returned)})
     return hits
 
 
@@ -122,9 +150,30 @@ class Workspace:
                 f.write(json.dumps(entry, ensure_ascii=False) + "\n")
         return entry
 
-    def log_event(self, agent: str, tool: str, args: dict, **where) -> dict:
-        """Submissions and verdicts go in the same log, so the audit has their times."""
-        return self._append_log({"agent": agent, "tool": tool, "path": None, "args": args, "ok": True, **where})
+    def log_event(self, agent: str, tool: str, args: dict, ok: bool = True, **where) -> dict:
+        """Submissions, verdicts and other tools go in the same log, so the audit has their times."""
+        return self._append_log({"agent": agent, "tool": tool, "path": None, "args": args, "ok": ok, **where})
+
+    def seed_file(self, path: str, content: str, **where) -> dict:
+        """Write a file as the designer. Replaces the file, and no agent's write log entry is involved."""
+        with self._lock:
+            entry = self._append_log({"agent": DESIGNER, "tool": "seed_file", "path": path, "bytes": content, "ok": True,
+                                      **where})
+            self.files[path] = WsFile(path, [Chunk(DESIGNER, entry["seq"], content)], creator=DESIGNER)
+        return entry
+
+    def clone(self, log_path: Path | None = None) -> "Workspace":
+        """An independent copy for a branch. The branch's log file starts with what happened before it."""
+        new = Workspace(log_path, self.min_contain)
+        new.files = {p: WsFile(f.path, [Chunk(c.writer, c.log_seq, c.text) for c in f.chunks], f.creator)
+                     for p, f in self.files.items()}
+        new.log = [dict(e) for e in self.log]
+        if new.log_path is not None:
+            new.log_path.parent.mkdir(parents=True, exist_ok=True)
+            with open(new.log_path, "w", encoding="utf-8") as out:
+                for e in new.log:
+                    out.write(json.dumps(e, ensure_ascii=False) + "\n")
+        return new
 
     # ------------------------------------------------------------------ tools
 
@@ -167,9 +216,11 @@ class Workspace:
         derived = derive_authors(self.log, agent, content, seq_next, self.min_contain)
         entry = self._append_log({
             "agent": agent, "tool": "read_file", "path": path, "ok": True, "returned": text, "chunks": spans,
-            "owner_authors": sorted({s["writer"] for s in spans if s["writer"] != agent}),
+            "owner_authors": sorted({s["writer"] for s in spans if s["writer"] not in (agent, DESIGNER)}),
             "derived": derived,
             "derived_authors": sorted({d["writer"] for d in derived}),
+            "derived_spans": [{"start": a, "end": b, "author": d["writer"], "log_seq": d["log_seq"], "match": d["match"]}
+                              for d in derived for a, b in d["spans"]],
             **where,
         })
         return text, entry

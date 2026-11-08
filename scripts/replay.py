@@ -23,6 +23,9 @@ so every script that imports MODEL_DIR, LENS_FILE and LENS_LAYERS from here foll
 continues from a copy of that cache, also on the 4D-mask kernel. Those tokens are identical in every pass, so this changes
 no pass's inputs, only skips recomputing them. --compacted adds a third pass, the reference with position ids closed up
 after each masked span (detector.render.compacted_positions), saved as `compacted`; an unmasked turn copies its reference.
+replay_turn's mask_mode "derived" makes the reference mask the derived sub-spans of tool messages (phase 2c) instead of peer
+messages, and declared=True adds a pass `declared`, the plain kernel with nothing masked, for the declared mask of a run whose
+shared file is environment (scripts/pod/replay_planted.py).
 --blind-only keeps the agents blind at the replayed episode. A blind agent's turn also reads where its reasoning first
 writes its task's withheld answer (positions planted_pre and planted_0), whether or not it submits it. Turns whose .npz exists are skipped and index.json is merged,
 so separate calls can add phases or agents to one run directory.
@@ -174,13 +177,14 @@ def text_token_span(tokenizer, r: dict, text: str) -> tuple[int, int] | None:
 
 
 def replay_turn(model, tokenizer, capture, turn, lens, out_path, shared_prefix=False, compacted=False, mentions=None,
-                shuffled=False, trace=False, extra_refs=None):
+                shuffled=False, trace=False, extra_refs=None, mask_mode="peer", declared=False):
     """shuffled adds a reference that masks a random sanctioned span as long as the turn's peer spans (shuffled_span).
     trace keeps, for every token of the reply, the relative surplus per layer against each reference and the surplus
     direction at TRACE_LAYERS, from the same passes. extra_refs maps a name to a text in the prompt (one note of a digest);
-    each adds a reference pass `mask_<name>` that masks only that text, for attributing the surplus to one note."""
+    each adds a reference pass `mask_<name>` that masks only that text, for attributing the surplus to one note. mask_mode
+    and declared are in the module docstring."""
     import torch
-    r = render_turn(tokenizer, turn, mentions)
+    r = render_turn(tokenizer, turn, mentions, mask_mode)
     names = list(r["positions"])
     positions = [r["positions"][n] for n in names]
     started = time.perf_counter()
@@ -228,6 +232,12 @@ def replay_turn(model, tokenizer, capture, turn, lens, out_path, shared_prefix=F
     if compacted and "compacted" not in passes:
         passes["compacted"] = (capture.run(model, r["ids"], positions, attention_mask_4d(len(r["ids"]), r["mask"]),
                                            compacted_positions(r["mask"])) if masked else passes["reference"])
+    if declared:
+        if masked:
+            passes["declared"] = capture.run(model, r["ids"], positions, None)
+            traces["declared"] = capture.trace() if trace else None
+        else:                           # nothing to mask, so the reference already is the plain kernel
+            passes["declared"], traces["declared"] = passes["reference"], traces.get("reference")
     capture.trace_from, capture.traced = None, {}
     actual, reference = passes["actual"], passes["reference"]
     arrays = {label: H.numpy() for label, H in passes.items()}
@@ -238,7 +248,7 @@ def replay_turn(model, tokenizer, capture, turn, lens, out_path, shared_prefix=F
         nA = torch.stack([torch.linalg.vector_norm(A[:, li].float(), dim=-1) for li in layers], dim=1)
         arrays["trace_actual_norm"] = nA.cpu().numpy().astype(np.float32)
         trace_layers = [capture.layers.index(l) for l in TRACE_LAYERS if l in capture.layers]
-        for label in ("reference", "shuffled"):
+        for label in ("reference", "shuffled", "declared"):
             R = traces.pop(label, None)
             if R is None:
                 continue
@@ -256,7 +266,7 @@ def replay_turn(model, tokenizer, capture, turn, lens, out_path, shared_prefix=F
     out_path.parent.mkdir(parents=True, exist_ok=True)
     np.savez(out_path, **arrays)        # uncompressed: zlib gains little on float32 residuals and blocks the GPU loop
     return {"agent": turn["agent"], "episode_index": turn["episode_index"], "phase": turn["phase"], "file": out_path.name,
-            "tokens": len(r["ids"]), "prompt_tokens": r["prompt_tokens"], "masked_tokens": len(r["mask"]) - sum(r["mask"]),
+            "step": turn.get("step"), "round": turn.get("round"), "mask_mode": mask_mode, "tokens": len(r["ids"]), "prompt_tokens": r["prompt_tokens"], "masked_tokens": len(r["mask"]) - sum(r["mask"]),
             "reference_kind": "masked" if masked else "plain_kernel", "shared_prefix_tokens": split,
             "passes": list(passes), "shuffled_span": shuffle, "trace_from": r["prompt_tokens"] if trace else None,
             "extra_spans": extra_spans or None,

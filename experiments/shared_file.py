@@ -55,10 +55,14 @@ def _clip(text: str, n: int) -> str:
 
 
 class SharedFileRunner(SwarmRunner):
-    def __init__(self, cfg: SwarmConfig, llm, out_dir: Path, bank: TaskBank, label: str = "shared_file"):
+    loop_tools = WORKSPACE_TOOLS     # a call to one of these gets its result and another model call
+    compact_history = True
+
+    def __init__(self, cfg: SwarmConfig, llm, out_dir: Path, bank: TaskBank, label: str = "shared_file",
+                 state: SwarmState | None = None, call_seq: int = 0, ws: Workspace | None = None):
         out_dir = Path(out_dir)
-        self.ws = Workspace(out_dir / "tool_log.jsonl")
-        super().__init__(cfg, llm, out_dir, bank, label=label)
+        self.ws = ws if ws is not None else Workspace(out_dir / "tool_log.jsonl")
+        super().__init__(cfg, llm, out_dir, bank, state=state, label=label, call_seq=call_seq)
         self.turns: list[dict] = []
 
     def _fresh_state(self) -> SwarmState:
@@ -79,6 +83,8 @@ class SharedFileRunner(SwarmRunner):
     def _compact(self, ep: int) -> None:
         """Past episodes' task material becomes a one-line stub, and past workspace
         results and written content are cut, so eight episodes fit the context."""
+        if not self.compact_history:
+            return
         for c in self.state.contexts.values():
             for m in c.messages:
                 if m.episode_index is None or m.episode_index >= ep or m.compacted:
@@ -138,7 +144,7 @@ class SharedFileRunner(SwarmRunner):
     async def _turn(self, agent: str, ep: int, phase: str, rnd: int, tools: list[dict],
                     required: str | None, must: bool) -> dict:
         c = self.state.contexts[agent]
-        out = {"submitted": None, "synthesized": False, "content": "", "reasoning": [], "finish": [],
+        out = {"submitted": None, "synthesized": False, "content": "", "reasoning": [], "finish": [], "completion_tokens": [],
                "steps": 0, "ws_calls": {t: 0 for t in WORKSPACE_TOOLS}, "submit_call_seq": None}
         max_steps = max(1, self.cfg.max_tool_steps)
         for step in range(max_steps):
@@ -151,10 +157,11 @@ class SharedFileRunner(SwarmRunner):
             out["steps"] += 1
             out["reasoning"].append(resp.reasoning)
             out["finish"].append(resp.finish_reason)
+            out["completion_tokens"].append((resp.usage or {}).get("completion_tokens"))
             out["content"] = resp.content or ""
             calls = list(resp.tool_calls)
             names = [tc.name for tc in calls]
-            ws_calls = [tc for tc in calls if tc.name in WORKSPACE_TOOLS]
+            ws_calls = [tc for tc in calls if tc.name in self.loop_tools]
             synthesized = False
             if must and required and required not in names and (not ws_calls or last):
                 tc = self._synthesize(required, resp.content)
@@ -181,8 +188,12 @@ class SharedFileRunner(SwarmRunner):
                         msg.derived_author = (max(entry["derived"], key=lambda d: d["log_seq"])["writer"]
                                               if entry["derived"] else None)
                         msg.provenance_derived = "peer_artifact" if entry["derived"] else "environment"
+                        msg.derived_spans = entry["derived_spans"]
                         msg.owner_authors = entry["owner_authors"]
                     c.add(msg)
+                    continue
+                if tc.name in self.loop_tools and tc.name in offered_names:
+                    c.add(Message("tool", self._other_tool(agent, tc, where), **kw))
                     continue
                 if tc.name == required and tc.name in offered_names and out["submitted"] is None:
                     out["submitted"] = tc
@@ -192,7 +203,7 @@ class SharedFileRunner(SwarmRunner):
                     result = "Submission recorded." if tc.name == "submit_answer" else "Verdict recorded."
                 elif tc.name in ("submit_answer", "submit_verdict") and out["submitted"] is not None:
                     result = "Already recorded. Only the first one counts."
-                elif tc.name in offered_names or tc.name in WORKSPACE_TOOLS:
+                elif tc.name in offered_names or tc.name in self.loop_tools:
                     result = f"{tc.name} is not available in this turn."
                 else:
                     result = f"Unknown tool {tc.name}."
@@ -203,6 +214,10 @@ class SharedFileRunner(SwarmRunner):
                            "submitted": out["submitted"] is not None, "synthesized": out["synthesized"],
                            "ws_calls": out["ws_calls"], "finish": out["finish"]})
         return out
+
+    def _other_tool(self, agent: str, tc: ToolCall, where: dict) -> str:
+        """A loop tool that is not one of the workspace's. Subclasses that add one answer it here."""
+        raise NotImplementedError(tc.name)
 
     # ------------------------------------------------------------------ phases
 
@@ -332,6 +347,9 @@ class SharedFileRunner(SwarmRunner):
                 "strict_wrong": scored[a]["strict_wrong"],
                 "reviewed_submission_correct": sub_correct[reviewed_by[a]],
                 "ws_calls": ws_calls,
+                "reply_tokens_by_step": [n for o in rounds_used[a] for n in o["completion_tokens"]],
+                "reply_tokens": (sum(n for o in rounds_used[a] for n in o["completion_tokens"] if n is not None)
+                                 if any(n is not None for o in rounds_used[a] for n in o["completion_tokens"]) else None),
                 "reward": scored[a]["reward"],
                 "cumulative_reward": scored[a]["cumulative"],
                 "reflection": refl[a]["reflection"],
@@ -372,12 +390,16 @@ class SharedFileRunner(SwarmRunner):
             "results": results,
             "complete": complete,
             "error": error,
+            **self._save_extra(),
         }
         tmp = self.out_dir / "run.json.tmp"
         with open(tmp, "w", encoding="utf-8") as f:
             json.dump(data, f, ensure_ascii=False)
         tmp.replace(self.out_dir / "run.json")
         return data
+
+    def _save_extra(self) -> dict:
+        return {}
 
 
 async def run_seed_shared(cfg: SwarmConfig, llm, seed_dir: Path, tasks_dir: Path | None = None) -> dict[str, dict]:
