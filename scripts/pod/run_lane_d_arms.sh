@@ -9,7 +9,7 @@ PY=/root/vllm-venv/bin/python
 until grep -q '^exit ' /workspace/logs/sweep2.log; do sleep 30; done
 healthy() { for i in $(seq 1 40); do curl -sf -H "Authorization: Bearer local-dummy" http://127.0.0.1:8000/v1/models >/dev/null && return 0; sleep 10; done; return 1; }
 pkill -f '[v]llm serve'; sleep 20
-KV_OFFLOAD_GB=${KV_OFFLOAD_GB:-120} nohup setsid bash scripts/pod/vllm_serve.sh > /workspace/logs/vllm2.log 2>&1 < /dev/null &
+KV_OFFLOAD_GB=${KV_OFFLOAD_GB:-100} nohup setsid bash scripts/pod/vllm_serve.sh > /workspace/logs/vllm2.log 2>&1 < /dev/null &
 if ! healthy; then
   echo "offload server did not come up, plain config" ; pkill -f '[v]llm serve'; sleep 20
   nohup setsid bash scripts/pod/vllm_serve.sh > /workspace/logs/vllm3.log 2>&1 < /dev/null &

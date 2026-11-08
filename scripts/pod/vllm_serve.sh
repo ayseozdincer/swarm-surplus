@@ -2,7 +2,7 @@
 # Qwen3-14B on vLLM, bf16, OpenAI-compatible on 127.0.0.1:8000. Tool calls through the hermes parser, thinking split
 # out by the qwen3 reasoning parser. The harness runs on the pod against this endpoint, so nothing is exposed.
 #   GPU_UTIL       fraction of the card vLLM takes (default 0.92; lower it to share the card with the replay)
-#   KV_OFFLOAD_GB  CPU buffer for vLLM's native KV offloading, so prefixes evicted from the card reload instead of being
+#   KV_OFFLOAD_GB  CPU buffer (GB, under the free /dev/shm, 119 GB on the H200 pod) for vLLM's native KV offloading, so prefixes evicted from the card reload instead of being
 #                  recomputed (sweep2 spent most of its time recomputing prompts with the GPU cache full)
 # The FlashInfer sampler JIT-builds a kernel at startup and the image has no matching toolchain, so sampling uses
 # vLLM's PyTorch sampler instead (same distribution).
