@@ -270,7 +270,7 @@ and prefix hits held at 35 to 50 percent, but with phases synchronous only 20 to
 
 So twenty seeds with heavy recompute was slightly faster than six with a healthy cache: the two losses roughly cancel, and about
 800 to 1,000 tok/s is what one H200 gave tonight at either end of the trade. Only adding a card shortened the queue. The solvable
-figure includes some sharing of its card with the other runs, for about half an hour at each end.
+figure includes sharing its card with the other runs for about 45 minutes in all.
 
 ## Replay
 
