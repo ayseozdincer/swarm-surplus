@@ -28,6 +28,11 @@ floor lands within 19 tokens of the first mention in all ten seeds (median 1 tok
 10 times the floor separates the leak from benign_k1 at AUROC 0.96 (9 of 10 pairs) and from no note at 1.00, from the other
 notes at 0.83 to 0.89. The plateau height alone separates the leak from a harmless note only at 0.78.
 
+**End to end with no position knowledge, the direction says what and the lens does not.** At the location the trace's window
+maximum finds, the surplus direction's nearest note signature (built from the other nine seeds) separates the leak from
+benign_k1 at AUROC 0.98 to 1.00 and from proposal_k1 at 0.96 to 1.00. The lens naming lift there falls to 0.08 to 0.42 (0.96 at
+`mention_pre`), because the window lands a few tokens off the one token where the lens names the answer.
+
 **Masking anything costs about the kernel floor.** The placebo reference masks a random designer span of the note's token
 length instead of the note. It moves the residual by 0.008 to 0.045 relative, against 0.024 to 0.373 for the real
 reference, and leaves J-space mass at 0.10 to 0.25, where the none branch's kernel noise sits (0.12 to 0.18). Its surplus
@@ -337,6 +342,50 @@ a short answer, rather than anything in the residual, and it is not reported as 
 by length, and a longer benign reply has more tokens that could cross the threshold, so the length effect works against it. With the
 placebo reference the same scores sit far lower in every branch (window 3.2 against 6.9) and do not favour the leak (0.12 to
 0.28), so the plateau belongs to the note.
+
+### The position-blind pipeline end to end
+
+`scripts/lane_c_found.py`. For the blind agent in leak, benign_k1, proposal_k1 and none, the 16- and 32-token window maximum of
+the trace (band L16 to L38) picks the location with no knowledge of the mention. One more actual and kept-reference pass reads
+the residual at the window's centre token and its last token. There, for the planted answer's first token: the lens naming
+rank and lift over the late layers, its J-space surplus share, and the direction score. A note's direction signature is the
+mean unit surplus direction of the other nine seeds' blind agents in that branch at their own found location (late band), so
+each seed is scored against signatures it did not contribute to. AUROC (paired wins) of leak against each negative, ten seeds.
+Data in `results/lane_c/found.json`.
+
+| Negative | Window | Token | Naming rank | Naming lift | J-space share | Source (direction) | Nearest signature is leak, leak / negative |
+| --- | --- | --- | --- | --- | --- | --- | --- |
+| benign_k1 | 16 | centre | 0.77 (7/10) | 0.42 (3/10) | 0.50 (0/10) | 0.99 (10/10) | 9 / 1 of 10 |
+| benign_k1 | 16 | last | 0.81 (8/10) | 0.08 (0/10) | 0.50 (0/10) | 0.98 (10/10) | 9 / 0 of 10 |
+| benign_k1 | 32 | centre | 0.73 (7/10) | 0.25 (2/10) | 0.55 (1/10) | 1.00 (10/10) | 10 / 0 of 10 |
+| benign_k1 | 32 | last | 0.56 (7/10) | 0.42 (4/10) | 0.50 (0/10) | 1.00 (10/10) | 10 / 2 of 10 |
+| proposal_k1 | 16 | centre | 0.76 (7/10) | 0.44 (4/10) | 0.50 (0/10) | 0.98 (10/10) | 9 / 2 of 10 |
+| proposal_k1 | 16 | last | 0.88 (9/10) | 0.06 (1/10) | 0.50 (0/10) | 0.96 (10/10) | 9 / 2 of 10 |
+| proposal_k1 | 32 | centre | 0.73 (7/10) | 0.19 (1/10) | 0.55 (1/10) | 0.99 (10/10) | 10 / 1 of 10 |
+| proposal_k1 | 32 | last | 0.57 (6/10) | 0.39 (5/10) | 0.50 (0/10) | 1.00 (10/10) | 10 / 4 of 10 |
+| none | 16 | centre | 0.38 (4/10) | 0.58 (5/10) | 0.50 (0/10) | 0.93 (9/10) | 9 / 5 of 10 |
+| none | 16 | last | 0.50 (5/10) | 0.09 (1/10) | 0.45 (0/10) | 0.90 (9/10) | 9 / 4 of 10 |
+| none | 32 | centre | 0.49 (4/10) | 0.30 (2/10) | 0.55 (1/10) | 0.96 (9/10) | 10 / 2 of 10 |
+| none | 32 | last | 0.33 (2/10) | 0.43 (5/10) | 0.50 (0/10) | 1.00 (10/10) | 10 / 5 of 10 |
+
+Where the windows land in the leak branch, in tokens after `mention_pre`. 16-token centre [-4, 7, 9, -19, 11, -4, 10, -4, 7, -4], last
+[3, 14, 16, -12, 18, 3, 17, 3, 14, 3]. 32-token centre [-5, -1, 2, -14, 4, -8, 7, 0, 14, -11], last [10, 14, 17, 1, 19, 7, 22, 15, 29, 4]. Nearest-signature accuracy over the three notes,
+30 decisions each, chance 0.33: w16 centre 0.87, w16 last 0.80, w32 centre 0.93, w32 last 0.60.
+
+**The direction completes the pipeline and the lens does not.** At the location the trace finds, the direction score separates
+the leak from benign_k1 at 0.98 to 1.00 (10 of 10 pairs at every window and token) and from proposal_k1 at 0.96 to 1.00. The
+leak signature is the nearest in 9 or 10 of the 10 leak turns, and in 0 to 2 of the benign_k1 turns. **Lens naming drops** from
+0.96 at `mention_pre` to 0.08 to 0.42 on naming lift, a drop of 0.54 to 0.88, and the 32-token window does not help (0.25 and
+0.42). Naming rank keeps 0.56 to 0.81. The J-space share of the planted token is zero at every found location in every branch.
+The reason is position. The windows centre 4 to 19 tokens either side of the mention and end on the answer's last characters
+(the last token of the 16-token window is the `1` of `291` in seed 3000), where the lens reads the next token, not the first
+token of the answer. The lens names the leak at one token, the one before the copy. So the position-blind detector is the trace
+for where and the direction for what.
+
+Two limits. The direction signatures are built from labelled examples of each note type in other seeds, so the score is a
+nearest-template test across seeds, and the leak notes share one template ("the answer for task F with the withheld input is
+..."). And every blind agent in the leak branch used the leak, so at this location exposure and uptake are the same turns. The
+exposed non-users of claim 3 are the test of that, on their verdict turns, below.
 
 ### W3 follow-up 1, the first mention
 

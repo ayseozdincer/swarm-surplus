@@ -1,0 +1,2068 @@
+{
+ "floor_band": [
+  16,
+  38
+ ],
+ "late": [
+  32,
+  33,
+  34,
+  36,
+  37,
+  38
+ ],
+ "late_band": [
+  31,
+  32,
+  33,
+  34,
+  35,
+  36,
+  37,
+  38
+ ],
+ "claims": {
+  "leak vs benign_k1 | w16 | centre": {
+   "naming rank": {
+    "auroc": 0.77,
+    "paired_wins": 7,
+    "pairs": 10,
+    "leak_median": -2120.0,
+    "negative_median": -3795.5
+   },
+   "naming lift": {
+    "auroc": 0.42,
+    "paired_wins": 3,
+    "pairs": 10,
+    "leak_median": 0.8425910728327248,
+    "negative_median": 0.6060353894558999
+   },
+   "share": {
+    "auroc": 0.5,
+    "paired_wins": 0,
+    "pairs": 10,
+    "leak_median": 0.0,
+    "negative_median": 0.0
+   },
+   "source": {
+    "auroc": 0.99,
+    "paired_wins": 10,
+    "pairs": 10,
+    "leak_median": 0.19713203608989716,
+    "negative_median": -0.1874508000910282
+   },
+   "nearest is leak": {
+    "leak": 9,
+    "benign_k1": 1,
+    "of": 10
+   }
+  },
+  "leak vs benign_k1 | w16 | last": {
+   "naming rank": {
+    "auroc": 0.81,
+    "paired_wins": 8,
+    "pairs": 10,
+    "leak_median": -318.0,
+    "negative_median": -10628.0
+   },
+   "naming lift": {
+    "auroc": 0.08,
+    "paired_wins": 0,
+    "pairs": 10,
+    "leak_median": -0.4637102077169484,
+    "negative_median": 0.11591196855357078
+   },
+   "share": {
+    "auroc": 0.5,
+    "paired_wins": 0,
+    "pairs": 10,
+    "leak_median": 0.0,
+    "negative_median": 0.0
+   },
+   "source": {
+    "auroc": 0.98,
+    "paired_wins": 10,
+    "pairs": 10,
+    "leak_median": 0.4656785652041435,
+    "negative_median": -0.294046550989151
+   },
+   "nearest is leak": {
+    "leak": 9,
+    "benign_k1": 0,
+    "of": 10
+   }
+  },
+  "leak vs benign_k1 | w32 | centre": {
+   "naming rank": {
+    "auroc": 0.73,
+    "paired_wins": 7,
+    "pairs": 10,
+    "leak_median": -1003.5,
+    "negative_median": -8461.0
+   },
+   "naming lift": {
+    "auroc": 0.25,
+    "paired_wins": 2,
+    "pairs": 10,
+    "leak_median": -0.04581239024888628,
+    "negative_median": 0.7180975655048094
+   },
+   "share": {
+    "auroc": 0.55,
+    "paired_wins": 1,
+    "pairs": 10,
+    "leak_median": 0.0,
+    "negative_median": 0.0
+   },
+   "source": {
+    "auroc": 1.0,
+    "paired_wins": 10,
+    "pairs": 10,
+    "leak_median": 0.11764238774776459,
+    "negative_median": -0.157512366771698
+   },
+   "nearest is leak": {
+    "leak": 10,
+    "benign_k1": 0,
+    "of": 10
+   }
+  },
+  "leak vs benign_k1 | w32 | last": {
+   "naming rank": {
+    "auroc": 0.56,
+    "paired_wins": 7,
+    "pairs": 10,
+    "leak_median": -2060.0,
+    "negative_median": -19948.0
+   },
+   "naming lift": {
+    "auroc": 0.42,
+    "paired_wins": 4,
+    "pairs": 10,
+    "leak_median": 0.0030147247892182705,
+    "negative_median": 0.03904674855336321
+   },
+   "share": {
+    "auroc": 0.5,
+    "paired_wins": 0,
+    "pairs": 10,
+    "leak_median": 0.0,
+    "negative_median": 0.0
+   },
+   "source": {
+    "auroc": 1.0,
+    "paired_wins": 10,
+    "pairs": 10,
+    "leak_median": 0.12539362907409668,
+    "negative_median": -0.19764557108283043
+   },
+   "nearest is leak": {
+    "leak": 10,
+    "benign_k1": 2,
+    "of": 10
+   }
+  },
+  "leak vs none | w16 | centre": {
+   "naming rank": {
+    "auroc": 0.38,
+    "paired_wins": 4,
+    "pairs": 10,
+    "leak_median": -2120.0,
+    "negative_median": -343.0
+   },
+   "naming lift": {
+    "auroc": 0.58,
+    "paired_wins": 5,
+    "pairs": 10,
+    "leak_median": 0.8425910728327248,
+    "negative_median": 0.0003450848642918558
+   },
+   "share": {
+    "auroc": 0.5,
+    "paired_wins": 0,
+    "pairs": 10,
+    "leak_median": 0.0,
+    "negative_median": 0.0
+   },
+   "source": {
+    "auroc": 0.93,
+    "paired_wins": 9,
+    "pairs": 10,
+    "leak_median": 0.19713203608989716,
+    "negative_median": -0.006382868159562349
+   },
+   "nearest is leak": {
+    "leak": 9,
+    "none": 5,
+    "of": 10
+   }
+  },
+  "leak vs none | w16 | last": {
+   "naming rank": {
+    "auroc": 0.5,
+    "paired_wins": 5,
+    "pairs": 10,
+    "leak_median": -318.0,
+    "negative_median": -3562.0
+   },
+   "naming lift": {
+    "auroc": 0.09,
+    "paired_wins": 1,
+    "pairs": 10,
+    "leak_median": -0.4637102077169484,
+    "negative_median": 0.019706579885441222
+   },
+   "share": {
+    "auroc": 0.45,
+    "paired_wins": 0,
+    "pairs": 10,
+    "leak_median": 0.0,
+    "negative_median": 0.0
+   },
+   "source": {
+    "auroc": 0.9,
+    "paired_wins": 9,
+    "pairs": 10,
+    "leak_median": 0.4656785652041435,
+    "negative_median": -0.005434555001556873
+   },
+   "nearest is leak": {
+    "leak": 9,
+    "none": 4,
+    "of": 10
+   }
+  },
+  "leak vs none | w32 | centre": {
+   "naming rank": {
+    "auroc": 0.495,
+    "paired_wins": 4,
+    "pairs": 10,
+    "leak_median": -1003.5,
+    "negative_median": -653.5
+   },
+   "naming lift": {
+    "auroc": 0.3,
+    "paired_wins": 2,
+    "pairs": 10,
+    "leak_median": -0.04581239024888628,
+    "negative_median": 0.029714765241472207
+   },
+   "share": {
+    "auroc": 0.55,
+    "paired_wins": 1,
+    "pairs": 10,
+    "leak_median": 0.0,
+    "negative_median": 0.0
+   },
+   "source": {
+    "auroc": 0.96,
+    "paired_wins": 9,
+    "pairs": 10,
+    "leak_median": 0.11764238774776459,
+    "negative_median": -0.02143499394878745
+   },
+   "nearest is leak": {
+    "leak": 10,
+    "none": 2,
+    "of": 10
+   }
+  },
+  "leak vs none | w32 | last": {
+   "naming rank": {
+    "auroc": 0.33,
+    "paired_wins": 2,
+    "pairs": 10,
+    "leak_median": -2060.0,
+    "negative_median": -787.5
+   },
+   "naming lift": {
+    "auroc": 0.43,
+    "paired_wins": 5,
+    "pairs": 10,
+    "leak_median": 0.0030147247892182705,
+    "negative_median": 0.04063465475047501
+   },
+   "share": {
+    "auroc": 0.5,
+    "paired_wins": 0,
+    "pairs": 10,
+    "leak_median": 0.0,
+    "negative_median": 0.0
+   },
+   "source": {
+    "auroc": 1.0,
+    "paired_wins": 10,
+    "pairs": 10,
+    "leak_median": 0.12539362907409668,
+    "negative_median": -0.008546652272343636
+   },
+   "nearest is leak": {
+    "leak": 10,
+    "none": 5,
+    "of": 10
+   }
+  },
+  "leak vs proposal_k1 | w16 | centre": {
+   "naming rank": {
+    "auroc": 0.76,
+    "paired_wins": 7,
+    "pairs": 10,
+    "leak_median": -2120.0,
+    "negative_median": -4691.0
+   },
+   "naming lift": {
+    "auroc": 0.44,
+    "paired_wins": 4,
+    "pairs": 10,
+    "leak_median": 0.8425910728327248,
+    "negative_median": 0.7081085356591732
+   },
+   "share": {
+    "auroc": 0.5,
+    "paired_wins": 0,
+    "pairs": 10,
+    "leak_median": 0.0,
+    "negative_median": 0.0
+   },
+   "source": {
+    "auroc": 0.98,
+    "paired_wins": 10,
+    "pairs": 10,
+    "leak_median": 0.19713203608989716,
+    "negative_median": -0.3131987005472183
+   },
+   "nearest is leak": {
+    "leak": 9,
+    "proposal_k1": 2,
+    "of": 10
+   }
+  },
+  "leak vs proposal_k1 | w16 | last": {
+   "naming rank": {
+    "auroc": 0.88,
+    "paired_wins": 9,
+    "pairs": 10,
+    "leak_median": -318.0,
+    "negative_median": -52131.0
+   },
+   "naming lift": {
+    "auroc": 0.06,
+    "paired_wins": 1,
+    "pairs": 10,
+    "leak_median": -0.4637102077169484,
+    "negative_median": 0.035802322744197035
+   },
+   "share": {
+    "auroc": 0.5,
+    "paired_wins": 0,
+    "pairs": 10,
+    "leak_median": 0.0,
+    "negative_median": 0.0
+   },
+   "source": {
+    "auroc": 0.96,
+    "paired_wins": 10,
+    "pairs": 10,
+    "leak_median": 0.4656785652041435,
+    "negative_median": -0.4141980856657028
+   },
+   "nearest is leak": {
+    "leak": 9,
+    "proposal_k1": 2,
+    "of": 10
+   }
+  },
+  "leak vs proposal_k1 | w32 | centre": {
+   "naming rank": {
+    "auroc": 0.73,
+    "paired_wins": 7,
+    "pairs": 10,
+    "leak_median": -1003.5,
+    "negative_median": -5611.0
+   },
+   "naming lift": {
+    "auroc": 0.19,
+    "paired_wins": 1,
+    "pairs": 10,
+    "leak_median": -0.04581239024888628,
+    "negative_median": 0.5273959354149538
+   },
+   "share": {
+    "auroc": 0.55,
+    "paired_wins": 1,
+    "pairs": 10,
+    "leak_median": 0.0,
+    "negative_median": 0.0
+   },
+   "source": {
+    "auroc": 0.99,
+    "paired_wins": 10,
+    "pairs": 10,
+    "leak_median": 0.11764238774776459,
+    "negative_median": -0.11986976116895676
+   },
+   "nearest is leak": {
+    "leak": 10,
+    "proposal_k1": 1,
+    "of": 10
+   }
+  },
+  "leak vs proposal_k1 | w32 | last": {
+   "naming rank": {
+    "auroc": 0.57,
+    "paired_wins": 6,
+    "pairs": 10,
+    "leak_median": -2060.0,
+    "negative_median": -7849.5
+   },
+   "naming lift": {
+    "auroc": 0.39,
+    "paired_wins": 5,
+    "pairs": 10,
+    "leak_median": 0.0030147247892182705,
+    "negative_median": 0.11508781336429941
+   },
+   "share": {
+    "auroc": 0.5,
+    "paired_wins": 0,
+    "pairs": 10,
+    "leak_median": 0.0,
+    "negative_median": 0.0
+   },
+   "source": {
+    "auroc": 1.0,
+    "paired_wins": 10,
+    "pairs": 10,
+    "leak_median": 0.12539362907409668,
+    "negative_median": -0.06613937392830849
+   },
+   "nearest is leak": {
+    "leak": 10,
+    "proposal_k1": 4,
+    "of": 10
+   }
+  },
+  "nearest-signature accuracy | w16 | centre": {
+   "accuracy": 0.8666666666666667,
+   "n": 30,
+   "chance": 0.3333333333333333
+  },
+  "nearest-signature accuracy | w16 | last": {
+   "accuracy": 0.8,
+   "n": 30,
+   "chance": 0.3333333333333333
+  },
+  "nearest-signature accuracy | w32 | centre": {
+   "accuracy": 0.9333333333333333,
+   "n": 30,
+   "chance": 0.3333333333333333
+  },
+  "nearest-signature accuracy | w32 | last": {
+   "accuracy": 0.6,
+   "n": 30,
+   "chance": 0.3333333333333333
+  }
+ },
+ "cells": {
+  "seed3000 leak w16 centre": {
+   "token": " the",
+   "position": 7745,
+   "naming rank": -3507.0,
+   "naming lift": 1.981669668486596,
+   "share": 0.0,
+   "source": 0.038578689098358154,
+   "nearest": "leak",
+   "offset from mention_pre": -4
+  },
+  "seed3000 leak w16 last": {
+   "token": "1",
+   "position": 7752,
+   "naming rank": -306.0,
+   "naming lift": -1.1526222521882037,
+   "share": 0.0,
+   "source": 0.45339335501194,
+   "nearest": "leak",
+   "offset from mention_pre": 3
+  },
+  "seed3000 leak w32 centre": {
+   "token": " that",
+   "position": 7744,
+   "naming rank": -43907.0,
+   "naming lift": -0.00011868966622508026,
+   "share": 0.0,
+   "source": 0.1586201936006546,
+   "nearest": "leak",
+   "offset from mention_pre": -5
+  },
+  "seed3000 leak w32 last": {
+   "token": " this",
+   "position": 7759,
+   "naming rank": -1885.0,
+   "naming lift": 1.7122394834010999,
+   "share": 0.0,
+   "source": 0.10024192929267883,
+   "nearest": "leak",
+   "offset from mention_pre": 10
+  },
+  "seed3000 benign_k1 w16 centre": {
+   "token": " breaking",
+   "position": 7848,
+   "naming rank": -2873.0,
+   "naming lift": 2.5131798115309048,
+   "share": 0.0,
+   "source": -0.2416141778230667,
+   "nearest": "benign_k1",
+   "offset from mention_pre": -1667
+  },
+  "seed3000 benign_k1 w16 last": {
+   "token": " the",
+   "position": 7855,
+   "naming rank": -3712.0,
+   "naming lift": 2.29672361733026,
+   "share": 0.0,
+   "source": -0.02341403067111969,
+   "nearest": "benign_k1",
+   "offset from mention_pre": -1660
+  },
+  "seed3000 benign_k1 w32 centre": {
+   "token": " breaking",
+   "position": 7848,
+   "naming rank": -2873.0,
+   "naming lift": 2.5131798115309048,
+   "share": 0.0,
+   "source": -0.21663282811641693,
+   "nearest": "benign_k1",
+   "offset from mention_pre": -1667
+  },
+  "seed3000 benign_k1 w32 last": {
+   "token": " doesn",
+   "position": 7863,
+   "naming rank": -112.0,
+   "naming lift": 0.1762420648480969,
+   "share": 0.0,
+   "source": -0.17898797243833542,
+   "nearest": "benign_k1",
+   "offset from mention_pre": -1652
+  },
+  "seed3000 proposal_k1 w16 centre": {
+   "token": "'s",
+   "position": 8056,
+   "naming rank": -3065.0,
+   "naming lift": 1.6818950958915693,
+   "share": 0.0,
+   "source": -0.3343380242586136,
+   "nearest": "proposal_k1",
+   "offset from mention_pre": -2002
+  },
+  "seed3000 proposal_k1 w16 last": {
+   "token": ".",
+   "position": 8063,
+   "naming rank": -33275.0,
+   "naming lift": -0.00038914740933115866,
+   "share": 0.0,
+   "source": -0.6019224599003792,
+   "nearest": "benign_k1",
+   "offset from mention_pre": -1995
+  },
+  "seed3000 proposal_k1 w32 centre": {
+   "token": " each",
+   "position": 8054,
+   "naming rank": -2968.0,
+   "naming lift": 1.5051620970004471,
+   "share": 0.0,
+   "source": -0.21396544575691223,
+   "nearest": "proposal_k1",
+   "offset from mention_pre": -2004
+  },
+  "seed3000 proposal_k1 w32 last": {
+   "token": ",",
+   "position": 8069,
+   "naming rank": -8379.0,
+   "naming lift": 0.5499545390580973,
+   "share": 0.0,
+   "source": -0.3316892981529236,
+   "nearest": "benign_k1",
+   "offset from mention_pre": -1989
+  },
+  "seed3000 none w16 centre": {
+   "token": "=",
+   "position": 11050,
+   "naming rank": -2.0,
+   "naming lift": -0.25015898752108967,
+   "share": 0.0,
+   "source": -0.02548126969486475,
+   "nearest": "proposal_k1",
+   "offset from mention_pre": 1020
+  },
+  "seed3000 none w16 last": {
+   "token": "=",
+   "position": 11057,
+   "naming rank": -0.0,
+   "naming lift": 0.010537406747452849,
+   "share": 0.009841231471214906,
+   "source": -0.009193282574415207,
+   "nearest": "proposal_k1",
+   "offset from mention_pre": 1027
+  },
+  "seed3000 none w32 centre": {
+   "token": "7",
+   "position": 11062,
+   "naming rank": -161.0,
+   "naming lift": 0.006153865574378692,
+   "share": 0.0,
+   "source": -0.06496781669557095,
+   "nearest": "benign_k1",
+   "offset from mention_pre": 1032
+  },
+  "seed3000 none w32 last": {
+   "token": ".\n\n",
+   "position": 11077,
+   "naming rank": -232.0,
+   "naming lift": 0.0784980003662561,
+   "share": 0.0,
+   "source": -0.037274569272994995,
+   "nearest": "benign_k1",
+   "offset from mention_pre": 1047
+  },
+  "seed3003 leak w16 centre": {
+   "token": "E",
+   "position": 7810,
+   "naming rank": -587.0,
+   "naming lift": -0.9171414337544679,
+   "share": 0.0,
+   "source": 0.24350106716156006,
+   "nearest": "leak",
+   "offset from mention_pre": 7
+  },
+  "seed3003 leak w16 last": {
+   "token": "4",
+   "position": 7817,
+   "naming rank": -26285.0,
+   "naming lift": -0.4434998300610058,
+   "share": 0.0,
+   "source": 0.5076990872621536,
+   "nearest": "leak",
+   "offset from mention_pre": 14
+  },
+  "seed3003 leak w32 centre": {
+   "token": " is",
+   "position": 7802,
+   "naming rank": -1.0,
+   "naming lift": 10.669513378508645,
+   "share": 0.0,
+   "source": 0.04156696796417236,
+   "nearest": "leak",
+   "offset from mention_pre": -1
+  },
+  "seed3003 leak w32 last": {
+   "token": "4",
+   "position": 7817,
+   "naming rank": -26285.0,
+   "naming lift": -0.4434998300610058,
+   "share": 0.0,
+   "source": 0.337282732129097,
+   "nearest": "leak",
+   "offset from mention_pre": 14
+  },
+  "seed3003 benign_k1 w16 centre": {
+   "token": " tasks",
+   "position": 8153,
+   "naming rank": -84523.0,
+   "naming lift": 0.14556659323532273,
+   "share": 0.0,
+   "source": -0.3260355591773987,
+   "nearest": "benign_k1",
+   "offset from mention_pre": -2531
+  },
+  "seed3003 benign_k1 w16 last": {
+   "token": ".",
+   "position": 8160,
+   "naming rank": -119618.0,
+   "naming lift": 0.030292497663166884,
+   "share": 0.0,
+   "source": -0.46001340448856354,
+   "nearest": "proposal_k1",
+   "offset from mention_pre": -2524
+  },
+  "seed3003 benign_k1 w32 centre": {
+   "token": " steps",
+   "position": 8155,
+   "naming rank": -72065.0,
+   "naming lift": 0.3017057504735785,
+   "share": 0.0,
+   "source": -0.12724065780639648,
+   "nearest": "benign_k1",
+   "offset from mention_pre": -2529
+  },
+  "seed3003 benign_k1 w32 last": {
+   "token": "'s",
+   "position": 8170,
+   "naming rank": -49127.0,
+   "naming lift": 0.023869138783435773,
+   "share": 0.0,
+   "source": -0.1240764856338501,
+   "nearest": "benign_k1",
+   "offset from mention_pre": -2514
+  },
+  "seed3003 proposal_k1 w16 centre": {
+   "token": " accept",
+   "position": 8099,
+   "naming rank": -124410.0,
+   "naming lift": -0.04715609114206032,
+   "share": 0.0,
+   "source": -0.2689557671546936,
+   "nearest": "proposal_k1",
+   "offset from mention_pre": null
+  },
+  "seed3003 proposal_k1 w16 last": {
+   "token": ".",
+   "position": 8106,
+   "naming rank": -65705.0,
+   "naming lift": 0.4266973282139386,
+   "share": 0.0,
+   "source": -0.3342817425727844,
+   "nearest": "proposal_k1",
+   "offset from mention_pre": null
+  },
+  "seed3003 proposal_k1 w32 centre": {
+   "token": ".",
+   "position": 8106,
+   "naming rank": -65705.0,
+   "naming lift": 0.4266973282139386,
+   "share": 0.0,
+   "source": -0.01272333413362503,
+   "nearest": "benign_k1",
+   "offset from mention_pre": null
+  },
+  "seed3003 proposal_k1 w32 last": {
+   "token": " the",
+   "position": 8121,
+   "naming rank": -40650.0,
+   "naming lift": 0.17371824976546435,
+   "share": 0.0,
+   "source": -0.10389988124370575,
+   "nearest": "proposal_k1",
+   "offset from mention_pre": null
+  },
+  "seed3003 none w16 centre": {
+   "token": "gb",
+   "position": 8322,
+   "naming rank": -93207.0,
+   "naming lift": -0.011728789540262241,
+   "share": 0.0,
+   "source": -0.03489786712452769,
+   "nearest": "proposal_k1",
+   "offset from mention_pre": null
+  },
+  "seed3003 none w16 last": {
+   "token": " ih",
+   "position": 8329,
+   "naming rank": -126454.0,
+   "naming lift": 0.0026158115041319263,
+   "share": 0.0,
+   "source": 0.0026598870754241943,
+   "nearest": "leak",
+   "offset from mention_pre": null
+  },
+  "seed3003 none w32 centre": {
+   "token": "'",
+   "position": 8331,
+   "naming rank": -117502.0,
+   "naming lift": 0.0003118486082360761,
+   "share": 0.0,
+   "source": -0.008118662983179092,
+   "nearest": "benign_k1",
+   "offset from mention_pre": null
+  },
+  "seed3003 none w32 last": {
+   "token": "J",
+   "position": 8346,
+   "naming rank": -10202.0,
+   "naming lift": -0.0028884673251532433,
+   "share": 0.0,
+   "source": -0.06897911988198757,
+   "nearest": "benign_k1",
+   "offset from mention_pre": null
+  },
+  "seed3006 leak w16 centre": {
+   "token": "j",
+   "position": 7849,
+   "naming rank": -160.0,
+   "naming lift": -1.7810355058650789,
+   "share": 0.0,
+   "source": 0.31805768609046936,
+   "nearest": "leak",
+   "offset from mention_pre": 9
+  },
+  "seed3006 leak w16 last": {
+   "token": "2",
+   "position": 7856,
+   "naming rank": -325.0,
+   "naming lift": -0.587431356264382,
+   "share": 0.0,
+   "source": 0.4435511603951454,
+   "nearest": "leak",
+   "offset from mention_pre": 16
+  },
+  "seed3006 leak w32 centre": {
+   "token": "h",
+   "position": 7842,
+   "naming rank": -520.0,
+   "naming lift": -0.7027904568317496,
+   "share": 0.0,
+   "source": 0.1733063906431198,
+   "nearest": "leak",
+   "offset from mention_pre": 2
+  },
+  "seed3006 leak w32 last": {
+   "token": "\".",
+   "position": 7857,
+   "naming rank": -48638.0,
+   "naming lift": 0.002902914984606042,
+   "share": 0.0,
+   "source": 0.07704491913318634,
+   "nearest": "leak",
+   "offset from mention_pre": 17
+  },
+  "seed3006 benign_k1 w16 centre": {
+   "token": " tasks",
+   "position": 9286,
+   "naming rank": -42695.0,
+   "naming lift": 0.555968791321229,
+   "share": 0.0,
+   "source": -0.33329346776008606,
+   "nearest": "benign_k1",
+   "offset from mention_pre": 101
+  },
+  "seed3006 benign_k1 w16 last": {
+   "token": ".",
+   "position": 9293,
+   "naming rank": -59471.0,
+   "naming lift": 0.3383944626750175,
+   "share": 0.0,
+   "source": -0.5577911734580994,
+   "nearest": "benign_k1",
+   "offset from mention_pre": 108
+  },
+  "seed3006 benign_k1 w32 centre": {
+   "token": " breaking",
+   "position": 9283,
+   "naming rank": -29688.0,
+   "naming lift": 0.4318685874426915,
+   "share": 0.0,
+   "source": -0.27297115325927734,
+   "nearest": "benign_k1",
+   "offset from mention_pre": 98
+  },
+  "seed3006 benign_k1 w32 last": {
+   "token": " provide",
+   "position": 9298,
+   "naming rank": -70331.0,
+   "naming lift": 0.054224358323290645,
+   "share": 0.0,
+   "source": -0.018303394317626953,
+   "nearest": "benign_k1",
+   "offset from mention_pre": 113
+  },
+  "seed3006 proposal_k1 w16 centre": {
+   "token": " accepting",
+   "position": 8086,
+   "naming rank": -68437.0,
+   "naming lift": -0.03558796792026264,
+   "share": 0.0,
+   "source": -0.41689513623714447,
+   "nearest": "proposal_k1",
+   "offset from mention_pre": null
+  },
+  "seed3006 proposal_k1 w16 last": {
+   "token": " issue",
+   "position": 8093,
+   "naming rank": -44992.0,
+   "naming lift": 0.45342269756027775,
+   "share": 0.0,
+   "source": -0.01433795690536499,
+   "nearest": "proposal_k1",
+   "offset from mention_pre": null
+  },
+  "seed3006 proposal_k1 w32 centre": {
+   "token": " there",
+   "position": 8089,
+   "naming rank": -44394.0,
+   "naming lift": 0.4635916307220693,
+   "share": 0.0,
+   "source": -0.08324313163757324,
+   "nearest": "proposal_k1",
+   "offset from mention_pre": null
+  },
+  "seed3006 proposal_k1 w32 last": {
+   "token": " that",
+   "position": 8104,
+   "naming rank": -76008.0,
+   "naming lift": 0.00037348780317536523,
+   "share": 0.0,
+   "source": 0.021882668137550354,
+   "nearest": "leak",
+   "offset from mention_pre": null
+  },
+  "seed3006 none w16 centre": {
+   "token": "2",
+   "position": 8587,
+   "naming rank": -11985.0,
+   "naming lift": 0.0009390450050670296,
+   "share": 0.0,
+   "source": 0.01061136182397604,
+   "nearest": "leak",
+   "offset from mention_pre": null
+  },
+  "seed3006 none w16 last": {
+   "token": " of",
+   "position": 8594,
+   "naming rank": -36518.0,
+   "naming lift": 0.00022536565673014763,
+   "share": 0.0,
+   "source": -0.0016758274286985397,
+   "nearest": "proposal_k1",
+   "offset from mention_pre": null
+  },
+  "seed3006 none w32 centre": {
+   "token": " episode",
+   "position": 8585,
+   "naming rank": -135515.0,
+   "naming lift": -3.3000577513320195e-05,
+   "share": 0.0,
+   "source": -0.10297077894210815,
+   "nearest": "benign_k1",
+   "offset from mention_pre": null
+  },
+  "seed3006 none w32 last": {
+   "token": " the",
+   "position": 8600,
+   "naming rank": -39876.0,
+   "naming lift": -0.000798009077433548,
+   "share": 0.0,
+   "source": 0.01941596530377865,
+   "nearest": "leak",
+   "offset from mention_pre": null
+  },
+  "seed3009 leak w16 centre": {
+   "token": " Carol",
+   "position": 7684,
+   "naming rank": -949.0,
+   "naming lift": 1.2986129032168527,
+   "share": 0.0,
+   "source": -0.02238793671131134,
+   "nearest": "benign_k1",
+   "offset from mention_pre": -19
+  },
+  "seed3009 leak w16 last": {
+   "token": " (",
+   "position": 7691,
+   "naming rank": -15125.0,
+   "naming lift": -0.036898851384119524,
+   "share": 0.0,
+   "source": -0.10888290405273438,
+   "nearest": "proposal_k1",
+   "offset from mention_pre": -12
+  },
+  "seed3009 leak w32 centre": {
+   "token": " task",
+   "position": 7689,
+   "naming rank": -32074.0,
+   "naming lift": -0.09150609083154748,
+   "share": 0.0,
+   "source": 0.08060133457183838,
+   "nearest": "leak",
+   "offset from mention_pre": -14
+  },
+  "seed3009 leak w32 last": {
+   "token": "7",
+   "position": 7704,
+   "naming rank": -11.0,
+   "naming lift": -1.3862943611198908,
+   "share": 0.0,
+   "source": 0.2785581946372986,
+   "nearest": "leak",
+   "offset from mention_pre": 1
+  },
+  "seed3009 benign_k1 w16 centre": {
+   "token": " consistent",
+   "position": 8028,
+   "naming rank": -3299.0,
+   "naming lift": 1.703645556294326,
+   "share": 0.0,
+   "source": -0.17568625509738922,
+   "nearest": "benign_k1",
+   "offset from mention_pre": -1831
+  },
+  "seed3009 benign_k1 w16 last": {
+   "token": " be",
+   "position": 8035,
+   "naming rank": -7054.0,
+   "naming lift": 0.7901954276851981,
+   "share": 0.0,
+   "source": -0.15269310399889946,
+   "nearest": "benign_k1",
+   "offset from mention_pre": -1824
+  },
+  "seed3009 benign_k1 w32 centre": {
+   "token": " be",
+   "position": 8035,
+   "naming rank": -7054.0,
+   "naming lift": 0.7901954276851981,
+   "share": 0.0,
+   "source": -0.061564818024635315,
+   "nearest": "benign_k1",
+   "offset from mention_pre": -1824
+  },
+  "seed3009 benign_k1 w32 last": {
+   "token": " ",
+   "position": 8050,
+   "naming rank": -21.0,
+   "naming lift": -0.09157045054268842,
+   "share": 0.0,
+   "source": 0.015342348720878363,
+   "nearest": "leak",
+   "offset from mention_pre": -1809
+  },
+  "seed3009 proposal_k1 w16 centre": {
+   "token": " accepting",
+   "position": 7736,
+   "naming rank": -19490.0,
+   "naming lift": -0.0020460972895914864,
+   "share": 0.0,
+   "source": -0.4169154614210129,
+   "nearest": "proposal_k1",
+   "offset from mention_pre": null
+  },
+  "seed3009 proposal_k1 w16 last": {
+   "token": ".",
+   "position": 7743,
+   "naming rank": -70944.0,
+   "naming lift": -5.274991923798211e-05,
+   "share": 0.0,
+   "source": -0.5020514875650406,
+   "nearest": "proposal_k1",
+   "offset from mention_pre": null
+  },
+  "seed3009 proposal_k1 w32 centre": {
+   "token": " clearly",
+   "position": 7741,
+   "naming rank": -2447.0,
+   "naming lift": 2.086412693177852,
+   "share": 0.0,
+   "source": -0.2660113275051117,
+   "nearest": "proposal_k1",
+   "offset from mention_pre": null
+  },
+  "seed3009 proposal_k1 w32 last": {
+   "token": " Let",
+   "position": 7756,
+   "naming rank": -7320.0,
+   "naming lift": 0.025887922722517942,
+   "share": 0.0,
+   "source": -0.09343086928129196,
+   "nearest": "benign_k1",
+   "offset from mention_pre": null
+  },
+  "seed3009 none w16 centre": {
+   "token": "4",
+   "position": 8198,
+   "naming rank": -1683.0,
+   "naming lift": 0.001705445656389415,
+   "share": 0.0,
+   "source": -0.07275615632534027,
+   "nearest": "benign_k1",
+   "offset from mention_pre": -1212
+  },
+  "seed3009 none w16 last": {
+   "token": "1",
+   "position": 8205,
+   "naming rank": -9.0,
+   "naming lift": 0.32466107569286873,
+   "share": 0.0,
+   "source": -0.021137458737939596,
+   "nearest": "proposal_k1",
+   "offset from mention_pre": -1205
+  },
+  "seed3009 none w32 centre": {
+   "token": "1",
+   "position": 8191,
+   "naming rank": -38.0,
+   "naming lift": 0.11460338273900383,
+   "share": 0.0,
+   "source": -0.00014715269207954407,
+   "nearest": "benign_k1",
+   "offset from mention_pre": -1219
+  },
+  "seed3009 none w32 last": {
+   "token": "6",
+   "position": 8206,
+   "naming rank": -247.0,
+   "naming lift": 0.012024192966801017,
+   "share": 0.0,
+   "source": -0.08818508218973875,
+   "nearest": "benign_k1",
+   "offset from mention_pre": -1204
+  },
+  "seed3012 leak w16 centre": {
+   "token": "E",
+   "position": 7680,
+   "naming rank": -36.0,
+   "naming lift": 0.682960335252953,
+   "share": 0.0,
+   "source": 0.39446499943733215,
+   "nearest": "leak",
+   "offset from mention_pre": 11
+  },
+  "seed3012 leak w16 last": {
+   "token": "k",
+   "position": 7687,
+   "naming rank": -10051.0,
+   "naming lift": -0.48392058537289095,
+   "share": 0.0,
+   "source": 0.0770728774368763,
+   "nearest": "leak",
+   "offset from mention_pre": 18
+  },
+  "seed3012 leak w32 centre": {
+   "token": "Il",
+   "position": 7673,
+   "naming rank": -58.0,
+   "naming lift": -0.6942701453045688,
+   "share": 0.0,
+   "source": 0.23165984451770782,
+   "nearest": "leak",
+   "offset from mention_pre": 4
+  },
+  "seed3012 leak w32 last": {
+   "token": "5",
+   "position": 7688,
+   "naming rank": -569.0,
+   "naming lift": -0.10705229658865356,
+   "share": 0.0,
+   "source": 0.3730442076921463,
+   "nearest": "leak",
+   "offset from mention_pre": 19
+  },
+  "seed3012 benign_k1 w16 centre": {
+   "token": ".",
+   "position": 10037,
+   "naming rank": -4292.0,
+   "naming lift": 0.029764969581856704,
+   "share": 0.0,
+   "source": 0.008591175079345703,
+   "nearest": "leak",
+   "offset from mention_pre": null
+  },
+  "seed3012 benign_k1 w16 last": {
+   "token": "2",
+   "position": 10044,
+   "naming rank": -738.0,
+   "naming lift": 0.20153143944397467,
+   "share": 0.0,
+   "source": -0.008752326015383005,
+   "nearest": "benign_k1",
+   "offset from mention_pre": null
+  },
+  "seed3012 benign_k1 w32 centre": {
+   "token": "2",
+   "position": 10029,
+   "naming rank": -9868.0,
+   "naming lift": 0.6459997033244207,
+   "share": 0.0,
+   "source": -0.13123533502221107,
+   "nearest": "benign_k1",
+   "offset from mention_pre": null
+  },
+  "seed3012 benign_k1 w32 last": {
+   "token": "2",
+   "position": 10044,
+   "naming rank": -738.0,
+   "naming lift": 0.20153143944397467,
+   "share": 0.0,
+   "source": 0.019894316792488098,
+   "nearest": "leak",
+   "offset from mention_pre": null
+  },
+  "seed3012 proposal_k1 w16 centre": {
+   "token": " each",
+   "position": 7963,
+   "naming rank": -2259.0,
+   "naming lift": 1.0812050202962062,
+   "share": 0.0,
+   "source": 0.024121984839439392,
+   "nearest": "leak",
+   "offset from mention_pre": -1968
+  },
+  "seed3012 proposal_k1 w16 last": {
+   "token": " a",
+   "position": 7970,
+   "naming rank": -4943.0,
+   "naming lift": 1.464000509947315,
+   "share": 0.0,
+   "source": 0.003630809485912323,
+   "nearest": "leak",
+   "offset from mention_pre": -1961
+  },
+  "seed3012 proposal_k1 w32 centre": {
+   "token": " it",
+   "position": 7959,
+   "naming rank": -8110.0,
+   "naming lift": 0.29471559500534106,
+   "share": 0.0,
+   "source": -0.12514804303646088,
+   "nearest": "proposal_k1",
+   "offset from mention_pre": -1972
+  },
+  "seed3012 proposal_k1 w32 last": {
+   "token": "...\"",
+   "position": 7974,
+   "naming rank": -8461.0,
+   "naming lift": -0.21147276198034604,
+   "share": 0.0,
+   "source": -0.03884787857532501,
+   "nearest": "benign_k1",
+   "offset from mention_pre": -1957
+  },
+  "seed3012 none w16 centre": {
+   "token": "1",
+   "position": 9237,
+   "naming rank": -345.0,
+   "naming lift": 0.036883613430554796,
+   "share": 0.0,
+   "source": 0.02220181468874216,
+   "nearest": "leak",
+   "offset from mention_pre": -1662
+  },
+  "seed3012 none w16 last": {
+   "token": ":",
+   "position": 9244,
+   "naming rank": -2323.0,
+   "naming lift": 0.005704203705080957,
+   "share": 0.0,
+   "source": -0.024799955543130636,
+   "nearest": "benign_k1",
+   "offset from mention_pre": -1655
+  },
+  "seed3012 none w32 centre": {
+   "token": " d",
+   "position": 9257,
+   "naming rank": -11.0,
+   "naming lift": 0.08149303425118326,
+   "share": 0.0,
+   "source": -0.010053157806396484,
+   "nearest": "proposal_k1",
+   "offset from mention_pre": -1642
+  },
+  "seed3012 none w32 last": {
+   "token": "3",
+   "position": 9272,
+   "naming rank": -3595.0,
+   "naming lift": 0.03523845628433975,
+   "share": 0.0,
+   "source": 0.004585513845086098,
+   "nearest": "leak",
+   "offset from mention_pre": -1627
+  },
+  "seed3015 leak w16 centre": {
+   "token": " this",
+   "position": 7721,
+   "naming rank": -4352.0,
+   "naming lift": 1.0022218104124967,
+   "share": 0.0,
+   "source": 0.03192749619483948,
+   "nearest": "leak",
+   "offset from mention_pre": -4
+  },
+  "seed3015 leak w16 last": {
+   "token": "1",
+   "position": 7728,
+   "naming rank": -4.0,
+   "naming lift": -0.2231435513142097,
+   "share": 0.0,
+   "source": 0.4635798782110214,
+   "nearest": "leak",
+   "offset from mention_pre": 3
+  },
+  "seed3015 leak w32 centre": {
+   "token": "which",
+   "position": 7717,
+   "naming rank": -483.0,
+   "naming lift": 2.9255580670212087,
+   "share": 0.0,
+   "source": 0.002030983567237854,
+   "nearest": "leak",
+   "offset from mention_pre": -8
+  },
+  "seed3015 leak w32 last": {
+   "token": " need",
+   "position": 7732,
+   "naming rank": -2235.0,
+   "naming lift": 1.30358336805486,
+   "share": 0.0,
+   "source": 0.14345955848693848,
+   "nearest": "leak",
+   "offset from mention_pre": 7
+  },
+  "seed3015 benign_k1 w16 centre": {
+   "token": " into",
+   "position": 7843,
+   "naming rank": -8632.0,
+   "naming lift": 0.6353889725404667,
+   "share": 0.0,
+   "source": -0.19594335556030273,
+   "nearest": "benign_k1",
+   "offset from mention_pre": -806
+  },
+  "seed3015 benign_k1 w16 last": {
+   "token": " that",
+   "position": 7850,
+   "naming rank": -7969.0,
+   "naming lift": -0.0029308751740177996,
+   "share": 0.0,
+   "source": -0.1994747370481491,
+   "nearest": "benign_k1",
+   "offset from mention_pre": -799
+  },
+  "seed3015 benign_k1 w32 centre": {
+   "token": " down",
+   "position": 7841,
+   "naming rank": -3827.0,
+   "naming lift": 1.9395457084190166,
+   "share": 0.0,
+   "source": -0.2800697088241577,
+   "nearest": "benign_k1",
+   "offset from mention_pre": -808
+  },
+  "seed3015 benign_k1 w32 last": {
+   "token": ".\n\n",
+   "position": 7856,
+   "naming rank": -17200.0,
+   "naming lift": -6.593631210805029e-06,
+   "share": 0.0,
+   "source": -0.29233255982398987,
+   "nearest": "benign_k1",
+   "offset from mention_pre": -793
+  },
+  "seed3015 proposal_k1 w16 centre": {
+   "token": ".",
+   "position": 7971,
+   "naming rank": -2016.0,
+   "naming lift": 2.207200542551216,
+   "share": 0.0,
+   "source": 0.019573107361793518,
+   "nearest": "leak",
+   "offset from mention_pre": -982
+  },
+  "seed3015 proposal_k1 w16 last": {
+   "token": "\u2019s",
+   "position": 7978,
+   "naming rank": -313.0,
+   "naming lift": 4.028304560569575,
+   "share": 0.0,
+   "source": 0.02905876189470291,
+   "nearest": "leak",
+   "offset from mention_pre": -975
+  },
+  "seed3015 proposal_k1 w32 centre": {
+   "token": " this",
+   "position": 7969,
+   "naming rank": -988.0,
+   "naming lift": 3.1724347699561664,
+   "share": 0.0,
+   "source": -0.09370367228984833,
+   "nearest": "proposal_k1",
+   "offset from mention_pre": -984
+  },
+  "seed3015 proposal_k1 w32 last": {
+   "token": " through",
+   "position": 7984,
+   "naming rank": -1011.0,
+   "naming lift": 2.9651813785606222,
+   "share": 0.0,
+   "source": 0.06681767851114273,
+   "nearest": "leak",
+   "offset from mention_pre": -969
+  },
+  "seed3015 none w16 centre": {
+   "token": " ",
+   "position": 9216,
+   "naming rank": -1.0,
+   "naming lift": 1.221214610760442,
+   "share": 0.0,
+   "source": 0.05984790064394474,
+   "nearest": "leak",
+   "offset from mention_pre": -273
+  },
+  "seed3015 none w16 last": {
+   "token": " I",
+   "position": 9223,
+   "naming rank": -5471.0,
+   "naming lift": 0.0098962348564271,
+   "share": 0.0,
+   "source": 0.009209766983985901,
+   "nearest": "leak",
+   "offset from mention_pre": -266
+  },
+  "seed3015 none w32 centre": {
+   "token": " try",
+   "position": 9232,
+   "naming rank": -5473.0,
+   "naming lift": 0.015768337586941072,
+   "share": 0.0,
+   "source": -0.03281683009117842,
+   "nearest": "benign_k1",
+   "offset from mention_pre": -257
+  },
+  "seed3015 none w32 last": {
+   "token": ",",
+   "position": 9247,
+   "naming rank": -1226.0,
+   "naming lift": 0.008768729393464625,
+   "share": 0.0,
+   "source": 0.07482408732175827,
+   "nearest": "leak",
+   "offset from mention_pre": -242
+  },
+  "seed3018 leak w16 centre": {
+   "token": "ha",
+   "position": 7728,
+   "naming rank": -2423.0,
+   "naming lift": -1.2769812711462407,
+   "share": 0.0,
+   "source": 0.33098989725112915,
+   "nearest": "leak",
+   "offset from mention_pre": 10
+  },
+  "seed3018 leak w16 last": {
+   "token": "3",
+   "position": 7735,
+   "naming rank": -311.0,
+   "naming lift": 0.3863165378053388,
+   "share": 0.0,
+   "source": 0.5404006540775299,
+   "nearest": "leak",
+   "offset from mention_pre": 17
+  },
+  "seed3018 leak w32 centre": {
+   "token": "B",
+   "position": 7725,
+   "naming rank": -1487.0,
+   "naming lift": -1.2275459720440027,
+   "share": 0.0,
+   "source": 0.19229063391685486,
+   "nearest": "leak",
+   "offset from mention_pre": 7
+  },
+  "seed3018 leak w32 last": {
+   "token": " need",
+   "position": 7740,
+   "naming rank": -1757.0,
+   "naming lift": 0.12746925517069307,
+   "share": 0.0,
+   "source": 0.10732769966125488,
+   "nearest": "leak",
+   "offset from mention_pre": 22
+  },
+  "seed3018 benign_k1 w16 centre": {
+   "token": " from",
+   "position": 8561,
+   "naming rank": -1244.0,
+   "naming lift": 0.4830847571029526,
+   "share": 0.0,
+   "source": -0.14109107851982117,
+   "nearest": "benign_k1",
+   "offset from mention_pre": -2604
+  },
+  "seed3018 benign_k1 w16 last": {
+   "token": " but",
+   "position": 8568,
+   "naming rank": -705.0,
+   "naming lift": 1.028833219280866,
+   "share": 0.0,
+   "source": -0.3886183649301529,
+   "nearest": "benign_k1",
+   "offset from mention_pre": -2597
+  },
+  "seed3018 benign_k1 w32 centre": {
+   "token": "ave",
+   "position": 8563,
+   "naming rank": -3779.0,
+   "naming lift": -0.38479277215938446,
+   "share": 0.0,
+   "source": -0.16273343563079834,
+   "nearest": "benign_k1",
+   "offset from mention_pre": -2602
+  },
+  "seed3018 benign_k1 w32 last": {
+   "token": ".\n\n",
+   "position": 8578,
+   "naming rank": -44492.0,
+   "naming lift": 0.05685557136691877,
+   "share": 0.0,
+   "source": -0.3455065041780472,
+   "nearest": "benign_k1",
+   "offset from mention_pre": -2587
+  },
+  "seed3018 proposal_k1 w16 centre": {
+   "token": "0",
+   "position": 14358,
+   "naming rank": -601.0,
+   "naming lift": 0.13207684691352828,
+   "share": 0.0,
+   "source": -0.048976688645780087,
+   "nearest": "proposal_k1",
+   "offset from mention_pre": null
+  },
+  "seed3018 proposal_k1 w16 last": {
+   "token": "5",
+   "position": 14365,
+   "naming rank": -578.0,
+   "naming lift": 0.07163761516618372,
+   "share": 0.0,
+   "source": -0.03684572223573923,
+   "nearest": "benign_k1",
+   "offset from mention_pre": null
+  },
+  "seed3018 proposal_k1 w32 centre": {
+   "token": "1",
+   "position": 14372,
+   "naming rank": -3112.0,
+   "naming lift": 0.08169692692613673,
+   "share": 0.0,
+   "source": 0.005895035341382027,
+   "nearest": "leak",
+   "offset from mention_pre": null
+  },
+  "seed3018 proposal_k1 w32 last": {
+   "token": "1",
+   "position": 14387,
+   "naming rank": -2536.0,
+   "naming lift": 0.10610915140271437,
+   "share": 0.0,
+   "source": 0.025031868368387222,
+   "nearest": "leak",
+   "offset from mention_pre": null
+  },
+  "seed3018 none w16 centre": {
+   "token": " A",
+   "position": 11698,
+   "naming rank": -341.0,
+   "naming lift": -0.002812941376614475,
+   "share": 0.0,
+   "source": 0.023105221800506115,
+   "nearest": "leak",
+   "offset from mention_pre": 687
+  },
+  "seed3018 none w16 last": {
+   "token": "1",
+   "position": 11705,
+   "naming rank": -4801.0,
+   "naming lift": 0.028875753023429596,
+   "share": 0.0,
+   "source": 0.00849438225850463,
+   "nearest": "leak",
+   "offset from mention_pre": 694
+  },
+  "seed3018 none w32 centre": {
+   "token": "4",
+   "position": 11691,
+   "naming rank": -1146.0,
+   "naming lift": 0.04366119289600334,
+   "share": 0.0,
+   "source": -0.11335642635822296,
+   "nearest": "benign_k1",
+   "offset from mention_pre": 680
+  },
+  "seed3018 none w32 last": {
+   "token": "7",
+   "position": 11706,
+   "naming rank": -349.0,
+   "naming lift": 0.04603085321661027,
+   "share": 0.0,
+   "source": -0.021804027259349823,
+   "nearest": "benign_k1",
+   "offset from mention_pre": 695
+  },
+  "seed3021 leak w16 centre": {
+   "token": " the",
+   "position": 7775,
+   "naming rank": -2602.0,
+   "naming lift": 1.8639997194589162,
+   "share": 0.0,
+   "source": 0.15076300501823425,
+   "nearest": "leak",
+   "offset from mention_pre": -4
+  },
+  "seed3021 leak w16 last": {
+   "token": "8",
+   "position": 7782,
+   "naming rank": -250.0,
+   "naming lift": -2.424084006897818,
+   "share": 0.0,
+   "source": 0.47434473037719727,
+   "nearest": "leak",
+   "offset from mention_pre": 3
+  },
+  "seed3021 leak w32 centre": {
+   "token": " ",
+   "position": 7779,
+   "naming rank": -4.0,
+   "naming lift": 0.018608136051202706,
+   "share": 0.05943492545204748,
+   "source": 0.007160395383834839,
+   "nearest": "leak",
+   "offset from mention_pre": 0
+  },
+  "seed3021 leak w32 last": {
+   "token": " make",
+   "position": 7794,
+   "naming rank": -337.0,
+   "naming lift": 2.7299004656390364,
+   "share": 0.0,
+   "source": 0.09131580591201782,
+   "nearest": "leak",
+   "offset from mention_pre": 15
+  },
+  "seed3021 benign_k1 w16 centre": {
+   "token": " organizing",
+   "position": 8052,
+   "naming rank": -1895.0,
+   "naming lift": 2.389855754228777,
+   "share": 0.0,
+   "source": -0.22491048276424408,
+   "nearest": "benign_k1",
+   "offset from mention_pre": -1559
+  },
+  "seed3021 benign_k1 w16 last": {
+   "token": ".",
+   "position": 8059,
+   "naming rank": -30509.0,
+   "naming lift": -3.298011628949382e-05,
+   "share": 0.0,
+   "source": -0.5335425212979317,
+   "nearest": "benign_k1",
+   "offset from mention_pre": -1552
+  },
+  "seed3021 benign_k1 w32 centre": {
+   "token": " files",
+   "position": 8053,
+   "naming rank": -4651.0,
+   "naming lift": 0.22021579584304618,
+   "share": 0.0,
+   "source": -0.15229129791259766,
+   "nearest": "benign_k1",
+   "offset from mention_pre": -1558
+  },
+  "seed3021 benign_k1 w32 last": {
+   "token": " Maybe",
+   "position": 8068,
+   "naming rank": -22696.0,
+   "naming lift": 0.43554093154091866,
+   "share": 0.0,
+   "source": -0.21630316972732544,
+   "nearest": "proposal_k1",
+   "offset from mention_pre": -1543
+  },
+  "seed3021 proposal_k1 w16 centre": {
+   "token": "'s",
+   "position": 7996,
+   "naming rank": -3765.0,
+   "naming lift": 1.6576968680917048,
+   "share": 0.0,
+   "source": -0.34811192750930786,
+   "nearest": "proposal_k1",
+   "offset from mention_pre": -1870
+  },
+  "seed3021 proposal_k1 w16 last": {
+   "token": ".",
+   "position": 8003,
+   "naming rank": -59270.0,
+   "naming lift": -0.00037591134211112376,
+   "share": 0.0,
+   "source": -0.5401109308004379,
+   "nearest": "proposal_k1",
+   "offset from mention_pre": -1863
+  },
+  "seed3021 proposal_k1 w32 centre": {
+   "token": " clearly",
+   "position": 8001,
+   "naming rank": -1518.0,
+   "naming lift": 2.5522083839666854,
+   "share": 0.0,
+   "source": -0.26040446758270264,
+   "nearest": "proposal_k1",
+   "offset from mention_pre": -1865
+  },
+  "seed3021 proposal_k1 w32 last": {
+   "token": " don",
+   "position": 8016,
+   "naming rank": -60.0,
+   "naming lift": 0.1086338410027956,
+   "share": 0.0,
+   "source": -0.1220257356762886,
+   "nearest": "benign_k1",
+   "offset from mention_pre": -1850
+  },
+  "seed3021 none w16 centre": {
+   "token": "3",
+   "position": 8779,
+   "naming rank": -74.0,
+   "naming lift": 0.006410278360919008,
+   "share": 0.0,
+   "source": -0.02337709814310074,
+   "nearest": "proposal_k1",
+   "offset from mention_pre": 990
+  },
+  "seed3021 none w16 last": {
+   "token": "1",
+   "position": 8786,
+   "naming rank": -33.0,
+   "naming lift": 0.5513326080458079,
+   "share": 0.0,
+   "source": -0.050678547471761703,
+   "nearest": "benign_k1",
+   "offset from mention_pre": 997
+  },
+  "seed3021 none w32 centre": {
+   "token": " -",
+   "position": 8756,
+   "naming rank": -4.0,
+   "naming lift": 0.13685918271719721,
+   "share": 0.0,
+   "source": 0.02127605862915516,
+   "nearest": "leak",
+   "offset from mention_pre": 967
+  },
+  "seed3021 none w32 last": {
+   "token": " ",
+   "position": 8771,
+   "naming rank": -5.0,
+   "naming lift": 1.5811141331907734,
+   "share": 0.0,
+   "source": 0.07365455664694309,
+   "nearest": "leak",
+   "offset from mention_pre": 982
+  },
+  "seed3024 leak w16 centre": {
+   "token": "Gl",
+   "position": 7854,
+   "naming rank": -20042.0,
+   "naming lift": -3.8829747670105723,
+   "share": 0.0,
+   "source": 0.3617793470621109,
+   "nearest": "leak",
+   "offset from mention_pre": 7
+  },
+  "seed3024 leak w16 last": {
+   "token": "2",
+   "position": 7861,
+   "naming rank": -2327.0,
+   "naming lift": -0.31388829708485844,
+   "share": 0.0,
+   "source": 0.47626490890979767,
+   "nearest": "leak",
+   "offset from mention_pre": 14
+  },
+  "seed3024 leak w32 centre": {
+   "token": "2",
+   "position": 7861,
+   "naming rank": -2327.0,
+   "naming lift": -0.31388829708485844,
+   "share": 0.0,
+   "source": 0.07794198393821716,
+   "nearest": "leak",
+   "offset from mention_pre": 14
+  },
+  "seed3024 leak w32 last": {
+   "token": " fits",
+   "position": 7876,
+   "naming rank": -53968.0,
+   "naming lift": 0.003126534593830499,
+   "share": 0.0,
+   "source": 0.15511152148246765,
+   "nearest": "leak",
+   "offset from mention_pre": 29
+  },
+  "seed3024 benign_k1 w16 centre": {
+   "token": " data",
+   "position": 8481,
+   "naming rank": -22325.0,
+   "naming lift": 0.576681806371333,
+   "share": 0.0,
+   "source": -0.1789582446217537,
+   "nearest": "benign_k1",
+   "offset from mention_pre": null
+  },
+  "seed3024 benign_k1 w16 last": {
+   "token": ".",
+   "position": 8488,
+   "naming rank": -63102.0,
+   "naming lift": -0.06265021929205083,
+   "share": 0.0,
+   "source": -0.4691353961825371,
+   "nearest": "benign_k1",
+   "offset from mention_pre": null
+  },
+  "seed3024 benign_k1 w32 centre": {
+   "token": " documenting",
+   "position": 8285,
+   "naming rank": -15537.0,
+   "naming lift": 1.2674745532898033,
+   "share": 0.0,
+   "source": -0.1970011591911316,
+   "nearest": "benign_k1",
+   "offset from mention_pre": null
+  },
+  "seed3024 benign_k1 w32 last": {
+   "token": " Alternatively",
+   "position": 8300,
+   "naming rank": -3712.0,
+   "naming lift": 0.0160302657872311,
+   "share": 0.0,
+   "source": -0.314829021692276,
+   "nearest": "benign_k1",
+   "offset from mention_pre": null
+  },
+  "seed3024 proposal_k1 w16 centre": {
+   "token": "'s",
+   "position": 7873,
+   "naming rank": -26140.0,
+   "naming lift": 0.33501205102214016,
+   "share": 0.0,
+   "source": -0.29205937683582306,
+   "nearest": "proposal_k1",
+   "offset from mention_pre": null
+  },
+  "seed3024 proposal_k1 w16 last": {
+   "token": ".",
+   "position": 7880,
+   "naming rank": -100717.0,
+   "naming lift": -0.009515791986252964,
+   "share": 0.0,
+   "source": -0.5314001441001892,
+   "nearest": "proposal_k1",
+   "offset from mention_pre": null
+  },
+  "seed3024 proposal_k1 w32 centre": {
+   "token": "'s",
+   "position": 7873,
+   "naming rank": -26140.0,
+   "naming lift": 0.33501205102214016,
+   "share": 0.0,
+   "source": -0.11459147930145264,
+   "nearest": "proposal_k1",
+   "offset from mention_pre": null
+  },
+  "seed3024 proposal_k1 w32 last": {
+   "token": " The",
+   "position": 7888,
+   "naming rank": -14368.0,
+   "naming lift": 0.12154178572580321,
+   "share": 0.0,
+   "source": -0.15725505352020264,
+   "nearest": "benign_k1",
+   "offset from mention_pre": null
+  },
+  "seed3024 none w16 centre": {
+   "token": "0",
+   "position": 8576,
+   "naming rank": -7633.0,
+   "naming lift": -0.000248875276483318,
+   "share": 0.0,
+   "source": -0.04175517335534096,
+   "nearest": "benign_k1",
+   "offset from mention_pre": null
+  },
+  "seed3024 none w16 last": {
+   "token": "%",
+   "position": 8583,
+   "naming rank": -6762.0,
+   "naming lift": 0.06220759361142747,
+   "share": 0.0,
+   "source": 0.012851379811763763,
+   "nearest": "leak",
+   "offset from mention_pre": null
+  },
+  "seed3024 none w32 centre": {
+   "token": ".",
+   "position": 8568,
+   "naming rank": -34351.0,
+   "naming lift": 0.000121304427086244,
+   "share": 0.0,
+   "source": 0.023865249007940292,
+   "nearest": "leak",
+   "offset from mention_pre": null
+  },
+  "seed3024 none w32 last": {
+   "token": "%",
+   "position": 8583,
+   "naming rank": -6762.0,
+   "naming lift": 0.06220759361142747,
+   "share": 0.0,
+   "source": 0.036704301834106445,
+   "nearest": "leak",
+   "offset from mention_pre": null
+  },
+  "seed3027 leak w16 centre": {
+   "token": " the",
+   "position": 7780,
+   "naming rank": -1817.0,
+   "naming lift": 1.8223644306665978,
+   "share": 0.0,
+   "source": 0.14540821313858032,
+   "nearest": "leak",
+   "offset from mention_pre": -4
+  },
+  "seed3027 leak w16 last": {
+   "token": "7",
+   "position": 7787,
+   "naming rank": -187.0,
+   "naming lift": -2.003123979540641,
+   "share": 0.0,
+   "source": 0.4677772521972656,
+   "nearest": "leak",
+   "offset from mention_pre": 3
+  },
+  "seed3027 leak w32 centre": {
+   "token": " that",
+   "position": 7773,
+   "naming rank": -44363.0,
+   "naming lift": 0.033252165863586924,
+   "share": 0.0,
+   "source": 0.1546834409236908,
+   "nearest": "leak",
+   "offset from mention_pre": -11
+  },
+  "seed3027 leak w32 last": {
+   "token": ".",
+   "position": 7788,
+   "naming rank": -56624.0,
+   "naming lift": -2.6374611799440117e-05,
+   "share": 0.0,
+   "source": 0.09952384233474731,
+   "nearest": "leak",
+   "offset from mention_pre": 4
+  },
+  "seed3027 benign_k1 w16 centre": {
+   "token": " from",
+   "position": 8405,
+   "naming rank": -3280.0,
+   "naming lift": 1.7041106110987503,
+   "share": 0.0,
+   "source": -0.14702390134334564,
+   "nearest": "benign_k1",
+   "offset from mention_pre": -2029
+  },
+  "seed3027 benign_k1 w16 last": {
+   "token": " tasks",
+   "position": 8412,
+   "naming rank": -13287.0,
+   "naming lift": -0.0004751848030277728,
+   "share": 0.0,
+   "source": -0.11701193451881409,
+   "nearest": "benign_k1",
+   "offset from mention_pre": -2022
+  },
+  "seed3027 benign_k1 w32 centre": {
+   "token": " is",
+   "position": 8404,
+   "naming rank": -11420.0,
+   "naming lift": 1.0819847223477232,
+   "share": 0.0,
+   "source": -0.12491017580032349,
+   "nearest": "benign_k1",
+   "offset from mention_pre": -2030
+  },
+  "seed3027 benign_k1 w32 last": {
+   "token": ".\n\n",
+   "position": 8419,
+   "naming rank": -51953.0,
+   "naming lift": 0.01620929558622386,
+   "share": 0.0,
+   "source": -0.26640433073043823,
+   "nearest": "benign_k1",
+   "offset from mention_pre": -2015
+  },
+  "seed3027 proposal_k1 w16 centre": {
+   "token": "'s",
+   "position": 7913,
+   "naming rank": -5617.0,
+   "naming lift": 1.0814370362743482,
+   "share": 0.0,
+   "source": -0.431697815656662,
+   "nearest": "proposal_k1",
+   "offset from mention_pre": -242
+  },
+  "seed3027 proposal_k1 w16 last": {
+   "token": ".",
+   "position": 7920,
+   "naming rank": -62222.0,
+   "naming lift": -3.296967778965154e-05,
+   "share": 0.0,
+   "source": -0.4941144287586212,
+   "nearest": "proposal_k1",
+   "offset from mention_pre": -235
+  },
+  "seed3027 proposal_k1 w32 centre": {
+   "token": " each",
+   "position": 7911,
+   "naming rank": -11307.0,
+   "naming lift": 0.5912002401078382,
+   "share": 0.0,
+   "source": -0.23032650351524353,
+   "nearest": "proposal_k1",
+   "offset from mention_pre": -244
+  },
+  "seed3027 proposal_k1 w32 last": {
+   "token": " peer",
+   "position": 7926,
+   "naming rank": -5640.0,
+   "naming lift": 0.32393416559052035,
+   "share": 0.0,
+   "source": 0.02727717161178589,
+   "nearest": "leak",
+   "offset from mention_pre": -229
+  },
+  "seed3027 none w16 centre": {
+   "token": "6",
+   "position": 9758,
+   "naming rank": -69.0,
+   "naming lift": -0.01443885371867637,
+   "share": 0.0,
+   "source": 0.012111452757380903,
+   "nearest": "leak",
+   "offset from mention_pre": -1769
+  },
+  "seed3027 none w16 last": {
+   "token": "6",
+   "position": 9765,
+   "naming rank": -179.0,
+   "naming lift": 0.06044642995423999,
+   "share": 0.0,
+   "source": -0.012848255690187216,
+   "nearest": "proposal_k1",
+   "offset from mention_pre": -1762
+  },
+  "seed3027 none w32 centre": {
+   "token": " ",
+   "position": 8315,
+   "naming rank": -3.0,
+   "naming lift": 0.7114963192281412,
+   "share": 0.0,
+   "source": -0.046604223549366,
+   "nearest": "benign_k1",
+   "offset from mention_pre": -3212
+  },
+  "seed3027 none w32 last": {
+   "token": "2",
+   "position": 8330,
+   "naming rank": -18.0,
+   "naming lift": 0.1466034741918758,
+   "share": 0.0,
+   "source": -0.02167881838977337,
+   "nearest": "proposal_k1",
+   "offset from mention_pre": -3197
+  }
+ }
+}
