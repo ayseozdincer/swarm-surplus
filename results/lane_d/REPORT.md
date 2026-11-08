@@ -58,6 +58,7 @@ and not from cross-seed signatures. Ten turns, one arm.
 | leak_all (`runs/sweep2_multi`) | done | 10 seeds (5001 to 5013, 5031 to 5043), three blind targets per episode, varied phrasing; replayed |
 | method_tip (`runs/sweep2_methodtip`) | done | the solvable arm's 20 seeds and targets, rules off, none + method_tip + leak_solvable, varied phrasing; replayed, with a second pass at the found location and a length control |
 | Per-token trace CSVs | done | sweep2 seeds 5034 and 5046, leak and benign_k1, lane C's format and placebo (`results/lane_d/trace_seed5034.csv`, `trace_seed5046.csv`, notes in `*_notes.json`) |
+| Solvable per-token traces | done | whole replies, note branch and none, no placebo: 5006 the computed case, 5021 the checked case (`results/lane_d/trace_solvable_5006_computed.csv`, `trace_solvable_5021_checked.csv`, `scripts/solvable_trace_csv.py`) |
 
 ## Setup, and what changed from the brief
 
