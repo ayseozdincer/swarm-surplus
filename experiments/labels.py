@@ -161,7 +161,7 @@ def run_labels(run: dict) -> dict:
     return {
         "manifest": run["run_config"]["manifest"],
         "label": run["run_config"].get("label"),
-        "plant": {k: run["plant"].get(k) for k in ("kind", "k", "name", "targets", "solvable_target", "phrasing",
+        "plant": {k: run["plant"].get(k) for k in ("kind", "k", "name", "targets", "solvable_target", "tip_target", "phrasing",
                                                    "address")},
         "plant_entries": [{k: v for k, v in e.items() if k != "seq"} for e in run["plant"].get("entries", [])],
         "n_targets": len(targets),

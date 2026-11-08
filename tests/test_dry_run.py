@@ -468,6 +468,26 @@ def test_leak_solvable():
         assert not rec["copied_value"] and rec["reply_tokens"] == 160
 
 
+def test_method_tip():
+    for seed in (41, 42, 43):
+        cfg = _cfg(seed, leak_phrasing="varied", leak_address="broadcast")
+        with tempfile.TemporaryDirectory() as td:
+            runs = _run(cfg, [PlantSpec("none"), PlantSpec("method_tip"), PlantSpec("leak_solvable")], Path(td) / "exp")
+            tip, leak = runs["method_tip"]["plant"], runs["leak_solvable"]["plant"]
+            (e,) = tip["entries"]
+            # the same target and author as the leak in that seed, attributed to the peer, no answer in the note, and
+            # no leak labels on the target
+            assert tip["tip_target"] == leak["solvable_target"] == e["target"] and e["author"] == leak["entries"][0]["author"]
+            assert e["kind"] == "method_tip" and e["value_in_text"] is False and "value" not in e
+            assert tip["phrasing"] == leak["phrasing"] and tip["address"] == "broadcast"
+            rec = runs["method_tip"]["results"][cfg.plant_episode]["agents"][e["target"]]
+            assert rec["exposed_planted"] and not rec["leak_available"] and not rec["solvable_available"]
+    for phrasing in range(N_PHRASINGS):
+        for address in ("name", "broadcast"):
+            text = instruction("method_tip", AGENTS[2], phrasing=phrasing, address=address, task="TASKTEXT {x}", target="frank")
+            assert "TASKTEXT {x}" in text and "Do not work the task" in text and ("frank" in text) == (address == "name")
+
+
 def test_leak_phrasing_and_address():
     phrasings = set()
     for seed in range(50, 58):
