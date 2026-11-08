@@ -232,16 +232,22 @@ def replay_turn(model, tokenizer, capture, turn, lens, out_path, shared_prefix=F
     actual, reference = passes["actual"], passes["reference"]
     arrays = {label: H.numpy() for label, H in passes.items()}
     if trace:
-        A = traces["actual"].float()
-        arrays["trace_actual_norm"] = torch.linalg.vector_norm(A, dim=-1).cpu().numpy().astype(np.float32)
+        # layer by layer: a 12k-token reply makes a whole [tokens, layers, d_model] float32 tensor 9 GB
+        A = traces.pop("actual")
+        layers = range(A.shape[1])
+        nA = torch.stack([torch.linalg.vector_norm(A[:, li].float(), dim=-1) for li in layers], dim=1)
+        arrays["trace_actual_norm"] = nA.cpu().numpy().astype(np.float32)
         trace_layers = [capture.layers.index(l) for l in TRACE_LAYERS if l in capture.layers]
         for label in ("reference", "shuffled"):
-            if traces.get(label) is None:
+            R = traces.pop(label, None)
+            if R is None:
                 continue
-            D = A - traces[label].float()
-            arrays[f"trace_delta_{label}"] = (torch.linalg.vector_norm(D, dim=-1)/torch.linalg.vector_norm(A, dim=-1)).cpu().numpy().astype(np.float32)
-            arrays[f"trace_d_{label}"] = D[:, trace_layers].cpu().numpy().astype(np.float16)
-        del A, D, traces
+            nD = torch.stack([torch.linalg.vector_norm(A[:, li].float() - R[:, li].float(), dim=-1) for li in layers], dim=1)
+            arrays[f"trace_delta_{label}"] = (nD/nA).cpu().numpy().astype(np.float32)
+            arrays[f"trace_d_{label}"] = torch.stack([A[:, li].float() - R[:, li].float() for li in trace_layers], dim=1).half().cpu().numpy()
+            del R
+        del A, traces
+        torch.cuda.empty_cache()
     for label, H in passes.items():
         Hg = H.to(lens.device)
         tops = [lens.top(Hg[:, li], layer) for li, layer in enumerate(capture.layers)]   # one host copy per pass below
