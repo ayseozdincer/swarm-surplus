@@ -91,7 +91,9 @@ class Capture:
             if self.index is None:
                 return
             h = output[0] if isinstance(output, tuple) else output
-            self.saved[layer] = h[0, self.index].float().cpu()
+            # stays on the device: a host copy here syncs every layer and serialises the per-module CPU overhead with the
+            # GPU work, which tripled the time of a pass; run and run_suffix copy the stacked rows once
+            self.saved[layer] = h[0, self.index].float()
             if self.trace_from is not None:
                 self.traced[layer] = h[0, self.trace_from:].detach().clone()
         return hook
@@ -110,7 +112,7 @@ class Capture:
         attention_mask = None if mask is None else mask.to(device)
         with torch.no_grad():
             model.model(input_ids=input_ids, position_ids=position_ids, attention_mask=attention_mask, use_cache=False)
-        return torch.stack([self.saved[layer] for layer in self.layers], dim=1)
+        return torch.stack([self.saved[layer] for layer in self.layers], dim=1).cpu()
 
     def prefix(self, model, ids):
         """KV cache of ids on the explicit 4D-mask kernel, nothing read."""
@@ -136,7 +138,7 @@ class Capture:
         with torch.no_grad():
             model.model(input_ids=torch.tensor([ids[split:]], device=device), position_ids=torch.tensor([position_ids[split:]], device=device),
                         attention_mask=mask[None, None].to(device), past_key_values=copy.deepcopy(cache), use_cache=True)
-        return torch.stack([self.saved[layer] for layer in self.layers], dim=1)
+        return torch.stack([self.saved[layer] for layer in self.layers], dim=1).cpu()
 
 
 SHUFFLE_DEFAULT_LEN = 64     # the shuffled span's length on a turn with no peer span to match
@@ -224,12 +226,10 @@ def replay_turn(model, tokenizer, capture, turn, lens, out_path, shared_prefix=F
             arrays[f"trace_d_{label}"] = D[:, trace_layers].cpu().numpy().astype(np.float16)
         del A, D, traces
     for label, H in passes.items():
-        ids = np.zeros((len(names), len(capture.layers), 10), dtype=np.int32)
-        logits = np.zeros((len(names), len(capture.layers), 10), dtype=np.float32)
-        for li, layer in enumerate(capture.layers):
-            top = lens.top(H[:, li], layer)
-            ids[:, li], logits[:, li] = top.indices.cpu().numpy(), top.values.cpu().numpy()
-        arrays[f"{label}_top_ids"], arrays[f"{label}_top_logits"] = ids, logits
+        Hg = H.to(lens.device)
+        tops = [lens.top(Hg[:, li], layer) for li, layer in enumerate(capture.layers)]   # one host copy per pass below
+        arrays[f"{label}_top_ids"] = torch.stack([t.indices for t in tops], dim=1).cpu().numpy().astype(np.int32)
+        arrays[f"{label}_top_logits"] = torch.stack([t.values for t in tops], dim=1).cpu().numpy().astype(np.float32)
     out_path.parent.mkdir(parents=True, exist_ok=True)
     np.savez(out_path, **arrays)        # uncompressed: zlib gains little on float32 residuals and blocks the GPU loop
     return {"agent": turn["agent"], "episode_index": turn["episode_index"], "phase": turn["phase"], "file": out_path.name,
