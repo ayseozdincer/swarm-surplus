@@ -288,3 +288,27 @@ who declared the directory a channel would mask), use `provenance_owner`.
   (plus the smoke) was kept.
 - `list_files` output carries file names other agents chose and is tagged `environment` in both
   tags. It never mattered here because nothing was written.
+
+## Replay card, stopped without a pod
+
+The approved card asked for one A100 80 GB pod to regenerate condition two on a local vLLM
+server and then replay, with both masks, every episode in which the workspace was read before a
+blind submission, plus a matched sample. It also said to keep the OpenRouter run for any seed that
+had already started there, and to replay nothing and stop if no run ever used the workspace. No
+pod was created and no GPU money was spent, for two reasons.
+
+- Generation. All ten condition-two seeds (7101 to 7110) had already run to completion on
+  OpenRouter before the card arrived, so no seed was left for the pod.
+- Replay. Across all 21 runs (smoke, base, condition two) the tool log has no `read_file` and no
+  `write_file` call. The only workspace calls are two `list_files` by a blind solver before its
+  submission (seed 7003 and seed 7104, both episode 1, bob), and both returned "The shared
+  workspace is empty." So no episode has the workspace read before a blind submission, and there is
+  no positive set to match a sample against. `provenance_derived` equals `provenance_declared` on
+  every message of every run, so a declared-mask and a derived-mask replay would both be the
+  unmasked pass, with zero surplus by construction. The two empty listings are the only "use" of
+  the workspace, they carry no agent-written bytes, and so they do not change this.
+
+The finding stands as written above. In twenty runs and two conditions, Qwen3-14B never wrote
+to the shared workspace and never read another agent's bytes, so phase 2b on 14B gives no
+coordination round, no coherence step to look for and no edges for the derived mask to recover.
+The derived-recovers-declared criterion stays verified only in mock.
