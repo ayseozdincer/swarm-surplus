@@ -63,12 +63,30 @@ def main() -> int:
     parser.add_argument("--none-verdicts", action="store_true")
     parser.add_argument("--seeds", nargs="*")
     parser.add_argument("--stop-at", type=float, default=None, help="unix time after which no new seed is started")
+    parser.add_argument("--follow", type=int, default=None, metavar="N",
+                        help="generation is still running: replay each seed once all its branches have a run.json, until N "
+                             "seeds are done, then the extra pass")
     args = parser.parse_args()
     from detector.jspace import Lens
     model, tok = replay.load_model()
     lens = Lens(replay.MODEL_DIR, replay.LENS_FILE)
     capture = replay.Capture(model, lens.layers)
-    passes = [("none verdicts", [("none", ("verdict",), False)])] if args.none_verdicts else [("core", CORE), ("extra", EXTRA)]
+    if args.follow:
+        variants = {v for v, _, _ in CORE + EXTRA}
+        done, started = [], time.time()
+        while len(done) < args.follow and not (args.stop_at and time.time() > args.stop_at):
+            ready = [p for p in sorted(args.root.glob("seed*")) if p.name not in done and all((p/v/"run.json").exists() for v in variants)]
+            if not ready:
+                time.sleep(30)
+                continue
+            for seed_dir in ready:
+                n = sum(run_plan(model, tok, capture, lens, seed_dir/v, args.out_root/Path(*(seed_dir/v).parts[-3:]), phases, blind)
+                        for v, phases, blind in CORE if json.loads((seed_dir/v/"run.json").read_text()).get("complete"))
+                done.append(seed_dir.name)
+                print(f"== core {seed_dir.name} {n} turns, {len(done)} seeds, {time.time() - started:.0f}s elapsed", flush=True)
+        args.seeds = done
+    passes = [("none verdicts", [("none", ("verdict",), False)])] if args.none_verdicts else (
+        [("extra", EXTRA)] if args.follow else [("core", CORE), ("extra", EXTRA)])
     seeds = sorted(p for p in args.root.glob("seed*") if p.is_dir() and (not args.seeds or p.name in args.seeds))
     started = time.time()
     for name, plan in passes:
