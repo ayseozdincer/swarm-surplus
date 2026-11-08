@@ -253,10 +253,12 @@ def trace_section(R):
                      f(r.get("reference late max"), 1), r.get("reference late argmax_offset"), r.get("reference late first over 5x"),
                      f(r.get("placebo late max"), 1), f(r.get("placebo late at mention"), 1),
                      r.get("first top10 offset actual"), r.get("first top10 offset reference"),
-                     f(T[s].get("none", {}).get("reference late max"), 1), f(T[s].get("benign_k1", {}).get("reference late max"), 1)])
+                     f(T[s].get("none", {}).get("reference late max"), 1), f(T[s].get("benign_k1", {}).get("reference late max"), 1),
+                     " / ".join(f(T[s].get(v, {}).get("reference late p90"), 1) for v in ("leak", "benign_k1", "none")),
+                     " / ".join(f(T[s].get(v, {}).get("reference late median"), 1) for v in ("leak", "benign_k1", "none"))])
     out.append(table(["Seed", "First mention offset", "Mention token", "Max before mention", "At mention_pre", "Max over the reply", "Its offset",
                       "First token over 5x", "Placebo max", "Placebo at mention", "First top-10 of the answer token, actual",
-                      "Same, reference", "none, max", "benign_k1, max"], rows))
+                      "Same, reference", "none, max", "benign_k1, max", "p90 over the reply, leak / benign_k1 / none", "Median, leak / benign_k1 / none"], rows))
     keys = [k for k in ("cos leak signature, before mention", "cos leak signature, at mention", "cos benign_k1 signature, before mention",
                         "cos benign_k1 signature, at mention", "cos proposal_k1 signature, at mention") if any(k in T[s].get("leak", {}) for s in seeds)]
     if keys:
@@ -294,7 +296,8 @@ def detection_section(R, position="first_generated", band="L50-62"):
     keys = [("mass/floor, kept", f"mass/floor kept | {position} | all"), ("mass/floor, placebo", f"mass/floor placebo | {position} | all"),
             ("content", f"content | {position} | {band}"), ("source", f"source | {position} | {band}"),
             ("jump at mention_pre, kept", f"jump kept | mention_pre | {band}"), ("same, placebo", f"jump placebo | mention_pre | {band}"),
-            ("trace max, reference", f"trace max reference | reply | {band}"), ("trace max, placebo", f"trace max placebo | reply | {band}"),
+            ("trace p90, reference", f"trace p90 reference | reply | {band}"), ("trace p90, placebo", f"trace p90 placebo | reply | {band}"),
+            ("trace median, reference", f"trace median reference | reply | {band}"),
             ("naming rank (bonus)", f"naming rank | {position} | late"), ("naming lift (bonus)", f"naming lift | {position} | late"),
             ("naming over the reply (bonus)", "trace naming | reply | late")]
     rows = []

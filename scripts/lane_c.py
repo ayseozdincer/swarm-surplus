@@ -471,6 +471,7 @@ def trace_table(seeds):
                     row[f"{ref} {name} max"] = float(series[start:].max())
                     row[f"{ref} {name} argmax_offset"] = int(series[start:].argmax())
                     row[f"{ref} {name} median"] = float(np.median(series[start:]))
+                    row[f"{ref} {name} p90"] = float(np.percentile(series[start:], 90))
                     if mention is not None:
                         row[f"{ref} {name} at mention"] = float(series[mention])
                         row[f"{ref} {name} before mention max"] = float(series[start:mention].max()) if mention > start else None
@@ -623,7 +624,10 @@ def detection(seeds, ranks, tok):
                         for ref in ("reference", "placebo"):
                             ratio = tr[f"delta_{ref}"][start:]/floor[None, :]
                             for band_name, layers in BANDS.items():
-                                row[f"trace max {ref} | reply | {band_name}"] = float(ratio[:, [LENS_LAYERS.index(l) for l in layers]].mean(1).max())
+                                series = ratio[:, [LENS_LAYERS.index(l) for l in layers]].mean(1)
+                                row[f"trace max {ref} | reply | {band_name}"] = float(series.max())
+                                row[f"trace p90 {ref} | reply | {band_name}"] = float(np.percentile(series, 90))
+                                row[f"trace median {ref} | reply | {band_name}"] = float(np.median(series))
                         row["trace naming | reply | late"] = -float(tr["rank_actual"][start:].min(1).min())
                 rows.append(row)
     keys = sorted({k for r in rows for k in r if " | " in k and not k.startswith("nearest")})
