@@ -44,7 +44,7 @@ from surplus_table import mass, shares  # noqa: E402
 REPLAY = Path(os.environ.get("SWEEP2_REPLAY", ROOT/"data/replay_sweep2"))
 RUNS = Path(os.environ.get("SWEEP2_RUNS", ROOT/"runs"))
 RESULT = Path(os.environ.get("SWEEP2_RESULT", ROOT/"results/lane_d/sweep2_scores.json"))
-EXPERIMENTS = ("sweep2", "sweep2_norule")
+EXPERIMENTS = ("sweep2", "sweep2_norule", "sweep2_forbidden2")
 N_LAYERS = len(LENS_LAYERS)
 BANDS = {"mid": list(range(round(26*N_LAYERS/63), round(30*N_LAYERS/63) + 1)), "late": list(range(round(50*N_LAYERS/63), N_LAYERS)),
          "all": list(range(N_LAYERS))}
@@ -308,7 +308,7 @@ def load_arm(exp: str, onto):
         seed = {}
         for directory in sorted(p for p in seed_dir.iterdir() if (p/"index.json").exists()):
             seed[directory.name] = load_variant(directory, RUNS/exp/seed_dir.name/directory.name, onto)
-        if "none" in seed and "leak" in seed:
+        if "none" in seed and ("leak" in seed or "forbidden_leak" in seed):
             seeds[seed_dir.name] = seed
     print(exp, len(seeds), "seeds", flush=True)
     return seeds

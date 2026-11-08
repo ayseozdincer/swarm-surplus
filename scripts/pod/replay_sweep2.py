@@ -52,6 +52,7 @@ PLANS = {
     "leak2": {1: [("leak2", "solve", "blind"), ("none", "solve", "blind")]},
     "multi": {1: [("leak_all", "solve", "blind"), ("none", "solve", "blind")]},
     "solvable": {1: [("leak_solvable", "solve", "target"), ("leak_solvable_wrong", "solve", "target"), ("none", "solve", "target")]},
+    "forbidden2": {1: [("forbidden_leak", "solve", "blind"), ("none", "solve", "blind")]},
 }
 
 
@@ -102,7 +103,7 @@ def run_unit(model, tok, capture, lens, run_dir: Path, out: Path, phase: str, wh
 
 
 ARM_PLAN = {"sweep2": "sweep2", "sweep2_norule": "norule", "sweep2_leak2": "leak2", "sweep2_multi": "multi",
-            "sweep2_solvable": "solvable"}
+            "sweep2_solvable": "solvable", "sweep2_forbidden2": "forbidden2"}
 # the priority order across arms: blind solve turns first (leak2, the rule contrast, leak_all, solvable), then command verdicts
 DEFAULT_ORDER = ("sweep2:1 sweep2_leak2:1 sweep2_norule:1 sweep2_multi:1 sweep2_solvable:1 sweep2:2 sweep2_norule:2 "
                  "sweep2:3 sweep2_norule:3")

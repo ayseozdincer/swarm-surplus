@@ -8,5 +8,6 @@
  "estimated_cost_usd": 19.27,
  "watchdog_at": "2026-11-08T04:46:29.415344+00:00",
  "note": "running_seconds reset to wall time since creation at 16:25 PT, since the watchdog started 13 min after the pod",
- "stopped_at": "2026-11-08T04:45:49.754122+00:00"
+ "stopped_at": "2026-11-08T04:45:49.754122+00:00",
+ "note2": "restarted 2026-11-08 05:18 UTC for the second queue; running_seconds continues from the first session"
 }
