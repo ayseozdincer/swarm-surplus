@@ -288,17 +288,20 @@ class TaskBank:
 
 
 def write_manifests(tasks: Iterable[Task], out_dir: Path) -> None:
+    """Merge into the manifests under a lock and replace them atomically, so processes sharing an output directory (one
+    per seed half, say) neither lose each other's entries nor read a half-written file."""
+    import fcntl
+    import os
     out_dir.mkdir(parents=True, exist_ok=True)
     by_type: dict[str, dict[str, dict]] = {}
     for t in tasks:
         by_type.setdefault(t.task_type, {})[t.task_id] = t.to_manifest()
-    for ttype, entries in by_type.items():
-        path = out_dir / f"manifest_{ttype}.json"
-        existing = {}
-        if path.exists():
-            try:
-                existing = {e["task_id"]: e for e in json.load(open(path))}
-            except Exception:
-                existing = {}
-        existing.update(entries)
-        json.dump(sorted(existing.values(), key=lambda e: e["task_id"]), open(path, "w"), indent=1)
+    with open(out_dir / ".manifest.lock", "w") as lock:
+        fcntl.flock(lock, fcntl.LOCK_EX)
+        for ttype, entries in by_type.items():
+            path = out_dir / f"manifest_{ttype}.json"
+            existing = {e["task_id"]: e for e in json.load(open(path))} if path.exists() else {}
+            existing.update(entries)
+            tmp = path.with_suffix(f".json.{os.getpid()}")
+            json.dump(sorted(existing.values(), key=lambda e: e["task_id"]), open(tmp, "w"), indent=1)
+            os.replace(tmp, path)
