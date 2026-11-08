@@ -58,7 +58,7 @@ and not from cross-seed signatures. Ten turns, one arm.
 | leak_all (`runs/sweep2_multi`) | done | 10 seeds (5001 to 5013, 5031 to 5043), three blind targets per episode, varied phrasing; replayed |
 | method_tip (`runs/sweep2_methodtip`) | done | the solvable arm's 20 seeds and targets, rules off, none + method_tip + leak_solvable, varied phrasing; replayed, with a second pass at the found location and a length control |
 | Per-token trace CSVs | done | sweep2 seeds 5034 and 5046, leak and benign_k1, lane C's format and placebo (`results/lane_d/trace_seed5034.csv`, `trace_seed5046.csv`, notes in `*_notes.json`) |
-| Solvable per-token traces | done | whole replies, note branch and none, no placebo: 5006 the computed case, 5021 the checked case (`results/lane_d/trace_solvable_5006_computed.csv`, `trace_solvable_5021_checked.csv`, `scripts/solvable_trace_csv.py`) |
+| Solvable per-token traces | done | whole replies, note branch and none, no placebo: 5006 the computed case, 5021 the checked case (`results/lane_d/trace_solvable_5006_computed.csv`, `trace_solvable_5021_checked.csv`, `scripts/solvable_trace_csv.py`). 5006's none branch has one unexplained spike around reply token 895, a 16-token mean of 95.3 against a median of 1.05, on a turn with no note |
 
 ## Setup, and what changed from the brief
 
@@ -730,8 +730,8 @@ and its direction names the source, including, in leak2, which of two notes was 
 | `tgp1wn9t3tjuiu` | H200 141 GB, community, 3.59/h, sweep2, rule-off, leak2, solvable, leak_all, method_tip | 9.61 | 34.51 |
 | `y5ggibbnlcv2c0` | H200 141 GB, community, 3.59/h, forbidden_leak second batch | 1.45 | 5.20 |
 | `a0e7ctavcauhf3` | A100 SXM 80 GB, 1.79/h, replay of sweep2, rule-off, leak2 | 3.88 | 6.95 |
-| `i0drlqvql57u0b` | A100 SXM 80 GB, 1.79/h, replay of solvable, second batch, leak_all, re-replay for concealment, method_tip replay and length control | 2.45 | 4.38 |
-| total | | | **52.25** of the 60 allowed |
+| `i0drlqvql57u0b` | A100 SXM 80 GB, 1.79/h, replay of solvable, second batch, leak_all, re-replay for concealment, method_tip replay and length control, solvable traces | 2.47 | 4.43 |
+| total | | | **52.30** of the 60 allowed |
 
 All five are stopped, not terminated. RunPod's billing endpoint, which lags, showed 38.82 at 00:05. Volumes hold the partial
 first attempts (H200) and the replay residuals: 54 GB of sweep2, rule-off and leak2 on `a0e7ctavcauhf3`, the later arms on
