@@ -36,7 +36,7 @@ def main() -> int:
         print("incomplete", lab["incomplete"])
     if args.notes:
         for r in lab["targets"]:
-            print(f"\nseed{r['seed']} {r['branch']} {r['target']} ({r['address']}, phrasing {r['phrasing']}), author {r['author']}, line {r['line_chars']} chars"
+            print(f"\nseed{r['seed']} {r['branch']} {r['target']} ({r['address']}, phrasing {r['phrasing']}), author {r['author']}, line {r['line_chars']} chars, {r['line_tokens']} tokens"
                   f"{' FALLBACK' if r['line_fallback'] else ''}")
             print(f"  line   {r['line']!r}")
             print(f"  answer {r['answer'][:80]!r}  correct {r['correct']}  source {r['source_match']!r}")

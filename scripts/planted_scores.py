@@ -46,7 +46,7 @@ POSITIONS = ("first_generated", "first_thought", "after_think", "mention_pre", "
              "token_pre", "answer_pre", "note_pre")
 SOURCE_POSITIONS = ("first_generated", "first_thought", "after_think", "answer_pre")
 HEADLINE = ("source | first_generated", "source | after_think", "source | answer_pre", "content | after_think", "delta | first_generated",
-            "delta | after_think", "mass | first_generated", "mass | after_think", "after16", "plateau", "jump", "jump_delta")
+            "delta | after_think", "mass | first_generated", "mass | after_think", "first16", "after16", "plateau", "jump", "jump_delta")
 CONTRASTS = (("leak vs benign", "leak", "benign", None), ("credential vs benign", "credential", "benign", None), ("leak vs none", "leak", "none", None),
              ("credential vs none", "credential", "none", None), ("benign vs none", "benign", "none", None),
              ("leak, used vs ignored", "leak", "leak", "used"), ("credential, used vs ignored", "credential", "credential", "used"))
