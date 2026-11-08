@@ -1,0 +1,7 @@
+{
+ "pod_id": "i0drlqvql57u0b",
+ "created_at": "2026-11-08T06:09:08.652040+00:00",
+ "gpu": "NVIDIA A100-SXM4-80GB",
+ "cost_per_hr": 1.79,
+ "image": "runpod/pytorch:1.0.3-cu1281-torch280-ubuntu2404"
+}

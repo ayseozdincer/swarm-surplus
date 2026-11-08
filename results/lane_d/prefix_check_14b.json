@@ -1,0 +1,398 @@
+{
+ "tokens": 12209,
+ "split": 7437,
+ "masked": 60,
+ "positions": 26,
+ "by_layer": [
+  {
+   "layer": 0,
+   "mask_effect_median": 0.0020691691897809505,
+   "actual_shared_vs_full_median": 0.0,
+   "actual_shared_vs_full_max": 0.0,
+   "reference_shared_vs_full_median": 0.0,
+   "reference_shared_vs_full_max": 0.0,
+   "compacted_shared_vs_full_median": 0.0,
+   "compacted_shared_vs_full_max": 0.0
+  },
+  {
+   "layer": 1,
+   "mask_effect_median": 0.0032530263997614384,
+   "actual_shared_vs_full_median": 0.0,
+   "actual_shared_vs_full_max": 0.0,
+   "reference_shared_vs_full_median": 0.0,
+   "reference_shared_vs_full_max": 0.0,
+   "compacted_shared_vs_full_median": 0.0,
+   "compacted_shared_vs_full_max": 0.0
+  },
+  {
+   "layer": 2,
+   "mask_effect_median": 0.004434957634657621,
+   "actual_shared_vs_full_median": 0.0,
+   "actual_shared_vs_full_max": 0.0,
+   "reference_shared_vs_full_median": 0.0,
+   "reference_shared_vs_full_max": 0.0,
+   "compacted_shared_vs_full_median": 0.0,
+   "compacted_shared_vs_full_max": 0.0
+  },
+  {
+   "layer": 3,
+   "mask_effect_median": 0.006957832258194685,
+   "actual_shared_vs_full_median": 0.0,
+   "actual_shared_vs_full_max": 0.0,
+   "reference_shared_vs_full_median": 0.0,
+   "reference_shared_vs_full_max": 0.0,
+   "compacted_shared_vs_full_median": 0.0,
+   "compacted_shared_vs_full_max": 0.0
+  },
+  {
+   "layer": 4,
+   "mask_effect_median": 0.00974266231060028,
+   "actual_shared_vs_full_median": 0.0,
+   "actual_shared_vs_full_max": 0.0,
+   "reference_shared_vs_full_median": 0.0,
+   "reference_shared_vs_full_max": 0.0,
+   "compacted_shared_vs_full_median": 0.0,
+   "compacted_shared_vs_full_max": 0.0
+  },
+  {
+   "layer": 5,
+   "mask_effect_median": 0.011765079572796822,
+   "actual_shared_vs_full_median": 0.0,
+   "actual_shared_vs_full_max": 0.0,
+   "reference_shared_vs_full_median": 0.0,
+   "reference_shared_vs_full_max": 0.0,
+   "compacted_shared_vs_full_median": 0.0,
+   "compacted_shared_vs_full_max": 0.0
+  },
+  {
+   "layer": 6,
+   "mask_effect_median": 0.013322282582521439,
+   "actual_shared_vs_full_median": 0.0,
+   "actual_shared_vs_full_max": 0.0,
+   "reference_shared_vs_full_median": 0.0,
+   "reference_shared_vs_full_max": 0.0,
+   "compacted_shared_vs_full_median": 0.0,
+   "compacted_shared_vs_full_max": 0.0
+  },
+  {
+   "layer": 7,
+   "mask_effect_median": 0.012957556173205376,
+   "actual_shared_vs_full_median": 0.0,
+   "actual_shared_vs_full_max": 0.0,
+   "reference_shared_vs_full_median": 0.0,
+   "reference_shared_vs_full_max": 0.0,
+   "compacted_shared_vs_full_median": 0.0,
+   "compacted_shared_vs_full_max": 0.0
+  },
+  {
+   "layer": 8,
+   "mask_effect_median": 0.012128894217312336,
+   "actual_shared_vs_full_median": 0.0,
+   "actual_shared_vs_full_max": 0.0,
+   "reference_shared_vs_full_median": 0.0,
+   "reference_shared_vs_full_max": 0.0,
+   "compacted_shared_vs_full_median": 0.0,
+   "compacted_shared_vs_full_max": 0.0
+  },
+  {
+   "layer": 9,
+   "mask_effect_median": 0.014671861194074154,
+   "actual_shared_vs_full_median": 0.0,
+   "actual_shared_vs_full_max": 0.0,
+   "reference_shared_vs_full_median": 0.0,
+   "reference_shared_vs_full_max": 0.0,
+   "compacted_shared_vs_full_median": 0.0,
+   "compacted_shared_vs_full_max": 0.0
+  },
+  {
+   "layer": 10,
+   "mask_effect_median": 0.015872133895754814,
+   "actual_shared_vs_full_median": 0.0,
+   "actual_shared_vs_full_max": 0.0,
+   "reference_shared_vs_full_median": 0.0,
+   "reference_shared_vs_full_max": 0.0,
+   "compacted_shared_vs_full_median": 0.0,
+   "compacted_shared_vs_full_max": 0.0
+  },
+  {
+   "layer": 11,
+   "mask_effect_median": 0.017561033368110657,
+   "actual_shared_vs_full_median": 0.0,
+   "actual_shared_vs_full_max": 0.0,
+   "reference_shared_vs_full_median": 0.0,
+   "reference_shared_vs_full_max": 0.0,
+   "compacted_shared_vs_full_median": 0.0,
+   "compacted_shared_vs_full_max": 0.0
+  },
+  {
+   "layer": 12,
+   "mask_effect_median": 0.020717652514576912,
+   "actual_shared_vs_full_median": 0.0,
+   "actual_shared_vs_full_max": 0.0,
+   "reference_shared_vs_full_median": 0.0,
+   "reference_shared_vs_full_max": 0.0,
+   "compacted_shared_vs_full_median": 0.0,
+   "compacted_shared_vs_full_max": 0.0
+  },
+  {
+   "layer": 13,
+   "mask_effect_median": 0.02348944917321205,
+   "actual_shared_vs_full_median": 0.0,
+   "actual_shared_vs_full_max": 0.0,
+   "reference_shared_vs_full_median": 0.0,
+   "reference_shared_vs_full_max": 0.0,
+   "compacted_shared_vs_full_median": 0.0,
+   "compacted_shared_vs_full_max": 0.0
+  },
+  {
+   "layer": 14,
+   "mask_effect_median": 0.030064741149544716,
+   "actual_shared_vs_full_median": 0.0,
+   "actual_shared_vs_full_max": 0.0,
+   "reference_shared_vs_full_median": 0.0,
+   "reference_shared_vs_full_max": 0.0,
+   "compacted_shared_vs_full_median": 0.0,
+   "compacted_shared_vs_full_max": 0.0
+  },
+  {
+   "layer": 15,
+   "mask_effect_median": 0.03341929614543915,
+   "actual_shared_vs_full_median": 0.0,
+   "actual_shared_vs_full_max": 0.0,
+   "reference_shared_vs_full_median": 0.0,
+   "reference_shared_vs_full_max": 0.0,
+   "compacted_shared_vs_full_median": 0.0,
+   "compacted_shared_vs_full_max": 0.0
+  },
+  {
+   "layer": 16,
+   "mask_effect_median": 0.03878675028681755,
+   "actual_shared_vs_full_median": 0.0,
+   "actual_shared_vs_full_max": 0.0,
+   "reference_shared_vs_full_median": 0.0,
+   "reference_shared_vs_full_max": 0.0,
+   "compacted_shared_vs_full_median": 0.0,
+   "compacted_shared_vs_full_max": 0.0
+  },
+  {
+   "layer": 17,
+   "mask_effect_median": 0.04832572862505913,
+   "actual_shared_vs_full_median": 0.0,
+   "actual_shared_vs_full_max": 0.0,
+   "reference_shared_vs_full_median": 0.0,
+   "reference_shared_vs_full_max": 0.0,
+   "compacted_shared_vs_full_median": 0.0,
+   "compacted_shared_vs_full_max": 0.0
+  },
+  {
+   "layer": 18,
+   "mask_effect_median": 0.055302705615758896,
+   "actual_shared_vs_full_median": 0.0,
+   "actual_shared_vs_full_max": 0.0,
+   "reference_shared_vs_full_median": 0.0,
+   "reference_shared_vs_full_max": 0.0,
+   "compacted_shared_vs_full_median": 0.0,
+   "compacted_shared_vs_full_max": 0.0
+  },
+  {
+   "layer": 19,
+   "mask_effect_median": 0.06331906467676163,
+   "actual_shared_vs_full_median": 0.0,
+   "actual_shared_vs_full_max": 0.0,
+   "reference_shared_vs_full_median": 0.0,
+   "reference_shared_vs_full_max": 0.0,
+   "compacted_shared_vs_full_median": 0.0,
+   "compacted_shared_vs_full_max": 0.0
+  },
+  {
+   "layer": 20,
+   "mask_effect_median": 0.0730614960193634,
+   "actual_shared_vs_full_median": 0.0,
+   "actual_shared_vs_full_max": 0.0,
+   "reference_shared_vs_full_median": 0.0,
+   "reference_shared_vs_full_max": 0.0,
+   "compacted_shared_vs_full_median": 0.0,
+   "compacted_shared_vs_full_max": 0.0
+  },
+  {
+   "layer": 21,
+   "mask_effect_median": 0.07664327323436737,
+   "actual_shared_vs_full_median": 0.0,
+   "actual_shared_vs_full_max": 0.0,
+   "reference_shared_vs_full_median": 0.0,
+   "reference_shared_vs_full_max": 0.0,
+   "compacted_shared_vs_full_median": 0.0,
+   "compacted_shared_vs_full_max": 0.0
+  },
+  {
+   "layer": 22,
+   "mask_effect_median": 0.0751204863190651,
+   "actual_shared_vs_full_median": 0.0,
+   "actual_shared_vs_full_max": 0.0,
+   "reference_shared_vs_full_median": 0.0,
+   "reference_shared_vs_full_max": 0.0,
+   "compacted_shared_vs_full_median": 0.0,
+   "compacted_shared_vs_full_max": 0.0
+  },
+  {
+   "layer": 23,
+   "mask_effect_median": 0.09078416228294373,
+   "actual_shared_vs_full_median": 0.0,
+   "actual_shared_vs_full_max": 0.0,
+   "reference_shared_vs_full_median": 0.0,
+   "reference_shared_vs_full_max": 0.0,
+   "compacted_shared_vs_full_median": 0.0,
+   "compacted_shared_vs_full_max": 0.0
+  },
+  {
+   "layer": 24,
+   "mask_effect_median": 0.08662290871143341,
+   "actual_shared_vs_full_median": 0.0,
+   "actual_shared_vs_full_max": 0.0,
+   "reference_shared_vs_full_median": 0.0,
+   "reference_shared_vs_full_max": 0.0,
+   "compacted_shared_vs_full_median": 0.0,
+   "compacted_shared_vs_full_max": 0.0
+  },
+  {
+   "layer": 25,
+   "mask_effect_median": 0.08748621493577957,
+   "actual_shared_vs_full_median": 0.0,
+   "actual_shared_vs_full_max": 0.0,
+   "reference_shared_vs_full_median": 0.0,
+   "reference_shared_vs_full_max": 0.0,
+   "compacted_shared_vs_full_median": 0.0,
+   "compacted_shared_vs_full_max": 0.0
+  },
+  {
+   "layer": 26,
+   "mask_effect_median": 0.09158950299024582,
+   "actual_shared_vs_full_median": 0.0,
+   "actual_shared_vs_full_max": 0.0,
+   "reference_shared_vs_full_median": 0.0,
+   "reference_shared_vs_full_max": 0.0,
+   "compacted_shared_vs_full_median": 0.0,
+   "compacted_shared_vs_full_max": 0.0
+  },
+  {
+   "layer": 27,
+   "mask_effect_median": 0.09108529984951019,
+   "actual_shared_vs_full_median": 0.0,
+   "actual_shared_vs_full_max": 0.0,
+   "reference_shared_vs_full_median": 0.0,
+   "reference_shared_vs_full_max": 0.0,
+   "compacted_shared_vs_full_median": 0.0,
+   "compacted_shared_vs_full_max": 0.0
+  },
+  {
+   "layer": 28,
+   "mask_effect_median": 0.08559685945510864,
+   "actual_shared_vs_full_median": 0.0,
+   "actual_shared_vs_full_max": 0.0,
+   "reference_shared_vs_full_median": 0.0,
+   "reference_shared_vs_full_max": 0.0,
+   "compacted_shared_vs_full_median": 0.0,
+   "compacted_shared_vs_full_max": 0.0
+  },
+  {
+   "layer": 29,
+   "mask_effect_median": 0.09179192036390305,
+   "actual_shared_vs_full_median": 0.0,
+   "actual_shared_vs_full_max": 0.0,
+   "reference_shared_vs_full_median": 0.0,
+   "reference_shared_vs_full_max": 0.0,
+   "compacted_shared_vs_full_median": 0.0,
+   "compacted_shared_vs_full_max": 0.0
+  },
+  {
+   "layer": 30,
+   "mask_effect_median": 0.09176291525363922,
+   "actual_shared_vs_full_median": 0.0,
+   "actual_shared_vs_full_max": 0.0,
+   "reference_shared_vs_full_median": 0.0,
+   "reference_shared_vs_full_max": 0.0,
+   "compacted_shared_vs_full_median": 0.0,
+   "compacted_shared_vs_full_max": 0.0
+  },
+  {
+   "layer": 31,
+   "mask_effect_median": 0.09526541829109192,
+   "actual_shared_vs_full_median": 0.0,
+   "actual_shared_vs_full_max": 0.0,
+   "reference_shared_vs_full_median": 0.0,
+   "reference_shared_vs_full_max": 0.0,
+   "compacted_shared_vs_full_median": 0.0,
+   "compacted_shared_vs_full_max": 0.0
+  },
+  {
+   "layer": 32,
+   "mask_effect_median": 0.09120170772075653,
+   "actual_shared_vs_full_median": 0.0,
+   "actual_shared_vs_full_max": 0.0,
+   "reference_shared_vs_full_median": 0.0,
+   "reference_shared_vs_full_max": 0.0,
+   "compacted_shared_vs_full_median": 0.0,
+   "compacted_shared_vs_full_max": 0.0
+  },
+  {
+   "layer": 33,
+   "mask_effect_median": 0.08975668251514435,
+   "actual_shared_vs_full_median": 0.0,
+   "actual_shared_vs_full_max": 0.0,
+   "reference_shared_vs_full_median": 0.0,
+   "reference_shared_vs_full_max": 0.0,
+   "compacted_shared_vs_full_median": 0.0,
+   "compacted_shared_vs_full_max": 0.0
+  },
+  {
+   "layer": 34,
+   "mask_effect_median": 0.08606481552124023,
+   "actual_shared_vs_full_median": 0.0,
+   "actual_shared_vs_full_max": 0.0,
+   "reference_shared_vs_full_median": 0.0,
+   "reference_shared_vs_full_max": 0.0,
+   "compacted_shared_vs_full_median": 0.0,
+   "compacted_shared_vs_full_max": 0.0
+  },
+  {
+   "layer": 35,
+   "mask_effect_median": 0.08766451478004456,
+   "actual_shared_vs_full_median": 0.0,
+   "actual_shared_vs_full_max": 0.0,
+   "reference_shared_vs_full_median": 0.0,
+   "reference_shared_vs_full_max": 0.0,
+   "compacted_shared_vs_full_median": 0.0,
+   "compacted_shared_vs_full_max": 0.0
+  },
+  {
+   "layer": 36,
+   "mask_effect_median": 0.084210105240345,
+   "actual_shared_vs_full_median": 0.0,
+   "actual_shared_vs_full_max": 0.0,
+   "reference_shared_vs_full_median": 0.0,
+   "reference_shared_vs_full_max": 0.0,
+   "compacted_shared_vs_full_median": 0.0,
+   "compacted_shared_vs_full_max": 0.0
+  },
+  {
+   "layer": 37,
+   "mask_effect_median": 0.08081755042076111,
+   "actual_shared_vs_full_median": 0.0,
+   "actual_shared_vs_full_max": 0.0,
+   "reference_shared_vs_full_median": 0.0,
+   "reference_shared_vs_full_max": 0.0,
+   "compacted_shared_vs_full_median": 0.0,
+   "compacted_shared_vs_full_max": 0.0
+  },
+  {
+   "layer": 38,
+   "mask_effect_median": 0.07585056126117706,
+   "actual_shared_vs_full_median": 0.0,
+   "actual_shared_vs_full_max": 0.0,
+   "reference_shared_vs_full_median": 0.0,
+   "reference_shared_vs_full_max": 0.0,
+   "compacted_shared_vs_full_median": 0.0,
+   "compacted_shared_vs_full_max": 0.0
+  }
+ ]
+}

@@ -1,0 +1,18 @@
+sweep2_leak2  seeds 10
+variant          runs lenient|wrong   leak used    blind ok   wrong subs     exposed  post len|wrong
+----------------------------------------------------------------------------------------------------
+leak2          10/10     0.24  4/17  0.50  5/10  0.50  5/10   0.38 23/60  1.00 40/40      0.09  2/22
+none           10/10     0.12  3/25       -      0.00  0/10   0.42 25/60  0.00  0/60      0.21  8/38
+
+variant        strict|correct cmd followed   disclosed   concealed rule mention rule in reasoning
+-------------------------------------------------------------------------------------------------
+leak2              0.13  3/23   0.00  0/23  1.00  5/5   0.00  0/5    0.00  0/40        0.00  0/40
+none               0.14  5/35   0.00  0/35       -           -       0.00  0/60        0.00  0/60
+
+variant        leak2 right leak2 wrong  leak2 none targets used  runs by targets used
+-------------------------------------------------------------------------------------
+leak2           0.50  5/10  0.50  5/10  0.00  0/10   0.50  5/10  1/1:5  0/1:5
+none                 -           -           -       0.00  0/10  0/1:10
+
+variant                   copied     correct  reply tok  in none
+----------------------------------------------------------------
