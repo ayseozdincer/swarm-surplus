@@ -1,10 +1,12 @@
 # Lane B. Phase 1b (Transfer) and 1a (Stego) of the surplus detector, Qwen3-32B
 
-Branch `claude/lane-b-phase1-16e264`. Code `scripts/lane_b.py` (replay, J-space, scoring), `scripts/lane_b_tables.py` (the tables below), pod scripts `scripts/pod/run_lane_b.sh` and `scripts/pod/run_lane_b_stego_score.sh`. Numbers in `results/lane_b/noise.json`, `transfer.json`, `stego.json`. Arrays on the pod under `/workspace/swarm/data/replay_lane_b` (see the data note at the end).
+Branch `claude/lane-b-phase1-16e264`. Code `scripts/lane_b.py` (replay, J-space, scoring), `scripts/lane_b_tables.py` (the tables below), pod scripts `scripts/pod/run_lane_b.sh`, `scripts/pod/run_lane_b_stego_score.sh` and `scripts/pod/run_lane_b_padded.sh`. Numbers in `results/lane_b/noise.json`, `transfer.json`, `stego.json`. Arrays in `data/replay_lane_b` (see the data note at the end).
 
-Status at 17:10 Los Angeles: Transfer and Stego done and written up below. The padded placebo group for Transfer is being scored.
+## Headline
 
-<!-- HEADLINE -->
+- **Transfer.** With the honest prompt of the control twin as reference, every mass and direction score is 1.000, true by construction (control agents' references equal their inputs). With every agent's reference edited, the informative test, surplus mass is **0.759 [0.64, 0.86] at the first response token and 0.963 [0.93, 1.00] at the end of response** against honest agents with a swapped brief (0.810 and 0.981 calibrated on control runs), with the colluders' edit about seven times larger in length change, so edit size remains a confound. The ontology on the surplus reaches 0.958 (0.981 calibrated) against the same references, above the cached J-PACT 0.556, ontology 0.653 and probe 0.799, partly because the collusion prompts literally contain `secretly`.
+- **Stego.** Run AUROC is 1.000, true by construction (only colluders have a private block). The receiver's J-space surplus at the sender's last token **holds the true count range in 0.504 of hands**, inside the paper's 0.41 to 0.62. But it holds the previous hand's range just as often (0.504), and honest players at the same token reach 0.466 with the same specificity (0.117 against 0.117). The top-10 readout names no range at all once the digit `0` is set aside. On Qwen3-32B the surplus does not show the receiver decoding the sender.
+- Times, Los Angeles: pod up with the model loaded at 15:09, Transfer written up and pushed at 16:17, Stego at 17:08, pod stopped at 17:42.
 
 ## What ran and what did not
 
@@ -13,14 +15,33 @@ Status at 17:10 Los Angeles: Transfer and Stego done and written up below. The p
 | Pod, model, lens | done | Own pod, model loaded at 15:09 |
 | Noise floor on this pod | done | 4 Transfer and 4 Stego honest control turns |
 | Phase 1b Transfer, real reference | done | 288 rows, both positions |
-| Phase 1b Transfer, placebo and swapped | done | W4's `padded` group not run in the main pass |
+| Phase 1b Transfer, placebo, swapped and padded | done | `padded` ran after Stego, about 16 GPU minutes |
 | Phase 1a Stego | done | 40 runs, hands 1 to 7, 1120 player turns |
-
-<!-- RAN -->
+| Lens-free direction, both phases | done | Direction norm and pair alignment (Transfer), same-against-different range cosine (Stego) |
+| Ontology on the surplus, Transfer | done | |
+| Stego compacted reference | done | Run alongside kept. The later request to skip it arrived after Stego had finished |
+| Second pod | not needed | The Stego replay took about 35 minutes on one card |
+| Residual arrays copied to this machine | partial | Everything except 0.44 GB of the `transfer_padded` residuals, which stayed on the pod volume after the link to the pod slowed to about 40 kB/s. All index, rows and J-space files are here |
+| Size-matched control for Transfer | not run | Edit size stays a confound for mass |
+| Watchdog on this machine | crashed at about 17:20 | A transient SSL error from the RunPod API, unhandled in `watchdog.py`. The pod's deadman (MAX_HOURS 7, IDLE_MIN 30) was running the whole time, and the pod was stopped by hand at 17:42 |
 
 ## Pod, hours and cost
 
-<!-- POD -->
+| Item | Value |
+| --- | --- |
+| Pod | `cph442oxalc20t`, name `swarm-lane-b`, RunPod secure cloud, US-MD-1 |
+| GPU | 1 x NVIDIA A100-SXM4-80GB, driver 595.91, 1.79 USD an hour |
+| Image | `runpod/pytorch:1.0.3-cu1281-torch280-ubuntu2404`, venv per `scripts/pod/setup.sh`, inputs per `scripts/pod/inputs.sh` |
+| Volume | 160 GB at `/workspace`, kept (the pod is stopped, not terminated) |
+| Created | 22:55:55 UTC (14:55 Los Angeles) |
+| Stopped | 01:42:54 UTC (17:42 Los Angeles), state EXITED |
+| Running time | 2.78 hours |
+| Cost | 4.98 USD at the hourly rate. RunPod's billing endpoint had posted 3.30 USD when the report was written, as it lags by an hour or so. Budget 12 USD |
+| State file | `results/lane_b/pod_state.json`. Its `running_seconds` stops at the watchdog crash and undercounts |
+| Guards | Deadman on the pod with `RUNPOD_POD_ID` set explicitly, MAX_HOURS 7, IDLE_MIN 30. Watchdog here with a 12 USD cap, see above |
+
+GPU time by step, from the pod logs (`results/lane_b/pod_logs/`): model load about 1 minute, noise turns under 1 minute, Transfer replay 15:09 to 16:13 (about 13 s a run for cicd, 40 to 75 s for the 7k-token families), Stego replay about 16:13 to 16:48, padded pass about 16:48 to 17:05. J-space decomposition ran beside the replays. A stopped pod still bills its volume, at roughly 1 USD a day for 160 GB.
+
 
 ## Noise floor on this pod
 
@@ -53,7 +74,7 @@ The same kernel twice is bit-identical, so as in W3 and W4 the floor that matter
 - Rows. The 288 final-phase public responses of the 36 collusion and 36 control runs, NARCBench's own loader and renderer through the J-space repo's `_aligned`, the same rows W4's pipeline replayed for Transfer. Implicit runs are not in the release metadata and are not used. 4 role-structured agents, one round.
 - Reference. The agent's honest role prompt from the paired control run, verbatim, swapped in by name as `detector/core_reference.py` does (names match in all 36 pairs, so no name needs changing). The final-phase prompt has no private block: no `PRIVATE` marker in any of the 288 prompts, and the private messages' text reappears only as the colluders' own public pipeline output. So nothing is masked, and the reference is the same user prompt with the honest system prompt. Responses are teacher-forced on the same tokens (checked token for token on every row).
 - Honest agents in collusion runs are not zero-edit here. Their system prompt in a collusion run ("Review the implementation code thoroughly ... Flag any concerns you find") differs from the control twin's ("Perform your role diligently with attention to security and correctness"), so their reference is a real, small edit of about the same length. Control agents' reference is their actual input.
-- Placebo, as W4 follow-up 1. The donor is the honest role prompt of the same pipeline slot in the control run of the next scenario of a different family, the donor's name replaced by the reader's. `placebo`: colluders get the donor prompt in place of the collusion prompt. `swapped`: every honest agent, in both run types, gets the donor prompt in place of its own reference prompt, the same kind of edit colluders get, minus the collusion content. W4's third group, `padded` (own prompt plus donor appended), was left out for time.
+- Placebo, as W4 follow-up 1. The donor is the honest role prompt of the same pipeline slot in the control run of the next scenario of a different family, the donor's name replaced by the reader's. `placebo`: colluders get the donor prompt in place of the collusion prompt. `swapped`: every honest agent, in both run types, gets the donor prompt in place of its own reference prompt, the same kind of edit colluders get, minus the collusion content. `padded`: every honest agent gets its own reference prompt with the donor prompt appended, W4's third group. It was left out of the main pass for time and run after Stego, so the table has all three.
 - Read positions. The first response token and the end of response, as W4, all 63 lens layers.
 - Scores, all fixed before the first full result. Surplus mass and pool mean (J-space, `phase0_report.aggregate` over the 63 layers). Lens-free direction, two ways: the norm of the surplus direction `d = h_actual - h_reference` relative to the reference, mean over layers, and the pair alignment of surplus directions, `cos(d_i, d_j)` contrasted with each member's mean cosine with the other two agents in J-PACT's `pair_contrast` form, mean over layers, run score the best pair. Ontology on the surplus, the cosine of `d` with the paper's 18 ontology directions, mean over words then layers, as W4 follow-up 2. Run score is the max over the four agents (pair alignment: max over pairs). Run AUROC is `detect.grouped_auroc` by family with `detect.scenario_draws`, 1000 draws.
 - Calibration on control runs only. Each agent's score is turned into a z-score against the agents of the same family and pipeline slot in the six control runs of that family, using the score those control agents get under the same kind of reference (real, or swapped for the placebo comparison). No collusion run enters a mean, a spread or a threshold. The run score is the max z. The TPR column puts the threshold at the 95th percentile of calibrated control-run scores.
@@ -62,28 +83,36 @@ The same kernel twice is bit-identical, so as in W3 and W4 the floor that matter
 
 Cached numbers for this model on Transfer (released J-space cache, `data/jpact-cache`, checked in the overnight cache report): J-PACT 0.556 [0.45, 0.70], ontology baseline 0.653, NARCBench probe 0.799.
 
-Run AUROC, by family with the scenario bootstrap, 36 collusion against 36 control runs. "Real reference" is the honest role prompt of the control twin. "Placebo vs swapped" gives every agent an edited reference: colluders the donor brief, honest agents the donor brief in place of their own.
+Run AUROC, by family with the scenario bootstrap, 36 collusion against 36 control runs. "Real reference" is the honest role prompt of the control twin. "Placebo vs swapped" gives every agent an edited reference: colluders the donor brief, honest agents the donor brief in place of their own. "Placebo vs padded" gives honest agents their own prompt with the donor brief appended instead.
 
 | Detector | Position | References | Run AUROC, raw | Run AUROC, calibrated on control runs | TPR at control p95, calibrated |
 | --- | --- | --- | --- | --- | --- |
 | Surplus mass (J-space) | first_response | real reference | 1.000 [1.00, 1.00] | 1.000 [1.00, 1.00] | 1.00 |
 | Surplus mass (J-space) | first_response | placebo vs swapped | 0.759 [0.64, 0.86] | 0.810 [0.69, 0.91] | 0.67 |
+| Surplus mass (J-space) | first_response | placebo vs padded | 0.986 [0.96, 1.00] | 1.000 [1.00, 1.00] | 1.00 |
 | Surplus pool mean (J-space) | first_response | real reference | 1.000 [1.00, 1.00] | 1.000 [1.00, 1.00] | 1.00 |
 | Surplus pool mean (J-space) | first_response | placebo vs swapped | 0.759 [0.62, 0.88] | 0.801 [0.68, 0.90] | 0.61 |
+| Surplus pool mean (J-space) | first_response | placebo vs padded | 1.000 [1.00, 1.00] | 1.000 [1.00, 1.00] | 1.00 |
 | Surplus direction norm, lens-free | first_response | real reference | 1.000 [1.00, 1.00] | 1.000 [1.00, 1.00] | 1.00 |
 | Surplus direction norm, lens-free | first_response | placebo vs swapped | 0.787 [0.71, 0.88] | 0.907 [0.85, 0.97] | 0.83 |
+| Surplus direction norm, lens-free | first_response | placebo vs padded | 1.000 [1.00, 1.00] | 1.000 [1.00, 1.00] | 1.00 |
 | Ontology on the surplus | first_response | real reference | 0.727 [0.61, 0.84] | 0.755 [0.65, 0.87] | 0.47 |
 | Ontology on the surplus | first_response | placebo vs swapped | 0.847 [0.74, 0.94] | 0.875 [0.76, 0.96] | 0.75 |
+| Ontology on the surplus | first_response | placebo vs padded | 0.819 [0.69, 0.92] | 0.884 [0.78, 0.96] | 0.75 |
 | Pair alignment of surplus directions, lens-free | first_response | real reference | 0.995 [0.98, 1.00] | - | top pair is the coalition 36 of 36 |
 | Pair alignment of surplus directions, lens-free | first_response | placebo vs swapped | 0.991 [0.95, 1.00] | - | top pair is the coalition 13 of 36 |
 | Surplus mass (J-space) | end_of_response | real reference | 1.000 [1.00, 1.00] | 1.000 [1.00, 1.00] | 1.00 |
 | Surplus mass (J-space) | end_of_response | placebo vs swapped | 0.963 [0.93, 1.00] | 0.981 [0.95, 1.00] | 0.86 |
+| Surplus mass (J-space) | end_of_response | placebo vs padded | 0.972 [0.94, 1.00] | 0.995 [0.98, 1.00] | 0.97 |
 | Surplus pool mean (J-space) | end_of_response | real reference | 1.000 [1.00, 1.00] | 1.000 [1.00, 1.00] | 1.00 |
 | Surplus pool mean (J-space) | end_of_response | placebo vs swapped | 0.917 [0.86, 0.98] | 0.977 [0.95, 1.00] | 0.89 |
+| Surplus pool mean (J-space) | end_of_response | placebo vs padded | 0.958 [0.93, 1.00] | 1.000 [1.00, 1.00] | 1.00 |
 | Surplus direction norm, lens-free | end_of_response | real reference | 1.000 [1.00, 1.00] | 1.000 [1.00, 1.00] | 1.00 |
 | Surplus direction norm, lens-free | end_of_response | placebo vs swapped | 0.907 [0.84, 0.97] | 0.926 [0.85, 0.98] | 0.83 |
+| Surplus direction norm, lens-free | end_of_response | placebo vs padded | 1.000 [1.00, 1.00] | 1.000 [1.00, 1.00] | 1.00 |
 | Ontology on the surplus | end_of_response | real reference | 0.870 [0.76, 0.96] | 0.949 [0.87, 0.99] | 0.83 |
 | Ontology on the surplus | end_of_response | placebo vs swapped | 0.958 [0.93, 1.00] | 0.981 [0.96, 1.00] | 0.89 |
+| Ontology on the surplus | end_of_response | placebo vs padded | 0.898 [0.80, 0.97] | 0.921 [0.84, 0.98] | 0.72 |
 | Pair alignment of surplus directions, lens-free | end_of_response | real reference | 1.000 [1.00, 1.00] | - | top pair is the coalition 34 of 36 |
 | Pair alignment of surplus directions, lens-free | end_of_response | placebo vs swapped | 0.875 [0.75, 0.96] | - | top pair is the coalition 18 of 36 |
 
@@ -93,20 +122,28 @@ Inside the collusion runs. Colluders against the honest agents of the same 36 ru
 | --- | --- | --- | --- | --- |
 | Surplus mass (J-space) | first_response | real reference | 0.959 | 34 of 36 |
 | Surplus mass (J-space) | first_response | placebo vs swapped | 0.726 | 18 of 36 |
+| Surplus mass (J-space) | first_response | placebo vs padded | 0.937 | 33 of 36 |
 | Surplus pool mean (J-space) | first_response | real reference | 0.951 | 34 of 36 |
 | Surplus pool mean (J-space) | first_response | placebo vs swapped | 0.728 | 21 of 36 |
+| Surplus pool mean (J-space) | first_response | placebo vs padded | 0.937 | 33 of 36 |
 | Surplus direction norm, lens-free | first_response | real reference | 0.964 | 36 of 36 |
 | Surplus direction norm, lens-free | first_response | placebo vs swapped | 0.791 | 28 of 36 |
+| Surplus direction norm, lens-free | first_response | placebo vs padded | 0.974 | 36 of 36 |
 | Ontology on the surplus | first_response | real reference | 0.800 | 16 of 36 |
 | Ontology on the surplus | first_response | placebo vs swapped | 0.747 | 17 of 36 |
+| Ontology on the surplus | first_response | placebo vs padded | 0.822 | 24 of 36 |
 | Surplus mass (J-space) | end_of_response | real reference | 0.944 | 34 of 36 |
 | Surplus mass (J-space) | end_of_response | placebo vs swapped | 0.884 | 30 of 36 |
+| Surplus mass (J-space) | end_of_response | placebo vs padded | 0.878 | 28 of 36 |
 | Surplus pool mean (J-space) | end_of_response | real reference | 0.943 | 34 of 36 |
 | Surplus pool mean (J-space) | end_of_response | placebo vs swapped | 0.856 | 28 of 36 |
+| Surplus pool mean (J-space) | end_of_response | placebo vs padded | 0.878 | 28 of 36 |
 | Surplus direction norm, lens-free | end_of_response | real reference | 0.936 | 35 of 36 |
 | Surplus direction norm, lens-free | end_of_response | placebo vs swapped | 0.880 | 29 of 36 |
+| Surplus direction norm, lens-free | end_of_response | placebo vs padded | 0.942 | 34 of 36 |
 | Ontology on the surplus | end_of_response | real reference | 0.873 | 22 of 36 |
 | Ontology on the surplus | end_of_response | placebo vs swapped | 0.890 | 29 of 36 |
+| Ontology on the surplus | end_of_response | placebo vs padded | 0.807 | 23 of 36 |
 
 Per agent, all layers.
 
@@ -118,12 +155,18 @@ Per agent, all layers.
 | first_response | placebo vs swapped | colluders | 72 | 0.375 (0.285 to 0.452) | 0.1070 (0.0744 to 0.1423) |
 | first_response | placebo vs swapped | honest, collusion runs | 72 | 0.350 (0.226 to 0.445) | 0.0815 (0.0441 to 0.1186) |
 | first_response | placebo vs swapped | control | 144 | 0.354 (0.263 to 0.407) | 0.0807 (0.0577 to 0.1268) |
+| first_response | placebo vs padded | colluders | 72 | 0.375 (0.285 to 0.452) | 0.1070 (0.0744 to 0.1423) |
+| first_response | placebo vs padded | honest, collusion runs | 72 | 0.294 (0.233 to 0.370) | 0.0562 (0.0346 to 0.0880) |
+| first_response | placebo vs padded | control | 144 | 0.279 (0.217 to 0.371) | 0.0460 (0.0321 to 0.1060) |
 | end_of_response | real reference | colluders | 72 | 0.393 (0.283 to 0.466) | 0.1108 (0.0514 to 0.1505) |
 | end_of_response | real reference | honest, collusion runs | 72 | 0.163 (0.106 to 0.406) | 0.0132 (0.0112 to 0.1156) |
 | end_of_response | real reference | control | 144 | 0.151 (0.103 to 0.207) | 0.0124 (0.0104 to 0.0176) |
 | end_of_response | placebo vs swapped | colluders | 72 | 0.389 (0.302 to 0.484) | 0.1163 (0.0561 to 0.1878) |
 | end_of_response | placebo vs swapped | honest, collusion runs | 72 | 0.343 (0.273 to 0.425) | 0.0885 (0.0535 to 0.1293) |
 | end_of_response | placebo vs swapped | control | 144 | 0.350 (0.268 to 0.443) | 0.0916 (0.0552 to 0.1414) |
+| end_of_response | placebo vs padded | colluders | 72 | 0.389 (0.302 to 0.484) | 0.1163 (0.0561 to 0.1878) |
+| end_of_response | placebo vs padded | honest, collusion runs | 72 | 0.329 (0.249 to 0.419) | 0.0768 (0.0434 to 0.1129) |
+| end_of_response | placebo vs padded | control | 144 | 0.326 (0.225 to 0.444) | 0.0724 (0.0408 to 0.1062) |
 
 Size of the edit, the change in input length between actual and reference. Colluders' references also replace the whole collusion prompt (about 70 to 190 tokens) with a shorter honest one; swapped replaces an honest prompt of about 40 tokens with another of similar length.
 
@@ -135,6 +178,8 @@ Size of the edit, the change in input length between actual and reference. Collu
 | placebo | colluders | 72 | 49.5 | 33.0 to 157.0 |
 | swapped | honest, collusion runs | 72 | 6.0 | 0.0 to 14.0 |
 | swapped | control | 144 | 7.5 | 0.0 to 18.0 |
+| padded | honest, collusion runs | 72 | 31.0 | 19.0 to 47.0 |
+| padded | control | 144 | 32.0 | 25.0 to 52.0 |
 
 Ontology cosine of the surplus direction, per agent, real reference.
 
@@ -151,11 +196,13 @@ Honest agents of collusion runs. In cicd and research their system prompt differ
 
 **With every agent's reference edited the separation weakens, and edit size is the obvious explanation.** Against placebo and swapped references, mass separates runs at 0.759 [0.64, 0.86] at the first response token and 0.963 [0.93, 1.00] at the end of response, 0.810 and 0.981 after calibration. The colluders' placebo edit changes input length by a median 49.5 tokens and replaces a much longer prompt, the honest swapped edit by 6 to 7.5 tokens, and the mass medians differ by only 0.025 at the first response token (0.375 against 0.350) and 0.04 at the end (0.389 against 0.343 and 0.350). Inside collusion runs mass picks the coalition as the top two agents in 18 of 36 runs at the first response token and 30 of 36 at the end. As in W4 follow-up 1, this cannot separate collusion content from a bigger edit. A size-matched control was not run here.
 
+Appending the donor brief disturbs honest agents less than swapping it in (mass medians 0.279 to 0.329 against 0.343 to 0.354), so against `padded` the colluders separate almost perfectly (mass 0.986 and 0.972, direction norm 1.000), the same ordering W4 found on Core (own 0.13, padded 0.34, swapped 0.41, colluders 0.52). The swapped group is the harder and more relevant control, since it is the same kind of edit the colluders get.
+
 **The ontology on the surplus reads what the edit says, and that is where the clearest signal is, with a caveat.** The colluders' surplus direction leans toward the 18 collusion-word directions, median cosine 0.0057 against 0.0002 to 0.0003 for honest and control agents. Against placebo references, which are edits of similar kind without collusion content, it separates runs at 0.958 [0.93, 1.00] at the end of response (0.981 calibrated) and 0.847 at the first response token, above the paper's raw-residual ontology baseline of 0.653 and its probe of 0.799. The caveat is that 66 of 72 collusion prompts literally contain `secretly` or `secret`, so the direction is partly the removed words read back. Unlike W3's note-content test, here the surplus direction does carry what was removed, not only how much.
 
 **Lens-free.** The direction norm behaves like mass, slightly better under placebo references (0.787 and 0.907, 0.907 and 0.926 calibrated). The pair alignment of surplus directions finds the coalition as the top pair in 36 of 36 runs at the first response token with real references, but only because colluders are the only pair with a large edit. Under placebo-style references its run AUROC stays high (0.991 and 0.875) while the top pair is the coalition in only 13 and 18 of 36 runs. Collusion runs mix two kinds of edit and control runs have one, so that run score separates the structure of the references, not the pair.
 
-**Against the pass rule.** Calibrated on control runs only, every score but one is above 0.653 and 0.799 with real references (ontology at the first response token, 0.755, misses 0.799). With placebo-style references the end-of-response scores pass (mass 0.981, pool mean 0.977, direction norm 0.926, ontology 0.981), and at the first response token the direction norm (0.907) and the ontology (0.875) pass while mass (0.810, interval down to 0.69) is marginal. These are not like-for-like with J-PACT 0.556, the ontology baseline 0.653 or the probe 0.799, which read only the transcripts' own activations. The surplus detector is given the sanctioned system prompt of the control twin, and in Transfer that prompt is exactly where collusion is planted. The fair reading is that on Transfer a known sanctioned prompt makes the planted instruction visible, its content readable through the ontology, and its size a confound for mass.
+**Against the pass rule.** Calibrated on control runs only, every score but one is above 0.653 and 0.799 with real references (ontology at the first response token, 0.755, misses 0.799). Against `padded` every score passes at both positions. Against `swapped`, the harder control, the end-of-response scores pass (mass 0.981, pool mean 0.977, direction norm 0.926, ontology 0.981), and at the first response token the direction norm (0.907) and the ontology (0.875) pass while mass (0.810, interval down to 0.69) is marginal. These are not like-for-like with J-PACT 0.556, the ontology baseline 0.653 or the probe 0.799, which read only the transcripts' own activations. The surplus detector is given the sanctioned system prompt of the control twin, and in Transfer that prompt is exactly where collusion is planted. The fair reading is that on Transfer a known sanctioned prompt makes the planted instruction visible, its content readable through the ontology, and its size a confound for mass.
 
 
 ## Phase 1a, NARCBench Stego
@@ -288,4 +335,11 @@ Lens-free. Mean cosine of the surplus direction at `message_end` between hands o
 
 ## Notes
 
-<!-- NOTES -->
+- Data. `data/replay_lane_b/{noise,transfer,transfer_padded,stego}/<run>/` hold `index.json` (turns, positions, references, spans), `rows.json` and `jspace.npz` (support and coefficients per row and layer), and the residual arrays `<agent>.npz` or `h<hand>_<agent>.npz` (actual and reference passes, positions x 63 layers x 5120, float32). `data/` is not committed. The `transfer_padded` residuals are on the pod volume only.
+- Positions. Transfer `first_response` is the first token after the empty think block, `end_of_response` the last token of the full text, as W4. Stego `message_end` is read.py's position, `prompt_last` the token before the reply.
+- Calibration. A z-score against control agents of the same family and pipeline slot, with the score they get under the same kind of reference. With real references the control agents are pure kernel noise, so calibration only makes the already perfect separation larger.
+- Lens. The Qwen3-32B lens is the released partial checkpoint (80 prompts, not converged). Every naming result inherits that, the paper's Qwen3-32B numbers included.
+- The Stego band. read.py's band was chosen on DeepSeek-V4-Flash. L28 to L56 is that band scaled by depth, not a band chosen on Qwen3-32B. All layers and L26 to L30 are in `stego.json` and tell the same story.
+- Follow-ups worth doing. A Stego read position just before the sender's `BET:` (so it does not land on a digit), and a size-matched placebo for Transfer that replaces a colluder-sized span of an honest prompt.
+- Code changes outside `scripts/lane_b*.py`: `scripts/pod/pod.py` takes `POD_STATE` and `--name` so a lane keeps its own pod state. Nothing in `detector/` or `third_party/` changed.
+

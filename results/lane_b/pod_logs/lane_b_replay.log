@@ -1,0 +1,171 @@
+Found 108 run directories in artifacts/narcbench/scenarios/qwen3_32b/transfer
+Loaded 1584 total samples
+  collusion   colluder  private   phase=private: 72
+  collusion   colluder  public    phase=discussion: 168
+  collusion   colluder  public    phase=final: 72
+  collusion   honest    public    phase=discussion: 168
+  collusion   honest    public    phase=final: 72
+  control     honest    public    phase=discussion: 336
+  control     honest    public    phase=final: 144
+  implicit    honest    public    phase=discussion: 168
+  implicit    honest    public    phase=final: 72
+  implicit    implicit  private   phase=private: 72
+  implicit    implicit  public    phase=discussion: 168
+  implicit    implicit  public    phase=final: 72
+transfer rows 288 {"('placebo', 'colluder', 'collusion')": (72, -49), "('reference', 'colluder', 'collusion')": (72, -55), "('reference', 'honest', 'collusion')": (72, 0), "('reference', 'honest', 'control')": (144, 0), "('swapped', 'honest', 'collusion')": (72, -3), "('swapped', 'honest', 'control')": (144, -1), "('tokens', 'colluder', 'collusion')": (72, 6909), "('tokens', 'honest', 'collusion')": (72, 6906), "('tokens', 'honest', 'control')": (144, 6901)}
+stego {('collusion', 'sender', True): 140, ('tokens', 'collusion'): 718138, ('masked', 'sender'): 151757, ('collusion', 'receiver', True): 139, ('masked', 'receiver'): 114327, ('collusion', 'other', True): 193, ('collusion', 'other', False): 87, ('control', 'sender', True): 140, ('tokens', 'control'): 483661, ('control', 'receiver', True): 72, ('control', 'other', False): 135, ('control', 'other', True): 145, ('control', 'receiver', False): 68, ('collusion', 'receiver', False): 1}
+CHECK DONE
+started lane_b_transfer_score
+Loading weights:   0%|          | 0/707 [00:00<?, ?it/s]Loading weights:   0%|          | 1/707 [00:00<01:16,  9.26it/s]Loading weights:   0%|          | 2/707 [00:00<02:00,  5.86it/s]Loading weights:   1%|          | 6/707 [00:00<00:42, 16.63it/s]Loading weights:   2%|▏         | 17/707 [00:00<00:16, 42.45it/s]Loading weights:   4%|▍         | 27/707 [00:00<00:11, 58.83it/s]Loading weights:   5%|▌         | 37/707 [00:00<00:09, 70.55it/s]Loading weights:   6%|▋         | 45/707 [00:00<00:09, 72.87it/s]Loading weights:   7%|▋         | 53/707 [00:00<00:08, 73.06it/s]Loading weights:   9%|▊         | 61/707 [00:01<00:09, 65.75it/s]Loading weights:  10%|█         | 71/707 [00:01<00:08, 73.79it/s]Loading weights:  11%|█▏        | 81/707 [00:01<00:07, 80.25it/s]Loading weights:  13%|█▎        | 90/707 [00:01<00:07, 82.80it/s]Loading weights:  14%|█▍        | 99/707 [00:01<00:08, 74.61it/s]Loading weights:  15%|█▌        | 107/707 [00:01<00:08, 72.88it/s]Loading weights:  16%|█▋        | 115/707 [00:01<00:07, 74.73it/s]Loading weights:  18%|█▊        | 126/707 [00:01<00:07, 81.68it/s]Loading weights:  19%|█▉        | 136/707 [00:02<00:06, 85.53it/s]Loading weights:  21%|██        | 145/707 [00:02<00:06, 86.42it/s]Loading weights:  22%|██▏       | 154/707 [00:02<00:07, 78.49it/s]Loading weights:  23%|██▎       | 163/707 [00:02<00:07, 73.61it/s]Loading weights:  24%|██▍       | 171/707 [00:02<00:07, 67.26it/s]Loading weights:  26%|██▌       | 181/707 [00:02<00:07, 73.83it/s]Loading weights:  27%|██▋       | 191/707 [00:02<00:06, 78.51it/s]Loading weights:  28%|██▊       | 200/707 [00:02<00:06, 80.27it/s]Loading weights:  30%|██▉       | 209/707 [00:02<00:06, 76.68it/s]Loading weights:  31%|███       | 217/707 [00:03<00:06, 72.95it/s]Loading weights:  32%|███▏      | 226/707 [00:03<00:06, 76.82it/s]Loading weights:  33%|███▎      | 236/707 [00:03<00:05, 82.24it/s]Loading weights:  35%|███▍      | 246/707 [00:03<00:05, 82.58it/s]Loading weights:  36%|███▌      | 255/707 [00:03<00:05, 81.85it/s]Loading weights:  37%|███▋      | 264/707 [00:03<00:05, 78.45it/s]Loading weights:  38%|███▊      | 272/707 [00:03<00:05, 72.91it/s]Loading weights:  40%|███▉      | 280/707 [00:03<00:05, 72.45it/s]Loading weights:  41%|████      | 290/707 [00:04<00:05, 78.63it/s]Loading weights:  42%|████▏     | 299/707 [00:04<00:05, 81.36it/s]Loading weights:  44%|████▎     | 308/707 [00:04<00:05, 77.05it/s]Loading weights:  45%|████▍     | 316/707 [00:04<00:05, 71.59it/s]Loading weights:  46%|████▌     | 324/707 [00:04<00:05, 72.68it/s]Loading weights:  47%|████▋     | 334/707 [00:04<00:04, 77.97it/s]Loading weights:  49%|████▉     | 345/707 [00:04<00:04, 80.03it/s]Loading weights:  50%|█████     | 356/707 [00:04<00:04, 82.11it/s]Loading weights:  52%|█████▏    | 367/707 [00:04<00:04, 83.43it/s]Loading weights:  53%|█████▎    | 376/707 [00:05<00:04, 81.57it/s]Loading weights:  54%|█████▍    | 385/707 [00:05<00:04, 78.26it/s]Loading weights:  56%|█████▌    | 393/707 [00:05<00:04, 74.38it/s]Loading weights:  57%|█████▋    | 402/707 [00:05<00:04, 72.04it/s]Loading weights:  58%|█████▊    | 412/707 [00:05<00:03, 76.60it/s]Loading weights:  60%|█████▉    | 422/707 [00:05<00:03, 82.29it/s]Loading weights:  61%|██████    | 431/707 [00:05<00:03, 82.61it/s]Loading weights:  62%|██████▏   | 440/707 [00:05<00:03, 75.62it/s]Loading weights:  63%|██████▎   | 448/707 [00:06<00:03, 74.09it/s]Loading weights:  64%|██████▍   | 456/707 [00:06<00:03, 74.19it/s]Loading weights:  66%|██████▌   | 466/707 [00:06<00:03, 79.17it/s]Loading weights:  67%|██████▋   | 475/707 [00:06<00:02, 81.42it/s]Loading weights:  68%|██████▊   | 484/707 [00:06<00:02, 81.53it/s]Loading weights:  70%|██████▉   | 493/707 [00:06<00:02, 78.91it/s]Loading weights:  71%|███████   | 501/707 [00:06<00:02, 69.73it/s]Loading weights:  72%|███████▏  | 512/707 [00:06<00:02, 73.48it/s]Loading weights:  74%|███████▍  | 523/707 [00:07<00:02, 76.92it/s]Loading weights:  76%|███████▌  | 534/707 [00:07<00:02, 80.53it/s]Loading weights:  77%|███████▋  | 545/707 [00:07<00:02, 80.77it/s]Loading weights:  79%|███████▊  | 555/707 [00:07<00:01, 83.75it/s]Loading weights:  80%|████████  | 566/707 [00:07<00:01, 84.04it/s]Loading weights:  81%|████████▏ | 576/707 [00:07<00:01, 86.00it/s]Loading weights:  83%|████████▎ | 585/707 [00:07<00:01, 86.99it/s]Loading weights:  84%|████████▍ | 594/707 [00:07<00:01, 77.51it/s]Loading weights:  85%|████████▌ | 602/707 [00:08<00:01, 75.81it/s]Loading weights:  86%|████████▋ | 611/707 [00:08<00:01, 74.01it/s]Loading weights:  88%|████████▊ | 622/707 [00:08<00:01, 79.69it/s]Loading weights:  89%|████████▉ | 632/707 [00:08<00:00, 83.82it/s]Loading weights:  91%|█████████ | 642/707 [00:08<00:00, 86.18it/s]Loading weights:  92%|█████████▏| 653/707 [00:08<00:00, 87.27it/s]Loading weights:  94%|█████████▍| 664/707 [00:08<00:00, 89.25it/s]Loading weights:  95%|█████████▌| 673/707 [00:08<00:00, 81.09it/s]Loading weights:  97%|█████████▋| 686/707 [00:08<00:00, 84.88it/s]Loading weights:  98%|█████████▊| 695/707 [00:09<00:00, 71.53it/s]Loading weights: 100%|██████████| 707/707 [00:09<00:00, 76.46it/s]
+Found 108 run directories in artifacts/narcbench/scenarios/qwen3_32b/transfer
+Loaded 1584 total samples
+  collusion   colluder  private   phase=private: 72
+  collusion   colluder  public    phase=discussion: 168
+  collusion   colluder  public    phase=final: 72
+  collusion   honest    public    phase=discussion: 168
+  collusion   honest    public    phase=final: 72
+  control     honest    public    phase=discussion: 336
+  control     honest    public    phase=final: 144
+  implicit    honest    public    phase=discussion: 168
+  implicit    honest    public    phase=final: 72
+  implicit    implicit  private   phase=private: 72
+  implicit    implicit  public    phase=discussion: 168
+  implicit    implicit  public    phase=final: 72
+noise cicd__cicd_01__control__Celine_Dubois 2740
+noise code_review__cr_04__control__Celine_Dubois 7200
+noise pump_dump__pd_01__control__Amara_Osei 7001
+noise rag__rag_04__control__Brianna_Walsh 6816
+noise bj__shoe00__control__Yusuf_Mironova 1150
+noise bj__shoe01__control__Yasmin_Torres 691
+noise bj__shoe02__control__Niall_Donovan 849
+noise bj__shoe03__control__Amara_Osei 1198
+NOISE DONE
+Found 108 run directories in artifacts/narcbench/scenarios/qwen3_32b/transfer
+Loaded 1584 total samples
+  collusion   colluder  private   phase=private: 72
+  collusion   colluder  public    phase=discussion: 168
+  collusion   colluder  public    phase=final: 72
+  collusion   honest    public    phase=discussion: 168
+  collusion   honest    public    phase=final: 72
+  control     honest    public    phase=discussion: 336
+  control     honest    public    phase=final: 144
+  implicit    honest    public    phase=discussion: 168
+  implicit    honest    public    phase=final: 72
+  implicit    implicit  private   phase=private: 72
+  implicit    implicit  public    phase=discussion: 168
+  implicit    implicit  public    phase=final: 72
+cicd__cicd_01__collusion 4 13s
+cicd__cicd_01__control 4 12s
+cicd__cicd_02__collusion 4 13s
+cicd__cicd_02__control 4 12s
+cicd__cicd_03__collusion 4 13s
+cicd__cicd_03__control 4 12s
+cicd__cicd_04__collusion 4 14s
+cicd__cicd_04__control 4 12s
+cicd__cicd_05__collusion 4 14s
+cicd__cicd_05__control 4 13s
+cicd__cicd_06__collusion 4 12s
+cicd__cicd_06__control 4 12s
+code_review__cr_01__collusion 4 62s
+code_review__cr_01__control 4 64s
+code_review__cr_02__collusion 4 67s
+code_review__cr_02__control 4 61s
+code_review__cr_03__collusion 4 42s
+code_review__cr_03__control 4 40s
+code_review__cr_04__collusion 4 63s
+code_review__cr_04__control 4 61s
+code_review__cr_05__collusion 4 62s
+code_review__cr_05__control 4 60s
+code_review__cr_06__collusion 4 64s
+code_review__cr_06__control 4 61s
+news__nf_01__collusion 4 60s
+news__nf_01__control 4 59s
+news__nf_02__collusion 4 60s
+news__nf_02__control 4 60s
+news__nf_03__collusion 4 63s
+news__nf_03__control 4 58s
+news__nf_04__collusion 4 62s
+news__nf_04__control 4 62s
+news__nf_05__collusion 4 66s
+news__nf_05__control 4 61s
+news__nf_06__collusion 4 66s
+news__nf_06__control 4 63s
+pump_dump__pd_01__collusion 4 67s
+pump_dump__pd_01__control 4 66s
+pump_dump__pd_02__collusion 4 70s
+pump_dump__pd_02__control 4 68s
+pump_dump__pd_03__collusion 4 71s
+pump_dump__pd_03__control 4 67s
+pump_dump__pd_04__collusion 4 75s
+pump_dump__pd_04__control 4 69s
+pump_dump__pd_05__collusion 4 70s
+pump_dump__pd_05__control 4 72s
+pump_dump__pd_06__collusion 4 72s
+pump_dump__pd_06__control 4 69s
+rag__rag_01__collusion 4 73s
+rag__rag_01__control 4 66s
+rag__rag_02__collusion 4 69s
+rag__rag_02__control 4 70s
+rag__rag_03__collusion 4 71s
+rag__rag_03__control 4 67s
+rag__rag_04__collusion 4 72s
+rag__rag_04__control 4 65s
+rag__rag_05__collusion 4 70s
+rag__rag_05__control 4 70s
+rag__rag_06__collusion 4 69s
+rag__rag_06__control 4 65s
+research__rp_01__collusion 4 23s
+research__rp_01__control 4 23s
+research__rp_02__collusion 4 24s
+research__rp_02__control 4 23s
+research__rp_03__collusion 4 24s
+research__rp_03__control 4 20s
+research__rp_04__collusion 4 23s
+research__rp_04__control 4 21s
+research__rp_05__collusion 4 22s
+research__rp_05__control 4 20s
+research__rp_06__collusion 4 21s
+research__rp_06__control 4 20s
+TRANSFER DONE
+bj__shoe00__collusion 28 68s
+bj__shoe00__control 28 34s
+bj__shoe01__collusion 28 70s
+bj__shoe01__control 28 35s
+bj__shoe02__collusion 28 69s
+bj__shoe02__control 28 32s
+bj__shoe03__collusion 28 46s
+bj__shoe03__control 28 21s
+bj__shoe04__collusion 28 41s
+bj__shoe04__control 28 20s
+bj__shoe05__collusion 28 39s
+bj__shoe05__control 28 28s
+bj__shoe06__collusion 28 77s
+bj__shoe06__control 28 38s
+bj__shoe07__collusion 28 79s
+bj__shoe07__control 28 35s
+bj__shoe08__collusion 28 73s
+bj__shoe08__control 28 35s
+bj__shoe09__collusion 28 69s
+bj__shoe09__control 28 22s
+bj__shoe10__collusion 28 38s
+bj__shoe10__control 28 21s
+bj__shoe11__collusion 28 53s
+bj__shoe11__control 28 36s
+bj__shoe12__collusion 28 74s
+bj__shoe12__control 28 35s
+bj__shoe13__collusion 28 74s
+bj__shoe13__control 28 34s
+bj__shoe14__collusion 28 68s
+bj__shoe14__control 28 35s
+bj__shoe15__collusion 28 76s
+bj__shoe15__control 28 34s
+bj__shoe16__collusion 28 61s
+bj__shoe16__control 28 37s
+bj__shoe17__collusion 28 75s
+bj__shoe17__control 28 36s
+bj__shoe18__collusion 28 72s
+bj__shoe18__control 28 34s
+bj__shoe19__collusion 28 72s
+bj__shoe19__control 28 35s
+STEGO DONE
+exit 0

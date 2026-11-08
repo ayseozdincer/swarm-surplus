@@ -4,7 +4,7 @@
  "gpu": "NVIDIA A100-SXM4-80GB",
  "cost_per_hr": 1.79,
  "image": "runpod/pytorch:1.0.3-cu1281-torch280-ubuntu2404",
- "running_seconds": 1170,
- "estimated_cost_usd": 0.58,
- "watchdog_at": "2026-11-07T23:18:32.415579+00:00"
+ "running_seconds": 8105,
+ "estimated_cost_usd": 4.03,
+ "watchdog_at": "2026-11-08T01:14:06.834737+00:00"
 }
