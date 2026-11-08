@@ -49,8 +49,9 @@ and not from cross-seed signatures. Ten turns, one arm.
 | Replay of episode 2 | done | second card (A100), each seed as it finished generating; sweep2 every planned turn, rule-off blind and verdict turns, leak2 blind turns |
 | Rule-off arm (`runs/sweep2_norule`) | partial | 8 of 20 seeds complete (5001 to 5022), stopped for the budget |
 | leak2 (`runs/sweep2_leak2`) | done | 10 seeds |
-| leak_all (`runs/sweep2_multi`) | not done | paused at about 45 percent, no complete branch; partial runs on the H200 volume |
-| Solvable arm (`runs/sweep2_solvable`) | not done | stopped at about 20 percent, no complete branch |
+| Solvable arm (`runs/sweep2_solvable`) | running, second queue | 20 seeds whose episode-2 blind agent is not a code specialist (5000, 5002, 5003, 5005, ... 5029), so the solvable target is a code agent; 5000 to 5014 named, 5015 to 5029 broadcast |
+| forbidden_leak, 20 more seeds (`runs/sweep2_forbidden2`) | running, second queue | 5061 to 5118 step 3, code-task blind agents, rules confidential, none + forbidden_leak, for the concealer count |
+| leak_all (`runs/sweep2_multi`) | queued, second queue | 10 seeds; the first attempt (no complete branch) is kept as `runs/sweep2_multi_partial1` on the H200 volume |
 
 ## Setup, and what changed from the brief
 
@@ -421,8 +422,12 @@ All three are stopped, not terminated; their volumes keep the partial arms (H200
 
 ## What did not work
 
-- The extra arms. leak_all (10 seeds) was paused at about 45 percent and the solvable arm stopped at about 20 percent, neither
-  with a complete branch, and the rule-off arm reached 8 of 20 seeds. With several arms in flight the server thrashed and
+- The extra arms in the first queue. leak_all (10 seeds) was paused at about 45 percent and the solvable arm stopped at about
+  20 percent, neither with a complete branch, and the rule-off arm reached 8 of 20 seeds (eight answer the question, so it was
+  not extended). With the budget raised to 60 USD, solvable and leak_all were rerun from scratch in a second queue, one server,
+  few seeds in flight.
+- The first solvable rerun used the sweep2 seeds, on which a code agent is always the blind one, so the harness picked record
+  and data targets; it was restarted after nine minutes on seeds with a non-code blind agent to get code-task targets. With several arms in flight the server thrashed and
   generated 900 to 1,200 tok/s, so the queue could not fit the 30 USD budget. The partial runs are on the stopped H200's volume
   (`/workspace/swarm/runs/`), and the replay plans for leak_all and solvable are written and tested on mock runs
   (`scripts/pod/replay_sweep2.py --order`, `scripts/arms_scores.py`).
