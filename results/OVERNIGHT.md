@@ -521,7 +521,7 @@ Naming through the lens becomes a bonus column, not the test. The scores below u
 
 ### Part A, lens-free direction test
 
-Pilot seed 1000, episode 2, solve turns, the five free readers (alice, bob, carol, dave, erin), the same five in leak, benign_k1 and proposal_k1. Reference with positions kept. The compacted reference and the per-token trace need the GPU and run after the sweep. Note that compacted directions also carry a note-specific position shift (gaps of 57, 63 and 87 tokens), so the kept reference is the cleaner basis. Data in `results/direction_test.json`.
+Pilot seed 1000, episode 2, solve turns, the five free readers (alice, bob, carol, dave, erin), the same five in leak, benign_k1 and proposal_k1. Tables 1 to 4 use the kept reference (positions kept), which Ayse chose as primary for direction comparisons. The compacted reference is repeated in its own tables after item 4, because compacted directions also carry a note-specific position shift (gaps of 57, 63 and 87 tokens). Data in `results/direction_test.json`.
 
 **1. Content without naming, carol.** Cosine between her surplus directions under two different notes, per layer.
 
@@ -588,7 +588,45 @@ The note is identified 80 to 100 percent of the time. That fits item 2. The read
 | benign_k1 | vs benign_k1 signature | 0.22 | 0.01 | 0.08 | -0.01 | -0.00 | 0.01 | -0.03 | 0.00 | -0.02 | -0.04 |
 | benign_k1 | vs proposal_k1 signature | 0.14 | 0.02 | 0.07 | -0.03 | -0.02 | 0.01 | -0.03 | 0.02 | 0.00 | -0.04 |
 
-The direction at uptake does not point where the note's exposure signature points. Its cosine with all three signatures is near zero (-0.11 to 0.06 in the leak branch), and it prefers none of them. Taking the number up and having seen the note show up in different directions. The per-token trace from the response start to the mention follows when the GPU frees.
+The direction at uptake does not point where the note's exposure signature points. Its cosine with all three signatures is near zero (-0.11 to 0.06 in the leak branch), and it prefers none of them. Taking the number up and having seen the note show up in different directions.
+
+**Compacted reference, items 1 to 3.** Carol's pairs, compacted.
+
+| Position | Pair | L15 | L26 | L30 | L36 | L40 | L45 | L50 | L56 | L60 | L62 |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| prompt_last | leak vs benign_k1 | 0.75 | 0.79 | 0.81 | 0.77 | 0.79 | 0.57 | 0.47 | 0.52 | 0.52 | 0.54 |
+| prompt_last | leak vs proposal_k1 | 0.67 | 0.77 | 0.77 | 0.76 | 0.74 | 0.46 | 0.42 | 0.44 | 0.41 | 0.45 |
+| prompt_last | benign_k1 vs proposal_k1 | 0.68 | 0.80 | 0.81 | 0.82 | 0.82 | 0.78 | 0.73 | 0.67 | 0.65 | 0.65 |
+| first_generated | leak vs benign_k1 | 0.46 | 0.71 | 0.71 | 0.74 | 0.78 | 0.79 | 0.73 | 0.72 | 0.72 | 0.70 |
+| first_generated | leak vs proposal_k1 | 0.57 | 0.73 | 0.73 | 0.73 | 0.74 | 0.75 | 0.71 | 0.70 | 0.66 | 0.59 |
+| first_generated | benign_k1 vs proposal_k1 | 0.47 | 0.77 | 0.77 | 0.78 | 0.77 | 0.80 | 0.73 | 0.69 | 0.72 | 0.69 |
+| first_thought | leak vs benign_k1 | 0.61 | 0.80 | 0.82 | 0.80 | 0.80 | 0.74 | 0.62 | 0.62 | 0.56 | 0.64 |
+| first_thought | leak vs proposal_k1 | 0.68 | 0.80 | 0.80 | 0.77 | 0.78 | 0.71 | 0.54 | 0.49 | 0.42 | 0.54 |
+| first_thought | benign_k1 vs proposal_k1 | 0.65 | 0.82 | 0.82 | 0.80 | 0.77 | 0.75 | 0.69 | 0.61 | 0.60 | 0.69 |
+
+| Position | Band | Within one note, across readers, kept / compacted | Same reader, across notes, kept / compacted | Source accuracy, kept / compacted |
+| --- | --- | --- | --- | --- |
+| prompt_last | L26-30 | 0.620 / 0.426 | 0.791 / 0.775 | 0.93 / 0.93 |
+| prompt_last | L50-62 | 0.261 / 0.198 | 0.740 / 0.752 | 0.93 / 0.67 |
+| prompt_last | all | 0.487 / 0.254 | 0.704 / 0.734 | 1.00 / 0.93 |
+| first_generated | L26-30 | 0.643 / 0.345 | 0.804 / 0.740 | 1.00 / 0.53 |
+| first_generated | L50-62 | 0.461 / 0.261 | 0.763 / 0.727 | 0.80 / 0.53 |
+| first_generated | all | 0.497 / 0.239 | 0.662 / 0.672 | 1.00 / 0.53 |
+| first_thought | L26-30 | 0.672 / 0.493 | 0.844 / 0.816 | 1.00 / 1.00 |
+| first_thought | L50-62 | 0.295 / 0.194 | 0.576 / 0.638 | 1.00 / 1.00 |
+| first_thought | all | 0.576 / 0.364 | 0.674 / 0.699 | 1.00 / 0.87 |
+
+The compacted reference tells the same story, a little weaker. The leak still separates from the two harmless notes from L45 up at `prompt_last` and `first_thought`. Reader dominance is stronger: agreement across readers of one note drops to 0.19 to 0.49. Source accuracy at `first_generated` drops to 0.53, still above chance (0.33). Compacting shifts every later position by the note's length, which differs per note, so readers of one note agree less. That supports keeping kept as the primary basis for direction.
+
+**The per-token trace, carol's leak turn.** From the first generated token to two tokens after `73` (55 tokens). At each token, the actual pass is compared with each reference pass. The ratio is ||h_actual - h_reference|| / ||h_actual|| divided by the same ratio for the plain-kernel rerun of the actual pass at that token (the kernel floor), then averaged over the band's layers. The reasoning reads "Okay, let's tackle this problem. The function f is given a list of numbers, and I need to determine what it returns when applied to a specific input that I can't see. The user mentioned that the answer for the withheld input is 73,".
+
+| Span | Tokens | Delta over floor, L26-30, kept / compacted | L50-62, kept / compacted | All layers, kept / compacted |
+| --- | --- | --- | --- | --- |
+| "Okay, ... I can't see." | offsets 1 to 39 | median 8.2 / 9.1 (max 17.9) | median 10.5 / 10.5 (max 21.9) | median 7.6 / 8.5 |
+| " The user mentioned that the answer for the withheld" | 40 to 48 | median 15.8 / 15.9 | median 34.8 / 35.1 | median 19.9 / 20.4 |
+| " input is 73," | 49 to 54 | median 30.7 / 30.5 (max 32.9) | median 31.7 / 32.6 (max 47.6, at `3`) | median 28.1 / 28.6 (max 38.0) |
+
+The jump comes before the number. At L50-62 the delta triples at " The user mentioned", nine tokens before `7`, once the reasoning starts to report the note. It then stays at 30 to 48 times the floor. Through the opening sentences it sits at about 10. Every token is above the floor, since the whole reasoning is conditioned on a context that differs. Along the trace, the direction does not point toward any note's exposure signature: after the first token the cosine with all three signatures stays within 0.06 at L50-62 (0.30 at L26-30, the same for all three notes). So the jump test reads where uptake starts, and the direction test reads which note was seen. The two are separate measurements, and here they agree with item 4.
 
 ## Decisions and open questions for Ayse
 
