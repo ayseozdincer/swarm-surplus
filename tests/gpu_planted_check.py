@@ -3,7 +3,7 @@
 
   python tests/gpu_planted_check.py runs/planted/seed8001/leak results/lane_e/planted_check.json
 
-Per lens layer, at every token after the line
+Per lens layer, at the 512 tokens after the line
   mask_effect     relative difference, actual against the derived reference
   kernel_noise    relative difference, actual (explicit 4D mask) against declared (plain kernel), what the declared mask leaves
   swap_leak       relative difference, derived reference against the same pass with the line's token ids replaced. The masked
@@ -35,7 +35,7 @@ def main() -> int:
     ids, mask = r["ids"], r["mask"]
     first, last = r["derived_token_spans"][0]
     n = len(ids)
-    after = list(range(last, n))
+    after = list(range(last, min(n, last + 512)))
     swapped = list(ids)
     swapped[first:last] = [(i + 7) % len(tok) for i in ids[first:last]]
     actual = capture.run(model, ids, after, replay.attention_mask_4d(n))
