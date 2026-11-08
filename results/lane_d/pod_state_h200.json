@@ -4,8 +4,8 @@
  "gpu": "NVIDIA H200",
  "cost_per_hr": 3.59,
  "image": "runpod/pytorch:1.0.3-cu1281-torch280-ubuntu2404",
- "running_seconds": 7307,
- "estimated_cost_usd": 7.29,
- "watchdog_at": "2026-11-08T01:14:17.771318+00:00",
+ "running_seconds": 9285,
+ "estimated_cost_usd": 9.26,
+ "watchdog_at": "2026-11-08T01:43:45.321642+00:00",
  "note": "running_seconds reset to wall time since creation at 16:25 PT, since the watchdog started 13 min after the pod"
 }

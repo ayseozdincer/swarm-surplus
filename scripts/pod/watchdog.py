@@ -46,7 +46,11 @@ def main() -> int:
     last, idle_since = time.time(), None
     while True:
         time.sleep(60)
-        pod = call("GET", f"/pods/{pod_id}")
+        try:
+            pod = call("GET", f"/pods/{pod_id}")
+        except (SystemExit, OSError) as error:     # a network blip must not end the guard; time keeps accruing below
+            log(f"status call failed, retrying next minute: {str(error)[:120]}")
+            pod = {"desiredStatus": "RUNNING", "costPerHr": state["cost_per_hr"]}
         now = time.time()
         rate = float(pod.get("costPerHr") or state["cost_per_hr"])
         running = pod.get("desiredStatus") == "RUNNING"
@@ -61,14 +65,15 @@ def main() -> int:
         util, busy_age = probe(args.ssh)
         working = (util is not None and util >= 5) or (busy_age is not None and busy_age < 300)
         idle_since = None if working or util is None else (idle_since or now)
-        if cost >= args.cap:
-            log(f"budget cap reached at {cost:.2f}; stopping pod")
-            call("POST", f"/pods/{pod_id}/stop")
-            return 2
-        if idle_since and now - idle_since >= args.idle_min * 60:
-            log(f"idle {args.idle_min} min at {cost:.2f}; stopping pod")
-            call("POST", f"/pods/{pod_id}/stop")
-            return 3
+        for reason, hit, code in ((f"budget cap reached at {cost:.2f}", cost >= args.cap, 2),
+                                  (f"idle {args.idle_min} min at {cost:.2f}", bool(idle_since and now - idle_since >= args.idle_min * 60), 3)):
+            if hit:
+                log(f"{reason}; stopping pod")
+                try:
+                    call("POST", f"/pods/{pod_id}/stop")
+                    return code
+                except (SystemExit, OSError) as error:
+                    log(f"stop call failed, retrying next minute: {str(error)[:120]}")
 
 
 if __name__ == "__main__":
