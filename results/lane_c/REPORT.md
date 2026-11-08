@@ -27,6 +27,11 @@ other note.** The maximum of a 16-token sliding mean of delta over floor lands w
 seeds (median 1 token after it). Over the first 256 reply tokens, the same length in every branch, the count of tokens above
 10 times the floor separates leak from benign_k1, both proposal branches and none at AUROC 1.00 and from benign_k3 at 0.96.
 
+**The plateau count measures reliance on the note, not exposure.** Exposed agents who did not use the leak score like agents
+reading a harmless note (count 0.49, window 0.43, verdict turns), while the users separate from them in the same branch (0.83 on
+the count, 0.94 on the window). Direction scores along the reply, drift from the exposure signature and the component orthogonal
+to it, add nothing beyond the plateau's size, so the direction is attribution only.
+
 **The direction says which note was read, not whether it was used.** At the location the trace finds, the surplus direction's
 nearest note signature separates the leak from benign_k1 at 0.98 to 1.00. But exposed agents who did not use the leak score
 0.93 against benign_k1 on the direction source score at their response start (claim 3, 30 pairs, mid band), while surplus mass (0.51), lens naming (0.49 to
@@ -114,7 +119,7 @@ found-location composition), `scripts/pod/run_lane_c_stages.sh`, `run_lane_c_ver
 | Final readout, direction test, content and source, claim 3 | done 17:34 | |
 | Compacted reference | not run | dropped by the lead session's decision. The 32B pod measured it, and matched-branch comparisons are within one model |
 | Placebo on the verdict turns | not run | asked for the blind agent's turns only |
-| Per-token trace for the exposed non-users | not run | only the blind agent's solve turns carry a trace, so the position-blind score is not tested on non-users |
+| Per-token trace for the exposed non-users | done 18:44 | verdict turns of users and non-users in leak and benign_k1, on a third pod; their solve turns are not traced |
 
 ## Floor
 
@@ -434,6 +439,52 @@ by length, and a longer benign reply has more tokens that could cross the thresh
 placebo reference the same scores sit far lower in every branch (window 3.2 against 6.9) and do not favour the leak (0.12 to
 0.28), so the plateau belongs to the note.
 
+### Uptake or engagement: users against exposed non-users
+
+`scripts/lane_c_users.py`, on a third pod (the first two could not restart, their hosts had no free GPU). Every free agent's
+verdict turn of episode 2 in leak and benign_k1 with a peer note masked, 110 turns: the blind agent (`user`, it used the leak at
+its solve turn), the four other free agents of the leak branch (`non-user`, exposed to the leak and not using it), and the leak's
+author where it is a free reader in benign_k1 (so every note signature has all its readers). Every reply token in an actual and
+a kept-reference pass on the explicit 4D-mask kernel, delta over the stage-1 floor averaged over L16 to L38, scored over the
+first 256 reply tokens. Direction scores use the note's exposure signature, the mean unit surplus direction at `first_generated`
+of the other readers of that note in that seed: `drift min` is the lowest 16-token sliding mean of cos(d_t, signature),
+`cos at plateau` its mean over the window the plateau score picks, and `orthogonal` and `parallel` the norms of d off and along
+the signature there, over the reference norm, over the floor. Drift and cosine are scored negated, so a high AUROC means users
+point away from the signature. Ten users, 40 non-users in leak, 30 matched non-users in benign_k1. Data in
+`results/lane_c/users.json`.
+
+| Score | Users against non-users, leak branch (medians) | Non-users, leak against benign_k1, matched (medians) | Users, leak against benign_k1, matched (medians) |
+| --- | --- | --- | --- |
+| first256 count | 0.83 (12 / 3) | 0.49, 13/30 (3 / 3) | 0.79, 10/10 (12 / 5.5) |
+| window 16 | 0.94 (8.37 / 5.19) | 0.43, 12/30 (5.32 / 5.6) | 0.69, 7/10 (8.37 / 6.11) |
+| drift min | late | 0.64 (-0.00629 / -0.00606) | 0.35, 11/30 (-0.00629 / -0.00805) | 0.69, 8/10 (-0.00629 / -0.0051) |
+| cos at plateau | late | 0.66 (-0.000295 / 0.00341) | 0.43, 12/30 (0.0039 / 0.00223) | 0.69, 9/10 (-0.000295 / 0.00354) |
+| orthogonal | late | 0.86 (9.77 / 6.12) | 0.46, 12/30 (6.36 / 6.65) | 0.61, 6/10 (9.77 / 8.18) |
+| parallel | late | 0.83 (0.145 / 0.0899) | 0.45, 10/30 (0.0899 / 0.107) | 0.60, 5/10 (0.145 / 0.134) |
+| drift min | mid | 0.71 (0.00622 / 0.0179) | 0.79, 25/30 (0.0174 / 0.033) | 0.96, 10/10 (0.00622 / 0.0478) |
+| cos at plateau | mid | 0.70 (0.0327 / 0.0642) | 0.61, 18/30 (0.0595 / 0.0783) | 0.71, 8/10 (0.0327 / 0.0737) |
+| orthogonal | mid | 0.83 (3.48 / 2.5) | 0.32, 8/30 (2.56 / 3.27) | 0.59, 5/10 (3.48 / 3.51) |
+| parallel | mid | 0.48 (0.146 / 0.193) | 0.35, 9/30 (0.17 / 0.263) | 0.39, 3/10 (0.146 / 0.23) |
+
+**The count measures reliance on the note, not exposure to it.** Exposed non-users in the leak branch look exactly like the same
+agents reading a harmless note: a median 3 tokens above 10 times the floor in both, AUROC 0.49 (window 0.43). Users separate from
+those non-users in the same branch, 0.83 on the count (12 against 3) and 0.94 on the 16-token window, even at their verdict turn,
+a turn after the uptake. On the solve turn, where the uptake happens, the users' count is a median 110 (stage 1). So the plateau is
+not engagement with any peer content; it appears when the agent's own text depends on the masked note. One caveat: the non-users
+were traced on verdict turns only, so the cleanest version of the test, a non-user's solve turn, is not in this set.
+
+**The direction is attribution only.** Drift from the exposure signature separates users from non-users weakly (0.64 late, 0.71
+mid), and at the mid band it also separates non-users by note (0.79), so it reads the note's identity. Cosines with the exposure
+signature are close to zero for everyone at the plateau, users and non-users alike (late band, median -0.0003 and 0.0034), so the
+earlier near-zero cosine at uptake is not a mechanism statement: the response-start exposure signature does not describe any
+agent's later tokens. The exposure-orthogonal component separates users at 0.86, but the parallel one does too (0.83), and the
+plateau height alone does better (0.94). The orthogonal norm is the plateau's size, not uptake living off the exposure direction.
+So uptake is carried by the plateau count and by the content readouts at the copy (the lens at `mention_pre`), and the direction
+tells which note was read.
+
+The planted answer's first-mention location cannot be used to place the non-users' plateaus: only 2 of 40 non-users write the
+answer as a whole word in their verdict reasoning, both in seed 3009, where the answer is the single digit 7.
+
 ### The position-blind pipeline end to end
 
 `scripts/lane_c_found.py`. For the blind agent in leak, benign_k1, proposal_k1 and none, the 16- and 32-token window maximum of
@@ -729,9 +780,11 @@ Reading the claims.
 | --- | --- | --- | --- | --- | --- | --- | --- |
 | `c61tivxdev57zx` (swarm-lane-c), US-MD-1 | A100 SXM 80 GB | 1.79 USD/h | 14:56 | 17:37 | 2.68 | 4.79 USD | 3.12 USD |
 | `vdy3bwywehd7rv` (swarm-lane-c-2), US-KS-2 | A100 SXM 80 GB | 1.79 USD/h | 16:10 | 17:31 | 1.36 | 2.43 USD | 0.90 USD |
-| Total | | | | | 4.04 | 7.22 USD | 4.02 USD (billing lags about an hour) |
+| `zixy8tw94dl2xd` (swarm-lane-c-3), US-KS-2, for the non-user job | A100 SXM 80 GB | 1.79 USD/h | 17:53 | 18:45 | 0.87 | 1.55 USD | not yet billed |
+| Total | | | | | 4.91 | 8.77 USD | 4.02 USD (billing lags about an hour) |
 
-Budget 10 USD, raised to 16 by the lead session. Both pods are stopped, not terminated. Their volumes (150 GB and 100 GB) keep
+Budget 10 USD, raised to 16 by the lead session, plus 3 USD for the non-user job. All three pods are stopped, not terminated.
+The third pod's 60 GB volume holds the non-user arrays (`/workspace/swarm/data/replay_14b/users`). Their volumes (150 GB and 100 GB) keep
 billing storage while stopped, about 0.07 USD an hour together at RunPod's rate for stopped volumes. Pod 1's volume holds the
 replayed arrays (`/workspace/swarm/data/replay_14b/blind` and `verdict`, about 20 GB) and the superseded part A turns.
 `data/replay_14b/` on the Mac holds no arrays, because after a Wi-Fi switch the Mac's link ran at about 20 KB/s.
@@ -748,5 +801,7 @@ replayed arrays (`/workspace/swarm/data/replay_14b/blind` and `verdict`, about 2
 - After the Mac's network dropped, pod 2's verdict data could not be relayed through the Mac. Pod 1 pulled it straight from
   pod 2 with a throwaway key made for that one copy, removed from both pods afterwards. The Mac-side watchdogs also died on the
   network error; pod 1's was restarted, and both pods' on-pod deadman guards stayed up throughout.
-- The window scores, the found-location composition and the trace exist for the blind agent only. The exposed non-users have
-  no trace, so the position-blind score is untested on exposure without uptake. That is the open check.
+- Neither stopped pod could restart for the non-user job (no free GPU on either host for ten minutes), so a third pod ran it
+  from a slim upload of the 110 turns it needs, since the Mac's link could not carry `runs/sweep14b`.
+- The non-users are traced on verdict turns only. A non-user's solve turn, where the users' uptake happens, is the remaining
+  check on the count.
