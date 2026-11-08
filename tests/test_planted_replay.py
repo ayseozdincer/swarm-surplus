@@ -248,6 +248,34 @@ def test_replay_on_a_tiny_model():
         assert leak_row["derived first"]["delta | first_generated"] > leak_row["declared first"]["delta | first_generated"]
         assert leak_row["masked_tokens"] > 0 and leak_row["used"] and rows[(f"seed{seeds[0]}", "none")]["masked_tokens"] == 0
 
+        # the pod's entry points, with the model loader and the lens swapped for these
+        import gpu_planted_check
+        from detector import jspace
+        replay.load_model = lambda: (model, tok)
+        jspace.Lens = lambda *a, **k: lens
+        again = Path(td)/"replay_cli"
+
+        def clear_hooks():   # each entry point makes its own Capture; a process on the pod has one
+            for layer in model.model.layers:
+                layer._forward_hooks.clear()
+
+        clear_hooks()
+        argv, sys.argv = sys.argv, ["replay_planted.py", str(runs), "--out-root", str(again), "--seeds", f"seed{seeds[0]}"]
+        try:
+            assert replay_planted.main() == 0
+        finally:
+            sys.argv = argv
+        assert sorted(p.name for p in (again/"exp"/f"seed{seeds[0]}").iterdir()) == sorted(BRANCHES)
+        clear_hooks()
+        check_path = Path(td)/"check.json"
+        argv, sys.argv = sys.argv, ["gpu_planted_check.py", str(runs/f"seed{seeds[0]}"/"leak"), str(check_path)]
+        try:
+            assert gpu_planted_check.main() == 0
+        finally:
+            sys.argv = argv
+        check = json.loads(check_path.read_text())
+        assert check["worst_swap_leak"] < 1e-3 and check["line_tokens"] > 0 and len(check["by_layer"]) == 39
+
 
 if __name__ == "__main__":
     for name, fn in list(globals().items()):
