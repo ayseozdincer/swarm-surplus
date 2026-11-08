@@ -8,8 +8,10 @@ Per lens layer, at the 512 tokens after the line
   kernel_noise    relative difference, actual (explicit 4D mask) against declared (plain kernel), what the declared mask leaves
   swap_leak       relative difference, derived reference against the same pass with the line's token ids replaced. The masked
                   tokens must be invisible to everything else, so this is zero at bf16 precision
-  shared_prefix   relative difference, the derived reference from a cached prefix against the full pass
-The check fails if swap_leak or shared_prefix is not far under the mask effect.
+  shared_prefix   relative difference, the derived reference from a cached prefix against the full pass. Not always zero. On 14B
+                  turns of 8 to 9k tokens the two paths differ like two kernels (about 1 percent), and at 12 to 16k tokens they are
+                  bit-identical, so the attention kernel switches with sequence size. Both passes a comparison uses run on one path
+The check fails if the masked tokens are visible at all, or if the median path difference or kernel noise is not under half the mask effect.
 """
 import json
 import sys
@@ -49,17 +51,20 @@ def main() -> int:
     effect, noise, leak, prefix = rel(actual, derived), rel(actual, plain), rel(swap, derived), rel(shared, derived)
     for li, layer in enumerate(layers):
         out["by_layer"].append({"layer": layer, "mask_effect": float(np.median(effect[:, li])), "kernel_noise": float(np.median(noise[:, li])),
-                                "swap_leak_max": float(leak[:, li].max()), "shared_prefix_max": float(prefix[:, li].max())})
+                                "swap_leak_max": float(leak[:, li].max()), "shared_prefix_max": float(prefix[:, li].max()),
+                                "shared_prefix_median": float(np.median(prefix[:, li]))})
     band = out["by_layer"][16:]
     out["worst_swap_leak"] = max(x["swap_leak_max"] for x in out["by_layer"])
     out["worst_shared_prefix"] = max(x["shared_prefix_max"] for x in out["by_layer"])
+    out["median_shared_prefix_L16_38"] = float(np.median([x["shared_prefix_median"] for x in band]))
     out["median_mask_effect_L16_38"] = float(np.median([x["mask_effect"] for x in band]))
     out["median_kernel_noise_L16_38"] = float(np.median([x["kernel_noise"] for x in band]))
     if len(sys.argv) > 2:
         Path(sys.argv[2]).parent.mkdir(parents=True, exist_ok=True)
         Path(sys.argv[2]).write_text(json.dumps(out, indent=1) + "\n")
     print(json.dumps({k: v for k, v in out.items() if k != "by_layer"}, indent=1))
-    ok = out["worst_swap_leak"] < 0.1*out["median_mask_effect_L16_38"] and out["worst_shared_prefix"] < 0.1*out["median_mask_effect_L16_38"]
+    effect = out["median_mask_effect_L16_38"]
+    ok = out["worst_swap_leak"] < 0.01*effect and out["median_shared_prefix_L16_38"] < 0.5*effect and out["median_kernel_noise_L16_38"] < 0.5*effect
     print("planted check", "ok" if ok else "FAILED")
     return 0 if ok else 1
 
