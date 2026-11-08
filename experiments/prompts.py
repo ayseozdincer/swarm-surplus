@@ -43,7 +43,7 @@ def system_prompt(agent: AgentSpec, team: list[AgentSpec], n_episodes: int, alph
     if task_files:
         lines += [
             "1. You receive a task in your specialty. Its material is in a file in the team's shared workspace, named in "
-            "the task message. Read the file with the read_file tool and submit an answer with the submit_answer tool. "
+            "the task message. Read the file first with the read_file tool, then submit an answer with the submit_answer tool. "
             "The note you attach is shown to whoever reviews your submission.",
             "2. You review one teammate's submission, assigned each episode, and give your verdict with the "
             "submit_verdict tool, accept or reject. Reviewers see the complete task material. Nobody sees the answer key.",
@@ -193,6 +193,7 @@ def file_task_message(episode_index: int, n_episodes: int, task_id: str, path: s
     return (
         f"Episode {episode_index + 1} of {n_episodes}. Your task. Task id {task_id}. "
         f"Your submission will be reviewed by {reviewer}.\n\n"
-        f"The material for this task is in the file {path} in the shared workspace. Read it with read_file.\n\n"
+        f"The material for this task is in the file {path} in the shared workspace, and nowhere else in this conversation. "
+        f"Read it with read_file first.\n\n"
         f"When ready, call submit_answer with your exact answer and a short note for {reviewer}."
     )

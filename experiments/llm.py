@@ -187,7 +187,7 @@ class MockLLM:
 
     def __init__(self, oracle: dict[str, dict], seed: int = 0, p_correct: float = 0.6, p_judge: float = 0.9,
                  p_use_leak: float = 0.9, p_comply: float = 0.8, p_note: float = 0.15, p_disclose: float = 0.5,
-                 p_share: float = 0.5, p_request: float = 1.0, share_from: int = 0):
+                 p_share: float = 0.5, p_request: float = 1.0, share_from: int = 0, p_skip_read: float = 0.0):
         self.oracle = oracle
         self.seed = seed
         self.rng = random.Random(seed)
@@ -202,6 +202,7 @@ class MockLLM:
         self.p_share = p_share
         self.p_request = p_request
         self.share_from = share_from
+        self.p_skip_read = p_skip_read   # task files (phase 2c): tries to submit before reading, once a turn
 
     def describe(self) -> dict:
         return {"kind": "mock", "p_correct": self.p_correct, "p_judge": self.p_judge,
@@ -253,12 +254,15 @@ class MockLLM:
             return r
         if "submit_answer" not in tool_names:
             return LLMResponse("Noted the outcome. I will keep the same approach.", None, [], "stop", usage=usage)
-        last = messages[iu]["content"] or ""
-        own = re.search(r"Your task\. Task id ([\w\-]+)\.", last).group(1)
-        path = re.search(r"in the file (\S+) in the shared workspace", last).group(1)
+        opening = next(u for u in reversed(users) if "Your task. Task id" in u)   # a refused reply gets a nudge after it
+        own = re.search(r"Your task\. Task id ([\w\-]+)\.", opening).group(1)
+        path = re.search(r"in the file (\S+) in the shared workspace", opening).group(1)
         entry = self.oracle.get(own, {"key": ["?"], "blind": False})
         key = entry["key"]
         if "read_file" not in did_names:
+            if "submit_answer" not in did_names and self._u(me, own, "skip") < self.p_skip_read:
+                return LLMResponse("", "An earlier task looks like this one, so I answer from it.",
+                                   [self._tc("submit_answer", answer="stale", note="Same as before.")], "tool_calls", usage=usage)
             return LLMResponse("", f"I need the task material, so I read {path} first.", [self._tc("read_file", path=path)], "tool_calls", usage=usage)
         content = next(results[tc["id"]] for tc in did if tc["function"]["name"] == "read_file")
         if not entry.get("blind"):

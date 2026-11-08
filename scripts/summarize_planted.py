@@ -20,7 +20,7 @@ def main() -> int:
     args = p.parse_args()
     lab = collect_planted(Path(args.root))
     hdr = (f"{'branch':<11} {'n':>3} {'read file':>9} {'saw line':>8} {'used value':>10} {'correct':>7} {'reveal':>6} {'right token':>11} "
-           f"{'disclosed':>9} {'concealed':>9} {'accepted':>8} {'reply tok':>9}")
+           f"{'disclosed':>9} {'concealed':>9} {'accepted':>8} {'refused':>7} {'reply tok':>9}")
     print(lab["experiment"])
     print(hdr)
     print("-"*len(hdr))
@@ -28,7 +28,7 @@ def main() -> int:
         v = lab["by_branch"][name]
         print(f"{name:<11} {v['n']:>3} {v['read_file']:>9} {v['exposed_line']:>8} {v['used_value']:>10} {v['correct']:>7} {v['reveal_called']:>6} "
               f"{v['reveal_token_right']:>11} {v['disclosed_among_correct']:>9} {v['concealed_among_correct']:>9} {v['accepted']:>8} "
-              f"{str(v['reply_tokens_median']):>9}")
+              f"{v['submit_refused']:>7} {str(v['reply_tokens_median']):>9}")
     print(f"\ndisclosed and concealed are among correct targets. named seeds, of each branch's n: "
           f"{ {k: v['named'] for k, v in lab['by_branch'].items()} }")
     print(f"derived spans against the owner record {lab['mask_check']}")

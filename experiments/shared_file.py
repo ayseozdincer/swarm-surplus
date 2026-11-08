@@ -145,7 +145,7 @@ class SharedFileRunner(SwarmRunner):
                     required: str | None, must: bool) -> dict:
         c = self.state.contexts[agent]
         out = {"submitted": None, "synthesized": False, "content": "", "reasoning": [], "finish": [], "completion_tokens": [],
-               "steps": 0, "ws_calls": {t: 0 for t in WORKSPACE_TOOLS}, "submit_call_seq": None}
+               "steps": 0, "ws_calls": {t: 0 for t in WORKSPACE_TOOLS}, "submit_call_seq": None, "refused": 0}
         max_steps = max(1, self.cfg.max_tool_steps)
         for step in range(max_steps):
             last = step == max_steps - 1
@@ -163,6 +163,14 @@ class SharedFileRunner(SwarmRunner):
             names = [tc.name for tc in calls]
             ws_calls = [tc for tc in calls if tc.name in self.loop_tools]
             synthesized = False
+            # checked before this reply's tool calls run, so a read in the same reply as the submission does not count
+            gate = self._submit_gate(agent, ep) if required and must and not last else None
+            if gate and required not in names and not ws_calls:
+                c.add(Message("assistant", resp.content if resp.content else None, provenance="self", episode_index=ep, phase=phase,
+                              reasoning=resp.reasoning, round=rnd, step=step))
+                c.add(Message("user", gate, provenance="designer", episode_index=ep, phase=phase, round=rnd, step=step))
+                out["refused"] += 1
+                continue
             if must and required and required not in names and (not ws_calls or last):
                 tc = self._synthesize(required, resp.content)
                 if tc is not None:
@@ -195,7 +203,11 @@ class SharedFileRunner(SwarmRunner):
                 if tc.name in self.loop_tools and tc.name in offered_names:
                     c.add(Message("tool", self._other_tool(agent, tc, where), **kw))
                     continue
-                if tc.name == required and tc.name in offered_names and out["submitted"] is None:
+                if tc.name == required and gate:
+                    self.ws.log_event(agent, f"{tc.name}_refused", dict(tc.arguments), ok=False, **where)
+                    out["refused"] += 1
+                    result = gate
+                elif tc.name == required and tc.name in offered_names and out["submitted"] is None:
                     out["submitted"] = tc
                     out["synthesized"] = synthesized and tc is calls[-1]
                     out["submit_call_seq"] = resp.seq
@@ -208,12 +220,17 @@ class SharedFileRunner(SwarmRunner):
                 else:
                     result = f"Unknown tool {tc.name}."
                 c.add(Message("tool", result, **kw))
-            if out["submitted"] is not None or not ws_calls:
+            if out["submitted"] is not None or not (ws_calls or gate):
                 break
         self.turns.append({"agent": agent, "episode_index": ep, "phase": phase, "round": rnd, "steps": out["steps"],
                            "submitted": out["submitted"] is not None, "synthesized": out["synthesized"],
                            "ws_calls": out["ws_calls"], "finish": out["finish"]})
         return out
+
+    def _submit_gate(self, agent: str, ep: int) -> str | None:
+        """What to answer instead of recording a submission the turn is not ready for, or None. Never applied to a turn's last
+        call, so a turn always ends with a submission."""
+        return None
 
     def _other_tool(self, agent: str, tc: ToolCall, where: dict) -> str:
         """A loop tool that is not one of the workspace's. Subclasses that add one answer it here."""
@@ -347,6 +364,7 @@ class SharedFileRunner(SwarmRunner):
                 "strict_wrong": scored[a]["strict_wrong"],
                 "reviewed_submission_correct": sub_correct[reviewed_by[a]],
                 "ws_calls": ws_calls,
+                "submit_refused": sum(o["refused"] for o in rounds_used[a]),
                 "reply_tokens_by_step": [n for o in rounds_used[a] for n in o["completion_tokens"]],
                 "reply_tokens": (sum(n for o in rounds_used[a] for n in o["completion_tokens"] if n is not None)
                                  if any(n is not None for o in rounds_used[a] for n in o["completion_tokens"]) else None),
