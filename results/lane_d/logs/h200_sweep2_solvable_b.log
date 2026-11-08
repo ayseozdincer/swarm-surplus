@@ -1,0 +1,2 @@
+1 seeds x 3 variants (none, leak_solvable, leak_solvable_wrong), 6 agents, warmup 2, post 1, concurrency 5
+norm mild, rules none, leak phrasing varied, leak address broadcast
