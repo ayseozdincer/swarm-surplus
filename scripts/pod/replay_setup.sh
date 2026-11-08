@@ -4,7 +4,7 @@
 set -euo pipefail
 mkdir -p /workspace/logs /root/artifacts
 pip install -q --break-system-packages "huggingface_hub[hf_xet]" uv
-nvidia-smi | grep -q "CUDA Version: 13" || DEBIAN_FRONTEND=noninteractive apt-get install -y -qq cuda-compat-13-0
+[[ "$(nvidia-smi)" == *"CUDA Version: 13"* ]] || DEBIAN_FRONTEND=noninteractive apt-get install -y -qq cuda-compat-13-0
 HF_HOME=/root/hf python3 -c "from huggingface_hub import snapshot_download; print(snapshot_download('Qwen/Qwen3-14B'))"
 ln -sfn "$(ls -d /root/hf/hub/models--Qwen--Qwen3-14B/snapshots/*)" /root/artifacts/qwen3_14b
 python3 -c "

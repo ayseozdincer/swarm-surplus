@@ -84,6 +84,7 @@ class Capture:
         for layer in self.layers:
             self.handles.append(model.model.layers[layer].register_forward_hook(self._hook(layer)))
         self.index = None
+        self.trace_from, self.traced = None, {}
 
     def _hook(self, layer):
         def hook(_module, _inputs, output):
@@ -91,7 +92,14 @@ class Capture:
                 return
             h = output[0] if isinstance(output, tuple) else output
             self.saved[layer] = h[0, self.index].float().cpu()
+            if self.trace_from is not None:
+                self.traced[layer] = h[0, self.trace_from:].detach().clone()
         return hook
+
+    def trace(self):
+        """[tokens, layers, d_model] residuals of the traced range from the last pass, on the GPU, in the model dtype."""
+        import torch
+        return torch.stack([self.traced[layer] for layer in self.layers], dim=1)
 
     def run(self, model, ids, positions, mask=None, position_ids=None):
         import torch
@@ -131,29 +139,90 @@ class Capture:
         return torch.stack([self.saved[layer] for layer in self.layers], dim=1)
 
 
-def replay_turn(model, tokenizer, capture, turn, lens, out_path, shared_prefix=False, compacted=False, mentions=None):
+SHUFFLE_DEFAULT_LEN = 64     # the shuffled span's length on a turn with no peer span to match
+TRACE_LAYERS = (18, 34)      # layers whose per-token surplus direction the trace keeps; deltas are kept at every layer
+
+
+def shuffled_span(tokenizer, turn: dict, r: dict, length: int, seed: int) -> tuple[int, int] | None:
+    """A random run of `length` sanctioned tokens inside the turn's last designer or environment message (its task or
+    verdict prompt), drawn with a fixed seed; None when that message is shorter than `length`."""
+    import random
+    messages, meta = turn["messages"], turn["message_meta"]
+    last = max((i for i, m in enumerate(meta) if m["provenance"] in ("designer", "environment") and messages[i]["role"] == "user"), default=None)
+    if last is None:
+        return None
+    upto = tokenizer.apply_chat_template(messages[:last + 1], tools=turn["tools"], tokenize=False, add_generation_prompt=False)
+    start_char = upto.rfind("<|im_start|>user\n") + len("<|im_start|>user\n")
+    offsets = tokenizer(r["text"], add_special_tokens=False, return_offsets_mapping=True)["offset_mapping"]
+    first = next(i for i, (a, b) in enumerate(offsets) if b > start_char)
+    last_token = next((i for i, (a, b) in enumerate(offsets) if a >= len(upto) - len("<|im_end|>\n")), len(offsets))
+    if last_token - first < length:
+        return None
+    start = random.Random(seed).randrange(first, last_token - length + 1)
+    return start, start + length
+
+
+def replay_turn(model, tokenizer, capture, turn, lens, out_path, shared_prefix=False, compacted=False, mentions=None,
+                shuffled=False, trace=False):
+    """shuffled adds a reference that masks a random sanctioned span as long as the turn's peer spans (shuffled_span).
+    trace keeps, for every token of the reply, the relative surplus per layer against each reference and the surplus
+    direction at TRACE_LAYERS, from the same passes."""
+    import torch
     r = render_turn(tokenizer, turn, mentions)
     names = list(r["positions"])
     positions = [r["positions"][n] for n in names]
     started = time.perf_counter()
     masked = bool(r["peer_token_spans"])
-    split = min(a for a, _ in r["peer_token_spans"]) if masked and shared_prefix else 0
-    passes = {}
+    shuffle = None
+    if shuffled:
+        length = (len(r["mask"]) - sum(r["mask"])) or SHUFFLE_DEFAULT_LEN
+        seed = int.from_bytes(f"{turn['agent']}|{turn['episode_index']}|{turn['phase']}|{out_path.parent}".encode()[-64:], "little") % 2**32
+        shuffle = shuffled_span(tokenizer, turn, r, length, seed)
+    keep_shuffled = None
+    if shuffle:
+        keep_shuffled = [1]*len(r["ids"])
+        keep_shuffled[shuffle[0]:shuffle[1]] = [0]*(shuffle[1] - shuffle[0])
+    starts = ([min(a for a, _ in r["peer_token_spans"])] if masked else []) + ([shuffle[0]] if shuffle else [])
+    split = min(starts) if starts and shared_prefix else 0
+    capture.trace_from = r["prompt_tokens"] - split if trace else None
+    passes, traces = {}, {}
     if split:
         cache = capture.prefix(model, r["ids"][:split])
         passes["actual"] = capture.run_suffix(model, cache, r["ids"], split, positions)
-        passes["reference"] = capture.run_suffix(model, cache, r["ids"], split, positions, r["mask"])
-        if compacted:
+        traces["actual"] = capture.trace() if trace else None
+        if masked:
+            passes["reference"] = capture.run_suffix(model, cache, r["ids"], split, positions, r["mask"])
+            traces["reference"] = capture.trace() if trace else None
+        if shuffle:
+            passes["shuffled"] = capture.run_suffix(model, cache, r["ids"], split, positions, keep_shuffled)
+            traces["shuffled"] = capture.trace() if trace else None
+        if compacted and masked:
             passes["compacted"] = capture.run_suffix(model, cache, r["ids"], split, positions, r["mask"], compacted_positions(r["mask"]))
         del cache
-    else:
+    capture.trace_from = r["prompt_tokens"] if trace else None
+    if "actual" not in passes:
         passes["actual"] = capture.run(model, r["ids"], positions, attention_mask_4d(len(r["ids"])))
+        traces["actual"] = capture.trace() if trace else None
+    if "reference" not in passes:
         passes["reference"] = capture.run(model, r["ids"], positions, attention_mask_4d(len(r["ids"]), r["mask"]) if masked else None)
-        if compacted:
-            passes["compacted"] = (capture.run(model, r["ids"], positions, attention_mask_4d(len(r["ids"]), r["mask"]),
-                                               compacted_positions(r["mask"])) if masked else passes["reference"])
+        traces["reference"] = capture.trace() if trace else None
+    if compacted and "compacted" not in passes:
+        passes["compacted"] = (capture.run(model, r["ids"], positions, attention_mask_4d(len(r["ids"]), r["mask"]),
+                                           compacted_positions(r["mask"])) if masked else passes["reference"])
+    capture.trace_from, capture.traced = None, {}
     actual, reference = passes["actual"], passes["reference"]
     arrays = {label: H.numpy() for label, H in passes.items()}
+    if trace:
+        A = traces["actual"].float()
+        arrays["trace_actual_norm"] = torch.linalg.vector_norm(A, dim=-1).cpu().numpy().astype(np.float32)
+        trace_layers = [capture.layers.index(l) for l in TRACE_LAYERS if l in capture.layers]
+        for label in ("reference", "shuffled"):
+            if traces.get(label) is None:
+                continue
+            D = A - traces[label].float()
+            arrays[f"trace_delta_{label}"] = (torch.linalg.vector_norm(D, dim=-1)/torch.linalg.vector_norm(A, dim=-1)).cpu().numpy().astype(np.float32)
+            arrays[f"trace_d_{label}"] = D[:, trace_layers].cpu().numpy().astype(np.float16)
+        del A, D, traces
     for label, H in passes.items():
         ids = np.zeros((len(names), len(capture.layers), 10), dtype=np.int32)
         logits = np.zeros((len(names), len(capture.layers), 10), dtype=np.float32)
@@ -166,7 +235,8 @@ def replay_turn(model, tokenizer, capture, turn, lens, out_path, shared_prefix=F
     return {"agent": turn["agent"], "episode_index": turn["episode_index"], "phase": turn["phase"], "file": out_path.name,
             "tokens": len(r["ids"]), "prompt_tokens": r["prompt_tokens"], "masked_tokens": len(r["mask"]) - sum(r["mask"]),
             "reference_kind": "masked" if masked else "plain_kernel", "shared_prefix_tokens": split,
-            "passes": list(passes),
+            "passes": list(passes), "shuffled_span": shuffle, "trace_from": r["prompt_tokens"] if trace else None,
+            "trace_layers": list(TRACE_LAYERS) if trace else None,
             "peer_token_spans": r["peer_token_spans"], "positions": dict(zip(names, positions)),
             "position_tokens": {n: tokenizer.decode([r["ids"][p]]) for n, p in zip(names, positions)},
             "position_token_ids": {n: r["ids"][p] for n, p in zip(names, positions)},

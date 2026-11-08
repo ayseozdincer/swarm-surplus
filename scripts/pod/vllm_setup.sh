@@ -16,7 +16,7 @@ for f in ['Qwen3-14B_jacobian_lens.pt', 'config.yaml', 'Qwen3-14B_convergence.cs
                           revision='b87d2a42d715f50e3a8359d9c29ccdd5514509d2', local_dir='/root/artifacts/lens_candidate'))"
 # vLLM 0.33 needs torch 2.14, built for CUDA 12.6 or 13.0 only; on a host driver older than CUDA 13 the cu130 build
 # runs through the forward compatibility libraries (datacenter GPUs), see vllm_serve.sh
-nvidia-smi | grep -q "CUDA Version: 13" || DEBIAN_FRONTEND=noninteractive apt-get install -y -qq cuda-compat-13-0
+[[ "$(nvidia-smi)" == *"CUDA Version: 13"* ]] || DEBIAN_FRONTEND=noninteractive apt-get install -y -qq cuda-compat-13-0
 [ -x /root/vllm-venv/bin/python ] || uv venv -q /root/vllm-venv --python 3.12
 VIRTUAL_ENV=/root/vllm-venv uv pip install -q vllm==0.33.0 openai ninja pyyaml scipy scikit-learn accelerate==1.15.0
 # jlens at the J-space repo's pin, without letting it touch vLLM's torch
