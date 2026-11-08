@@ -28,6 +28,7 @@ sys.path[:0] = [str(ROOT), str(ROOT/"third_party/maj-lens"), str(ROOT/"scripts")
 from replay import LENS_LAYERS, MODEL_DIR  # noqa: E402
 
 WINDOWS = (8, 16, 32)
+FIRST = 256
 BANDS = {"L16-38": list(range(16, 39)), "all": list(LENS_LAYERS)}
 BRANCHES = ("leak", "benign_k1", "none")
 MARKERS = ("first_generated", "after_think", "mention_pre", "answer_pre")
@@ -82,6 +83,15 @@ def main() -> int:
                     series = ratio[:, layers].mean(1)
                     cell[f"{kind} {band} above 10"] = float((series > 10).mean())
                     cell[f"{kind} {band} count above 10"] = int((series > 10).sum())
+                    cell[f"{kind} {band} p90"] = float(np.percentile(series, 90))
+                    cell[f"{kind} {band} median"] = float(np.median(series))
+                    # the same over the first FIRST reply tokens only, the same length in every branch, against the
+                    # reply-length confound (the shortest leak reply has 265 tokens)
+                    head = series[:FIRST]
+                    cell[f"{kind} {band} first{FIRST} p90"] = float(np.percentile(head, 90))
+                    cell[f"{kind} {band} first{FIRST} median"] = float(np.median(head))
+                    cell[f"{kind} {band} first{FIRST} count above 10"] = int((head > 10).sum())
+                    cell[f"{kind} {band} first{FIRST} window 16"] = window_max(head, 16)[0]
                     for w in WINDOWS:
                         value, centre = window_max(series, w)
                         cell[f"{kind} {band} window {w}"] = value
@@ -89,7 +99,8 @@ def main() -> int:
                         if mention is not None:
                             cell[f"{kind} {band} window {w} centre - mention"] = centre - mention
             scores[seed][branch] = cell
-    keys = [k for k in next(iter(scores.values()))["leak"] if (" window " in k and not k.endswith(("centre", "mention"))) or k.endswith("above 10")]
+    keys = [k for k in next(iter(scores.values()))["leak"] if (" window " in k and not k.endswith(("centre", "mention")))
+            or k.endswith(("above 10", "p90", "median"))]
     keys.append("reply tokens, negated")
     for branches in scores.values():
         for cell in branches.values():
