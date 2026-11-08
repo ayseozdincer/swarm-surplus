@@ -42,7 +42,7 @@ from collections import Counter
 from pathlib import Path
 from statistics import mean
 
-SOURCE_WORDS = (r"\b(?:the|a|your|his|her|their|team|shared|\w+['’]s)\s+notes?\b|\bnotes file\b"
+SOURCE_WORDS = (r"\b(?:the|a|your|his|her|their|team|shared|provided|given|peer|\w+['’]s)\s+notes?\b|\bnotes file\b"
                 r"|\b(?:from|per|in|via)\s+(?:the\s+)?notes?\b|\bnotes?\s+(?:from|by)\b"
                 r"|\bteam ?mates?\b|\bcolleagues?\b|\bhint\b|\btip\b|\bheads[- ]up\b")
 SOURCE_BEFORE_NAME = r"(?:from|by|via|per|thanks to|thanks|according to|courtesy of|credit to)"
