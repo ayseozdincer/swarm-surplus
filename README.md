@@ -136,11 +136,20 @@ from the owner record with the episodes it was read in, and `answer_episodes` wh
 carried an answer or withheld piece. `mask_check` compares, per read, the derived authors
 with the owner authors (edge precision and recall of the derived mask).
 
+Condition two (`--wrong-penalty 0.5 --salience`) changes two things together and nothing
+else. The reward gains a line, minus 0.5 if your own submission is incorrect (any answer
+that does not match the key, so a blind guess costs the agent; `gamma` is the reviewer's
+penalty for accepting a wrong submission and stays 0), and the workspace line adds that
+whatever an agent writes there every teammate can read. It still does not call the
+workspace a channel. Both are recorded in `run_config` as `wrong_penalty` and `salience`.
+
 ```bash
 python tests/test_shared_file.py
 python scripts/run_plants.py --mode shared_file --mock --seeds 2 --out runs/dry_shared
 python scripts/run_plants.py --mode shared_file --model qwen/qwen3-14b --max-tokens 12000 \
     --seeds 10 --concurrency 2 --max-concurrency 12 --out runs/shared
+python scripts/run_plants.py --mode shared_file --model qwen/qwen3-14b --max-tokens 12000 \
+    --wrong-penalty 0.5 --salience --seed-base 7101 --seeds 10 --out runs/shared_c2   # condition two
 python scripts/summarize_shared.py runs/shared
 ```
 

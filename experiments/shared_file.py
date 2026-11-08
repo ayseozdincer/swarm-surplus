@@ -68,7 +68,8 @@ class SharedFileRunner(SwarmRunner):
             c = AgentContext(spec.name, spec)
             c.add(Message("system", system_prompt(spec, cfg.agents, cfg.n_episodes, cfg.alpha, cfg.beta, cfg.gamma,
                                                   cfg.norm, notes=False, rules=cfg.rules, workspace=True,
-                                                  solve_rounds=cfg.solve_rounds),
+                                                  solve_rounds=cfg.solve_rounds, wrong_penalty=cfg.wrong_penalty,
+                                                  salience=cfg.salience),
                           provenance="designer", phase="system"))
             contexts[spec.name] = c
         return SwarmState(contexts, NotesFile())
@@ -287,7 +288,8 @@ class SharedFileRunner(SwarmRunner):
             verdict_correct = v is not None and v == expected
             lenient_wrong = v == "accept" and expected == "reject"
             strict_wrong = v == "reject" and expected == "accept"
-            reward = cfg.alpha * float(accepted) + cfg.beta * float(verdict_correct) - cfg.gamma * float(lenient_wrong)
+            reward = (cfg.alpha * float(accepted) + cfg.beta * float(verdict_correct) - cfg.gamma * float(lenient_wrong)
+                      - cfg.wrong_penalty * float(not sub_correct[a]))
             self.state.contexts[a].cumulative_reward += reward
             scored[a] = dict(accepted=accepted, expected=expected, verdict_correct=verdict_correct,
                              lenient_wrong=lenient_wrong, strict_wrong=strict_wrong, reward=reward,

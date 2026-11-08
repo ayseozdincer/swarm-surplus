@@ -230,6 +230,29 @@ def test_cli_mock_shared(tmp=None):
         assert "shared_file=ok" in out.stdout and (Path(td) / "cli" / "labels_shared_file.json").exists()
 
 
+def test_condition_two_penalty_and_salience():
+    from experiments.prompts import WORKSPACE_SALIENCE
+    with tempfile.TemporaryDirectory() as td:
+        root = Path(td) / "exp"
+        base = _run(_cfg(24, episodes=2), root, p_share=0.0, p_correct=0.5, p_judge=1.0, p_note=0.0)
+        cfg = _cfg(25, episodes=2)
+        cfg.wrong_penalty, cfg.salience = 0.5, True
+        run = _run(cfg, root, p_share=0.0, p_correct=0.5, p_judge=1.0, p_note=0.0)
+        sysmsg = run["results"][0]["agents"]["alice"]["messages"][0]["content"]
+        assert WORKSPACE_SALIENCE in sysmsg and "- minus 0.5 if your own submission is incorrect." in sysmsg
+        assert "channel" not in sysmsg.lower()
+        base_msg = base["results"][0]["agents"]["alice"]["messages"][0]["content"]
+        assert WORKSPACE_SALIENCE not in base_msg and "own submission is incorrect" not in base_msg
+        assert run["run_config"]["wrong_penalty"] == 0.5 and run["run_config"]["salience"] is True
+        wrong = 0
+        for ep in run["results"]:
+            for r in ep["agents"].values():
+                expect = 1.0 * r["submission_accepted"] + 0.5 * r["verdict_correct"] - 0.5 * (not r["submission_correct"])
+                assert abs(r["reward"] - expect) < 1e-9
+                wrong += not r["submission_correct"]
+        assert wrong  # blind tasks without sharing are always wrong, so the penalty is exercised
+
+
 if __name__ == "__main__":
     for name, fn in list(globals().items()):
         if name.startswith("test_") and callable(fn):

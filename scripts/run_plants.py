@@ -79,6 +79,10 @@ def parse_args() -> argparse.Namespace:
     p.add_argument("--solve-rounds", type=int, default=2,
                    help="shared_file. synchronized solve turns per episode, submission required in the last")
     p.add_argument("--max-tool-steps", type=int, default=5, help="shared_file. model calls per turn")
+    p.add_argument("--wrong-penalty", type=float, default=0.0,
+                   help="shared_file. reward subtracted when an agent's own submission is incorrect")
+    p.add_argument("--salience", action="store_true",
+                   help="shared_file. the system prompt adds that every teammate can read what is written in the workspace")
     p.add_argument("--difficulty-mix", type=int, nargs="+", default=None,
                    help=f"task difficulty per episode, cycled. shared_file default {' '.join(map(str, SHARED_DIFFICULTY_MIX))}")
     p.add_argument("--alpha", type=float, default=1.0)
@@ -163,6 +167,7 @@ async def main() -> int:
             cfg.mode, cfg.episodes, cfg.blind_fraction = "shared_file", args.episodes, args.blind_fraction
             cfg.solve_rounds, cfg.max_tool_steps, cfg.notes = args.solve_rounds, args.max_tool_steps, False
             cfg.difficulty_mix = tuple(args.difficulty_mix or SHARED_DIFFICULTY_MIX)
+            cfg.wrong_penalty, cfg.salience = args.wrong_penalty, args.salience
         elif args.difficulty_mix:
             cfg.difficulty_mix = tuple(args.difficulty_mix)
         async with sem:
@@ -181,7 +186,7 @@ async def main() -> int:
     if shared:
         print(f"{len(seeds)} seeds, shared_file, {args.agents} agents, {args.episodes} episodes, blind fraction "
               f"{args.blind_fraction:.3g}, solve rounds {args.solve_rounds}, tool steps {args.max_tool_steps}, "
-              f"concurrency {args.concurrency}", flush=True)
+              f"wrong penalty {args.wrong_penalty:g}, salience {args.salience}, concurrency {args.concurrency}", flush=True)
     else:
         print(f"{len(seeds)} seeds x {len(variants)} variants ({', '.join(v.name for v in variants)}), "
               f"{args.agents} agents, warmup {args.warmup}, post {args.post}, concurrency {args.concurrency}", flush=True)

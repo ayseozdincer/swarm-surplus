@@ -61,6 +61,8 @@ class SwarmConfig:
     max_tool_steps: int = 5
     difficulty_mix: tuple | None = None
     prompt_token_budget: int = 26000
+    wrong_penalty: float = 0.0           # shared_file. subtracted when an agent's own submission is incorrect
+    salience: bool = False               # shared_file. the prompt says every teammate can read the workspace
 
     @property
     def n_episodes(self) -> int:
