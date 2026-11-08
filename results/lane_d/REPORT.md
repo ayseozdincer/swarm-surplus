@@ -2,6 +2,30 @@
 
 Branch `claude/lane-d-sweep2-affc5f`. 2026-11-07.
 
+## Uptake by direction within one turn (leak2)
+
+Each leak2 target saw two notes and used one (`leak2_source`); ten turns, scored at the token before the reasoning first writes
+the submitted value (`mention_pre`), at the answer and at the trace peak (`results/lane_d/leak2_uptake.json`, `scripts/leak2_uptake.py`).
+
+| Test | Where | Picks the used note | p, one-sided vs 0.5 |
+| --- | --- | --- | --- |
+| Two-way nearest class signature, leave one seed out (class = right or wrong value, posted first or second) | mention_pre, late | 7/10 | 0.17 |
+| same | answer_pre, late | 3/10 | 0.95 |
+| same | trace peak, L18 and L34 | 4/10 | 0.83 |
+| Within-turn attribution by direction: the note whose own surplus (actual minus the reference masking only it) is nearest the full surplus | answer_pre, late | **10/10** | 0.001 |
+| same | mention_pre, late | 8/10 | 0.055 |
+| Within-turn exposure-orthogonal norm: the note's own surplus with both notes' exposure directions projected out, used larger than ignored | mention_pre, all layers | **9/10** | 0.011 |
+| same | mention_pre, late | 8/10 | 0.055 |
+
+**Signatures pooled across seeds do not pick the used note; the turn's own per-note references do.** Built from other
+seeds' users of a note with the same correctness and position, the class signatures carry no transferable "which note"
+information: at most 7 of 10, and below chance at the answer. Within the turn, the note that was used accounts for the surplus
+direction at the answer in all ten turns and for more surplus at the first mention in nine. The exposure directions, the per-note
+surplus at the reply's first token, are almost orthogonal to the per-note surplus at the mention (|cos| under 0.08 in every turn),
+so removing them changes the norms by under 0.3 percent: exposure and uptake are separate directions, the same reading as W7
+part A on 32B. So uptake is detectable by direction within one turn when each candidate source gets its own masked reference,
+and not from cross-seed signatures. Ten turns, one arm.
+
 ## Headline
 
 | Question | Answer, sweep2 (rules confidential, code-task blind agents, 20 seeds) |
