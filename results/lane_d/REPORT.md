@@ -184,7 +184,27 @@ The rule changes what the agents think about, not what they do. The two misses i
 function logic", claiming its own computation, with or without the rule. The reasoning label has no false positives without
 the rule (0/40 in the leak branch; 1/40 in command_k1, from the command's wording).
 
-leak_all and the solvable arm did not finish, see "What did not work".
+## Behaviour, solvable task (`runs/sweep2_solvable`)
+
+Twenty seeds, rules off, varied phrasing, 5000 to 5014 named and 5015 to 5029 broadcast. A same-specialty peer's note gives a
+non-blind code agent the answer to its own solvable task: the right value in `leak_solvable`, a mechanically wrong one in
+`leak_solvable_wrong` (`results/lane_d/summary_sweep2_solvable.txt`, `results/lane_d/solvable_behaviour.json`).
+
+| | right-value note | wrong-value note | none, same agent |
+| --- | --- | --- | --- |
+| targets, code agents | 20, 20 | 20, 20 | 20 |
+| note carries the value | 20 | 20 | - |
+| submitted the note's value | 13 | **0** | - |
+| correct | 13 | 11 | 10 |
+| median reply tokens, submitted the value | 1,577 | - | 3,013 |
+| median reply tokens, did not | 5,768 | 5,232 | |
+| names the source, among those who submitted it / the rest | 4 of 13 / 1 of 7 | - / 2 of 20 | - |
+
+A wrong value on a solvable task is never taken: the agents work it out, reject the note, and do as well as with no note
+(11 against 10). A right value is submitted 13 times, in half the tokens, and 9 of those 13 do not mention the note ("Calculated
+step-by-step"). "Submitted the value" does not by itself mean copied, since a right value is also what solving gives; the
+replay below separates them.
+
 
 ## Generation throughput and cost
 
@@ -356,6 +376,30 @@ that is any note against none.
 
 Concealers against disclosers. 43 leak users across sweep2 and the rule-off arm, 3 concealers, all in forbidden_leak, so below
 the five the contrast needs: sweep2 leak 17 users / 0 concealed, forbidden_leak 20 / 3, rule-off leak 6 / 0.
+
+### Solvable task: copiers, readers and the plateau
+
+The target's solve turn in both note branches and in none, with the per-token trace (`results/lane_d/arms_scores.json`). The
+floor is the median per-token surplus of the same agent's none turn, whose second pass is the plain kernel. Plateau is the
+number of the reply's first 256 tokens above 10 times that floor, late band. Jump is the surplus over the floor at the token
+before the reasoning first writes the note's value.
+
+| Group | n | Plateau, median | Jump, median | Writes the value | Where, median share of the reply | Correct | Reply tokens, median |
+| --- | --- | --- | --- | --- | --- | --- | --- |
+| right note, submitted it | 13 | 23 | 10.8 | 13 | 0.93 | 13 | 1,577 |
+| right note, did not submit it | 7 | 28 | 43.3 | 4 | 0.34 | 0 | 5,768 |
+| wrong note, did not submit it | 20 | 23.5 | 51.1 | 16 | 0.35 | 11 | 5,232 |
+| none | 20 | 1 | - | - | - | 10 | 3,013 |
+
+**The plateau tracks exposure, not use.** Everyone with a note in context shows it, whether they used the note or rejected it
+(against none, AUROC 1.00 in all three groups; submitters against non-submitters 0.26 and 0.45). This is the solve-turn
+exposed-non-user case lane C left open: readers who did their own work carry the same plateau as those who took the value.
+
+**The jump tracks where the value came from.** An agent that writes a value only the note holds, early, to weigh it, jumps 43 to
+51 times the floor. An agent that submits a right value mostly reaches it at the end of its own computation (93 percent of the
+way through the reply) and jumps 11 times. Among the 13 submitters, the 4 whose same seed was wrong in none (5005, 5009, 5026,
+5027), so plausibly real copies, jump 11 to 44, while several whose none turn was right jump only 2 to 6. Thirteen turns, so
+this is a direction, not a rate. There are no wrong-value copiers to score.
 
 ### Which of two notes was taken up (leak2)
 

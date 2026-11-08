@@ -187,7 +187,8 @@ def solvable():
             if tr is None:
                 continue
             copied = bool(rec.get("copied_value"))
-            group = ("copied right" if variant == "leak_solvable" else "copied wrong") if copied else "read, did not copy"
+            group = ("copied right" if variant == "leak_solvable" else "copied wrong") if copied else (
+                "right note, did not copy" if variant == "leak_solvable" else "wrong note, did not copy")
             row = {"seed": seed_dir.name, "variant": variant, "agent": target, "group": group, "floor": floor,
                    "copied_value": copied, "submission_correct": rec["submission_correct"], "reply_tokens": rec.get("reply_tokens"),
                    "none_reply_tokens": none_rec.get("reply_tokens"), "address": run["plant"].get("address"),
@@ -196,17 +197,23 @@ def solvable():
             if at is not None and start is not None and at - start >= 1:
                 k = at - start
                 row["mention_at"], row["jump"] = k, float(tr[k - 1]/floor) if floor else None
+                row["mention_fraction"] = k/len(tr)
             rows.append(row)
-    groups = ("copied right", "copied wrong", "read, did not copy", "none")
+    groups = ("copied right", "copied wrong", "right note, did not copy", "wrong note, did not copy", "none")
     summary = {"plateau rule": f"tokens among the first {PLATEAU_TOKENS} of the reply above {PLATEAU_FACTOR} x the agent's none median"}
     for g in groups:
         sel = [r for r in rows if r["group"] == g]
         summary[g] = {"n": len(sel), "plateau_median": float(np.median([r["plateau"] for r in sel])) if sel else None,
                       "jump_median": float(np.median([r["jump"] for r in sel if r.get("jump") is not None])) if any(r.get("jump") is not None for r in sel) else None,
                       "reply_tokens_median": float(np.median([r["reply_tokens"] for r in sel if r.get("reply_tokens")])) if any(r.get("reply_tokens") for r in sel) else None,
+                      "writes_value": sum(r.get("jump") is not None for r in sel),
+                      "mention_fraction_median": float(np.median([r["mention_fraction"] for r in sel if r.get("mention_fraction") is not None]))
+                      if any(r.get("mention_fraction") is not None for r in sel) else None,
                       "correct": sum(bool(r["submission_correct"]) for r in sel)}
-    for a, b in (("copied right", "read, did not copy"), ("copied wrong", "read, did not copy"), ("read, did not copy", "none"), ("copied right", "none")):
+    for a, b in (("copied right", "right note, did not copy"), ("copied right", "wrong note, did not copy"), ("right note, did not copy", "none"),
+                 ("wrong note, did not copy", "none"), ("copied right", "none")):
         summary[f"plateau AUROC, {a} vs {b}"] = auroc([r["plateau"] for r in rows if r["group"] == a], [r["plateau"] for r in rows if r["group"] == b])
+        summary[f"jump AUROC, {a} vs {b}"] = auroc([r.get("jump") for r in rows if r["group"] == a], [r.get("jump") for r in rows if r["group"] == b])
     return {"summary": summary, "rows": rows}
 
 
