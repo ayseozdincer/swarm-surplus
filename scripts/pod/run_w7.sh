@@ -7,3 +7,5 @@ python -u scripts/direction_test.py collect || exit 1
 python -u scripts/direction_test.py analyze || exit 1
 python -u scripts/detection_run.py
 python -u scripts/direction_edges.py
+python -u scripts/concealment_read.py collect
+python -u scripts/concealment_read.py analyze
