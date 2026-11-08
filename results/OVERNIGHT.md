@@ -818,7 +818,7 @@ Decisions Ayse made overnight, relayed through the review session.
 | Which reference | Report both. Compacted is primary for surplus mass and for distance to the no-note state. Kept is primary for direction comparisons across notes, since compacting adds a note-length position shift |
 | Edge test 1c | Stays a target, redefined as the direction edge from W7 part A. Scored on the Core arrays, CPU only |
 | Transfer outcome labels | Dropped. The audit stays, and its 17 yes cases get a human read before any number is quoted |
-| Pod | Stopped at the end of the queue, not terminated. A Qwen3-14B sweep on the Mac will need a replay within a day |
+| Pod | Stopped at the end of the queue, not terminated. A Qwen3-14B sweep on the Mac will need a replay within a day. Done: stopped 02:36 UTC, volume kept |
 | Read positions | The per-token trace with a jump test is the method. Fixed positions stay reported for comparability |
 | J-space noise | The direction and the dense readout carry the tests. Sparse shares are the bonus naming column |
 
@@ -828,6 +828,9 @@ Still open.
 2. **The Qwen3-32B lens is a partial checkpoint**, 80 prompts and not converged, with a refit planned upstream. Fit our own, wait, or switch models? It matters less now that the tests run on directions, but the naming column still uses it.
 3. **The pod-side stop script is unverified.** The key RunPod injects into the pod answered 403 to every read, so the real guard was the watchdog on this Mac, which only runs while the Mac is awake. Worth knowing before the next unattended run.
 4. **The account has a 250 GB network volume, `silent-dissent-models`** (CA-MTL-3, about 0.024 USD an hour, 0.58 a day), which this work did not create or touch.
+5. **Uptake against exposure (W7 part B).** On three seeds, only the jump at the first mention separates the agent who used the leaked answer from readers who only saw it. The direction scores flag that the leak note was read at all. Should sweep2's primary score be the jump, with direction as the exposure flag? Every leak note in sweep1 also greets carol by name, so the direction's "content" can be the addressee. Sweep2 would need leak notes without the reader's name to rule that out.
+6. **Provenance (1c).** Core gives both colluders the same hidden content, so any direction edge finds the partner whatever the timing. A provenance test needs runs where the partner's influence arrives at a known turn, for example a planted message from one agent to one other mid-episode.
+7. **Concealment.** Three cases show nothing (W7). The test runs on sweep2's `disclosed_source` and `concealed_source` labels, with the note-span read used here.
 
 ## Artifacts pulled
 
