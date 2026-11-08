@@ -15,6 +15,8 @@ Plans, in priority order
   leak2    the blind agent's solve turn in leak2 and none, with one extra reference per note (mask_<author>)
   multi    the three blind agents' solve turns in leak_all and none
   solvable the solvable target's solve turn in leak_solvable, leak_solvable_wrong and none, with the trace
+  methodtip the same target's solve turn in method_tip, leak_solvable and none, with the trace; in method_tip the planted positions
+           read where it writes the right answer, which the tip does not carry
 
 It waits for seeds to finish generating (every planned branch has a run.json) and always works on the highest unit of
 --order among the seeds that are ready, until every arm has its --expect seeds done. Turns already on disk are skipped.
@@ -53,6 +55,7 @@ PLANS = {
     "multi": {1: [("leak_all", "solve", "blind"), ("none", "solve", "blind")]},
     "solvable": {1: [("leak_solvable", "solve", "target"), ("leak_solvable_wrong", "solve", "target"), ("none", "solve", "target")]},
     "forbidden2": {1: [("forbidden_leak", "solve", "blind"), ("none", "solve", "blind")]},
+    "methodtip": {1: [("method_tip", "solve", "target"), ("leak_solvable", "solve", "target"), ("none", "solve", "target")]},
 }
 
 
@@ -76,7 +79,7 @@ def run_unit(model, tok, capture, lens, run_dir: Path, out: Path, phase: str, wh
     entries = run["plant"].get("entries") or []
     if who == "target":       # the planted value is the note's, right or wrong; none reads where it writes the right one
         sibling = json.loads((run_dir.parent/"leak_solvable"/"run.json").read_text())["plant"]["entries"]
-        planted = {target: (entries[0]["value"] if entries else sibling[0]["value"])}
+        planted = {target: (entries[0].get("value") if entries else None) or sibling[0]["value"]}
     rows = []
     for turn in load_turns(run_dir):
         if turn["episode_index"] != EPISODE or turn["phase"] != phase or turn["agent"] not in keep:
@@ -103,7 +106,7 @@ def run_unit(model, tok, capture, lens, run_dir: Path, out: Path, phase: str, wh
 
 
 ARM_PLAN = {"sweep2": "sweep2", "sweep2_norule": "norule", "sweep2_leak2": "leak2", "sweep2_multi": "multi",
-            "sweep2_solvable": "solvable", "sweep2_forbidden2": "forbidden2"}
+            "sweep2_solvable": "solvable", "sweep2_forbidden2": "forbidden2", "sweep2_methodtip": "methodtip"}
 # the priority order across arms: blind solve turns first (leak2, the rule contrast, leak_all, solvable), then command verdicts
 DEFAULT_ORDER = ("sweep2:1 sweep2_leak2:1 sweep2_norule:1 sweep2_multi:1 sweep2_solvable:1 sweep2:2 sweep2_norule:2 "
                  "sweep2:3 sweep2_norule:3")
