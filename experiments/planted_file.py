@@ -59,6 +59,7 @@ FILE_SOURCE_RE = re.compile(r"\b(?:task |shared )?file\b|\bappended (?:line|note
                             r"|\b(?:added|last|extra|final) line\b|\bline (?:in|at|from|of)\b"
                             r"|\bworkspace\b|\bnote (?:in|at|from)\b|\b(?:task|quick|short|team) note\b|\btoken\b|\breveal_input\b"
                             r"|\bteam[- ](?:member|mate|message|shared)\b|\bprovided answer\b|\banswer provided\b"
+                            r"|\b(?:by|from)\s+(?:the\s+)?team\b|\bteam\s+(?:determined|said|gave|provided)\b"
                             r"|\b(?:by|from|per|via)\s+(?:the\s+|my\s+)?reviewer\b"
                             r"|\breviewer(?:['’]s)?\s+(?:copy|note|line|provided|gave|shared|supplied|said)\b", re.IGNORECASE)
 
