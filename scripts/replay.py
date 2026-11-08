@@ -41,7 +41,7 @@ import numpy as np
 
 ROOT = Path(__file__).resolve().parents[1]
 sys.path[:0] = [str(ROOT), str(ROOT/"third_party/maj-lens")]
-from detector.render import compacted_positions, load_turns, render_turn  # noqa: E402
+from detector.render import compacted_positions, load_turns, render_turn, token_span  # noqa: E402
 
 ARTIFACTS = Path(os.environ.get("SWARM_ARTIFACTS", "/workspace/artifacts"))
 # model directory, lens file, lens layers
@@ -164,17 +164,28 @@ def shuffled_span(tokenizer, turn: dict, r: dict, length: int, seed: int) -> tup
     return start, start + length
 
 
+def text_token_span(tokenizer, r: dict, text: str) -> tuple[int, int] | None:
+    """Token span of the last occurrence of `text` in the turn's prompt."""
+    at = r["text"].rfind(text, 0, r["prompt_chars"])
+    if at < 0:
+        return None
+    offsets = [tuple(o) for o in tokenizer(r["text"], add_special_tokens=False, return_offsets_mapping=True)["offset_mapping"]]
+    return token_span(offsets, at, at + len(text))
+
+
 def replay_turn(model, tokenizer, capture, turn, lens, out_path, shared_prefix=False, compacted=False, mentions=None,
-                shuffled=False, trace=False):
+                shuffled=False, trace=False, extra_refs=None):
     """shuffled adds a reference that masks a random sanctioned span as long as the turn's peer spans (shuffled_span).
     trace keeps, for every token of the reply, the relative surplus per layer against each reference and the surplus
-    direction at TRACE_LAYERS, from the same passes."""
+    direction at TRACE_LAYERS, from the same passes. extra_refs maps a name to a text in the prompt (one note of a digest);
+    each adds a reference pass `mask_<name>` that masks only that text, for attributing the surplus to one note."""
     import torch
     r = render_turn(tokenizer, turn, mentions)
     names = list(r["positions"])
     positions = [r["positions"][n] for n in names]
     started = time.perf_counter()
     masked = bool(r["peer_token_spans"])
+    extra_spans = {name: text_token_span(tokenizer, r, text) for name, text in (extra_refs or {}).items()}
     shuffle = None
     if shuffled:
         length = (len(r["mask"]) - sum(r["mask"])) or SHUFFLE_DEFAULT_LEN
@@ -200,6 +211,12 @@ def replay_turn(model, tokenizer, capture, turn, lens, out_path, shared_prefix=F
             traces["shuffled"] = capture.trace() if trace else None
         if compacted and masked:
             passes["compacted"] = capture.run_suffix(model, cache, r["ids"], split, positions, r["mask"], compacted_positions(r["mask"]))
+        for name, span in extra_spans.items():
+            if span and span[0] >= split:
+                keep = [1]*len(r["ids"])
+                keep[span[0]:span[1]] = [0]*(span[1] - span[0])
+                capture.trace_from = None
+                passes[f"mask_{name}"] = capture.run_suffix(model, cache, r["ids"], split, positions, keep)
         del cache
     capture.trace_from = r["prompt_tokens"] if trace else None
     if "actual" not in passes:
@@ -236,6 +253,7 @@ def replay_turn(model, tokenizer, capture, turn, lens, out_path, shared_prefix=F
             "tokens": len(r["ids"]), "prompt_tokens": r["prompt_tokens"], "masked_tokens": len(r["mask"]) - sum(r["mask"]),
             "reference_kind": "masked" if masked else "plain_kernel", "shared_prefix_tokens": split,
             "passes": list(passes), "shuffled_span": shuffle, "trace_from": r["prompt_tokens"] if trace else None,
+            "extra_spans": extra_spans or None,
             "trace_layers": list(TRACE_LAYERS) if trace else None,
             "peer_token_spans": r["peer_token_spans"], "positions": dict(zip(names, positions)),
             "position_tokens": {n: tokenizer.decode([r["ids"][p]]) for n, p in zip(names, positions)},

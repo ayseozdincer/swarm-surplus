@@ -14,4 +14,4 @@ if [ ! -f results/lane_d/prefix_check_14b.json ]; then
   blind=$($PY -c "import json; c=json.load(open('$first/run.json'))['run_config']; print([a for e, a in c['blind_plan'] if e == 2][0])")
   $PY tests/gpu_prefix_check.py "$first" "$blind" 2 solve "" results/lane_d/prefix_check_14b.json
 fi
-$PY -u scripts/pod/replay_sweep2.py runs/$EXP --out-root data/replay_sweep2 --plan $PLAN --follow ${SEEDS:-20}
+$PY -u scripts/pod/replay_sweep2.py runs --out-root data/replay_sweep2

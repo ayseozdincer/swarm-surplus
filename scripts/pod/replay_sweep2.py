@@ -12,11 +12,14 @@ Plans, in priority order
               and command_k3
   norule   P1 the blind agent's solve turn in leak, none, benign_k1 (with the trace); P2 verdicts in command_k1, command_k3,
            none; P3 every agent's solve turn in none, leak, benign_k1, command_k1
+  leak2    the blind agent's solve turn in leak2 and none, with one extra reference per note (mask_<author>)
+  multi    the three blind agents' solve turns in leak_all and none
+  solvable the solvable target's solve turn in leak_solvable, leak_solvable_wrong and none, with the trace
 
---follow N waits for seeds to finish generating (every planned branch has a run.json) and works on the highest-priority
-unit among the seeds that are ready, until N seeds have every unit done. Turns already on disk are skipped.
+It waits for seeds to finish generating (every planned branch has a run.json) and always works on the highest unit of
+--order among the seeds that are ready, until every arm has its --expect seeds done. Turns already on disk are skipped.
 
-  python scripts/pod/replay_sweep2.py runs/sweep2 --out-root data/replay_sweep2 --follow 20
+  python scripts/pod/replay_sweep2.py runs --out-root data/replay_sweep2
 """
 from __future__ import annotations
 
@@ -45,7 +48,16 @@ PLANS = {
         2: [("command_k1", "verdict", "free"), ("command_k3", "verdict", "free"), ("none", "verdict", "free")],
         3: [("none", "solve", "all"), ("leak", "solve", "all"), ("benign_k1", "solve", "all"), ("command_k1", "solve", "all")],
     },
+    # each leak2 note gets its own reference pass (mask_<author>), so the surplus can be attributed to one of the two
+    "leak2": {1: [("leak2", "solve", "blind"), ("none", "solve", "blind")]},
+    "multi": {1: [("leak_all", "solve", "blind"), ("none", "solve", "blind")]},
+    "solvable": {1: [("leak_solvable", "solve", "target"), ("leak_solvable_wrong", "solve", "target"), ("none", "solve", "target")]},
 }
+
+
+def solvable_target(seed_dir: Path) -> str | None:
+    path = seed_dir/"leak_solvable"/"run.json"
+    return json.loads(path.read_text())["plant"].get("solvable_target") if path.exists() else None
 
 
 def run_unit(model, tok, capture, lens, run_dir: Path, out: Path, phase: str, who: str, compacted: bool) -> int:
@@ -54,10 +66,16 @@ def run_unit(model, tok, capture, lens, run_dir: Path, out: Path, phase: str, wh
         print(f"skip {run_dir}: not complete", flush=True)
         return 0
     agents = run["results"][EPISODE]["agents"]
-    keep = {a for a, r in agents.items() if (who == "blind" and r["blind"]) or (who == "free" and not r["instructed"]) or who == "all"}
+    target = solvable_target(run_dir.parent) if who == "target" else None
+    keep = {a for a, r in agents.items() if (who == "blind" and r["blind"]) or (who == "free" and not r["instructed"]) or who == "all"
+            or a == target}
     old = json.loads((out/"index.json").read_text())["turns"] if (out/"index.json").exists() else []
     done = {row["file"] for row in old}
     planted = replay.planted_answers(run_dir, EPISODE)
+    entries = run["plant"].get("entries") or []
+    if who == "target":       # the planted value is the note's, right or wrong; none reads where it writes the right one
+        sibling = json.loads((run_dir.parent/"leak_solvable"/"run.json").read_text())["plant"]["entries"]
+        planted = {target: (entries[0]["value"] if entries else sibling[0]["value"])}
     rows = []
     for turn in load_turns(run_dir):
         if turn["episode_index"] != EPISODE or turn["phase"] != phase or turn["agent"] not in keep:
@@ -66,8 +84,14 @@ def run_unit(model, tok, capture, lens, run_dir: Path, out: Path, phase: str, wh
         if path.name in done and path.exists():
             continue
         mentions = {"planted": planted[turn["agent"]]} if turn["agent"] in planted else None
-        trace = agents[turn["agent"]]["blind"] and phase == "solve"
-        rows.append(replay.replay_turn(model, tok, capture, turn, lens, path, True, compacted, mentions, shuffled=True, trace=trace))
+        extra = None
+        if run["plant"].get("kind") == "leak2":
+            mine = [e for e in entries if e.get("target") == turn["agent"]]
+            mentions = {**(mentions or {}), **{f"value_{e['author']}": e["value"] for e in mine if e.get("value")}}
+            extra = {e["author"]: e["text"] for e in mine}
+        trace = (agents[turn["agent"]]["blind"] or turn["agent"] == target) and phase == "solve"
+        rows.append(replay.replay_turn(model, tok, capture, turn, lens, path, True, compacted, mentions, shuffled=True, trace=trace,
+                                       extra_refs=extra))
         r = rows[-1]
         print(f"{run_dir} {r['agent']} {r['phase']} tokens {r['tokens']} prefix {r['shared_prefix_tokens']} {r['seconds']}s", flush=True)
     if rows or not old:
@@ -77,12 +101,20 @@ def run_unit(model, tok, capture, lens, run_dir: Path, out: Path, phase: str, wh
     return len(rows)
 
 
+ARM_PLAN = {"sweep2": "sweep2", "sweep2_norule": "norule", "sweep2_leak2": "leak2", "sweep2_multi": "multi",
+            "sweep2_solvable": "solvable"}
+# the priority order across arms: blind solve turns first (leak2, the rule contrast, leak_all, solvable), then command verdicts
+DEFAULT_ORDER = ("sweep2:1 sweep2_leak2:1 sweep2_norule:1 sweep2_multi:1 sweep2_solvable:1 sweep2:2 sweep2_norule:2 "
+                 "sweep2:3 sweep2_norule:3")
+
+
 def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
-    parser.add_argument("root", type=Path)
+    parser.add_argument("runs_root", type=Path, help="the directory holding the experiment directories, e.g. runs")
     parser.add_argument("--out-root", type=Path, default=ROOT/"data/replay_sweep2")
-    parser.add_argument("--plan", choices=list(PLANS), default="sweep2")
-    parser.add_argument("--follow", type=int, default=None, metavar="N")
+    parser.add_argument("--order", default=DEFAULT_ORDER, help="space-separated exp:priority units, highest first")
+    parser.add_argument("--expect", nargs="*", default=["sweep2=20", "sweep2_norule=20", "sweep2_leak2=10", "sweep2_multi=10",
+                                                        "sweep2_solvable=10"], help="exp=N seeds to wait for")
     parser.add_argument("--stop-at", type=float, default=None, help="unix time after which no new unit is started")
     parser.add_argument("--compacted", action="store_true")
     args = parser.parse_args()
@@ -90,28 +122,31 @@ def main() -> int:
     model, tok = replay.load_model()
     lens = Lens(replay.MODEL_DIR, replay.LENS_FILE)
     capture = replay.Capture(model, lens.layers)
-    plan = PLANS[args.plan]
-    variants = {v for units in plan.values() for v, _, _ in units}
-    finished: set[tuple[str, int]] = set()
+    order = [(u.split(":")[0], int(u.split(":")[1])) for u in args.order.split()]
+    expect = {e.split("=")[0]: int(e.split("=")[1]) for e in args.expect}
+    finished: set[tuple[str, str, int]] = set()
     started = time.time()
-    while True:
-        if args.stop_at and time.time() > args.stop_at:
-            print("stop-at reached", flush=True)
-            break
-        ready = [p for p in sorted(args.root.glob("seed*")) if all((p/v/"run.json").exists() for v in variants)]
-        todo = sorted(((prio, seed_dir) for seed_dir in ready for prio in plan if (seed_dir.name, prio) not in finished),
-                      key=lambda x: (x[0], x[1].name))
-        if not todo:
-            complete = {s for s, _ in finished if all((s, p) in finished for p in plan)}
-            if args.follow is None or len(complete) >= args.follow:
+    while not (args.stop_at and time.time() > args.stop_at):
+        unit = None
+        for exp, prio in order:
+            plan = PLANS[ARM_PLAN[exp]]
+            variants = {v for units in plan.values() for v, _, _ in units}
+            ready = [p for p in sorted((args.runs_root/exp).glob("seed*")) if all((p/v/"run.json").exists() for v in variants)]
+            todo = [p for p in ready if (exp, p.name, prio) not in finished]
+            if todo:
+                unit = (exp, prio, todo[0])
+                break
+        if unit is None:
+            done = all(sum(1 for e, _, p in finished if e == exp and p == prio) >= expect.get(exp, 0) for exp, prio in order)
+            if done:
                 break
             time.sleep(30)
             continue
-        prio, seed_dir = todo[0]
+        exp, prio, seed_dir = unit
         n = sum(run_unit(model, tok, capture, lens, seed_dir/v, args.out_root/Path(*(seed_dir/v).parts[-3:]), phase, who, args.compacted)
-                for v, phase, who in plan[prio])
-        finished.add((seed_dir.name, prio))
-        print(f"== P{prio} {seed_dir.name} {n} turns, {time.time() - started:.0f}s elapsed", flush=True)
+                for v, phase, who in PLANS[ARM_PLAN[exp]][prio])
+        finished.add((exp, seed_dir.name, prio))
+        print(f"== {exp} P{prio} {seed_dir.name} {n} turns, {time.time() - started:.0f}s elapsed", flush=True)
     return 0
 
 
