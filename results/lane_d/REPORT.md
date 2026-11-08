@@ -257,10 +257,20 @@ not compute-bound: with 140 branches in flight the working set was several milli
 the prefix-cache hit rate fell to 18 percent and prompt recompute ran at 4,000 to 10,000 tok/s beside 500 to 1,500 tok/s of
 generation. CPU KV offloading (100 GB) for the later arms did not fix it: generation averaged 1,204 tok/s over those two hours,
 with the offload cache hit on 8 to 20 percent of lookups, and running one arm at a time helped little because a single
-10-seed arm's working set already exceeds the cache. The second queue ran 6 seeds in flight: the cache stayed under half full and
-prefix hits near 50 percent, but with phases synchronous only 20 to 50 requests ran at once and generation stayed at 1,000 to
-1,400 tok/s (solvable, 20 seeds, 1.9 h). So about 1,000 to 1,400 tok/s is what one H200 gave tonight at either end of the trade,
-and two cards in parallel were the only thing that shortened the queue.
+10-seed arm's working set already exceeds the cache.
+
+Fewer seeds in flight did not help either. The second queue kept 5 or 6 seeds in flight per card: the cache stayed under half full
+and prefix hits held at 35 to 50 percent, but with phases synchronous only 20 to 50 requests ran at once. Over wall time:
+
+| Run | Card | Seeds in flight | Completion tokens | Hours | tok/s |
+| --- | --- | --- | --- | --- | --- |
+| sweep2 | H200 | 20 | 11.18M | 3.00 | 1,034 |
+| solvable | H200 | 6 | 5.50M | 1.87 | 820 |
+| forbidden_leak second batch | second H200 | 6 | 4.31M | 1.35 | 890 |
+
+So twenty seeds with heavy recompute was slightly faster than six with a healthy cache: the two losses roughly cancel, and about
+800 to 1,000 tok/s is what one H200 gave tonight at either end of the trade. Only adding a card shortened the queue. The solvable
+figure includes some sharing of its card with the other runs, for about half an hour at each end.
 
 ## Replay
 
