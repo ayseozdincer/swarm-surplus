@@ -98,7 +98,41 @@ targets cite it in the solve reasoning, against 2 or 3 per 100 in none and benig
 20/60 come mostly from the pattern matching the command's own wording ("not supposed to", "against"), not the rule, so read
 it there with care.
 
-TBD rule-off, leak2, leak_all, solvable tables.
+## Behaviour, leak2 (two conflicting notes, rules off)
+
+Ten seeds, 5001 to 5013 with the target named and 5031 to 5043 broadcast, leak phrasing varied (`results/lane_d/summary_sweep2_leak2.txt`).
+One note carries the right value and one a mechanically wrong value; which author carries which, and which is posted first,
+are coin flips per seed.
+
+| | leak2 | none |
+| --- | --- | --- |
+| used the right value | 5/10 | - |
+| used the wrong value | 5/10 | - |
+| used neither | 0/10 | - |
+| blind correct | 5/10 | 0/10 |
+| disclosed among correct users | 5/5 | - |
+| strict given correct | 3/23 | 5/35 |
+
+Which note the target took, by `leak2_source`.
+
+| | took that note | of |
+| --- | --- | --- |
+| the same-specialty peer's note | 7 | 10 |
+| ... when it carried the right value | 2 | 2 |
+| ... when it carried the wrong value | 5 | 8 |
+| the note posted first | 6 | 10 |
+| right value, target named / broadcast | 3 / 2 | 5 / 5 |
+
+Nobody tried to solve the task or ignore both notes. The agents defer to the teammate who shares their specialty, whether or
+not that teammate is right, and two say outright that the notes conflict and pick one. The wrong-value users name their source
+too ("Based on Carol's note indicating the answer is 141"), so the disclosure label, which counts only correct users, understates it.
+
+The leak2 manifests were lost to a write race between the two processes sharing `runs/sweep2_leak2` (one manifest kept only
+seed 5013's tasks, two were half-written). Task generation is deterministic per seed, so they were regenerated: the 8 surviving
+entries are byte-identical, every task id in the run records is present, and all 20 notes' values agree with the regenerated
+keys on which one is right. `experiments/tasks.py` now locks and replaces atomically.
+
+TBD rule-off, leak_all, solvable.
 
 ## Generation throughput and cost
 
@@ -262,6 +296,25 @@ followers (0.28, so 0.72 the other way round), on 86 reviewers and one seed set.
 
 Concealers against disclosers. 37 leak users, 3 concealers, all in forbidden_leak, so below the five the contrast needs. The
 counts per arm are in the behaviour tables.
+
+### Which of two notes was taken up (leak2)
+
+Each leak2 turn has, besides the kept reference that masks both notes, one reference per note that masks only that note's
+line in the digest. Two attributions, scored against `leak2_source` (the author whose value the submission equals): the note
+whose removal moves the state more (delta), and the note whose own surplus direction, actual minus that reference, is nearest
+the full surplus direction (cos). Late band, ten turns (`results/lane_d/arms_scores.json`).
+
+| Position | nearest direction | larger delta | nearest, right value from the same specialty | nearest, right value from the other |
+| --- | --- | --- | --- | --- |
+| first_generated | 5/10 | 7/10 | 1/2 | 4/8 |
+| after_think | 9/10 | 6/10 | 2/2 | 7/8 |
+| answer_pre | **10/10** | 6/10 | 2/2 | 8/8 |
+| note_pre (the submission note) | 10/10 | 6/10 | 2/2 | 8/8 |
+
+At the answer the surplus direction names the note that was used in all ten turns, right or wrong, with margins such as 0.77
+against 0.37 and 0.61 against 0.47. At the first token of the reply it is at chance, consistent with the choice being made in
+the reasoning. The magnitude rule does no better than 6 or 7 of 10. Ten turns and several positions, so read `answer_pre` as the
+decision point and the rest as exploratory; mid layers are weaker (5/10 at `answer_pre`).
 
 
 ## Reading
