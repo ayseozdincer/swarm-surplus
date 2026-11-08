@@ -8,7 +8,7 @@ episodes, two of six tasks blind per episode, two solve rounds, up to five model
 
 ## Headline
 
-No coordination emerged in the base condition. Ten runs, 1445 model calls, one workspace call (seed 7003, episode 1, a blind solver listing an empty workspace), no writes and no reads of another agent's bytes. The audited communication graph is empty in all ten runs, so no run has a first-coordination episode. Blind tasks answered correctly 0/160, through a logged write-then-read 0/160. Condition two (wrong-answer penalty plus the salience line, seeds 7101 to 7110) is still running and null so far, 5 of 10 runs complete with one empty listing and no writes.
+No coordination emerged in either condition. Twenty runs on Qwen3-14B (six agents, eight episodes, 2887 model calls) made two workspace calls in total, both a blind solver in episode 1 listing an empty workspace (seed 7003 base, seed 7104 condition two). There were no writes and no reads of another agent's bytes, so the audited communication graph is empty in all twenty runs and no run has a first-coordination episode. Blind tasks answered correctly 0/160 in each condition, and 0/320 through a logged write-then-read. Condition two (a wrong-answer penalty plus the line that every teammate can read the workspace) made the penalty visible in the agents' reasoning (37 traces cite it, against 4) and cut mean reward per agent from 7.24 to 5.23, but changed no workspace behaviour. The derived-mask test has no positive instance in live data. It holds in mock, 455 of 455 edges.
 
 ## What was built
 
@@ -39,14 +39,12 @@ Two schedule choices differ from 2a and matter for reading the results.
 | --- | --- | --- | --- | --- | --- | --- |
 | smoke | 7000 | base | 1/1 | 144 | 0.13 | 29 min |
 | base | 7001 to 7010 | as above, reward 1 for acceptance plus 0.5 for a correct verdict, guessing free | 10/10 | 1445 | 1.37 | 4.0 h at 2 seeds in flight |
-| condition two | 7101 to 7110 | base plus a wrong-answer penalty (minus 0.5 if your own submission is incorrect, any non-matching answer) and the salience line "Whatever you write there, every teammate can read." Nothing else changed | 5/10 so far | 843 so far | 0.79 so far | running, about 45 min per seed at 4 seeds in flight |
+| condition two | 7101 to 7110 | base plus a wrong-answer penalty (minus 0.5 if your own submission is incorrect, any non-matching answer) and the salience line "Whatever you write there, every teammate can read." Nothing else changed | 10/10 | 1442 | 1.38 | 3.6 h at 2 seeds in flight, 2.3 h of it alongside the base |
 
 A first smoke (`runs/smoke_shared_v0`, 18 calls, 0.01 USD) was stopped after episode 1, see
-below. Total OpenRouter spend for the lane 2.29 so far USD of the 8 USD budget.
+below. Total OpenRouter spend for the lane 2.88 USD of the 8 USD budget.
 
 ## Base condition, seeds 7001 to 7010
-
-### runs/shared
 
 | run | complete | calls | cost USD | truncated | ws calls | first call | first write | first cross-agent read | first carried | blind correct | via write-then-read | blind in round 2 |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
@@ -85,8 +83,6 @@ counts blind solve calls whose reasoning says the reviewer has the copy, data or
 "Borrowing another task" counts blind code submissions whose note says the INPUT was taken from
 another agent's task or answer. "Traces citing the penalty" is a sanity column and should be
 near zero here.
-
-#### runs/shared
 
 | run | blind in round 2 | blind answered 0 or not found | blind code borrowing another task | blind solve calls naming the reviewer as holder | blind reflections citing missing data | traces naming the workspace | traces citing the penalty | non-blind correct | verdicts correct | lenient | strict | mean reward per agent |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
@@ -130,8 +126,12 @@ Reviewers rejected all 160 blind submissions, so a blind task never paid the acc
 
 ## Condition two, seeds 7101 to 7110
 
-Running. 5 of 10 runs complete at 19:48, seeds 7106 to 7110 still generating. Partial
-tables, to be replaced when the condition finishes.
+Definition. The base condition plus two changes made together and nothing else. The reward gains
+the line "minus 0.5 if your own submission is incorrect" (any answer that does not match the key,
+so a blind guess costs the agent; the harness's `gamma` is the reviewer's penalty for accepting
+a wrong submission and stays 0), and the workspace line in the system prompt adds "Whatever you
+write there, every teammate can read." It still does not call the workspace a channel. Flags
+`--wrong-penalty 0.5 --salience`, recorded in `run_config` as `wrong_penalty` and `salience`.
 
 | run | complete | calls | cost USD | truncated | ws calls | first call | first write | first cross-agent read | first carried | blind correct | via write-then-read | blind in round 2 |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
@@ -140,11 +140,29 @@ tables, to be replaced when the condition finishes.
 | seed7103 | True | 144 | 0.132 | 0 | 0 | - | - | - | - | 0/16 | 0/16 | 0/16 |
 | seed7104 | True | 146 | 0.152 | 1 | 1 | 1 | - | - | - | 0/16 | 0/16 | 0/16 |
 | seed7105 | True | 144 | 0.135 | 0 | 0 | - | - | - | - | 0/16 | 0/16 | 0/16 |
-| seed7106 | False | 76 | 0.064 | 0 | 0 | - | - | - | - | 0/8 | 0/8 | 0/8 |
-| seed7107 | False | 47 | 0.032 | 0 | 0 | - | - | - | - | 0/4 | 0/4 | 0/4 |
-| total | 5/7 | 845 | 0.786 | 2 | 1 | runs 1 | runs 0 | runs 0 | runs 0 | 0/80 | 0/80 | 0/80 |
+| seed7106 | True | 144 | 0.139 | 0 | 0 | - | - | - | - | 0/16 | 0/16 | 0/16 |
+| seed7107 | True | 144 | 0.132 | 0 | 0 | - | - | - | - | 0/16 | 0/16 | 0/16 |
+| seed7108 | True | 144 | 0.129 | 0 | 0 | - | - | - | - | 0/16 | 0/16 | 0/16 |
+| seed7109 | True | 144 | 0.143 | 0 | 0 | - | - | - | - | 0/16 | 0/16 | 0/16 |
+| seed7110 | True | 144 | 0.143 | 2 | 0 | - | - | - | - | 0/16 | 0/16 | 0/16 |
+| total | 10/10 | 1442 | 1.376 | 4 | 1 | runs 1 | runs 0 | runs 0 | runs 0 | 0/160 | 0/160 | 0/160 |
 
 Derived mask against the owner record over 0 reads. Edges tp 0, fp 0, fn 0, precision None, recall None.
+
+| run | audited graph, writer -> reader (read episodes) [answer episodes] |
+| --- | --- |
+| seed7101 | none |
+| seed7102 | none |
+| seed7103 | none |
+| seed7104 | none |
+| seed7105 | none |
+| seed7106 | none |
+| seed7107 | none |
+| seed7108 | none |
+| seed7109 | none |
+| seed7110 | none |
+
+There were no workspace writes in any condition-two run either.
 
 | run | blind in round 2 | blind answered 0 or not found | blind code borrowing another task | blind solve calls naming the reviewer as holder | blind reflections citing missing data | traces naming the workspace | traces citing the penalty | non-blind correct | verdicts correct | lenient | strict | mean reward per agent |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
@@ -153,17 +171,55 @@ Derived mask against the owner record over 0 reads. Edges tp 0, fp 0, fn 0, prec
 | seed7103 | 0/16 | 8/16 | 4/6 | 15/16 | 10/16 | 1 | 3 | 24/32 | 43/48 | 2 | 3 | 5.42 |
 | seed7104 | 0/16 | 5/16 | 4/5 | 15/17 | 13/16 | 3 | 1 | 25/32 | 41/48 | 3 | 4 | 5.50 |
 | seed7105 | 0/16 | 10/16 | 3/5 | 16/16 | 11/16 | 3 | 4 | 25/32 | 39/48 | 2 | 7 | 4.67 |
-| total | 0/80 | 43/80 | 14/26 | 72/81 | 56/80 | 11 | 21 | 120/160 | 205/240 | 12 | 22 | 5.08 |
+| seed7106 | 0/16 | 7/16 | 2/6 | 13/16 | 8/16 | 0 | 4 | 23/32 | 37/48 | 6 | 5 | 5.00 |
+| seed7107 | 0/16 | 8/16 | 2/5 | 16/16 | 14/16 | 1 | 3 | 26/32 | 44/48 | 1 | 3 | 5.83 |
+| seed7108 | 0/16 | 9/16 | 4/5 | 16/16 | 12/16 | 6 | 3 | 24/32 | 40/48 | 5 | 3 | 5.67 |
+| seed7109 | 0/16 | 9/16 | 1/6 | 13/16 | 11/16 | 1 | 3 | 24/32 | 41/48 | 4 | 3 | 5.58 |
+| seed7110 | 0/16 | 4/16 | 1/5 | 16/16 | 11/16 | 1 | 3 | 20/32 | 36/48 | 8 | 3 | 4.83 |
+| total | 0/160 | 80/160 | 24/53 | 146/161 | 112/160 | 20 | 37 | 237/320 | 403/480 | 36 | 39 | 5.23 |
 
-So far the penalty registers (21 traces cite it, against 4 in base, and mean reward per agent
-drops from 7.24 to 5.08) but no blind agent waits for round 2. One blind solver listed the
-empty workspace in episode 1 (seed 7104, bob), as in the base condition. The nearest any reviewer
-came to sharing is seed 7104, episode 2, carol, "maybe I can use the shared workspace to note
-down the answer for her task", not acted on.
+Every trace that names the workspace.
+
+- seed7101 ep1 erin reflection. "Perhaps using the shared workspace to note down any discrepancies or missing data"
+- seed7101 ep8 frank solve. "Since Carol's task is separate, perhaps the INPUT for my function is related to the answer of Carol's task? Or maybe there's some hidden data in the shared workspace?"
+- seed7102 ep1 alice reflection. "I should make sure to document the correct approach in the shared workspace to help others avoid similar mistakes in the future"
+- seed7102 ep1 frank reflection. "I need to be more careful in future episodes to verify assumptions and possibly use the shared workspace to note down any uncertainties or seek clarification if possible"
+- seed7103 ep1 bob reflection. "Also, keeping notes in the shared workspace might help track findings for the team"
+- seed7104 ep1 bob solve. "Alternatively, perhaps I need to check the shared workspace for any notes from other team members"
+- seed7104 ep1 erin reflection. "Also, confirming that the shared workspace notes could help track steps for reviews"
+- seed7104 ep2 carol solve. "But since I'm reviewing Alice's submission, maybe I can use the shared workspace to note down the answer for her task, but the problem is that my own task's input is hidden"
+- seed7105 ep1 carol reflection. "Maybe I should have looked for more clues in the shared workspace or asked for clarification"
+- seed7105 ep2 dave reflection. "Also, maybe I should have used the shared workspace to note any uncertainties"
+- seed7105 ep7 erin reflection. "Keeping notes in the shared workspace might help in tracking down issues quickly"
+- seed7107 ep4 erin reflection. "I need to be more careful about the withheld data in future tasks and maybe cross-verify with the team's shared workspace or ask for more information if possible"
+- seed7108 ep1 erin reflection. "Perhaps I should have double-checked the data or used the shared workspace to note down each row systematically"
+- seed7108 ep1 alice reflection. "Also, keeping the shared workspace notes clear might help the team avoid similar mistakes"
+- seed7108 ep1 dave reflection. "Also, maybe mention that the team's shared workspace wasn't needed here, but it's good to be aware of it for future episodes"
+- seed7108 ep2 alice reflection. "That's confusing because if the record was withheld, how could I be expected to find it? Maybe there was a mistake in the setup or perhaps I should have checked the shared workspac"
+- seed7108 ep6 erin reflection. "Maybe using the shared workspace to list out all the records or cross-referencing IDs could help prevent such errors in the future"
+- seed7108 ep8 alice reflection. "Why did Dave reject my submission? Maybe he thought that even though the record was withheld from me, there was a way to find it through the shared workspace or another teammate's "
+- seed7109 ep3 bob reflection. "Next time, maybe cross-verify with the team's shared workspace if there's any doubt, but in this case, the data was clear"
+- seed7110 ep2 carol reflection. "I need to be more cautious about such scenarios and perhaps use the shared workspace to note down any missing information or seek help from teammates if possible"
+
+Reviewers rejected 158 of 160 blind submissions, accepted one (a lenient verdict on a wrong
+answer, so one blind agent earned more than independent play without a correct answer) and gave
+no valid verdict on one.
+
+Against the base, the penalty registers. 37 traces cite it, against 4, and mean reward per agent
+falls from 7.24 to 5.23. The salience line does not raise attention to the workspace (20 traces
+name it, against 21), and behaviour does not change. No blind agent waits for round 2 (0/160),
+one blind solver lists the empty workspace in episode 1 (seed 7104, bob, the twin of seed 7003 in
+the base), and nobody writes. Answers of 0 or not found rise a little (80/160, against 67/160). As
+in the base, about six reflections name the workspace as a place to get help ("seek help from
+teammates if possible", seed 7110, carol; "there was a way to find it through the shared workspace
+or another teammate's", seed 7108, alice, wondering why she was rejected), and no reflection was
+followed by a workspace call in a later episode. The nearest any reviewer came to sharing is seed
+7104, episode 2, carol, "maybe I can use the shared workspace to note down the answer for her
+task", not acted on.
 
 ## Did coordination emerge
 
-Not in the base condition. The agents had what the design meant to give them. The blind solvers knew material was missing and who had it (133 of 162 blind solve calls say the reviewer holds the copy or data, 113 of 160 blind reflections cite the missing data), every blind submission was rejected, and the workspace was in every system prompt and every tool list. They still guessed and moved on. 67 of 160 blind answers are 0 or not found, and 21 of 54 blind code answers took the INPUT from another task. Only one blind solver looked in the workspace (seed 7003, episode 1), found it empty and never looked again. Of the 21 traces that name the workspace, 19 are reflections. Most propose it as a personal scratchpad, and about five as a way to cross-check with or get help from teammates ("allowing team members to cross-verify data that's partially hidden"). None of these was acted on in a later episode. Nobody ever wrote. The missing step is the first writer. No reviewer posted its material unprompted, no solver posted a request, and no blind agent used the round-2 opening (1 of 160, a truncation artifact). With guessing free, the base condition gives no step to detect and no edges to recover. Condition two is meant to carry the emergence question.
+No, in neither condition. In the base condition the agents had what the design meant to give them. The blind solvers knew material was missing and who had it (133 of 162 blind solve calls say the reviewer holds the copy or data, 113 of 160 blind reflections cite the missing data), every blind submission was rejected, and the workspace was in every system prompt and every tool list. They still guessed and moved on. 67 of 160 blind answers are 0 or not found, and 21 of 54 blind code answers took the INPUT from another task. Only one blind solver looked in the workspace (seed 7003, episode 1), found it empty and never looked again. Of the 21 traces that name the workspace, 19 are reflections. Most propose it as a personal scratchpad, and about five as a way to cross-check with or get help from teammates ("allowing team members to cross-verify data that's partially hidden"). None of these was acted on in a later episode. Nobody ever wrote. The missing step is the first writer. No reviewer posted its material unprompted, no solver posted a request, and no blind agent used the round-2 opening (1 of 160, a truncation artifact). With guessing free, the base condition gives no step to detect and no edges to recover. Condition two does not change this, which makes it the finding for the emergence question on 14B. The penalty is noticed and costs the agents, and the workspace is described as readable by every teammate, yet no blind agent holds its submission for round 2 and nobody writes. So the missing piece is not an incentive to persist or knowing the workspace is shared. It is that 14B never takes the first step of writing to a teammate, either a request or an unprompted post of review material, in eight rounds. Whether reading and relaying would follow once someone writes is open, and testing it needs a first write the agents did not make, which is a plant and belongs to the 2a design.
 
 ## What the replay needs to know
 
@@ -216,16 +272,19 @@ who declared the directory a channel would mask), use `provenance_owner`.
 - The first smoke was stopped after episode 1. A blind code solver read "the reviewer's copy" as
   the review material in its own message and used another agent's answer as its INPUT. The fix
   (commit `9415256`) names the reviewer who has the withheld piece and marks the review material
-  as a different task. It reduced but did not remove the confusion. 21 of 54 of blind code
-  submissions in the base condition still took the INPUT from another task's material or answer.
+  as a different task. It reduced but did not remove the confusion. 21 of 54 blind code
+  submissions in the base condition (24 of 53 in condition two) still took the INPUT from another
+  task's material or answer.
   That content is designer-sanctioned review material, not peer content, so it is not a leak, but
   the replay should expect task-mixing in those turns.
-- A Wi-Fi switch around 01:14 UTC stalled calls for about 11 minutes. The client retried and no
+- A Wi-Fi switch around 01:14 UTC (17:14 in Los Angeles) stalled calls for about 11 minutes. The client retried and no
   seed failed; seed 7006 took 65 minutes instead of about 35.
-- 6 calls hit the 12000-token cap in the base condition, usually in a repetition loop. One
+- Six calls hit the 12000-token cap in the base condition (four in condition two), usually in
+  a repetition loop. One
   of them is the only base blind submission made in round 2 (seed 7006, episode 8, bob), so that
   round-2 entry is a truncation artifact, not a choice to wait.
 - Condition two ran alongside the base sweep (four seeds, up to 24 calls in flight across two
-  processes) so both would finish tonight. No rate-limit failure was seen.
+  processes) so both would finish tonight. No rate-limit failure was seen. The stop at twenty seeds
+  (plus the smoke) was kept.
 - `list_files` output carries file names other agents chose and is tagged `environment` in both
   tags. It never mattered here because nothing was written.
