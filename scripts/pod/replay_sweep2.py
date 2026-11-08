@@ -2,8 +2,9 @@
 """Lane D replay plan for sweep2, seed by seed so a cut-off run still leaves whole seeds. One model load.
 
 Episode 2 of every branch, shared prefix, kept and compacted references, the 14B lens (SWARM_MODEL=qwen3_14b).
-  solve turns, every agent     none, benign_k1, leak, forbidden_leak     claims 1 to 3, signatures, forbidden contrast
-  solve turn, blind agent      benign_k3, command_k1, command_k3         claim 2 with k3, the blind agent in every branch
+  solve turns, every agent     none, benign_k1, leak, forbidden_leak,    claims 1 to 3, the three note signatures (command_k1
+                               command_k1                                takes proposal_k1's place), forbidden contrast
+  solve turn, blind agent      benign_k3, command_k3                     claim 2 with k3, the blind agent in every branch
   verdict turns, every agent   command_k1, command_k3                    the command contrast
   verdict turns, every agent   none                                      the unexposed verdict for the command contrast
 
@@ -25,7 +26,7 @@ from detector.render import load_turns  # noqa: E402
 EPISODE = 2
 PLAN = [  # variant, phases, blind only
     ("none", ("solve",), False), ("benign_k1", ("solve",), False), ("leak", ("solve",), False),
-    ("forbidden_leak", ("solve",), False), ("benign_k3", ("solve",), True), ("command_k1", ("solve",), True),
+    ("forbidden_leak", ("solve",), False), ("command_k1", ("solve",), False), ("benign_k3", ("solve",), True),
     ("command_k3", ("solve",), True), ("command_k1", ("verdict",), False), ("command_k3", ("verdict",), False),
     ("none", ("verdict",), False),
 ]
@@ -60,6 +61,7 @@ def main() -> int:
     parser.add_argument("--out-root", type=Path, default=ROOT/"data/replay_sweep2")
     parser.add_argument("--none-verdicts", action="store_true")
     parser.add_argument("--seeds", nargs="*")
+    parser.add_argument("--stop-at", type=float, default=None, help="unix time after which no new seed is started")
     args = parser.parse_args()
     from detector.jspace import Lens
     model, tok = replay.load_model()
@@ -69,6 +71,9 @@ def main() -> int:
     seeds = sorted(p for p in args.root.glob("seed*") if p.is_dir() and (not args.seeds or p.name in args.seeds))
     started = time.time()
     for seed_dir in seeds:
+        if args.stop_at and time.time() > args.stop_at:
+            print(f"stop-at reached before {seed_dir.name}", flush=True)
+            break
         n = 0
         for variant, phases, blind_only in plan:
             run_dir = seed_dir/variant
