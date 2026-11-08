@@ -7,6 +7,8 @@ Episode 2 of every branch, shared prefix, kept and compacted references, the 14B
   solve turn, blind agent      benign_k3, command_k3                     claim 2 with k3, the blind agent in every branch
   verdict turns, every agent   command_k1, command_k3                    the command contrast
   verdict turns, every agent   none                                      the unexposed verdict for the command contrast
+The first pass over all seeds does the solve turns of none, leak, forbidden_leak, benign_k1 and command_k1 and the command
+verdicts; the second the blind agent in benign_k3 and command_k3 and the none verdicts.
 
   python scripts/pod/replay_sweep2.py runs/sweep2 --out-root data/replay_sweep2
 """
@@ -24,12 +26,11 @@ import replay  # noqa: E402
 from detector.render import load_turns  # noqa: E402
 
 EPISODE = 2
-PLAN = [  # variant, phases, blind only
-    ("none", ("solve",), False), ("benign_k1", ("solve",), False), ("leak", ("solve",), False),
-    ("forbidden_leak", ("solve",), False), ("command_k1", ("solve",), False), ("benign_k3", ("solve",), True),
-    ("command_k3", ("solve",), True), ("command_k1", ("verdict",), False), ("command_k3", ("verdict",), False),
-    ("none", ("verdict",), False),
-]
+# Two passes over the seeds, so a deadline drops extras before it drops seeds. variant, phases, blind only
+CORE = [("none", ("solve",), False), ("leak", ("solve",), False), ("forbidden_leak", ("solve",), False),
+        ("benign_k1", ("solve",), False), ("command_k1", ("solve",), False), ("command_k1", ("verdict",), False),
+        ("command_k3", ("verdict",), False)]
+EXTRA = [("benign_k3", ("solve",), True), ("command_k3", ("solve",), True), ("none", ("verdict",), False)]
 
 
 def run_plan(model, tok, capture, lens, run_dir: Path, out: Path, phases, blind_only: bool) -> int:
@@ -67,21 +68,22 @@ def main() -> int:
     model, tok = replay.load_model()
     lens = Lens(replay.MODEL_DIR, replay.LENS_FILE)
     capture = replay.Capture(model, lens.layers)
-    plan = [("none", ("verdict",), False)] if args.none_verdicts else PLAN
+    passes = [("none verdicts", [("none", ("verdict",), False)])] if args.none_verdicts else [("core", CORE), ("extra", EXTRA)]
     seeds = sorted(p for p in args.root.glob("seed*") if p.is_dir() and (not args.seeds or p.name in args.seeds))
     started = time.time()
-    for seed_dir in seeds:
-        if args.stop_at and time.time() > args.stop_at:
-            print(f"stop-at reached before {seed_dir.name}", flush=True)
-            break
-        n = 0
-        for variant, phases, blind_only in plan:
-            run_dir = seed_dir/variant
-            if not (run_dir/"run.json").exists() or not json.loads((run_dir/"run.json").read_text()).get("complete"):
-                print(f"skip {run_dir}: not complete", flush=True)
-                continue
-            n += run_plan(model, tok, capture, lens, run_dir, args.out_root/Path(*run_dir.parts[-3:]), phases, blind_only)
-        print(f"== {seed_dir.name} {n} turns, {time.time() - started:.0f}s elapsed", flush=True)
+    for name, plan in passes:
+        for seed_dir in seeds:
+            if args.stop_at and time.time() > args.stop_at:
+                print(f"stop-at reached in the {name} pass before {seed_dir.name}", flush=True)
+                return 0
+            n = 0
+            for variant, phases, blind_only in plan:
+                run_dir = seed_dir/variant
+                if not (run_dir/"run.json").exists() or not json.loads((run_dir/"run.json").read_text()).get("complete"):
+                    print(f"skip {run_dir}: not complete", flush=True)
+                    continue
+                n += run_plan(model, tok, capture, lens, run_dir, args.out_root/Path(*run_dir.parts[-3:]), phases, blind_only)
+            print(f"== {name} {seed_dir.name} {n} turns, {time.time() - started:.0f}s elapsed", flush=True)
     return 0
 
 
