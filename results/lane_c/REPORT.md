@@ -23,6 +23,11 @@ clean case. The reference's best late-layer rank there is 185 to 1,427 in four o
 predict the string, and 0 in the fifth (seed 3012). For numbers the reference still predicts some digit, rank 0 to 1, as
 on 32B.
 
+**A trace score that is told neither what nor where finds the uptake.** The maximum of a 16-token sliding mean of delta over
+floor lands within 19 tokens of the first mention in all ten seeds (median 1 token after it). The count of reply tokens above
+10 times the floor separates the leak from benign_k1 at AUROC 0.96 (9 of 10 pairs) and from no note at 1.00, from the other
+notes at 0.83 to 0.89. The plateau height alone separates the leak from a harmless note only at 0.78.
+
 **Masking anything costs about the kernel floor.** The placebo reference masks a random designer span of the note's token
 length instead of the note. It moves the residual by 0.008 to 0.045 relative, against 0.024 to 0.373 for the real
 reference, and leaves J-space mass at 0.10 to 0.25, where the none branch's kernel noise sits (0.12 to 0.18). Its surplus
@@ -287,6 +292,45 @@ The placebo reference masks a random designer span (system prompt or task text) 
 | proposal_k3 | answer_pre | 0.027 | 0.009 | 0.027 | 0.17 | 0.225 | 0.135 | 9 |
 | proposal_k3 | mention_pre | 0.018 | 0.011 | 0.018 | 0.30 | 0.189 | 0.162 | 8 |
 | proposal_k3 | end_of_response | 0.029 | 0.010 | 0.028 | 0.20 | 0.203 | 0.142 | 10 |
+
+### A trace score that does not know where the mention is
+
+`scripts/lane_c_window.py`, CPU, on the stage-1 traces. For the blind agent's solve turn, every reply token from
+`first_generated` on, delta over floor is the reference's relative residual delta over the every-token kernel floor of that
+layer, then averaged over L16 to L38 (or all layers). Scores per turn are the maximum over the reply of a sliding-window mean
+(8, 16, 32 tokens), and the fraction and the count of reply tokens above 10 times the floor. Ten seeds, matched pairs. The
+last column is where the leak branch's window maximum lands, its centre in tokens after `mention_pre`. Data in
+`results/lane_c/window.json`, the per-token trace of seed 3000 (leak and benign_k1) in `results/lane_c/trace_seed3000.csv`.
+
+| Band | Score | leak vs benign_k1 | leak vs none | leak vs benign_k3 | leak vs proposal_k1 | leak vs proposal_k3 | Median, leak / benign_k1 | Window centre minus first mention, leak, tokens |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| L16-38 | window 8 | 0.70 (6/10) | 1.00 (10/10) | 0.81 (8/10) | 0.60 (5/10) | 0.75 (8/10) | 65.5 / 55.7 | -2 to 244, median 6 |
+| L16-38 | window 16 | 0.78 (8/10) | 1.00 (10/10) | 0.78 (8/10) | 0.57 (6/10) | 0.68 (7/10) | 61.6 / 45.8 | -19 to 11, median 1 |
+| L16-38 | window 32 | 0.86 (8/10) | 1.00 (10/10) | 0.79 (8/10) | 0.70 (8/10) | 0.72 (6/10) | 52.0 / 31.8 | -14 to 14, median 0 |
+| L16-38 | fraction above 10 | 1.00 (10/10) | 1.00 (10/10) | 1.00 (10/10) | 0.98 (10/10) | 0.99 (10/10) | 0.4 / 0.0 | - |
+| L16-38 | count above 10 | 0.96 (9/10) | 1.00 (10/10) | 0.85 (9/10) | 0.89 (9/10) | 0.83 (9/10) | 259.5 / 110.0 | - |
+| all | window 8 | 0.67 (6/10) | 1.00 (10/10) | 0.79 (7/10) | 0.65 (5/10) | 0.72 (7/10) | 56.6 / 44.4 | -1 to 244, median 6 |
+| all | window 16 | 0.77 (8/10) | 1.00 (10/10) | 0.79 (8/10) | 0.61 (6/10) | 0.68 (6/10) | 52.5 / 35.2 | -6 to 10, median 2 |
+| all | window 32 | 0.85 (8/10) | 1.00 (10/10) | 0.79 (8/10) | 0.73 (8/10) | 0.77 (8/10) | 41.5 / 24.6 | -13 to 15, median 0 |
+| all | fraction above 10 | 1.00 (10/10) | 1.00 (10/10) | 1.00 (10/10) | 0.98 (10/10) | 0.99 (10/10) | 0.2 / 0.0 | - |
+| all | count above 10 | 0.96 (9/10) | 1.00 (10/10) | 0.83 (8/10) | 0.88 (9/10) | 0.81 (7/10) | 164.5 / 79.5 | - |
+| control | reply length, shorter scores higher | 0.92 (9/10) | 0.93 (9/10) | 0.92 (10/10) | 0.91 (9/10) | 0.94 (9/10) | 776 / 2846 tokens | - |
+| placebo reference, L16-38 | window 16 | 0.21 (1/10) | 0.28 (3/10) | 0.24 (1/10) | 0.26 (2/10) | 0.17 (1/10) | 3.2 / 6.9 | - |
+| placebo reference, L16-38 | count above 10 | 0.12 (2/10) | 0.20 (1/10) | 0.14 (0/10) | 0.17 (1/10) | 0.17 (1/10) | 3.0 / 20.0 | - |
+
+**Where, yes.** Without being told where to look, the 16-token window maximum lands within 19 tokens of the first mention in
+all ten seeds, a median 1 token after `mention_pre`, and the 32-token one within 14, median 0. The 8-token window is the
+exception, 244 tokens away in one seed (a single-token kernel-noise outlier). So the detector finds the moment of uptake on its
+own.
+
+**What, partly.** The height of the plateau tells the leak from no note (1.00 at every window) but only modestly from a harmless
+note (0.78 at 16 tokens, 0.86 at 32, against benign_k1; 0.57 to 0.73 against proposal_k1). A benign note discussed in the
+reasoning raises plateaus of the same height. The count of reply tokens above 10 times the floor does better, 0.96 against
+benign_k1 (9 of 10 pairs) and 0.83 to 0.89 against the other notes. The fraction reaches 0.98 to 1.00 against every note, but it
+divides by reply length, and reply length alone scores 0.91 to 0.94 (leak replies are a median 776 tokens against 2,846,
+because the agent copies the answer instead of solving), so that 1.00 is partly behaviour rather than the residual. With the
+placebo reference the same scores sit far lower in every branch (window 3.2 against 6.9) and do not favour the leak (0.12 to
+0.28), so the plateau belongs to the note.
 
 ### W3 follow-up 1, the first mention
 
