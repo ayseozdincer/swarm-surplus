@@ -181,7 +181,7 @@ async def main() -> int:
         if not api_key:
             print(f"error: {args.api_key_env} is not set. Put it in the environment or in .env.", file=sys.stderr)
             return 2
-        shared = OpenAICompatLLM(args.model, args.base_url, api_key, temperature=args.temperature,
+        client = OpenAICompatLLM(args.model, args.base_url, api_key, temperature=args.temperature,
                                  max_tokens=args.max_tokens, reasoning=not args.no_reasoning,
                                  provider_pin=args.provider_pin, max_concurrency=args.max_concurrency, timeout=args.timeout,
                                  max_retries=args.max_retries,
@@ -189,7 +189,7 @@ async def main() -> int:
         model, base_url = args.model, args.base_url
 
         def llm_for(cfg: SwarmConfig):
-            return shared
+            return client
 
     sem = asyncio.Semaphore(args.concurrency)
     t0 = time.time()

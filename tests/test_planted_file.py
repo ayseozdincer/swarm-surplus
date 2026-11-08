@@ -228,6 +228,23 @@ def test_non_code_target_fails_clearly():
         assert not out["prefix"]["complete"] and "not a code task" in out["prefix"]["error"]
 
 
+def test_cli_modes_with_a_real_client():
+    """A real client, not the mock, against a closed port. Each mode must take its own path, so its directories appear before
+    the first call fails."""
+    import os
+    import subprocess
+    script = Path(__file__).resolve().parents[1]/"scripts"/"run_plants.py"
+    env = {**os.environ, "NO_KEY_NEEDED": "x"}
+    for mode, directory in (("plants", "prefix"), ("shared_file", "shared_file"), ("planted_file", "prefix")):
+        with tempfile.TemporaryDirectory() as td:
+            out = Path(td)/"cli"
+            done = subprocess.run([sys.executable, str(script), "--mode", mode, "--seeds", "1", "--seed-base", "8001", "--episodes", "1", "--warmup", "2",
+                                   "--base-url", "http://127.0.0.1:9/v1", "--api-key-env", "NO_KEY_NEEDED", "--max-retries", "1", "--timeout", "1", "--out", str(out)],
+                                  capture_output=True, text=True, timeout=120, env=env, cwd=td)
+            made = sorted(p.name for p in (out/"seed8001").iterdir())
+            assert directory in made and (mode == "shared_file") == ("shared_file" in made), (mode, made, done.stdout[-300:], done.stderr[-300:])
+
+
 # ---------------------------------------------------------------------- rendering, with the real tokenizer
 
 def _tokenizer():
