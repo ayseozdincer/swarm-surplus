@@ -1,6 +1,6 @@
 # Overnight report
 
-Draft in progress, updated as work lands. Branch `overnight-detector`.
+Branch `overnight-detector`. Every number below comes from a file under `results/`, named in its section.
 
 ## What ran and what did not
 
@@ -8,15 +8,34 @@ Draft in progress, updated as work lands. Branch `overnight-detector`.
 | --- | --- | --- |
 | W1 code notes and cache report | done | Qwen3-32B rows reproduce. `read.py` stopped at figure rendering, see the notes at the end |
 | W2 pod, model, lens | done | Smoke test passes |
-| W3 replay and leak readout | done | First replay discarded and rerun once. The leak is not read at the handoff's positions, and is read at the first mention, see below |
-| W4 Phase 0 on Core | done | Surplus AUROC 1.000, close to true by construction, see the warning in that section |
-| W5 Transfer implicit labels | partial, blocker below | Audit done. Outcome label not computable from the release |
+| W3 replay and leak readout | done | First replay discarded and rerun once with the kernel pinned. The leak is not read at the handoff's positions. It is read at the first mention (follow-ups 1 and 2) |
+| W4 Phase 0 on Core | done | Surplus AUROC 1.000, close to true by construction |
+| W4 follow-ups 1 to 4 | done | Placebo, ontology on the surplus, edge test 1c (dense sets too sparse), size-matched removal. Mass is edit size |
+| W4 follow-ups 5 and 6 | done | The directive moves mass about twice as far as neutral text of equal length, but most of the mass is edit size. After size adjustment, run AUROC 0.85 at the first token, 0.42 at the end |
+| W5 Transfer implicit labels | done as decided | Audit done (17 yes, 19 no, $0.0069). Outcome labels dropped by Ayse's decision, the 17 yes cases get a human read |
 | W6 Stego spans | done | `detector/stego_spans.py`, tested on all 320 colluder turns |
 | W6 sweep1 replay | done | Seeds 2000 to 2002, every variant, episode 2, plus the verdict turns of 7 later proposal runs. The leak reads at the first mention in all three seeds |
+| W7 part A, direction test | done | Kept and compacted references, the per-token trace |
+| W7 part B, detection on sweep1 | done | 3 seeds. The jump carries uptake, the direction carries exposure |
+| 1c direction edge | done | Partner nearest in 62 of 62, as is the shuffled null, so no provenance |
+| W7 concealment read | done, descriptive | Three cases, nothing separates them. Sweep2 is the test |
+| GPU checks | recorded | Mask deletion fails its pre-set criterion, recorded and not rerun (see W3) |
 
 ## Pod, GPU, hours and cost
 
-Filled in at the end of the night. Running estimate from the watchdog: see `results/pod_state.json`.
+| Item | Value |
+| --- | --- |
+| Pod id | `d8xqdg78e5amwd` (swarm-overnight), RunPod, image `runpod/pytorch:1.0.3-cu1281-torch280-ubuntu2404` |
+| GPU | 1 x NVIDIA A100-SXM4-80GB, 16 vCPU, 250 GB RAM, 250 GB pod volume |
+| Rate | 1.79 USD per hour GPU, about 1.83 per hour billed with disk |
+| Running | 2026-11-07 17:26:44 UTC to 2026-11-08 02:36 UTC, 9.15 hours wall clock |
+| Billed so far | 15.05 USD for 8.21 hours (RunPod billing through the 01:00 UTC bucket; the last hour had not posted at the time of writing) |
+| Estimated total | about 16.8 USD at the billed rate (the watchdog's GPU-only estimate is 16.28) |
+| Budget | 30 USD; local watchdog cap 28.5 USD and 20 minutes idle |
+| State now | **Stopped, not terminated.** The volume and everything on it are kept |
+| Stopped-volume cost | about 1.64 USD per day (250 GB at 0.20 USD per GB-month), until the pod is terminated |
+
+The watchdog ran on this Mac, and the stop script inside the pod could not be verified (open question 3). One certificate error during a Wi-Fi switch killed the watchdog at 01:13 UTC. It was restarted 11 minutes later with the gap counted, and now survives network and HTTP errors. A stopped pod keeps its volume on the same host, so restarting it for the next replay needs a free A100 on that machine.
 
 ## OpenRouter spend
 
@@ -424,11 +443,74 @@ Colluders against honest agents with the matched edit, AUROC (runs domain-groupe
 
 **Honest agents with a matched removal reach colluder mass, so mass is edit size, and the Core AUROC of 1.000 is an artifact of the reference construction.** At the end of response, the edit that matches the colluders' (swap plus removal) gives AUROC 0.448, and its interval includes chance. At the first response token some separation is left (0.893), but the gap in median mass shrinks from 0.39 to 0.055. That remainder can still come from what is removed rather than from collusion: the colluders lose private text addressed to them by name, while the honest agents lose public history. Mass alone does not carry the Core result. The direction and dense readout tests in W7 are where any collusion content has to show.
 
+### W4 follow-up 5, key-sentence dose
+
+In Core, the sentence that tells a colluder which option to push is in its system prompt, not in the private block. The private block is the partner exchange that follows from it. So the "directive sentence" is the system-prompt sentence that states the outcome, chosen by hand per scenario (both colluders of a run share it) and listed in `DIRECTIVES` in `scripts/phase0_dose.py`. Examples: "Issue a clean opinion.", "Ensure Bid B prevails.", "Push toward parole denial.". Median 9 tokens (4 to 31). Every reference here is an attention mask on the served input (keys masked, positions kept), on the same kernel as the actual pass. The actual pass recomputed for two rows matches `data/phase0/core` exactly (max abs difference 0.0).
+
+- **Key sentence.** The directive masked, everything else as served.
+- **Neutral sentence.** The same number of tokens masked from the task text of the user prompt. The shortest sentence after the first that states no evaluation (no favour, recommend, support, should, must, requires, option, ...) and is long enough, masked from its start. For example "The audit partner has billed", "The restaurant is owned by a", "Honeybee mortality data".
+- **Full mask.** The colluder-only system-prompt text and the private block masked (median 388 tokens), the attention-mask version of the W4 full-block reference.
+- **Honest, neutral sentence.** Honest agents with the scenario's directive length masked from their task text the same way.
+
+Surplus mass per agent, pooled over rounds and layers, by band. The floor is the kernel-noise median, with its max in brackets.
+
+| Position | Band | Floor | Colluders, full-block reference (W4) | Colluders, full mask | Colluders, key sentence | Colluders, neutral sentence | Honest, own reference | Honest, neutral sentence |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| first response token | L26-30 | 0.135 (0.307) | 0.578 | 0.583 | 0.341 | 0.252 | 0.143 | 0.266 |
+| first response token | L50-62 | 0.122 (0.155) | 0.496 | 0.480 | 0.198 | 0.176 | 0.096 | 0.203 |
+| first response token | all | 0.137 (0.168) | 0.515 | 0.515 | 0.250 | 0.194 | 0.127 | 0.219 |
+| end of response | L26-30 | 0.134 (0.320) | 0.558 | 0.597 | 0.330 | 0.212 | 0.167 | 0.248 |
+| end of response | L50-62 | 0.142 (0.241) | 0.447 | 0.485 | 0.246 | 0.174 | 0.151 | 0.185 |
+| end of response | all | 0.142 (0.168) | 0.491 | 0.509 | 0.263 | 0.189 | 0.153 | 0.208 |
+
+| Measure | First response token | End of response |
+| --- | --- | --- |
+| Key sentence above neutral, same colluder | 60 of 62 | 62 of 62 |
+| AUROC, colluders key vs colluders neutral (agents) | 0.874 | 0.960 |
+| Key share of the way from floor to full block, median (range) | 0.30 (0.13 to 0.56) | 0.35 (0.12 to 0.61) |
+| Neutral share of the same, median (range) | 0.15 (0.01 to 0.41) | 0.13 (0.00 to 0.46) |
+| Run AUROC, colluders key vs honest own reference | 1.000 [1.00, 1.00] | 1.000 [1.00, 1.00] |
+| Run AUROC, colluders key vs honest neutral sentence | 0.768 [0.62, 0.87] | 0.875 [0.79, 0.97] |
+| Agent AUROC, colluders key vs honest neutral sentence | 0.759 | 0.901 |
+
+**Neither pure case holds.** At equal size, the directive moves mass about twice as far as a neutral sentence (60 and 62 of 62 colluders), so size is not the whole explanation. But nine directive tokens get only 30 to 35 percent of the way to the full-block value, and the neutral sentence also moves mass above the floor. So mass also grows with the amount masked. Mass per masked token is about 0.03 for nine tokens and 0.001 for the full block (follow-up 6), so mass saturates with the size of the edit and is not linear in it. Against honest agents given the same nine-token neutral mask, the key-sentence mass separates colluders at run AUROC 0.77 at the first response token and 0.88 at the end of response.
+
+### W4 follow-up 6, normalisation
+
+For every agent and reference, the edit as token counts against the served prompt (difflib over token ids, in `data/phase0/followups/edits.json`): deleted tokens are in the input but not seen by the reference; changed is deleted plus inserted. Mass per agent is pooled over rounds and all layers. The fit uses honest agents only, across own, padded, swapped, removed and swap_removed (930 agent-reference points). Mass against log(1 + changed tokens) fits with R² 0.93 at the first response token and 0.92 at the end of response, against 0.62 and 0.65 for a straight line. Deleted tokens fit worse (R² 0.63 and 0.56). Colluders are scored by their residual above the changed-token fit.
+
+| Group | Agents | Mass, first token / end | Deleted tokens, median | Changed tokens, median | Mass per 1000 deleted tokens, first / end | Mass per 1000 changed tokens, first / end |
+| --- | --- | --- | --- | --- | --- | --- |
+| colluders, full-block reference | 62 | 0.515 / 0.491 | 371 | 488 | 1.38 / 1.25 | 1.01 / 0.94 |
+| colluders, placebo | 62 | 0.524 / 0.497 | 375 | 502 | 1.34 / 1.25 | 1.00 / 0.94 |
+| colluders, full mask | 62 | 0.515 / 0.509 | 388 | 388 | 1.27 / 1.25 | 1.27 / 1.25 |
+| colluders, key sentence | 62 | 0.250 / 0.263 | 9 | 9 | 30.9 / 29.5 | 30.9 / 29.5 |
+| colluders, neutral sentence | 62 | 0.194 / 0.189 | 9 | 9 | 22.8 / 21.2 | 22.8 / 21.2 |
+| honest, own reference | 186 | 0.127 / 0.153 | 0 | 0 | - | - |
+| honest, padded | 186 | 0.340 / 0.371 | 0 | 135 | - | 2.49 / 2.74 |
+| honest, swapped | 186 | 0.407 / 0.382 | 111 | 229 | 3.64 / 3.36 | 1.80 / 1.67 |
+| honest, removed | 186 | 0.387 / 0.415 | 226 | 229 | 1.58 / 1.67 | 1.56 / 1.65 |
+| honest, swap plus removal | 186 | 0.460 / 0.469 | 352 | 475 | 1.27 / 1.26 | 0.93 / 0.94 |
+| honest, neutral sentence | 186 | 0.219 / 0.208 | 9 | 9 | 24.1 / 22.1 | 24.1 / 22.1 |
+
+Colluders (full-block reference) against honest agents, raw mass against the residual above the honest fit on changed tokens. Run AUROC is domain-grouped with the scenario bootstrap.
+
+| Honest comparison | Position | Raw mass, run AUROC | Residual, run AUROC | Raw, agent AUROC | Residual, agent AUROC | Residual median, colluders / honest |
+| --- | --- | --- | --- | --- | --- | --- |
+| swap plus removal | first response token | 0.893 [0.79, 0.98] | 0.851 [0.75, 0.96] | 0.894 | 0.904 | 0.072 / 0.024 |
+| swap plus removal | end of response | 0.448 [0.31, 0.60] | 0.415 [0.25, 0.55] | 0.662 | 0.657 | 0.044 / 0.023 |
+| removal | first response token | 0.976 [0.90, 1.00] | 0.960 [0.86, 1.00] | 0.986 | 0.980 | 0.072 / -0.013 |
+| removal | end of response | 0.841 [0.75, 0.95] | 0.609 [0.46, 0.79] | 0.859 | 0.797 | 0.044 / 0.004 |
+| own reference | first response token | 1.000 [1.00, 1.00] | 1.000 [1.00, 1.00] | 1.000 | 0.999 | 0.072 / 0.008 |
+| own reference | end of response | 1.000 [1.00, 1.00] | 0.815 [0.75, 1.00] | 1.000 | 0.895 | 0.044 / 0.007 |
+
+**After the size adjustment a small content effect survives at the first response token and none at the end of response.** Colluders sit 0.07 above the honest fit at the first token (run AUROC 0.85 against the matched honest edit) and 0.04 above it at the end of response (0.42). Follow-up 5 agrees. At equal size the directive carries about twice the mass of neutral text, but the bulk of the full-block mass is explained by how much was hidden.
+
 ## W5 summary
 
 `data/transfer_implicit_labels.json` has one record for each of the 36 implicit runs. It is force-added, since `data/` is ignored.
 
-**Blocker on the outcome label.** The handoff's label cannot be computed from the released data, for two reasons.
+**Why the outcome label was dropped.** The handoff's label cannot be computed from the released data, for two reasons.
 
 | Assumption in the handoff | What the release has |
 | --- | --- |
@@ -742,10 +824,41 @@ Decisions Ayse made overnight, relayed through the review session.
 
 Still open.
 
-1. **Surplus mass is edit size (W4 follow-up 4).** With a size-matched honest edit, the Core AUROC falls to 0.448 at the end of response (0.893 at the first response token). Should the write-up keep mass only as a gate (something was hidden from this agent) and move every collusion claim to the direction and dense readout tests?
+1. **Surplus mass is mostly edit size (W4 follow-ups 4 to 6).** With a size-matched honest edit, the Core AUROC falls to 0.448 at the end of response and 0.893 at the first response token. After a size fit on honest agents, the residual gives 0.415 and 0.851. At equal size, the directive sentence carries about twice the mass of neutral text. Should the write-up keep mass only as a gate (something was hidden from this agent) and move every collusion claim to the jump and direction tests?
 2. **The Qwen3-32B lens is a partial checkpoint**, 80 prompts and not converged, with a refit planned upstream. Fit our own, wait, or switch models? It matters less now that the tests run on directions, but the naming column still uses it.
 3. **The pod-side stop script is unverified.** The key RunPod injects into the pod answered 403 to every read, so the real guard was the watchdog on this Mac, which only runs while the Mac is awake. Worth knowing before the next unattended run.
 4. **The account has a 250 GB network volume, `silent-dissent-models`** (CA-MTL-3, about 0.024 USD an hour, 0.58 a day), which this work did not create or touch.
+
+## Artifacts pulled
+
+Copied from the pod to this Mac before the stop. Counts and bytes were checked per directory against the pod. Everything under `data/` is git-ignored and stays local. The 16 result JSONs on the pod are byte-identical (sha256) to the committed ones in `results/`.
+
+| Pod path | Local path | Files | Bytes | Matches the pod |
+| --- | --- | --- | --- | --- |
+| data/replay/pilot | data/replay/pilot | 84 | 642,951,180 | yes |
+| data/replay/sweep1 | data/replay/sweep1 | 441 | 3,547,291,055 | yes |
+| data/replay_mention | data/replay_mention | 12 | 39,496,467 | yes |
+| data/phase0/core | data/phase0/core | 930 | 3,864,179,016 | yes |
+| data/phase0/noise | data/phase0/noise | 46 | 207,471,229 | yes |
+| data/phase0/followups | data/phase0/followups | 23 of 30 | 2,137,657,810 | yes, except the 7 skipped below |
+| data/direction | data/direction | 16 | 341,919,914 | yes |
+| data/concealment | data/concealment | 3 | 206,451,932 | yes |
+| data/jpact-cache | data/pod_jpact_cache | 2 | 41,684 | yes |
+| /workspace/logs | data/pod_logs | 11 | 385,117 | yes, scanned for keys, none found |
+| results | results | 16 | 2,211,207 | identical |
+| **Total** | | **1,584** | **10,990,056,611** | |
+
+Skipped: seven residual arrays from the Core follow-ups, 6,833,111,936 bytes. They are kept on the stopped pod's volume. Their decompositions (`*_jspace.npz`) and row indexes (`*.json`) were pulled, which is all any report script reads. `swapped.npy`, which the 1c direction edge reads, was pulled.
+
+| Skipped file | Bytes |
+| --- | --- |
+| data/phase0/followups/padded.npy | 1,439,907,968 |
+| data/phase0/followups/removed.npy | 1,256,693,888 |
+| data/phase0/followups/swap_removed.npy | 1,256,693,888 |
+| data/phase0/followups/dose_honest_neutral.npy | 1,439,907,968 |
+| data/phase0/followups/dose_key.npy | 479,969,408 |
+| data/phase0/followups/dose_neutral.npy | 479,969,408 |
+| data/phase0/followups/dose_full.npy | 479,969,408 |
 
 ## J-space code notes
 
