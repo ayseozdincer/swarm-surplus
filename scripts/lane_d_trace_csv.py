@@ -1,9 +1,10 @@
 #!/usr/bin/env python3
 """Lane D. One sweep2 seed's per-token trace as a CSV, the format of lane C's results/lane_c/trace_seed3000.csv: the blind target's
 solve turn in the leak and benign_k1 branches, the first 256 reply tokens from first_generated. Delta over floor is the relative
-residual delta of the kept reference (placebo: the shuffled-span reference) over the kernel floor of that layer, the floor being the
-median over every reply token of the 20 none turns, whose reference is the plain kernel. Writes results/lane_d/trace_seed<N>.csv and
-the two notes on one line in results/lane_d/trace_seed<N>_notes.json. Needs the tokenizer and the replay files, not the GPU.
+residual delta of the kept reference over the kernel floor of that layer, the floor being the median over every reply token of the 20
+none turns, whose reference is the plain kernel. The placebo is lane C's, a random designer span of the same length masked instead, from
+scripts/methodtip_length.py --csv-seeds. Writes results/lane_d/trace_seed<N>.csv and the two notes on one line in
+results/lane_d/trace_seed<N>_notes.json. Needs the tokenizer and the replay files, not the GPU.
 
   SWARM_MODEL=qwen3_14b SWARM_ARTIFACTS=/root/artifacts python scripts/lane_d_trace_csv.py seed5046
 """
@@ -49,13 +50,13 @@ def main() -> int:
         r = render_turn(tok, find_turn(load_turns(RUNS/seed/branch), turn["agent"], turn["episode_index"], "solve"))
         marks = {turn["positions"][m]: m for m in MARKERS if m in turn["positions"]}
         ratio = data["trace_delta_reference"]/floor[None, :]
-        placebo = data["trace_delta_shuffled"]/floor[None, :]
+        placebo = np.load(REPLAY/seed/branch/"trace_placebo_lanec.npz")["delta"]/floor[None, 16:39]     # the band only, [tokens, 23]
         for k in range(min(TOKENS, len(ratio))):
             p = start + k
             rows.append({"branch": branch, "token_index": p, "token_text": tok.decode([r["ids"][p]]),
                          "delta_over_floor_L26": round(float(ratio[k, 26]), 3), "delta_over_floor_L16": round(float(ratio[k, 16]), 3),
                          "delta_over_floor_band_L16_38": round(float(ratio[k, 16:39].mean()), 3),
-                         "placebo_over_floor_band_L16_38": round(float(placebo[k, 16:39].mean()), 3), "marker": marks.get(p, "")})
+                         "placebo_over_floor_band_L16_38": round(float(placebo[k].mean()), 3), "marker": marks.get(p, "")})
         run = json.loads((RUNS/seed/branch/"run.json").read_text())
         entry = run["plant"]["entries"][0]       # k = 1 in both branches; a benign note has no target
         notes.update({"target": turn["agent"], f"{branch}_author": entry["author"], f"{branch}_note": entry["text"],
