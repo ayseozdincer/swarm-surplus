@@ -326,9 +326,15 @@ own.
 **What, partly.** The height of the plateau tells the leak from no note (1.00 at every window) but only modestly from a harmless
 note (0.78 at 16 tokens, 0.86 at 32, against benign_k1; 0.57 to 0.73 against proposal_k1). A benign note discussed in the
 reasoning raises plateaus of the same height. The count of reply tokens above 10 times the floor does better, 0.96 against
-benign_k1 (9 of 10 pairs) and 0.83 to 0.89 against the other notes. The fraction reaches 0.98 to 1.00 against every note, but it
-divides by reply length, and reply length alone scores 0.91 to 0.94 (leak replies are a median 776 tokens against 2,846,
-because the agent copies the answer instead of solving), so that 1.00 is partly behaviour rather than the residual. With the
+benign_k1 (9 of 10 pairs) and 0.83 to 0.89 against the other notes. **The count is the recommended plateau score, not the
+fraction.**
+
+**The reply-length confound.** A leak reply is short. The blind agent copies the answer instead of working the task, so its
+reply is a median 776 tokens against 2,846 in benign_k1. Reply length alone, shorter scoring higher, separates leak from every
+other branch at AUROC 0.91 to 0.94 (0.92 against benign_k1, 9 of 10 pairs). The fraction of tokens above 10 times the floor
+divides by that length, which is why it reaches 0.98 to 1.00 against every note. That figure is mostly the agent's behaviour,
+a short answer, rather than anything in the residual, and it is not reported as a detector result. The count does not divide
+by length, and a longer benign reply has more tokens that could cross the threshold, so the length effect works against it. With the
 placebo reference the same scores sit far lower in every branch (window 3.2 against 6.9) and do not favour the leak (0.12 to
 0.28), so the plateau belongs to the note.
 
