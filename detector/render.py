@@ -116,7 +116,7 @@ def render_turn(tokenizer, turn: dict, mentions: dict[str, str] | None = None) -
         positions["first_thought"] = token_at(offsets, reply + len("<think>\n"))
     if think_close >= 0:
         positions["after_think"] = token_at(offsets, think_close + len("</think>"))
-    for key in ("answer", "verdict"):
+    for key in ("answer", "verdict", "note"):
         span = tool_value_span(full, reply, key)
         if span and span[1] > span[0]:
             first, last = token_span(offsets, *span)
