@@ -8,10 +8,9 @@ PY=/root/venv/bin/python
 [ -d /usr/local/cuda-13.0/compat ] && export LD_LIBRARY_PATH=/usr/local/cuda-13.0/compat
 EXP=${EXP:-sweep2}; PLAN=${PLAN:-sweep2}
 mkdir -p results/lane_d data/replay_sweep2
-until ls runs/$EXP/seed*/leak/run.json >/dev/null 2>&1; do sleep 30; done
 if [ ! -f results/lane_d/prefix_check_14b.json ]; then
   first=$(ls -d runs/$EXP/seed*/leak | head -1)
   blind=$($PY -c "import json; c=json.load(open('$first/run.json'))['run_config']; print([a for e, a in c['blind_plan'] if e == 2][0])")
   $PY tests/gpu_prefix_check.py "$first" "$blind" 2 solve "" results/lane_d/prefix_check_14b.json
 fi
-$PY -u scripts/pod/replay_sweep2.py runs --out-root data/replay_sweep2
+$PY -u scripts/pod/replay_sweep2.py runs --out-root data/replay_sweep2 ${ORDER:+--order "$ORDER"} ${EXPECT:+--expect $EXPECT}
