@@ -1,0 +1,2861 @@
+{
+ "leak_at_mention": [
+  {
+   "run": "/workspace/swarm/data/replay_mention/pilot/seed1000/leak",
+   "target": "7",
+   "context": " ",
+   "position": 7861,
+   "prompt_tokens": 7810,
+   "by_layer": [
+    {
+     "layer": 0,
+     "rank_actual": 10135,
+     "rank_reference": 9992,
+     "top1_actual": "教练",
+     "top1_reference": "教练"
+    },
+    {
+     "layer": 1,
+     "rank_actual": 8980,
+     "rank_reference": 9169,
+     "top1_actual": "叹息",
+     "top1_reference": "叹息"
+    },
+    {
+     "layer": 2,
+     "rank_actual": 134172,
+     "rank_reference": 131997,
+     "top1_actual": "叹息",
+     "top1_reference": "叹息"
+    },
+    {
+     "layer": 3,
+     "rank_actual": 133052,
+     "rank_reference": 130225,
+     "top1_actual": "瞭解並",
+     "top1_reference": " Prostitutas"
+    },
+    {
+     "layer": 4,
+     "rank_actual": 22897,
+     "rank_reference": 23178,
+     "top1_actual": "误解",
+     "top1_reference": "误解"
+    },
+    {
+     "layer": 5,
+     "rank_actual": 59970,
+     "rank_reference": 58483,
+     "top1_actual": "お互",
+     "top1_reference": "お互"
+    },
+    {
+     "layer": 6,
+     "rank_actual": 49036,
+     "rank_reference": 50622,
+     "top1_actual": "お互",
+     "top1_reference": "お互"
+    },
+    {
+     "layer": 7,
+     "rank_actual": 68546,
+     "rank_reference": 66611,
+     "top1_actual": "瞭解並",
+     "top1_reference": "瞭解並"
+    },
+    {
+     "layer": 8,
+     "rank_actual": 32434,
+     "rank_reference": 29819,
+     "top1_actual": "お互",
+     "top1_reference": "热带"
+    },
+    {
+     "layer": 9,
+     "rank_actual": 129936,
+     "rank_reference": 122734,
+     "top1_actual": "お互",
+     "top1_reference": "お互"
+    },
+    {
+     "layer": 10,
+     "rank_actual": 137468,
+     "rank_reference": 122540,
+     "top1_actual": "お互",
+     "top1_reference": "お互"
+    },
+    {
+     "layer": 11,
+     "rank_actual": 139572,
+     "rank_reference": 128340,
+     "top1_actual": "可靠的",
+     "top1_reference": "可靠的"
+    },
+    {
+     "layer": 12,
+     "rank_actual": 150883,
+     "rank_reference": 150065,
+     "top1_actual": ".\n",
+     "top1_reference": ".\n"
+    },
+    {
+     "layer": 13,
+     "rank_actual": 151266,
+     "rank_reference": 150895,
+     "top1_actual": " .",
+     "top1_reference": " ."
+    },
+    {
+     "layer": 14,
+     "rank_actual": 151466,
+     "rank_reference": 151358,
+     "top1_actual": " .",
+     "top1_reference": " ."
+    },
+    {
+     "layer": 15,
+     "rank_actual": 150792,
+     "rank_reference": 149991,
+     "top1_actual": " .",
+     "top1_reference": " ."
+    },
+    {
+     "layer": 16,
+     "rank_actual": 148920,
+     "rank_reference": 146654,
+     "top1_actual": " .",
+     "top1_reference": " ."
+    },
+    {
+     "layer": 17,
+     "rank_actual": 139826,
+     "rank_reference": 129661,
+     "top1_actual": " .",
+     "top1_reference": " ."
+    },
+    {
+     "layer": 18,
+     "rank_actual": 151383,
+     "rank_reference": 151404,
+     "top1_actual": " .",
+     "top1_reference": " ."
+    },
+    {
+     "layer": 19,
+     "rank_actual": 150795,
+     "rank_reference": 151165,
+     "top1_actual": " .",
+     "top1_reference": " ."
+    },
+    {
+     "layer": 20,
+     "rank_actual": 147478,
+     "rank_reference": 149749,
+     "top1_actual": " .",
+     "top1_reference": " ."
+    },
+    {
+     "layer": 21,
+     "rank_actual": 151580,
+     "rank_reference": 151605,
+     "top1_actual": " .",
+     "top1_reference": " .\n"
+    },
+    {
+     "layer": 22,
+     "rank_actual": 151606,
+     "rank_reference": 151575,
+     "top1_actual": " .",
+     "top1_reference": " .\n"
+    },
+    {
+     "layer": 23,
+     "rank_actual": 151451,
+     "rank_reference": 151288,
+     "top1_actual": " .",
+     "top1_reference": " .\n"
+    },
+    {
+     "layer": 24,
+     "rank_actual": 151506,
+     "rank_reference": 151556,
+     "top1_actual": " .",
+     "top1_reference": " ."
+    },
+    {
+     "layer": 25,
+     "rank_actual": 151558,
+     "rank_reference": 151582,
+     "top1_actual": " .",
+     "top1_reference": "销售收入"
+    },
+    {
+     "layer": 26,
+     "rank_actual": 151643,
+     "rank_reference": 151657,
+     "top1_actual": " ,",
+     "top1_reference": " maybe"
+    },
+    {
+     "layer": 27,
+     "rank_actual": 151648,
+     "rank_reference": 151655,
+     "top1_actual": " ,",
+     "top1_reference": " ,"
+    },
+    {
+     "layer": 28,
+     "rank_actual": 151624,
+     "rank_reference": 151653,
+     "top1_actual": " ,",
+     "top1_reference": " ,"
+    },
+    {
+     "layer": 29,
+     "rank_actual": 151452,
+     "rank_reference": 151503,
+     "top1_actual": " ,",
+     "top1_reference": " ,"
+    },
+    {
+     "layer": 30,
+     "rank_actual": 151506,
+     "rank_reference": 151561,
+     "top1_actual": " ,",
+     "top1_reference": " ,"
+    },
+    {
+     "layer": 31,
+     "rank_actual": 151513,
+     "rank_reference": 151477,
+     "top1_actual": " .\n",
+     "top1_reference": " .\n"
+    },
+    {
+     "layer": 32,
+     "rank_actual": 151426,
+     "rank_reference": 151493,
+     "top1_actual": " .\n",
+     "top1_reference": " .\n"
+    },
+    {
+     "layer": 33,
+     "rank_actual": 151309,
+     "rank_reference": 151347,
+     "top1_actual": " ``",
+     "top1_reference": " ``"
+    },
+    {
+     "layer": 34,
+     "rank_actual": 151008,
+     "rank_reference": 151088,
+     "top1_actual": " .",
+     "top1_reference": "值得一"
+    },
+    {
+     "layer": 35,
+     "rank_actual": 69323,
+     "rank_reference": 113740,
+     "top1_actual": " .\n",
+     "top1_reference": " .\n"
+    },
+    {
+     "layer": 36,
+     "rank_actual": 123364,
+     "rank_reference": 135717,
+     "top1_actual": " .",
+     "top1_reference": " ."
+    },
+    {
+     "layer": 37,
+     "rank_actual": 146884,
+     "rank_reference": 147881,
+     "top1_actual": " .\n",
+     "top1_reference": " .\n"
+    },
+    {
+     "layer": 38,
+     "rank_actual": 9416,
+     "rank_reference": 3020,
+     "top1_actual": " ______",
+     "top1_reference": " _"
+    },
+    {
+     "layer": 39,
+     "rank_actual": 148087,
+     "rank_reference": 130831,
+     "top1_actual": " .\n",
+     "top1_reference": " .\n"
+    },
+    {
+     "layer": 40,
+     "rank_actual": 65,
+     "rank_reference": 9,
+     "top1_actual": " $",
+     "top1_reference": " $"
+    },
+    {
+     "layer": 41,
+     "rank_actual": 87,
+     "rank_reference": 5,
+     "top1_actual": ".\n",
+     "top1_reference": "3"
+    },
+    {
+     "layer": 42,
+     "rank_actual": 150074,
+     "rank_reference": 107616,
+     "top1_actual": "�",
+     "top1_reference": "­tion"
+    },
+    {
+     "layer": 43,
+     "rank_actual": 150649,
+     "rank_reference": 4803,
+     "top1_actual": "�",
+     "top1_reference": "­"
+    },
+    {
+     "layer": 44,
+     "rank_actual": 43899,
+     "rank_reference": 17788,
+     "top1_actual": ",",
+     "top1_reference": ","
+    },
+    {
+     "layer": 45,
+     "rank_actual": 18792,
+     "rank_reference": 1031,
+     "top1_actual": "赎",
+     "top1_reference": "车祸"
+    },
+    {
+     "layer": 46,
+     "rank_actual": 125313,
+     "rank_reference": 1293,
+     "top1_actual": ":\r\n",
+     "top1_reference": ".\r\n"
+    },
+    {
+     "layer": 47,
+     "rank_actual": 51773,
+     "rank_reference": 125,
+     "top1_actual": ":\r\n",
+     "top1_reference": ".\r\n"
+    },
+    {
+     "layer": 48,
+     "rank_actual": 53037,
+     "rank_reference": 54,
+     "top1_actual": ":\r\n",
+     "top1_reference": "车祸"
+    },
+    {
+     "layer": 49,
+     "rank_actual": 79821,
+     "rank_reference": 221,
+     "top1_actual": "累计",
+     "top1_reference": "赎"
+    },
+    {
+     "layer": 50,
+     "rank_actual": 33414,
+     "rank_reference": 99,
+     "top1_actual": "累计",
+     "top1_reference": "累计"
+    },
+    {
+     "layer": 51,
+     "rank_actual": 2964,
+     "rank_reference": 480,
+     "top1_actual": "计算",
+     "top1_reference": "累计"
+    },
+    {
+     "layer": 52,
+     "rank_actual": 31,
+     "rank_reference": 110,
+     "top1_actual": "计算",
+     "top1_reference": "累计"
+    },
+    {
+     "layer": 53,
+     "rank_actual": 45,
+     "rank_reference": 23,
+     "top1_actual": "计算",
+     "top1_reference": "灾难"
+    },
+    {
+     "layer": 54,
+     "rank_actual": 97,
+     "rank_reference": 31,
+     "top1_actual": "计算",
+     "top1_reference": "灾难"
+    },
+    {
+     "layer": 55,
+     "rank_actual": 120,
+     "rank_reference": 121,
+     "top1_actual": "计算",
+     "top1_reference": ".\n\n"
+    },
+    {
+     "layer": 56,
+     "rank_actual": 37,
+     "rank_reference": 628,
+     "top1_actual": "计算",
+     "top1_reference": ".\n\n\n\n\n\n"
+    },
+    {
+     "layer": 57,
+     "rank_actual": 2,
+     "rank_reference": 244,
+     "top1_actual": "计算",
+     "top1_reference": ".\n\n\n\n\n\n"
+    },
+    {
+     "layer": 58,
+     "rank_actual": 1,
+     "rank_reference": 13,
+     "top1_actual": "计算",
+     "top1_reference": ".\n\n"
+    },
+    {
+     "layer": 59,
+     "rank_actual": 38,
+     "rank_reference": 0,
+     "top1_actual": "计算",
+     "top1_reference": "7"
+    },
+    {
+     "layer": 60,
+     "rank_actual": 6,
+     "rank_reference": 0,
+     "top1_actual": "计算",
+     "top1_reference": "7"
+    },
+    {
+     "layer": 61,
+     "rank_actual": 0,
+     "rank_reference": 2,
+     "top1_actual": "7",
+     "top1_reference": "3"
+    },
+    {
+     "layer": 62,
+     "rank_actual": 0,
+     "rank_reference": 4,
+     "top1_actual": "7",
+     "top1_reference": "1"
+    }
+   ],
+   "best_rank_actual": 0,
+   "best_rank_reference": 0,
+   "best_rank_late_actual": 0,
+   "best_rank_late_reference": 0,
+   "layers_target_top1_actual": [
+    61,
+    62
+   ],
+   "layers_target_top1_reference": [
+    59,
+    60
+   ],
+   "jspace_surplus_layers": [
+    58,
+    61,
+    62
+   ],
+   "mass": 0.6056405216556319
+  },
+  {
+   "run": "/workspace/swarm/data/replay/sweep1/seed2000/leak",
+   "target": "ce",
+   "context": " \"",
+   "position": 8079,
+   "prompt_tokens": 7762,
+   "by_layer": [
+    {
+     "layer": 0,
+     "rank_actual": 84965,
+     "rank_reference": 85040,
+     "top1_actual": " \"\r\n",
+     "top1_reference": " \"\r\n"
+    },
+    {
+     "layer": 1,
+     "rank_actual": 111420,
+     "rank_reference": 111501,
+     "top1_actual": "对决",
+     "top1_reference": "对决"
+    },
+    {
+     "layer": 2,
+     "rank_actual": 127095,
+     "rank_reference": 127350,
+     "top1_actual": "对决",
+     "top1_reference": "对决"
+    },
+    {
+     "layer": 3,
+     "rank_actual": 131666,
+     "rank_reference": 131870,
+     "top1_actual": "对决",
+     "top1_reference": "对决"
+    },
+    {
+     "layer": 4,
+     "rank_actual": 117904,
+     "rank_reference": 118023,
+     "top1_actual": "对决",
+     "top1_reference": " Prostitutas"
+    },
+    {
+     "layer": 5,
+     "rank_actual": 102277,
+     "rank_reference": 102481,
+     "top1_actual": "对决",
+     "top1_reference": "对决"
+    },
+    {
+     "layer": 6,
+     "rank_actual": 127218,
+     "rank_reference": 126946,
+     "top1_actual": "对决",
+     "top1_reference": "对决"
+    },
+    {
+     "layer": 7,
+     "rank_actual": 133204,
+     "rank_reference": 133082,
+     "top1_actual": "对决",
+     "top1_reference": "对决"
+    },
+    {
+     "layer": 8,
+     "rank_actual": 117862,
+     "rank_reference": 117478,
+     "top1_actual": "\"\r\n",
+     "top1_reference": "\"\r\n"
+    },
+    {
+     "layer": 9,
+     "rank_actual": 114568,
+     "rank_reference": 114142,
+     "top1_actual": " \"\r\n",
+     "top1_reference": "\"\r\n"
+    },
+    {
+     "layer": 10,
+     "rank_actual": 138980,
+     "rank_reference": 138845,
+     "top1_actual": "\"\r\n",
+     "top1_reference": "\"\r\n"
+    },
+    {
+     "layer": 11,
+     "rank_actual": 117098,
+     "rank_reference": 116582,
+     "top1_actual": "—\"",
+     "top1_reference": "—\""
+    },
+    {
+     "layer": 12,
+     "rank_actual": 131593,
+     "rank_reference": 131189,
+     "top1_actual": "—\"",
+     "top1_reference": "—\""
+    },
+    {
+     "layer": 13,
+     "rank_actual": 136872,
+     "rank_reference": 138108,
+     "top1_actual": "—\"",
+     "top1_reference": "—\""
+    },
+    {
+     "layer": 14,
+     "rank_actual": 136211,
+     "rank_reference": 136812,
+     "top1_actual": "—\"",
+     "top1_reference": "—\""
+    },
+    {
+     "layer": 15,
+     "rank_actual": 126745,
+     "rank_reference": 126137,
+     "top1_actual": " \"",
+     "top1_reference": " \""
+    },
+    {
+     "layer": 16,
+     "rank_actual": 135816,
+     "rank_reference": 134201,
+     "top1_actual": " \"",
+     "top1_reference": " \""
+    },
+    {
+     "layer": 17,
+     "rank_actual": 133723,
+     "rank_reference": 128977,
+     "top1_actual": " \"",
+     "top1_reference": " \""
+    },
+    {
+     "layer": 18,
+     "rank_actual": 140059,
+     "rank_reference": 138341,
+     "top1_actual": " \"",
+     "top1_reference": " \""
+    },
+    {
+     "layer": 19,
+     "rank_actual": 139575,
+     "rank_reference": 136596,
+     "top1_actual": " \"",
+     "top1_reference": " \""
+    },
+    {
+     "layer": 20,
+     "rank_actual": 146464,
+     "rank_reference": 145215,
+     "top1_actual": " \"",
+     "top1_reference": " \""
+    },
+    {
+     "layer": 21,
+     "rank_actual": 144889,
+     "rank_reference": 142424,
+     "top1_actual": " \"",
+     "top1_reference": " \""
+    },
+    {
+     "layer": 22,
+     "rank_actual": 145627,
+     "rank_reference": 145123,
+     "top1_actual": " \"",
+     "top1_reference": "...\""
+    },
+    {
+     "layer": 23,
+     "rank_actual": 147064,
+     "rank_reference": 147483,
+     "top1_actual": " \"",
+     "top1_reference": "...\""
+    },
+    {
+     "layer": 24,
+     "rank_actual": 148630,
+     "rank_reference": 149616,
+     "top1_actual": " \"",
+     "top1_reference": "...\""
+    },
+    {
+     "layer": 25,
+     "rank_actual": 147763,
+     "rank_reference": 149490,
+     "top1_actual": " \"",
+     "top1_reference": "...\""
+    },
+    {
+     "layer": 26,
+     "rank_actual": 149155,
+     "rank_reference": 150616,
+     "top1_actual": " \"",
+     "top1_reference": "...\""
+    },
+    {
+     "layer": 27,
+     "rank_actual": 147461,
+     "rank_reference": 149900,
+     "top1_actual": " \"",
+     "top1_reference": " \""
+    },
+    {
+     "layer": 28,
+     "rank_actual": 138504,
+     "rank_reference": 146917,
+     "top1_actual": " \"",
+     "top1_reference": " \""
+    },
+    {
+     "layer": 29,
+     "rank_actual": 130598,
+     "rank_reference": 140216,
+     "top1_actual": "...\"\n",
+     "top1_reference": "...\"\n"
+    },
+    {
+     "layer": 30,
+     "rank_actual": 117031,
+     "rank_reference": 134607,
+     "top1_actual": " \"",
+     "top1_reference": "...\"\n"
+    },
+    {
+     "layer": 31,
+     "rank_actual": 131493,
+     "rank_reference": 141514,
+     "top1_actual": " \"\n",
+     "top1_reference": " \"\n"
+    },
+    {
+     "layer": 32,
+     "rank_actual": 138797,
+     "rank_reference": 146108,
+     "top1_actual": "...\"\n",
+     "top1_reference": "...\"\n"
+    },
+    {
+     "layer": 33,
+     "rank_actual": 146185,
+     "rank_reference": 148771,
+     "top1_actual": "...\"\n",
+     "top1_reference": "...\"\n"
+    },
+    {
+     "layer": 34,
+     "rank_actual": 143807,
+     "rank_reference": 147117,
+     "top1_actual": " \\\"",
+     "top1_reference": "椟"
+    },
+    {
+     "layer": 35,
+     "rank_actual": 109934,
+     "rank_reference": 128114,
+     "top1_actual": " \".",
+     "top1_reference": " \"."
+    },
+    {
+     "layer": 36,
+     "rank_actual": 87574,
+     "rank_reference": 104472,
+     "top1_actual": " \"",
+     "top1_reference": " \""
+    },
+    {
+     "layer": 37,
+     "rank_actual": 112539,
+     "rank_reference": 111035,
+     "top1_actual": " \".",
+     "top1_reference": ".\""
+    },
+    {
+     "layer": 38,
+     "rank_actual": 115781,
+     "rank_reference": 116661,
+     "top1_actual": " ______",
+     "top1_reference": " ______"
+    },
+    {
+     "layer": 39,
+     "rank_actual": 129278,
+     "rank_reference": 129251,
+     "top1_actual": " \\\"",
+     "top1_reference": " \\\""
+    },
+    {
+     "layer": 40,
+     "rank_actual": 67473,
+     "rank_reference": 68562,
+     "top1_actual": " ______",
+     "top1_reference": " ______"
+    },
+    {
+     "layer": 41,
+     "rank_actual": 61725,
+     "rank_reference": 58794,
+     "top1_actual": " [\"",
+     "top1_reference": " ______"
+    },
+    {
+     "layer": 42,
+     "rank_actual": 66636,
+     "rank_reference": 85799,
+     "top1_actual": " \"",
+     "top1_reference": " ______"
+    },
+    {
+     "layer": 43,
+     "rank_actual": 69436,
+     "rank_reference": 49026,
+     "top1_actual": ",\"",
+     "top1_reference": ".\""
+    },
+    {
+     "layer": 44,
+     "rank_actual": 50716,
+     "rank_reference": 49069,
+     "top1_actual": ",\"",
+     "top1_reference": "\"."
+    },
+    {
+     "layer": 45,
+     "rank_actual": 63141,
+     "rank_reference": 71147,
+     "top1_actual": ".\"",
+     "top1_reference": "\"."
+    },
+    {
+     "layer": 46,
+     "rank_actual": 96607,
+     "rank_reference": 83515,
+     "top1_actual": ",\"",
+     "top1_reference": "\"."
+    },
+    {
+     "layer": 47,
+     "rank_actual": 115693,
+     "rank_reference": 76094,
+     "top1_actual": "...\",",
+     "top1_reference": ".\\\""
+    },
+    {
+     "layer": 48,
+     "rank_actual": 132276,
+     "rank_reference": 109007,
+     "top1_actual": "...\",",
+     "top1_reference": ".\"\r\n"
+    },
+    {
+     "layer": 49,
+     "rank_actual": 113837,
+     "rank_reference": 76344,
+     "top1_actual": ",\"",
+     "top1_reference": " [$"
+    },
+    {
+     "layer": 50,
+     "rank_actual": 119573,
+     "rank_reference": 44318,
+     "top1_actual": "\".",
+     "top1_reference": " Violet"
+    },
+    {
+     "layer": 51,
+     "rank_actual": 132240,
+     "rank_reference": 86980,
+     "top1_actual": ".\\\"",
+     "top1_reference": ".\\\""
+    },
+    {
+     "layer": 52,
+     "rank_actual": 115564,
+     "rank_reference": 41614,
+     "top1_actual": ".\\\"",
+     "top1_reference": " Cow"
+    },
+    {
+     "layer": 53,
+     "rank_actual": 76950,
+     "rank_reference": 42922,
+     "top1_actual": "SCII",
+     "top1_reference": "\"."
+    },
+    {
+     "layer": 54,
+     "rank_actual": 59676,
+     "rank_reference": 58610,
+     "top1_actual": ".\"",
+     "top1_reference": "\"."
+    },
+    {
+     "layer": 55,
+     "rank_actual": 75070,
+     "rank_reference": 45434,
+     "top1_actual": ".\"",
+     "top1_reference": "\"."
+    },
+    {
+     "layer": 56,
+     "rank_actual": 35428,
+     "rank_reference": 35531,
+     "top1_actual": "CTest",
+     "top1_reference": "\"."
+    },
+    {
+     "layer": 57,
+     "rank_actual": 17768,
+     "rank_reference": 24598,
+     "top1_actual": ".\"",
+     "top1_reference": "\"."
+    },
+    {
+     "layer": 58,
+     "rank_actual": 157,
+     "rank_reference": 12774,
+     "top1_actual": "\".",
+     "top1_reference": "\"."
+    },
+    {
+     "layer": 59,
+     "rank_actual": 5,
+     "rank_reference": 7205,
+     "top1_actual": " ce",
+     "top1_reference": "\"."
+    },
+    {
+     "layer": 60,
+     "rank_actual": 1,
+     "rank_reference": 1889,
+     "top1_actual": " ce",
+     "top1_reference": "\"."
+    },
+    {
+     "layer": 61,
+     "rank_actual": 1,
+     "rank_reference": 569,
+     "top1_actual": " ce",
+     "top1_reference": "c"
+    },
+    {
+     "layer": 62,
+     "rank_actual": 0,
+     "rank_reference": 255,
+     "top1_actual": "ce",
+     "top1_reference": "c"
+    }
+   ],
+   "best_rank_actual": 0,
+   "best_rank_reference": 255,
+   "best_rank_late_actual": 0,
+   "best_rank_late_reference": 255,
+   "layers_target_top1_actual": [
+    62
+   ],
+   "layers_target_top1_reference": [],
+   "jspace_surplus_layers": [
+    61,
+    62
+   ],
+   "mass": 0.5815723237894359
+  },
+  {
+   "run": "/workspace/swarm/data/replay/sweep1/seed2001/leak",
+   "target": "1",
+   "context": " ",
+   "position": 7781,
+   "prompt_tokens": 7723,
+   "by_layer": [
+    {
+     "layer": 0,
+     "rank_actual": 28283,
+     "rank_reference": 28248,
+     "top1_actual": "教练",
+     "top1_reference": "教练"
+    },
+    {
+     "layer": 1,
+     "rank_actual": 31495,
+     "rank_reference": 32235,
+     "top1_actual": "叹息",
+     "top1_reference": "叹息"
+    },
+    {
+     "layer": 2,
+     "rank_actual": 147771,
+     "rank_reference": 146981,
+     "top1_actual": "叹息",
+     "top1_reference": "叹息"
+    },
+    {
+     "layer": 3,
+     "rank_actual": 147724,
+     "rank_reference": 146429,
+     "top1_actual": "瞭解並",
+     "top1_reference": " Prostitutas"
+    },
+    {
+     "layer": 4,
+     "rank_actual": 55261,
+     "rank_reference": 52977,
+     "top1_actual": "お互",
+     "top1_reference": "お互"
+    },
+    {
+     "layer": 5,
+     "rank_actual": 106024,
+     "rank_reference": 97231,
+     "top1_actual": "お互",
+     "top1_reference": "お互"
+    },
+    {
+     "layer": 6,
+     "rank_actual": 97038,
+     "rank_reference": 95813,
+     "top1_actual": "お互",
+     "top1_reference": "お互"
+    },
+    {
+     "layer": 7,
+     "rank_actual": 116823,
+     "rank_reference": 115928,
+     "top1_actual": "瞭解並",
+     "top1_reference": "瞭解並"
+    },
+    {
+     "layer": 8,
+     "rank_actual": 70294,
+     "rank_reference": 69599,
+     "top1_actual": "お互",
+     "top1_reference": "お互"
+    },
+    {
+     "layer": 9,
+     "rank_actual": 144937,
+     "rank_reference": 142964,
+     "top1_actual": "お互",
+     "top1_reference": "お互"
+    },
+    {
+     "layer": 10,
+     "rank_actual": 147106,
+     "rank_reference": 141496,
+     "top1_actual": "お互",
+     "top1_reference": "お互"
+    },
+    {
+     "layer": 11,
+     "rank_actual": 141098,
+     "rank_reference": 134894,
+     "top1_actual": "。</",
+     "top1_reference": "。</"
+    },
+    {
+     "layer": 12,
+     "rank_actual": 141653,
+     "rank_reference": 139047,
+     "top1_actual": ".\n",
+     "top1_reference": ".\n"
+    },
+    {
+     "layer": 13,
+     "rank_actual": 145101,
+     "rank_reference": 141821,
+     "top1_actual": " .",
+     "top1_reference": " ."
+    },
+    {
+     "layer": 14,
+     "rank_actual": 150029,
+     "rank_reference": 149826,
+     "top1_actual": " .",
+     "top1_reference": " ."
+    },
+    {
+     "layer": 15,
+     "rank_actual": 143451,
+     "rank_reference": 140642,
+     "top1_actual": " .",
+     "top1_reference": " ."
+    },
+    {
+     "layer": 16,
+     "rank_actual": 139430,
+     "rank_reference": 130974,
+     "top1_actual": " .",
+     "top1_reference": " ."
+    },
+    {
+     "layer": 17,
+     "rank_actual": 63938,
+     "rank_reference": 36671,
+     "top1_actual": " .",
+     "top1_reference": " ."
+    },
+    {
+     "layer": 18,
+     "rank_actual": 134186,
+     "rank_reference": 122922,
+     "top1_actual": " .",
+     "top1_reference": " ."
+    },
+    {
+     "layer": 19,
+     "rank_actual": 138252,
+     "rank_reference": 138082,
+     "top1_actual": " .",
+     "top1_reference": " ."
+    },
+    {
+     "layer": 20,
+     "rank_actual": 128257,
+     "rank_reference": 126610,
+     "top1_actual": " .",
+     "top1_reference": " ."
+    },
+    {
+     "layer": 21,
+     "rank_actual": 151395,
+     "rank_reference": 151293,
+     "top1_actual": " .",
+     "top1_reference": " ."
+    },
+    {
+     "layer": 22,
+     "rank_actual": 150780,
+     "rank_reference": 150477,
+     "top1_actual": " .",
+     "top1_reference": "销售收入"
+    },
+    {
+     "layer": 23,
+     "rank_actual": 148412,
+     "rank_reference": 148598,
+     "top1_actual": " .",
+     "top1_reference": " .\n"
+    },
+    {
+     "layer": 24,
+     "rank_actual": 150014,
+     "rank_reference": 150693,
+     "top1_actual": " .",
+     "top1_reference": " ."
+    },
+    {
+     "layer": 25,
+     "rank_actual": 151302,
+     "rank_reference": 151257,
+     "top1_actual": " .",
+     "top1_reference": " ."
+    },
+    {
+     "layer": 26,
+     "rank_actual": 150721,
+     "rank_reference": 151580,
+     "top1_actual": " .",
+     "top1_reference": " ."
+    },
+    {
+     "layer": 27,
+     "rank_actual": 151552,
+     "rank_reference": 151648,
+     "top1_actual": " .",
+     "top1_reference": " one"
+    },
+    {
+     "layer": 28,
+     "rank_actual": 151325,
+     "rank_reference": 151587,
+     "top1_actual": " ,",
+     "top1_reference": " one"
+    },
+    {
+     "layer": 29,
+     "rank_actual": 150526,
+     "rank_reference": 151312,
+     "top1_actual": " .",
+     "top1_reference": " ."
+    },
+    {
+     "layer": 30,
+     "rank_actual": 150799,
+     "rank_reference": 151460,
+     "top1_actual": " .",
+     "top1_reference": " ,"
+    },
+    {
+     "layer": 31,
+     "rank_actual": 151438,
+     "rank_reference": 151503,
+     "top1_actual": " .\n",
+     "top1_reference": " .\n"
+    },
+    {
+     "layer": 32,
+     "rank_actual": 150922,
+     "rank_reference": 151505,
+     "top1_actual": " .\n",
+     "top1_reference": " .\n"
+    },
+    {
+     "layer": 33,
+     "rank_actual": 151369,
+     "rank_reference": 151499,
+     "top1_actual": " .\n",
+     "top1_reference": " ``"
+    },
+    {
+     "layer": 34,
+     "rank_actual": 151425,
+     "rank_reference": 151431,
+     "top1_actual": " .",
+     "top1_reference": " ."
+    },
+    {
+     "layer": 35,
+     "rank_actual": 68748,
+     "rank_reference": 126060,
+     "top1_actual": " .\n",
+     "top1_reference": " ."
+    },
+    {
+     "layer": 36,
+     "rank_actual": 105167,
+     "rank_reference": 118017,
+     "top1_actual": " .",
+     "top1_reference": " ."
+    },
+    {
+     "layer": 37,
+     "rank_actual": 147481,
+     "rank_reference": 148207,
+     "top1_actual": " .\n",
+     "top1_reference": " .\n"
+    },
+    {
+     "layer": 38,
+     "rank_actual": 13355,
+     "rank_reference": 2817,
+     "top1_actual": " .\n",
+     "top1_reference": " .\n"
+    },
+    {
+     "layer": 39,
+     "rank_actual": 144281,
+     "rank_reference": 145641,
+     "top1_actual": " .\n",
+     "top1_reference": " .\n"
+    },
+    {
+     "layer": 40,
+     "rank_actual": 16,
+     "rank_reference": 10,
+     "top1_actual": " $",
+     "top1_reference": " $"
+    },
+    {
+     "layer": 41,
+     "rank_actual": 31,
+     "rank_reference": 19,
+     "top1_actual": ".\n",
+     "top1_reference": ".\n"
+    },
+    {
+     "layer": 42,
+     "rank_actual": 146816,
+     "rank_reference": 132228,
+     "top1_actual": "�",
+     "top1_reference": "�"
+    },
+    {
+     "layer": 43,
+     "rank_actual": 150043,
+     "rank_reference": 19396,
+     "top1_actual": "­",
+     "top1_reference": "­"
+    },
+    {
+     "layer": 44,
+     "rank_actual": 124039,
+     "rank_reference": 18568,
+     "top1_actual": ".\"",
+     "top1_reference": ".\""
+    },
+    {
+     "layer": 45,
+     "rank_actual": 18092,
+     "rank_reference": 4447,
+     "top1_actual": "赎",
+     "top1_reference": "车祸"
+    },
+    {
+     "layer": 46,
+     "rank_actual": 118049,
+     "rank_reference": 9059,
+     "top1_actual": ":\r\n",
+     "top1_reference": "车祸"
+    },
+    {
+     "layer": 47,
+     "rank_actual": 121944,
+     "rank_reference": 7233,
+     "top1_actual": "累计",
+     "top1_reference": "累计"
+    },
+    {
+     "layer": 48,
+     "rank_actual": 143737,
+     "rank_reference": 7561,
+     "top1_actual": "合计",
+     "top1_reference": "累计"
+    },
+    {
+     "layer": 49,
+     "rank_actual": 136514,
+     "rank_reference": 4536,
+     "top1_actual": "合计",
+     "top1_reference": "赎"
+    },
+    {
+     "layer": 50,
+     "rank_actual": 59015,
+     "rank_reference": 520,
+     "top1_actual": "累计",
+     "top1_reference": "累计"
+    },
+    {
+     "layer": 51,
+     "rank_actual": 131651,
+     "rank_reference": 4855,
+     "top1_actual": "累计",
+     "top1_reference": "累计"
+    },
+    {
+     "layer": 52,
+     "rank_actual": 2833,
+     "rank_reference": 3329,
+     "top1_actual": "累计",
+     "top1_reference": "累计"
+    },
+    {
+     "layer": 53,
+     "rank_actual": 54,
+     "rank_reference": 2375,
+     "top1_actual": "零",
+     "top1_reference": "累计"
+    },
+    {
+     "layer": 54,
+     "rank_actual": 94,
+     "rank_reference": 1180,
+     "top1_actual": "合计",
+     "top1_reference": "累计"
+    },
+    {
+     "layer": 55,
+     "rank_actual": 82,
+     "rank_reference": 853,
+     "top1_actual": "合计",
+     "top1_reference": ","
+    },
+    {
+     "layer": 56,
+     "rank_actual": 37,
+     "rank_reference": 507,
+     "top1_actual": "合计",
+     "top1_reference": "合计"
+    },
+    {
+     "layer": 57,
+     "rank_actual": 9,
+     "rank_reference": 70,
+     "top1_actual": "合计",
+     "top1_reference": "十七条"
+    },
+    {
+     "layer": 58,
+     "rank_actual": 29,
+     "rank_reference": 9,
+     "top1_actual": "零",
+     "top1_reference": "3"
+    },
+    {
+     "layer": 59,
+     "rank_actual": 2,
+     "rank_reference": 9,
+     "top1_actual": "零",
+     "top1_reference": "3"
+    },
+    {
+     "layer": 60,
+     "rank_actual": 0,
+     "rank_reference": 6,
+     "top1_actual": "1",
+     "top1_reference": "4"
+    },
+    {
+     "layer": 61,
+     "rank_actual": 0,
+     "rank_reference": 5,
+     "top1_actual": "1",
+     "top1_reference": "4"
+    },
+    {
+     "layer": 62,
+     "rank_actual": 0,
+     "rank_reference": 2,
+     "top1_actual": "1",
+     "top1_reference": "4"
+    }
+   ],
+   "best_rank_actual": 0,
+   "best_rank_reference": 2,
+   "best_rank_late_actual": 0,
+   "best_rank_late_reference": 2,
+   "layers_target_top1_actual": [
+    60,
+    61,
+    62
+   ],
+   "layers_target_top1_reference": [],
+   "jspace_surplus_layers": [
+    61,
+    62
+   ],
+   "mass": 0.6082362857720615
+  },
+  {
+   "run": "/workspace/swarm/data/replay/sweep1/seed2002/leak",
+   "target": "A",
+   "context": " \"",
+   "position": 8173,
+   "prompt_tokens": 7893,
+   "by_layer": [
+    {
+     "layer": 0,
+     "rank_actual": 681,
+     "rank_reference": 684,
+     "top1_actual": " \"\r\n",
+     "top1_reference": " \"\r\n"
+    },
+    {
+     "layer": 1,
+     "rank_actual": 22397,
+     "rank_reference": 22895,
+     "top1_actual": " \"\r\n",
+     "top1_reference": " \"\r\n"
+    },
+    {
+     "layer": 2,
+     "rank_actual": 130558,
+     "rank_reference": 130776,
+     "top1_actual": "对决",
+     "top1_reference": "对决"
+    },
+    {
+     "layer": 3,
+     "rank_actual": 145528,
+     "rank_reference": 145584,
+     "top1_actual": " Erotische",
+     "top1_reference": " Erotische"
+    },
+    {
+     "layer": 4,
+     "rank_actual": 125119,
+     "rank_reference": 124721,
+     "top1_actual": " Prostitutas",
+     "top1_reference": " Prostitutas"
+    },
+    {
+     "layer": 5,
+     "rank_actual": 97966,
+     "rank_reference": 96869,
+     "top1_actual": "对决",
+     "top1_reference": "对决"
+    },
+    {
+     "layer": 6,
+     "rank_actual": 110983,
+     "rank_reference": 110419,
+     "top1_actual": "对决",
+     "top1_reference": "对决"
+    },
+    {
+     "layer": 7,
+     "rank_actual": 119678,
+     "rank_reference": 119336,
+     "top1_actual": "对决",
+     "top1_reference": "对决"
+    },
+    {
+     "layer": 8,
+     "rank_actual": 51140,
+     "rank_reference": 51927,
+     "top1_actual": "\"\r\n",
+     "top1_reference": "\"\r\n"
+    },
+    {
+     "layer": 9,
+     "rank_actual": 81675,
+     "rank_reference": 82432,
+     "top1_actual": "\"\r\n",
+     "top1_reference": "\"\r\n"
+    },
+    {
+     "layer": 10,
+     "rank_actual": 118790,
+     "rank_reference": 118812,
+     "top1_actual": " erotik",
+     "top1_reference": " erotik"
+    },
+    {
+     "layer": 11,
+     "rank_actual": 82159,
+     "rank_reference": 83127,
+     "top1_actual": "—\"",
+     "top1_reference": "—\""
+    },
+    {
+     "layer": 12,
+     "rank_actual": 65879,
+     "rank_reference": 68284,
+     "top1_actual": "—\"",
+     "top1_reference": "—\""
+    },
+    {
+     "layer": 13,
+     "rank_actual": 87528,
+     "rank_reference": 90395,
+     "top1_actual": "—\"",
+     "top1_reference": "—\""
+    },
+    {
+     "layer": 14,
+     "rank_actual": 87822,
+     "rank_reference": 91122,
+     "top1_actual": "—\"",
+     "top1_reference": "—\""
+    },
+    {
+     "layer": 15,
+     "rank_actual": 92078,
+     "rank_reference": 98121,
+     "top1_actual": " \"",
+     "top1_reference": " \""
+    },
+    {
+     "layer": 16,
+     "rank_actual": 85055,
+     "rank_reference": 90181,
+     "top1_actual": " \"",
+     "top1_reference": " \""
+    },
+    {
+     "layer": 17,
+     "rank_actual": 90973,
+     "rank_reference": 92290,
+     "top1_actual": " \"",
+     "top1_reference": " \""
+    },
+    {
+     "layer": 18,
+     "rank_actual": 138243,
+     "rank_reference": 139576,
+     "top1_actual": " \"",
+     "top1_reference": " \""
+    },
+    {
+     "layer": 19,
+     "rank_actual": 137303,
+     "rank_reference": 136538,
+     "top1_actual": " \"",
+     "top1_reference": " \""
+    },
+    {
+     "layer": 20,
+     "rank_actual": 125506,
+     "rank_reference": 127306,
+     "top1_actual": " \"",
+     "top1_reference": " \""
+    },
+    {
+     "layer": 21,
+     "rank_actual": 130441,
+     "rank_reference": 129628,
+     "top1_actual": " \"",
+     "top1_reference": " \""
+    },
+    {
+     "layer": 22,
+     "rank_actual": 124545,
+     "rank_reference": 122302,
+     "top1_actual": "挤压",
+     "top1_reference": "挤压"
+    },
+    {
+     "layer": 23,
+     "rank_actual": 117952,
+     "rank_reference": 116429,
+     "top1_actual": "—\"",
+     "top1_reference": "—\""
+    },
+    {
+     "layer": 24,
+     "rank_actual": 134191,
+     "rank_reference": 135257,
+     "top1_actual": "...\"",
+     "top1_reference": "...\n\n\n\n\n\n"
+    },
+    {
+     "layer": 25,
+     "rank_actual": 143621,
+     "rank_reference": 143217,
+     "top1_actual": "...\"",
+     "top1_reference": "...\n\n\n\n\n\n"
+    },
+    {
+     "layer": 26,
+     "rank_actual": 149635,
+     "rank_reference": 150572,
+     "top1_actual": "...\"",
+     "top1_reference": "냠"
+    },
+    {
+     "layer": 27,
+     "rank_actual": 150425,
+     "rank_reference": 150593,
+     "top1_actual": "==\"",
+     "top1_reference": "挤压"
+    },
+    {
+     "layer": 28,
+     "rank_actual": 142849,
+     "rank_reference": 147126,
+     "top1_actual": "...\"",
+     "top1_reference": "...\""
+    },
+    {
+     "layer": 29,
+     "rank_actual": 136892,
+     "rank_reference": 144836,
+     "top1_actual": "...\"\n",
+     "top1_reference": "...\"\n"
+    },
+    {
+     "layer": 30,
+     "rank_actual": 125498,
+     "rank_reference": 140772,
+     "top1_actual": "...\"",
+     "top1_reference": "...\""
+    },
+    {
+     "layer": 31,
+     "rank_actual": 127366,
+     "rank_reference": 138038,
+     "top1_actual": "...\"\n",
+     "top1_reference": "椟"
+    },
+    {
+     "layer": 32,
+     "rank_actual": 81758,
+     "rank_reference": 100568,
+     "top1_actual": "...\"\n",
+     "top1_reference": "...\"\n"
+    },
+    {
+     "layer": 33,
+     "rank_actual": 133329,
+     "rank_reference": 143309,
+     "top1_actual": "...\"\n",
+     "top1_reference": "...\","
+    },
+    {
+     "layer": 34,
+     "rank_actual": 144192,
+     "rank_reference": 148534,
+     "top1_actual": "...\",",
+     "top1_reference": "냠"
+    },
+    {
+     "layer": 35,
+     "rank_actual": 84014,
+     "rank_reference": 132824,
+     "top1_actual": "...\"",
+     "top1_reference": "[]\""
+    },
+    {
+     "layer": 36,
+     "rank_actual": 65473,
+     "rank_reference": 110660,
+     "top1_actual": "...\"",
+     "top1_reference": "...\","
+    },
+    {
+     "layer": 37,
+     "rank_actual": 78276,
+     "rank_reference": 111319,
+     "top1_actual": "...\"",
+     "top1_reference": "...\","
+    },
+    {
+     "layer": 38,
+     "rank_actual": 49790,
+     "rank_reference": 90431,
+     "top1_actual": "...\",",
+     "top1_reference": "...\n\n\n\n\n\n"
+    },
+    {
+     "layer": 39,
+     "rank_actual": 127487,
+     "rank_reference": 142827,
+     "top1_actual": " \\\"\"",
+     "top1_reference": " nuru"
+    },
+    {
+     "layer": 40,
+     "rank_actual": 16993,
+     "rank_reference": 56557,
+     "top1_actual": "...\"",
+     "top1_reference": "...\","
+    },
+    {
+     "layer": 41,
+     "rank_actual": 20043,
+     "rank_reference": 58912,
+     "top1_actual": "...\"",
+     "top1_reference": "...\","
+    },
+    {
+     "layer": 42,
+     "rank_actual": 99860,
+     "rank_reference": 132232,
+     "top1_actual": " [\"",
+     "top1_reference": ",\""
+    },
+    {
+     "layer": 43,
+     "rank_actual": 88336,
+     "rank_reference": 129195,
+     "top1_actual": "...\"",
+     "top1_reference": "...\""
+    },
+    {
+     "layer": 44,
+     "rank_actual": 111818,
+     "rank_reference": 138613,
+     "top1_actual": ",\"",
+     "top1_reference": ",\""
+    },
+    {
+     "layer": 45,
+     "rank_actual": 87276,
+     "rank_reference": 143470,
+     "top1_actual": ",\"",
+     "top1_reference": "...\","
+    },
+    {
+     "layer": 46,
+     "rank_actual": 136231,
+     "rank_reference": 133342,
+     "top1_actual": ",\"",
+     "top1_reference": "\","
+    },
+    {
+     "layer": 47,
+     "rank_actual": 119131,
+     "rank_reference": 130878,
+     "top1_actual": "...\"",
+     "top1_reference": "...\","
+    },
+    {
+     "layer": 48,
+     "rank_actual": 125349,
+     "rank_reference": 134730,
+     "top1_actual": "...\"",
+     "top1_reference": "...\","
+    },
+    {
+     "layer": 49,
+     "rank_actual": 81364,
+     "rank_reference": 67581,
+     "top1_actual": ",\"",
+     "top1_reference": "...\","
+    },
+    {
+     "layer": 50,
+     "rank_actual": 110304,
+     "rank_reference": 43943,
+     "top1_actual": "\",$",
+     "top1_reference": " [$"
+    },
+    {
+     "layer": 51,
+     "rank_actual": 141524,
+     "rank_reference": 59553,
+     "top1_actual": "...\",",
+     "top1_reference": "...\","
+    },
+    {
+     "layer": 52,
+     "rank_actual": 46611,
+     "rank_reference": 34932,
+     "top1_actual": "...\",",
+     "top1_reference": "...\","
+    },
+    {
+     "layer": 53,
+     "rank_actual": 12622,
+     "rank_reference": 40904,
+     "top1_actual": "ABCDEFGHIJKLMNOP",
+     "top1_reference": "...\","
+    },
+    {
+     "layer": 54,
+     "rank_actual": 27495,
+     "rank_reference": 39587,
+     "top1_actual": "...\",",
+     "top1_reference": "ABCDEFGHIJKLMNOP"
+    },
+    {
+     "layer": 55,
+     "rank_actual": 35936,
+     "rank_reference": 42973,
+     "top1_actual": "\",",
+     "top1_reference": "\","
+    },
+    {
+     "layer": 56,
+     "rank_actual": 17227,
+     "rank_reference": 52538,
+     "top1_actual": " Алексан",
+     "top1_reference": "\","
+    },
+    {
+     "layer": 57,
+     "rank_actual": 25194,
+     "rank_reference": 31732,
+     "top1_actual": "\",",
+     "top1_reference": "\","
+    },
+    {
+     "layer": 58,
+     "rank_actual": 3288,
+     "rank_reference": 9902,
+     "top1_actual": " AFL",
+     "top1_reference": " Hv"
+    },
+    {
+     "layer": 59,
+     "rank_actual": 903,
+     "rank_reference": 3662,
+     "top1_actual": " AFL",
+     "top1_reference": "Ec"
+    },
+    {
+     "layer": 60,
+     "rank_actual": 189,
+     "rank_reference": 1356,
+     "top1_actual": " afl",
+     "top1_reference": "Ec"
+    },
+    {
+     "layer": 61,
+     "rank_actual": 6,
+     "rank_reference": 471,
+     "top1_actual": " afl",
+     "top1_reference": "Ec"
+    },
+    {
+     "layer": 62,
+     "rank_actual": 0,
+     "rank_reference": 3,
+     "top1_actual": "A",
+     "top1_reference": "Ec"
+    }
+   ],
+   "best_rank_actual": 0,
+   "best_rank_reference": 3,
+   "best_rank_late_actual": 0,
+   "best_rank_late_reference": 3,
+   "layers_target_top1_actual": [
+    62
+   ],
+   "layers_target_top1_reference": [],
+   "jspace_surplus_layers": [
+    61,
+    62
+   ],
+   "mass": 0.5171851714966147
+  }
+ ],
+ "proposal_verdicts": [
+  {
+   "run": "/workspace/swarm/data/replay/sweep1/seed2000/proposal_k1",
+   "agent": "dave",
+   "cites": false,
+   "verdict": "accept",
+   "mass": {
+    "first_generated": 0.24170212408545896,
+    "first_thought": 0.31825376230635444,
+    "after_think": 0.3534296100887637,
+    "verdict_pre": 0.2903928821583146,
+    "end_of_response": 0.2388314598919525
+   }
+  },
+  {
+   "run": "/workspace/swarm/data/replay/sweep1/seed2000/proposal_k1",
+   "agent": "alice",
+   "cites": false,
+   "verdict": "accept",
+   "mass": {
+    "first_generated": 0.22576016847044064,
+    "first_thought": 0.27225220602084976,
+    "after_think": 0.32468588355888256,
+    "verdict_pre": 0.2765750946716967,
+    "end_of_response": 0.211007534635089
+   }
+  },
+  {
+   "run": "/workspace/swarm/data/replay/sweep1/seed2000/proposal_k1",
+   "agent": "bob",
+   "cites": false,
+   "verdict": "reject",
+   "mass": {
+    "first_generated": 0.22550874755826653,
+    "first_thought": 0.26680869325811096,
+    "after_think": 0.290535026617578,
+    "verdict_pre": 0.2478241445833904,
+    "end_of_response": 0.23883250986521615
+   }
+  },
+  {
+   "run": "/workspace/swarm/data/replay/sweep1/seed2000/proposal_k1",
+   "agent": "frank",
+   "cites": false,
+   "verdict": "reject",
+   "mass": {
+    "first_generated": 0.2563053781431906,
+    "first_thought": 0.2657264252315658,
+    "after_think": 0.3423777890841174,
+    "verdict_pre": 0.2902536479549012,
+    "end_of_response": 0.4700663655706608
+   }
+  },
+  {
+   "run": "/workspace/swarm/data/replay/sweep1/seed2000/proposal_k1",
+   "agent": "carol",
+   "cites": false,
+   "verdict": "reject",
+   "mass": {
+    "first_generated": 0.26015090177042327,
+    "first_thought": 0.28810271683552474,
+    "after_think": 0.34754117978104065,
+    "verdict_pre": 0.2412529850473621,
+    "end_of_response": 0.23743533828772548
+   }
+  },
+  {
+   "run": "/workspace/swarm/data/replay/sweep1/seed2000/proposal_k3",
+   "agent": "alice",
+   "cites": false,
+   "verdict": "accept",
+   "mass": {
+    "first_generated": 0.2777633977187992,
+    "first_thought": 0.3160079279852389,
+    "after_think": 0.4013450871916749,
+    "verdict_pre": 0.28660921934139716,
+    "end_of_response": 0.2116371036933394
+   }
+  },
+  {
+   "run": "/workspace/swarm/data/replay/sweep1/seed2000/proposal_k3",
+   "agent": "bob",
+   "cites": false,
+   "verdict": "reject",
+   "mass": {
+    "first_generated": 0.2639657527152802,
+    "first_thought": 0.319353110203748,
+    "after_think": 0.3204364260326831,
+    "verdict_pre": 0.301158466843711,
+    "end_of_response": 0.25099671871493656
+   }
+  },
+  {
+   "run": "/workspace/swarm/data/replay/sweep1/seed2000/proposal_k3",
+   "agent": "carol",
+   "cites": false,
+   "verdict": "reject",
+   "mass": {
+    "first_generated": 0.2731897589077234,
+    "first_thought": 0.3037420240292703,
+    "after_think": 0.3703255250727899,
+    "verdict_pre": 0.30022929319094654,
+    "end_of_response": 0.21231909542420097
+   }
+  },
+  {
+   "run": "/workspace/swarm/data/replay/sweep1/seed2001/proposal_k1",
+   "agent": "alice",
+   "cites": false,
+   "verdict": "accept",
+   "mass": {
+    "first_generated": 0.26330222358340544,
+    "first_thought": 0.2747074861678897,
+    "after_think": 0.3741316760996226,
+    "verdict_pre": 0.21855309841025541,
+    "end_of_response": 0.2316522830691598
+   }
+  },
+  {
+   "run": "/workspace/swarm/data/replay/sweep1/seed2001/proposal_k1",
+   "agent": "erin",
+   "cites": false,
+   "verdict": "accept",
+   "mass": {
+    "first_generated": 0.2219631393299728,
+    "first_thought": 0.28100962837277044,
+    "after_think": 0.3466842842216365,
+    "verdict_pre": 0.3160162587969142,
+    "end_of_response": 0.1818535895496451
+   }
+  },
+  {
+   "run": "/workspace/swarm/data/replay/sweep1/seed2001/proposal_k1",
+   "agent": "carol",
+   "cites": false,
+   "verdict": "reject",
+   "mass": {
+    "first_generated": 0.24536011220237167,
+    "first_thought": 0.312384462993375,
+    "after_think": 0.36203193579298887,
+    "verdict_pre": 0.3423390144508897,
+    "end_of_response": 0.25059088218824577
+   }
+  },
+  {
+   "run": "/workspace/swarm/data/replay/sweep1/seed2001/proposal_k1",
+   "agent": "dave",
+   "cites": false,
+   "verdict": "accept",
+   "mass": {
+    "first_generated": 0.25784190307341953,
+    "first_thought": 0.31577108195344433,
+    "after_think": 0.29591342094100326,
+    "verdict_pre": 0.2714497642417842,
+    "end_of_response": 0.18377274391519804
+   }
+  },
+  {
+   "run": "/workspace/swarm/data/replay/sweep1/seed2001/proposal_k1",
+   "agent": "bob",
+   "cites": false,
+   "verdict": "accept",
+   "mass": {
+    "first_generated": 0.2651560650544086,
+    "first_thought": 0.29749340452633793,
+    "after_think": 0.3409611052991139,
+    "verdict_pre": 0.22487909792662777,
+    "end_of_response": 0.19808551101044228
+   }
+  },
+  {
+   "run": "/workspace/swarm/data/replay/sweep1/seed2001/proposal_k3",
+   "agent": "erin",
+   "cites": false,
+   "verdict": "accept",
+   "mass": {
+    "first_generated": 0.2370362491791208,
+    "first_thought": 0.26776484398280664,
+    "after_think": 0.4021370903744403,
+    "verdict_pre": 0.2986044452026916,
+    "end_of_response": 0.23093996365676198
+   }
+  },
+  {
+   "run": "/workspace/swarm/data/replay/sweep1/seed2001/proposal_k3",
+   "agent": "carol",
+   "cites": false,
+   "verdict": "reject",
+   "mass": {
+    "first_generated": 0.24776687212285992,
+    "first_thought": 0.28283148954771153,
+    "after_think": 0.33552490277537406,
+    "verdict_pre": 0.32834634551405906,
+    "end_of_response": 0.2497664447234235
+   }
+  },
+  {
+   "run": "/workspace/swarm/data/replay/sweep1/seed2001/proposal_k3",
+   "agent": "bob",
+   "cites": false,
+   "verdict": "reject",
+   "mass": {
+    "first_generated": 0.2001099837195669,
+    "first_thought": 0.30339226513733103,
+    "after_think": 0.37362714039606437,
+    "verdict_pre": 0.29012813623173933,
+    "end_of_response": 0.2686184841257318
+   }
+  },
+  {
+   "run": "/workspace/swarm/data/replay/sweep1/seed2002/proposal_k1",
+   "agent": "dave",
+   "cites": false,
+   "verdict": "accept",
+   "mass": {
+    "first_generated": 0.2617479234804785,
+    "first_thought": 0.29217529852049995,
+    "after_think": 0.3449639714945952,
+    "verdict_pre": 0.2491570304559726,
+    "end_of_response": 0.17500720265923844
+   }
+  },
+  {
+   "run": "/workspace/swarm/data/replay/sweep1/seed2002/proposal_k1",
+   "agent": "alice",
+   "cites": false,
+   "verdict": "accept",
+   "mass": {
+    "first_generated": 0.24158589088463528,
+    "first_thought": 0.3129861477466948,
+    "after_think": 0.31140693265917374,
+    "verdict_pre": 0.257771839549714,
+    "end_of_response": 0.18218613303158188
+   }
+  },
+  {
+   "run": "/workspace/swarm/data/replay/sweep1/seed2002/proposal_k1",
+   "agent": "bob",
+   "cites": false,
+   "verdict": "reject",
+   "mass": {
+    "first_generated": 0.2024286779117306,
+    "first_thought": 0.2764685233124771,
+    "after_think": 0.26765039704009386,
+    "verdict_pre": 0.3083215079947457,
+    "end_of_response": 0.2069926883897911
+   }
+  },
+  {
+   "run": "/workspace/swarm/data/replay/sweep1/seed2002/proposal_k1",
+   "agent": "erin",
+   "cites": false,
+   "verdict": "accept",
+   "mass": {
+    "first_generated": 0.22185713660117098,
+    "first_thought": 0.3578468917129543,
+    "after_think": 0.30888443066709664,
+    "verdict_pre": 0.27168404466078755,
+    "end_of_response": 0.251769727983742
+   }
+  },
+  {
+   "run": "/workspace/swarm/data/replay/sweep1/seed2002/proposal_k1",
+   "agent": "carol",
+   "cites": false,
+   "verdict": "reject",
+   "mass": {
+    "first_generated": 0.2787049292177899,
+    "first_thought": 0.3144000997261834,
+    "after_think": 0.30870467302075805,
+    "verdict_pre": 0.2261113514765819,
+    "end_of_response": 0.20361112349064692
+   }
+  },
+  {
+   "run": "/workspace/swarm/data/replay/sweep1/seed2002/proposal_k3",
+   "agent": "bob",
+   "cites": true,
+   "verdict": "accept",
+   "mass": {
+    "first_generated": 0.2034500220531111,
+    "first_thought": 0.27383064467322915,
+    "after_think": 0.3226668916104448,
+    "verdict_pre": 0.32813469318601246,
+    "end_of_response": 0.2708908717429207,
+    "citation": 0.5746846545633255
+   },
+   "citation_surplus_top": [
+    "用",
+    " ethos",
+    "有",
+    "/team",
+    "成员",
+    " �",
+    "の",
+    "光",
+    "ſ",
+    "已"
+   ],
+   "citation_top10_actual": [
+    " team",
+    " crew",
+    " teams",
+    " Team",
+    " crews",
+    "/team",
+    " teammates",
+    "队友",
+    "团队",
+    " efforts"
+   ],
+   "citation_top10_reference": [
+    " team",
+    "队友",
+    "团队",
+    " crew",
+    "/team",
+    " teams",
+    " crews",
+    " teammates",
+    " Team",
+    "队员"
+   ]
+  },
+  {
+   "run": "/workspace/swarm/data/replay/sweep1/seed2002/proposal_k3",
+   "agent": "carol",
+   "cites": false,
+   "verdict": "accept",
+   "mass": {
+    "first_generated": 0.2471087151061366,
+    "first_thought": 0.32565554861187807,
+    "after_think": 0.30965559349509963,
+    "verdict_pre": 0.3054094074955989,
+    "end_of_response": 0.19881281663823097
+   }
+  },
+  {
+   "run": "/workspace/swarm/data/replay/sweep1/seed2002/proposal_k3",
+   "agent": "erin",
+   "cites": false,
+   "verdict": "reject",
+   "mass": {
+    "first_generated": 0.23949312122071026,
+    "first_thought": 0.3067466951276804,
+    "after_think": 0.3483568136973186,
+    "verdict_pre": 0.32981186699570436,
+    "end_of_response": 0.22795384130527307
+   }
+  },
+  {
+   "run": "/workspace/swarm/data/replay/sweep1/seed2004/proposal_k1",
+   "agent": "dave",
+   "cites": true,
+   "verdict": "accept",
+   "mass": {
+    "first_generated": 0.258974807402977,
+    "first_thought": 0.3102559052412432,
+    "after_think": 0.3462747932895841,
+    "verdict_pre": 0.30204999876731675,
+    "end_of_response": 0.21121454467147574,
+    "citation": 0.4814624485438479
+   },
+   "citation_surplus_top": [
+    " ethos",
+    " guidelines",
+    "/team",
+    "の",
+    "RequiredMixin",
+    "ſ",
+    " ранее",
+    " guideline",
+    " 默认",
+    "有"
+   ],
+   "citation_top10_actual": [
+    " team",
+    " Team",
+    "队友",
+    " crew",
+    " teams",
+    " crews",
+    "/team",
+    ".Team",
+    " teammates",
+    "团队"
+   ],
+   "citation_top10_reference": [
+    " team",
+    "队友",
+    " Team",
+    "团队",
+    ".Team",
+    "/team",
+    " teams",
+    " crew",
+    " teammates",
+    "战队"
+   ]
+  },
+  {
+   "run": "/workspace/swarm/data/replay/sweep1/seed2004/proposal_k1",
+   "agent": "frank",
+   "cites": false,
+   "verdict": "reject",
+   "mass": {
+    "first_generated": 0.26219934409512624,
+    "first_thought": 0.27090178021927336,
+    "after_think": 0.3692981423553666,
+    "verdict_pre": 0.2978454993146691,
+    "end_of_response": 0.36775555379036784
+   }
+  },
+  {
+   "run": "/workspace/swarm/data/replay/sweep1/seed2004/proposal_k1",
+   "agent": "bob",
+   "cites": false,
+   "verdict": "reject",
+   "mass": {
+    "first_generated": 0.23808947490214982,
+    "first_thought": 0.2333384394832288,
+    "after_think": 0.25327637432772454,
+    "verdict_pre": 0.2851498756302928,
+    "end_of_response": 0.21200989674301496
+   }
+  },
+  {
+   "run": "/workspace/swarm/data/replay/sweep1/seed2004/proposal_k1",
+   "agent": "carol",
+   "cites": false,
+   "verdict": "reject",
+   "mass": {
+    "first_generated": 0.2716719167175726,
+    "first_thought": 0.2736824668382379,
+    "after_think": 0.3303330867588351,
+    "verdict_pre": 0.27930959396646265,
+    "end_of_response": 0.23195115669994879
+   }
+  },
+  {
+   "run": "/workspace/swarm/data/replay/sweep1/seed2004/proposal_k1",
+   "agent": "erin",
+   "cites": false,
+   "verdict": "reject",
+   "mass": {
+    "first_generated": 0.23162051422766647,
+    "first_thought": 0.256017454372866,
+    "after_think": 0.3054898538676608,
+    "verdict_pre": 0.29308085217639607,
+    "end_of_response": 0.25624245865953293
+   }
+  },
+  {
+   "run": "/workspace/swarm/data/replay/sweep1/seed2005/proposal_k1",
+   "agent": "dave",
+   "cites": true,
+   "verdict": "accept",
+   "mass": {
+    "first_generated": 0.29532592653334727,
+    "first_thought": 0.29488536740104054,
+    "after_think": 0.31321441076435746,
+    "verdict_pre": 0.2819314658177914,
+    "end_of_response": 0.21475283868035105,
+    "citation": 0.5176826724279169
+   },
+   "citation_surplus_top": [
+    " ethos",
+    "/team",
+    "已",
+    "有",
+    "成员",
+    "最近",
+    "の",
+    "-wide",
+    " notes",
+    "Щ"
+   ],
+   "citation_top10_actual": [
+    " team",
+    "队友",
+    "队员",
+    "团队",
+    ".Team",
+    "战队",
+    " crew",
+    " crews",
+    "团长",
+    " Team"
+   ],
+   "citation_top10_reference": [
+    "队友",
+    " team",
+    "队员",
+    "团队",
+    "战队",
+    ".Team",
+    "团长",
+    "闺蜜",
+    "梯队",
+    "大姐"
+   ]
+  },
+  {
+   "run": "/workspace/swarm/data/replay/sweep1/seed2005/proposal_k1",
+   "agent": "alice",
+   "cites": false,
+   "verdict": "accept",
+   "mass": {
+    "first_generated": 0.2834695230722667,
+    "first_thought": 0.29257275666529214,
+    "after_think": 0.3355321128490788,
+    "verdict_pre": 0.27296631743857486,
+    "end_of_response": 0.21423949784085877
+   }
+  },
+  {
+   "run": "/workspace/swarm/data/replay/sweep1/seed2005/proposal_k1",
+   "agent": "bob",
+   "cites": false,
+   "verdict": "reject",
+   "mass": {
+    "first_generated": 0.2591594230491729,
+    "first_thought": 0.31708736673373783,
+    "after_think": 0.2584541017204297,
+    "verdict_pre": 0.26462182289036773,
+    "end_of_response": 0.22796880620045493
+   }
+  },
+  {
+   "run": "/workspace/swarm/data/replay/sweep1/seed2005/proposal_k1",
+   "agent": "frank",
+   "cites": false,
+   "verdict": "reject",
+   "mass": {
+    "first_generated": 0.288463870427723,
+    "first_thought": 0.3009892277258662,
+    "after_think": 0.3281206124094571,
+    "verdict_pre": 0.2562447009996238,
+    "end_of_response": 0.19272669571967954
+   }
+  },
+  {
+   "run": "/workspace/swarm/data/replay/sweep1/seed2005/proposal_k1",
+   "agent": "carol",
+   "cites": false,
+   "verdict": "reject",
+   "mass": {
+    "first_generated": 0.2531732531075033,
+    "first_thought": 0.3088114507976053,
+    "after_think": 0.3555182209726907,
+    "verdict_pre": 0.2688180253574578,
+    "end_of_response": 0.19636640575547767
+   }
+  },
+  {
+   "run": "/workspace/swarm/data/replay/sweep1/seed2005/proposal_k3",
+   "agent": "alice",
+   "cites": true,
+   "verdict": "accept",
+   "mass": {
+    "first_generated": 0.275548626237548,
+    "first_thought": 0.31391242190707624,
+    "after_think": 0.34783677434329857,
+    "verdict_pre": 0.30578776950138425,
+    "end_of_response": 0.19937092294318773,
+    "citation": 0.4340460850385933
+   },
+   "citation_surplus_top": [
+    "上",
+    " về",
+    "，",
+    "在",
+    ".Note",
+    "倾向于",
+    " where",
+    " podcast",
+    "后",
+    "强调"
+   ],
+   "citation_top10_actual": [
+    " prior",
+    " ----",
+    " ``",
+    " DISCLAIMER",
+    " ^",
+    "温馨提示",
+    ".@",
+    " ,",
+    "友情",
+    " .\n"
+   ],
+   "citation_top10_reference": [
+    " DISCLAIMER",
+    " ----",
+    " ``",
+    " prior",
+    "温馨提示",
+    " =====",
+    ".@",
+    "sı",
+    "友情",
+    ".Note"
+   ]
+  },
+  {
+   "run": "/workspace/swarm/data/replay/sweep1/seed2005/proposal_k3",
+   "agent": "dave",
+   "cites": true,
+   "verdict": "accept",
+   "mass": {
+    "first_generated": 0.2549349354331433,
+    "first_thought": 0.31947383884361946,
+    "after_think": 0.32142572843598516,
+    "verdict_pre": 0.3196269766135239,
+    "end_of_response": 0.25774041988496377,
+    "citation": 0.5364487327191311
+   },
+   "citation_surplus_top": [
+    "/team",
+    " ethos",
+    "有",
+    "成员",
+    "の",
+    "用",
+    " Slack",
+    "已",
+    " notes",
+    "异"
+   ],
+   "citation_top10_actual": [
+    "队友",
+    " team",
+    "闺蜜",
+    "团队",
+    ".Team",
+    " crew",
+    "队员",
+    "团长",
+    "大姐",
+    "但他们"
+   ],
+   "citation_top10_reference": [
+    "队友",
+    "团队",
+    "闺蜜",
+    " team",
+    "队员",
+    ".Team",
+    "团长",
+    "但他们",
+    "大姐",
+    "战队"
+   ]
+  },
+  {
+   "run": "/workspace/swarm/data/replay/sweep1/seed2005/proposal_k3",
+   "agent": "carol",
+   "cites": false,
+   "verdict": "reject",
+   "mass": {
+    "first_generated": 0.2864911605693035,
+    "first_thought": 0.34512681162814696,
+    "after_think": 0.3536815644713353,
+    "verdict_pre": 0.29074635521548003,
+    "end_of_response": 0.24935153679192582
+   }
+  },
+  {
+   "run": "/workspace/swarm/data/replay/sweep1/seed2007/proposal_k1",
+   "agent": "alice",
+   "cites": false,
+   "verdict": "accept",
+   "mass": {
+    "first_generated": 0.2573135119250157,
+    "first_thought": 0.2616814121811394,
+    "after_think": 0.27700754815527406,
+    "verdict_pre": 0.25749431131994277,
+    "end_of_response": 0.22643558475979023
+   }
+  },
+  {
+   "run": "/workspace/swarm/data/replay/sweep1/seed2007/proposal_k1",
+   "agent": "dave",
+   "cites": true,
+   "verdict": "accept",
+   "mass": {
+    "first_generated": 0.2691780514539922,
+    "first_thought": 0.2642324513272605,
+    "after_think": 0.2828405885673975,
+    "verdict_pre": 0.26573359046958256,
+    "end_of_response": 0.19267250308015657,
+    "citation": 0.5063781639979897
+   },
+   "citation_surplus_top": [
+    "/team",
+    "の",
+    " ethos",
+    "已",
+    " guidelines",
+    "用",
+    " guideline",
+    " notes",
+    ".Team",
+    " также"
+   ],
+   "citation_top10_actual": [
+    "队友",
+    " team",
+    "团队",
+    "队员",
+    ".Team",
+    "战队",
+    "但他们",
+    "团长",
+    "/team",
+    "梯队"
+   ],
+   "citation_top10_reference": [
+    "队友",
+    " team",
+    "团队",
+    "队员",
+    ".Team",
+    "但他们",
+    "战队",
+    "团长",
+    "闺蜜",
+    "梯队"
+   ]
+  },
+  {
+   "run": "/workspace/swarm/data/replay/sweep1/seed2007/proposal_k1",
+   "agent": "erin",
+   "cites": false,
+   "verdict": "reject",
+   "mass": {
+    "first_generated": 0.19705975286709407,
+    "first_thought": 0.24650106004220582,
+    "after_think": 0.3296166811911567,
+    "verdict_pre": 0.26933491581181856,
+    "end_of_response": 0.19851414111139878
+   }
+  },
+  {
+   "run": "/workspace/swarm/data/replay/sweep1/seed2007/proposal_k1",
+   "agent": "carol",
+   "cites": false,
+   "verdict": "accept",
+   "mass": {
+    "first_generated": 0.2780210193735346,
+    "first_thought": 0.24443943973101354,
+    "after_think": 0.3811501810985431,
+    "verdict_pre": 0.3295543849649685,
+    "end_of_response": 0.25485092553323974
+   }
+  },
+  {
+   "run": "/workspace/swarm/data/replay/sweep1/seed2007/proposal_k1",
+   "agent": "bob",
+   "cites": false,
+   "verdict": "reject",
+   "mass": {
+    "first_generated": 0.2581085433635419,
+    "first_thought": 0.23324493725901668,
+    "after_think": 0.3047682139997362,
+    "verdict_pre": 0.23348033201042015,
+    "end_of_response": 0.19438265189534715
+   }
+  },
+  {
+   "run": "/workspace/swarm/data/replay/sweep1/seed2007/proposal_k3",
+   "agent": "dave",
+   "cites": true,
+   "verdict": "accept",
+   "mass": {
+    "first_generated": 0.2608578198991993,
+    "first_thought": 0.30946622995547807,
+    "after_think": 0.31097025447771764,
+    "verdict_pre": 0.33798468789179,
+    "end_of_response": 0.24872182942047297,
+    "citation": 0.5352952804628331
+   },
+   "citation_surplus_top": [
+    "/team",
+    " ethos",
+    "有",
+    " agreed",
+    " guidelines",
+    "RequiredMixin",
+    "已",
+    "成员",
+    "最近",
+    ".Team"
+   ],
+   "citation_top10_actual": [
+    "队友",
+    " team",
+    "队员",
+    "团队",
+    "闺蜜",
+    ".Team",
+    "战队",
+    "团长",
+    "大姐",
+    "但他们"
+   ],
+   "citation_top10_reference": [
+    "队友",
+    "团队",
+    "队员",
+    "闺蜜",
+    " team",
+    ".Team",
+    "战队",
+    "团长",
+    "大姐",
+    "但他们"
+   ]
+  },
+  {
+   "run": "/workspace/swarm/data/replay/sweep1/seed2007/proposal_k3",
+   "agent": "carol",
+   "cites": false,
+   "verdict": "accept",
+   "mass": {
+    "first_generated": 0.2383908203014166,
+    "first_thought": 0.2842136060150631,
+    "after_think": 0.3364917346812198,
+    "verdict_pre": 0.31766535668960383,
+    "end_of_response": 0.27900843430281785
+   }
+  },
+  {
+   "run": "/workspace/swarm/data/replay/sweep1/seed2007/proposal_k3",
+   "agent": "erin",
+   "cites": false,
+   "verdict": "reject",
+   "mass": {
+    "first_generated": 0.2715409685403964,
+    "first_thought": 0.3601380718205419,
+    "after_think": 0.29504843880055176,
+    "verdict_pre": 0.27764316819397933,
+    "end_of_response": 0.2724543225525645
+   }
+  },
+  {
+   "run": "/workspace/swarm/data/replay/sweep1/seed2008/proposal_k3",
+   "agent": "alice",
+   "cites": true,
+   "verdict": "accept",
+   "mass": {
+    "first_generated": 0.27682763676987415,
+    "first_thought": 0.3126905934434872,
+    "after_think": 0.4050597097066595,
+    "verdict_pre": 0.3059526488598673,
+    "end_of_response": 0.217180025867702,
+    "citation": 0.4892591444755928
+   },
+   "citation_surplus_top": [
+    " ethos",
+    "の",
+    "成员",
+    "已",
+    "用",
+    "提倡",
+    "最近",
+    "/team",
+    " notes",
+    " �"
+   ],
+   "citation_top10_actual": [
+    " team",
+    "队友",
+    "团队",
+    "队员",
+    ".Team",
+    " teams",
+    " crew",
+    " Team",
+    " teammates",
+    "/team"
+   ],
+   "citation_top10_reference": [
+    "队友",
+    " team",
+    "团队",
+    "队员",
+    ".Team",
+    "闺蜜",
+    "战队",
+    "团长",
+    "但他们",
+    " teammates"
+   ]
+  },
+  {
+   "run": "/workspace/swarm/data/replay/sweep1/seed2008/proposal_k3",
+   "agent": "frank",
+   "cites": false,
+   "verdict": "reject",
+   "mass": {
+    "first_generated": 0.27297513731132594,
+    "first_thought": 0.3256497550598244,
+    "after_think": 0.36952813950086427,
+    "verdict_pre": 0.321104720849119,
+    "end_of_response": 0.23030556150177298
+   }
+  },
+  {
+   "run": "/workspace/swarm/data/replay/sweep1/seed2008/proposal_k3",
+   "agent": "carol",
+   "cites": false,
+   "verdict": "accept",
+   "mass": {
+    "first_generated": 0.25604004975371547,
+    "first_thought": 0.3069286168008022,
+    "after_think": 0.35966814654479423,
+    "verdict_pre": 0.3376706103592215,
+    "end_of_response": 0.2557002513196279
+   }
+  },
+  {
+   "run": "/workspace/swarm/data/replay/sweep1/seed2009/proposal_k3",
+   "agent": "dave",
+   "cites": true,
+   "verdict": "accept",
+   "mass": {
+    "first_generated": 0.23443322443020104,
+    "first_thought": 0.31834878238315284,
+    "after_think": 0.3618044978770141,
+    "verdict_pre": 0.3319658621865509,
+    "end_of_response": 0.21522748997458505,
+    "citation": 0.508562426050067
+   },
+   "citation_surplus_top": [
+    " ethos",
+    "已",
+    "成员",
+    "的",
+    " �",
+    " guidelines",
+    "提倡",
+    "以",
+    "最近",
+    " الفريق"
+   ],
+   "citation_top10_actual": [
+    " team",
+    "队友",
+    " crew",
+    "团队",
+    " teams",
+    ".Team",
+    " Team",
+    "队员",
+    "团长",
+    " teammates"
+   ],
+   "citation_top10_reference": [
+    "队友",
+    " team",
+    "队员",
+    "团队",
+    "闺蜜",
+    ".Team",
+    "团长",
+    "/team",
+    " teammates",
+    "战队"
+   ]
+  },
+  {
+   "run": "/workspace/swarm/data/replay/sweep1/seed2009/proposal_k3",
+   "agent": "frank",
+   "cites": false,
+   "verdict": "reject",
+   "mass": {
+    "first_generated": 0.24098577824666298,
+    "first_thought": 0.32057197649869174,
+    "after_think": 0.40028609672844034,
+    "verdict_pre": 0.2781739677954944,
+    "end_of_response": 0.2749160016205892
+   }
+  },
+  {
+   "run": "/workspace/swarm/data/replay/sweep1/seed2009/proposal_k3",
+   "agent": "carol",
+   "cites": false,
+   "verdict": "accept",
+   "mass": {
+    "first_generated": 0.22382458026136853,
+    "first_thought": 0.30697363976878256,
+    "after_think": 0.3674703224807007,
+    "verdict_pre": 0.23409249446203448,
+    "end_of_response": 0.22775378088373094
+   }
+  }
+ ]
+}
