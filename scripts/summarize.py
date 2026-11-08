@@ -42,6 +42,16 @@ def main() -> int:
         dist = "  ".join(f"{k}:{n}" for k, n in v["targets_used_dist"].items())
         print(f"{name:<14} {fmt(v['leak2_used_correct']):>11} {fmt(v['leak2_used_wrong']):>11} "
               f"{fmt(v['leak2_used_none']):>11} {fmt(v['targets_used']):>12}  {dist}")
+    # a leak to an agent that can solve its task. reply tokens compare the target with itself in none
+    tok = lambda x: "-" if x is None else f"{x:.0f}"  # noqa: E731
+    hdr = f"{'variant':<20} {'copied':>11} {'correct':>11} {'reply tok':>10} {'in none':>8}"
+    print()
+    print(hdr)
+    print("-" * len(hdr))
+    for name, v in lab["variants"].items():
+        if v["copied_value"]["den"]:
+            print(f"{name:<20} {fmt(v['copied_value']):>11} {fmt(v['solvable_correct']):>11} "
+                  f"{tok(v['target_reply_tokens_mean']):>10} {tok(v['target_reply_tokens_none_mean']):>8}")
     return 0
 
 
