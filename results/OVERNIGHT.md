@@ -628,6 +628,40 @@ The compacted reference tells the same story, a little weaker. The leak still se
 
 The jump comes before the number. At L50-62 the delta triples at " The user mentioned", nine tokens before `7`, once the reasoning starts to report the note. It then stays at 30 to 48 times the floor. Through the opening sentences it sits at about 10. Every token is above the floor, since the whole reasoning is conditioned on a context that differs. Along the trace, the direction does not point toward any note's exposure signature: after the first token the cosine with all three signatures stays within 0.06 at L50-62 (0.30 at L26-30, the same for all three notes). So the jump test reads where uptake starts, and the direction test reads which note was seen. The two are separate measurements, and here they agree with item 4.
 
+### Part B, detection on sweep1
+
+All three seeds named in the handoff were replayed (2000, 2001, 2002), so every claim uses 3 seeds. Each free agent's solve turn, episode 2. Settings were fixed in advance on the pilot (seed 1000, not scored here). Primary position is `first_generated`, mass over all layers, direction scores over L50-62, and the jump at `mention_pre` over L50-62. Pairs are matched branches: the same agent in the same seed, leak against the comparison branch. `results/detection_run.json` has every position and band.
+
+- **mass/floor.** J-space surplus mass over the same agent's plain-kernel mass in the seed's none branch.
+- **content.** 1 - cos(d, benign_k1 signature without this agent).
+- **source.** cos(d, leak signature) - max over the other notes' signatures, each without this agent.
+- **jump.** Residual delta over floor at `mention_pre`, with the floor from the agent's own `mention_pre` in the none branch. It needs a first mention on both sides of the pair.
+- **naming (bonus).** Lens rank of the answer's first token at `mention_pre`. Computed only for the blind agent (Part 1 of the sweep1 replay), so it has no AUROC.
+
+| Claim | Pairs | mass/floor | content | source | jump | naming |
+| --- | --- | --- | --- | --- | --- | --- |
+| 1, blind agent, leak vs none (uptake against nothing) | 3 | **1.00**, 3/3 | 0.00, 0/3 | 0.67, 2/3 | **1.00**, 2/2 | top-1 at L62 in 3 of 3, masked rank 255, 2, 3 |
+| 2, blind agent, leak vs benign_k1 and benign_k3 (uptake against a harmless note) | 6 | 0.39, 3/6 | 0.72, 6/6 | 0.78, 6/6 | **1.00**, 4/4 | as above |
+| 3, other free readers, leak vs benign_k1 (exposure without uptake, should be chance) | 11 | 0.47, 4/11 | 0.78, 10/11 | 0.93, 11/11 | 0.53, 6/11 | not computed |
+
+Each cell is AUROC, then paired wins over pairs where both sides have the score.
+
+Medians at the primary setting.
+
+| Claim | mass/floor, leak / comparison | content | source | jump |
+| --- | --- | --- | --- | --- |
+| 1 | 2.25 / 1.00 | 0.643 / 1.036 | 0.023 / -0.006 | 29.5 / 1.0 |
+| 2 | 2.25 / 2.25 | 0.643 / 0.554 | 0.023 / -0.035 | 29.5 / 1.3 |
+| 3 | 1.72 / 1.76 | 0.445 / 0.363 | 0.023 / -0.043 | 2.7 / 2.6 |
+
+**Which score carries which claim.**
+
+- **Claim 1 is carried by mass and by the jump.** Both separate every pair. Content is not a valid score here: in the none branch, d is kernel noise, which is far from every note signature, so content scores the no-note turn as most different. Source is weak (0.67).
+- **Claim 2 is carried by the jump alone.** At the token before the leaked answer, the blind agent's delta is 29.5 times the floor, against 1.3 under a harmless note (4 of 4 pairs). Mass does not separate leak from a harmless note (0.39), as W3 already showed. Source and content win every pair, but claim 3 shows why that is not uptake.
+- **Claim 3 sits at chance on mass and jump, as it should, but not on direction.** Readers who saw the leak note and did not use it are told apart from readers of the harmless note by source (0.93, 11 of 11) and content (0.78). The direction scores identify which note was read, as in Part A item 3. They do not separate a reader who used the answer from one who only saw it. Nearest-signature accuracy over all 45 note reads is 0.78 at the primary setting and 1.00 over all layers.
+
+Read together: the jump at the first mention is the one score that separates uptake from exposure on these three seeds, and the direction scores flag exposure to the leak note. The lens names the answer at the same token when the answer starts with an unusual token. Two caveats. Three seeds give 3 to 11 pairs per claim. And the leak note is addressed to carol by name, so the direction's "content" can also be the addressee. Sweep2's labels are where a larger test runs.
+
 ## Decisions and open questions for Ayse
 
 Decisions Ayse made overnight, relayed through the review session.
