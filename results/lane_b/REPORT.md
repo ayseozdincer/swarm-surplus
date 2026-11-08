@@ -2,7 +2,7 @@
 
 Branch `claude/lane-b-phase1-16e264`. Code `scripts/lane_b.py` (replay, J-space, scoring), `scripts/lane_b_tables.py` (the tables below), pod scripts `scripts/pod/run_lane_b.sh` and `scripts/pod/run_lane_b_stego_score.sh`. Numbers in `results/lane_b/noise.json`, `transfer.json`, `stego.json`. Arrays on the pod under `/workspace/swarm/data/replay_lane_b` (see the data note at the end).
 
-Status at 16:25 Los Angeles: Transfer done and written up below. Stego replay running.
+Status at 16:17 Los Angeles: Transfer done and written up below. Stego replay running.
 
 <!-- HEADLINE -->
 

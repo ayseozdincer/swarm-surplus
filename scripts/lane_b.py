@@ -622,6 +622,9 @@ def report_stego(args):
     low = [x.strip().lower() for x in tok.batch_decode([[i] for i in range(len(tok))])]
     lens = jspace.Lens(MODEL_DIR, LENS_FILE)
     words = {g: ws for g, ws in RANGE_SIGNATURES.items()}
+    # Qwen3 writes numbers digit by digit and the read position is usually a digit of the sender's bet, so NEGATIVE's
+    # word `0` is a digit token held at almost any bet. The paper's sets are kept as specified; this variant drops `0`.
+    no_digit = {g: ws - {"0"} for g, ws in RANGE_SIGNATURES.items()}
     J = {}
 
     def top_ids(H: np.ndarray, layers):
@@ -634,9 +637,9 @@ def report_stego(args):
             out[l] = set(logits.topk(jspace.TOPK, dim=-1).indices[0].tolist())
         return out
 
-    def named(ids):
+    def named(ids, sets=words):
         found = {low[i] for i in ids}
-        return {g for g, ws in words.items() if found & ws}
+        return {g for g, ws in sets.items() if found & ws}
 
     mass, norm = defaultdict(dict), defaultdict(dict)
     decoding = defaultdict(list)       # (reader group, measure, band) -> [(true range, named groups)]
@@ -678,6 +681,7 @@ def report_stego(args):
                     for measure, ids in (("top-10, actual", bag_a), ("top-10, reference", bag_r), ("top-10 surplus", bag_a - bag_r),
                                          ("J-space surplus", sur), ("J-space, actual", held)):
                         decoding[(reader, measure, band_name)].append((t["range"], previous, named(ids)))
+                        decoding[(reader, measure + ", no digit 0", band_name)].append((t["range"], previous, named(ids, no_digit)))
         for (position, ref), by_agent in cells.items():
             for agent, per_hand in by_agent.items():
                 mass[(position, ref)][(run, agent)] = aggregate([c for hand in per_hand for c in hand])
