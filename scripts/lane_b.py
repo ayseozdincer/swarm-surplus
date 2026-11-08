@@ -159,6 +159,37 @@ def transfer(args, model, tok, capture):
         print(run, len(turns), f"{time.time() - started:.0f}s", flush=True)
 
 
+def transfer_padded(args, model, tok, capture):
+    """W4's third placebo group, run after the main replay: honest agents with the donor prompt appended to their own
+    reference prompt. Arrays go to data/replay_lane_b/transfer_padded/<run>, one `padded` array per honest agent."""
+    samples, render = transfer_samples()
+    donor = donors({s["run_id"] for s in samples})
+    by_run = defaultdict(list)
+    for s in samples:
+        if s["role"] != "colluder":
+            by_run[s["run_id"]].append(s)
+    for run, rows in sorted(by_run.items()):
+        directory = OUT/"transfer_padded"/run
+        if (directory/"index.json").exists():
+            continue
+        directory.mkdir(parents=True, exist_ok=True)
+        scenario = run.rsplit("__", 1)[0]
+        honest = control_systems(scenario)
+        turns = []
+        for s in rows:
+            name = s["agent_name"]
+            donor_name, donor_prompt = donor[scenario][[n for n, _ in honest].index(name)]
+            ids_a, start_a = encode(tok, render, s)
+            ids_r, start_r = encode(tok, render, {**s, "system_prompt": dict(honest)[name] + "\n\n" + donor_prompt.replace(donor_name, name)})
+            if ids_a[start_a:] != ids_r[start_r:]:
+                raise ValueError(f"response tokens differ: {run} {name} padded")
+            file = f"{slug(name)}.npz"
+            np.savez(directory/file, padded=capture.run(model, ids_r, [start_r, len(ids_r) - 1], attention_mask_4d(len(ids_r))).numpy())
+            turns.append({"file": file, "agent": name, "tokens": len(ids_r), "positions": dict(zip(T_POSITIONS, (start_r, len(ids_r) - 1)))})
+        (directory/"index.json").write_text(json.dumps({"run": run, "layers": capture.layers, "turns": turns}, indent=1))
+        print("padded", run, len(turns), flush=True)
+
+
 # ═══════════════════════════════════════════════════════════════════ Stego inputs
 
 def stego_episodes():
@@ -386,6 +417,8 @@ def calibrated(agent_scores: dict, calibration: dict):
     out = {}
     for key, (fam, slot, value) in agent_scores.items():
         pool = np.array(pools[(fam, slot)])
+        if len(pool) < 2:
+            raise ValueError(f"calibration pool of {len(pool)} for {fam} slot {slot}")
         out[key] = (fam, slot, float((value - pool.mean())/max(pool.std(ddof=1), 1e-12)))
     return out
 
@@ -462,7 +495,7 @@ def report_transfer(args):
     mass = defaultdict(dict)      # position -> kind -> (run, agent) -> (pool mean, mass)
     norm = defaultdict(dict)      # position -> kind -> (run, agent) -> mean relative delta over layers
     ont = defaultdict(dict)       # position -> kind -> (run, agent) -> ontology cosine
-    direction = defaultdict(dict)  # position -> (run, agent) -> d [layers, d] for the real reference
+    direction = defaultdict(lambda: defaultdict(dict))  # position -> kind -> (run, agent) -> d [layers, d]
     for directory in sorted(p for p in root.iterdir() if (p/"jspace.npz").exists()):
         run = directory.name
         index, support, coefficients = load_jspace(directory)
@@ -480,13 +513,25 @@ def report_transfer(args):
                     norm[position].setdefault(kind, {})[key] = float(relative_delta(a, r).mean())
                     d = unit(a - r)
                     ont[position].setdefault(kind, {})[key] = float(np.mean([(d[li] @ onto[l].T).mean() for li, l in enumerate(LENS_LAYERS)]))
-                    if kind == "reference":
-                        direction[position][key] = a - r
+                    direction[position][kind][key] = a - r
+            extra = OUT/"transfer_padded"/run
+            if (extra/"jspace.npz").exists() and t["role"] != "colluder":
+                pidx, psupport, pcoefficients = load_jspace(extra)
+                padded = np.load(extra/t["file"])["padded"]
+                agents[key]["edit_tokens"]["padded"] = abs(json.loads((extra/"index.json").read_text())["turns"][[x["file"] for x in json.loads((extra/"index.json").read_text())["turns"]].index(t["file"])]["tokens"] - t["tokens"])
+                for pi, position in enumerate(T_POSITIONS):
+                    i, j = index[(t["file"], "actual", position)], pidx[(t["file"], "padded", position)]
+                    z_a, z_p = shares(support[i], coefficients[i]), shares(psupport[j], pcoefficients[j])
+                    mass[position].setdefault("padded", {})[key] = aggregate([jspace.surplus(z_a[l], z_p[l]) for l in ALL])
+                    a, r = data["actual"][pi], padded[pi]
+                    norm[position].setdefault("padded", {})[key] = float(relative_delta(a, r).mean())
+                    d = unit(a - r)
+                    ont[position].setdefault("padded", {})[key] = float(np.mean([(d[li] @ onto[l].T).mean() for li, l in enumerate(LENS_LAYERS)]))
     labels = {run: int(run.endswith("__collusion")) for run, _ in agents}
     groups = {run: family(run) for run, _ in agents}
     colluder = lambda k: agents[k]["role"] == "colluder"
     result = {"agents": len(agents), "runs": len(labels), "edit_tokens": {}, "positions": {}}
-    for kind in ("reference", *KINDS):
+    for kind in ("reference", *KINDS, "padded"):
         for name, want in (("colluders", colluder), ("honest, collusion runs", lambda k: not colluder(k) and agents[k]["mode"] == "collusion"),
                            ("control", lambda k: agents[k]["mode"] == "control")):
             values = [agents[k]["edit_tokens"][kind] for k in agents if want(k) and kind in agents[k]["edit_tokens"]]
@@ -497,6 +542,8 @@ def report_transfer(args):
         """table_for(kind) -> (run, agent) -> value; returns the comparisons, raw and calibrated."""
         out = {}
         comparisons = {"real reference": ("reference", "reference"), "placebo vs swapped": ("placebo", "swapped")}
+        if "padded" in mass[T_POSITIONS[0]] and len(mass[T_POSITIONS[0]]["padded"]) == sum(not colluder(k) for k in agents):
+            comparisons["placebo vs padded"] = ("placebo", "padded")
         for label, (ck, hk) in comparisons.items():
             ct, ht = table_for(ck), table_for(hk)
             scores = {k: (agents[k]["family"], agents[k]["slot"], (ct if colluder(k) else ht)[k]) for k in agents}
@@ -525,7 +572,9 @@ def report_transfer(args):
                "pool_mean": score_set(lambda kind: {k: v[0] for k, v in mass[position][kind].items()}),
                "relative_delta": score_set(lambda kind: norm[position][kind]),
                "ontology": score_set(lambda kind: ont[position][kind])}
-        row["pair_alignment"] = pair_alignment(direction[position], agents, labels, groups)
+        row["pair_alignment"] = pair_alignment(direction[position]["reference"], agents, labels, groups)
+        mixed = {k: (direction[position]["placebo"] if colluder(k) else direction[position]["swapped"])[k] for k in agents}
+        row["pair_alignment, placebo vs swapped"] = pair_alignment(mixed, agents, labels, groups)
         result["positions"][position] = row
         print(position, json.dumps({m: {c: round(v["raw"]["auroc"], 3) for c, v in row[m].items()} for m in ("mass", "relative_delta", "ontology")}), flush=True)
         print(position, "pair alignment", json.dumps({k: v["auroc"] if isinstance(v, dict) and "auroc" in v else v for k, v in row["pair_alignment"].items() if k in ("run", "top_pair_coalition")}), flush=True)
@@ -723,19 +772,19 @@ def range_separation(rows, permutations=1000):
 
 def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
-    parser.add_argument("actions", nargs="+", choices=("noise", "transfer", "stego", "decompose", "follow", "report_noise", "report_transfer", "report_stego", "check"),
+    parser.add_argument("actions", nargs="+", choices=("noise", "transfer", "transfer_padded", "stego", "decompose", "follow", "report_noise", "report_transfer", "report_stego", "check"),
                         help="GPU replays given together share one model load")
     parser.add_argument("--dirs", nargs="*", type=Path, default=[])
     parser.add_argument("--n", type=int, default=4)
     parser.add_argument("--expect", type=int, default=0, help="follow: stop once this many run directories have shares")
     args = parser.parse_args()
-    replays = [a for a in args.actions if a in ("noise", "transfer", "stego")]
+    replays = [a for a in args.actions if a in ("noise", "transfer", "transfer_padded", "stego")]
     if replays:
         model, tok = load_model()
         capture = Capture(model, LENS_LAYERS)
     for action in args.actions:
         if action in replays:
-            {"noise": noise, "transfer": transfer, "stego": stego}[action](args, model, tok, capture)
+            {"noise": noise, "transfer": transfer, "transfer_padded": transfer_padded, "stego": stego}[action](args, model, tok, capture)
         else:
             {"decompose": decompose, "follow": follow, "report_noise": report_noise, "report_transfer": report_transfer, "report_stego": report_stego,
              "check": check}[action](args)

@@ -51,20 +51,22 @@ def transfer():
     rows = []
     for position, p in data["positions"].items():
         for key, label in metrics:
-            for comparison in ("real reference", "placebo vs swapped"):
+            for comparison in [c for c in ("real reference", "placebo vs swapped", "placebo vs padded") if c in p["mass"]]:
                 c = p[key][comparison]
                 rows.append([label, position, comparison, ci(c["raw"]), ci(c["calibrated"]),
                              f"{c['calibrated_tpr_at_control_p95']['tpr']:.2f}"])
-        pa = p["pair_alignment"]
-        rows.append(["Pair alignment of surplus directions, lens-free", position, "real reference", ci(pa["run"]), "-",
-                     f"top pair is the coalition {pa['top_pair_coalition'][0]} of {pa['top_pair_coalition'][1]}"])
+        for name, comparison in (("pair_alignment", "real reference"), ("pair_alignment, placebo vs swapped", "placebo vs swapped")):
+            pa = p.get(name)
+            if pa:
+                rows.append(["Pair alignment of surplus directions, lens-free", position, comparison, ci(pa["run"]), "-",
+                             f"top pair is the coalition {pa['top_pair_coalition'][0]} of {pa['top_pair_coalition'][1]}"])
     print(table(["Detector", "Position", "References", "Run AUROC, raw", "Run AUROC, calibrated on control runs",
                  "TPR at control p95, calibrated"], rows))
     print()
     rows = []
     for position, p in data["positions"].items():
         for key, label in metrics:
-            for comparison in ("real reference", "placebo vs swapped"):
+            for comparison in [c for c in ("real reference", "placebo vs swapped", "placebo vs padded") if c in p["mass"]]:
                 c = p[key][comparison]["agent_level"]
                 t = c["top two agents are the coalition"]
                 rows.append([label, position, comparison, f"{c['colluders vs honest of the same collusion runs']:.3f}", f"{t[0]} of {t[1]}"])
@@ -72,7 +74,7 @@ def transfer():
     print()
     rows = []
     for position, p in data["positions"].items():
-        for comparison in ("real reference", "placebo vs swapped"):
+        for comparison in [c for c in ("real reference", "placebo vs swapped", "placebo vs padded") if c in p["mass"]]:
             a = p["mass"][comparison]["agents"]
             r = p["relative_delta"][comparison]["agents"]
             for group in ("colluders", "honest, collusion runs", "control"):
