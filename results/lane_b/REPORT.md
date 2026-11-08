@@ -2,7 +2,7 @@
 
 Branch `claude/lane-b-phase1-16e264`. Code `scripts/lane_b.py` (replay, J-space, scoring), `scripts/lane_b_tables.py` (the tables below), pod scripts `scripts/pod/run_lane_b.sh` and `scripts/pod/run_lane_b_stego_score.sh`. Numbers in `results/lane_b/noise.json`, `transfer.json`, `stego.json`. Arrays on the pod under `/workspace/swarm/data/replay_lane_b` (see the data note at the end).
 
-Status at 16:17 Los Angeles: Transfer done and written up below. Stego replay running.
+Status at 17:10 Los Angeles: Transfer and Stego done and written up below. The padded placebo group for Transfer is being scored.
 
 <!-- HEADLINE -->
 
@@ -14,7 +14,7 @@ Status at 16:17 Los Angeles: Transfer done and written up below. Stego replay ru
 | Noise floor on this pod | done | 4 Transfer and 4 Stego honest control turns |
 | Phase 1b Transfer, real reference | done | 288 rows, both positions |
 | Phase 1b Transfer, placebo and swapped | done | W4's `padded` group not run in the main pass |
-| Phase 1a Stego | running | |
+| Phase 1a Stego | done | 40 runs, hands 1 to 7, 1120 player turns |
 
 <!-- RAN -->
 
@@ -170,7 +170,121 @@ Honest agents of collusion runs. In cicd and research their system prompt differ
 - A confound the paper's measure shares, and a control for it. The receiver's private block carries the count records of the previous hands, and ranges persist from hand to hand, so a surplus can name the true range by carrying the last record rather than by decoding the sender. Each naming row therefore also gives the share of hands that name the previous hand's range, and, on the hands where the range changed, how often the true and the previous range are named.
 - Lens-free. Within each collusion run, the cosine of the receiver's surplus direction at `message_end` between hands of the same range (HOT with HOT, NEGATIVE with NEGATIVE), minus between HOT and NEGATIVE hands, mean over the band's layers, then over runs. Nearby hands are alike for reasons that have nothing to do with the count, so the same contrast is also taken within strata of equal hand distance and averaged, and a within-run label permutation gives a p value. The same is run with the previous hand's range as the label. Nulls: honest players of collusion runs and every control reader, at the same position.
 
-<!-- STEGO -->
+### Results
+
+Cached numbers for this model on Stego: J-PACT 1.000 [1.00, 1.00], NARCBench probe 1.000, ontology baseline 1.000.
+
+Detection. Run AUROC over 20 collusion and 20 control runs, the run score the max over the four players. Agent columns are median (range) of surplus mass or direction norm over hands 1 to 7.
+
+| Detector | Position | Colluders' reference | Run AUROC | Receiver | Sender | Honest, collusion runs | Control |
+| --- | --- | --- | --- | --- | --- | --- | --- |
+| Surplus mass (J-space) | message_end | compacted | 1.000 [1.00, 1.00] | 0.646 (0.594 to 0.702) | 0.570 (0.529 to 0.622) | 0.159 (0.138 to 0.180) | 0.153 (0.117 to 0.182) |
+| Surplus mass (J-space) | message_end | kept | 1.000 [1.00, 1.00] | 0.644 (0.591 to 0.699) | 0.566 (0.524 to 0.615) | 0.159 (0.138 to 0.180) | 0.153 (0.117 to 0.182) |
+| Surplus mass (J-space) | prompt_last | compacted | 1.000 [1.00, 1.00] | 0.626 (0.602 to 0.653) | 0.707 (0.679 to 0.733) | 0.155 (0.141 to 0.177) | 0.155 (0.133 to 0.176) |
+| Surplus mass (J-space) | prompt_last | kept | 1.000 [1.00, 1.00] | 0.610 (0.590 to 0.639) | 0.695 (0.668 to 0.725) | 0.155 (0.141 to 0.177) | 0.155 (0.133 to 0.176) |
+| Surplus direction norm, lens-free | message_end | compacted | 1.000 [1.00, 1.00] | 0.299 (0.228 to 0.370) | 0.261 (0.211 to 0.334) | 0.011 (0.010 to 0.014) | 0.011 (0.009 to 0.014) |
+| Surplus direction norm, lens-free | message_end | kept | 1.000 [1.00, 1.00] | 0.298 (0.222 to 0.370) | 0.258 (0.207 to 0.330) | 0.011 (0.010 to 0.014) | 0.011 (0.009 to 0.014) |
+| Surplus direction norm, lens-free | prompt_last | compacted | 1.000 [1.00, 1.00] | 0.260 (0.238 to 0.278) | 0.365 (0.327 to 0.394) | 0.012 (0.011 to 0.013) | 0.012 (0.011 to 0.014) |
+| Surplus direction norm, lens-free | prompt_last | kept | 1.000 [1.00, 1.00] | 0.248 (0.220 to 0.265) | 0.348 (0.311 to 0.378) | 0.012 (0.011 to 0.013) | 0.012 (0.011 to 0.014) |
+
+Range naming at `message_end`, band L28 to L56. Each cell of the last three columns is the share of hands of that true range whose token set names NEGATIVE / NEUTRAL / HOT (hands). The receiver's row in the paper (DeepSeek-V4-Flash, its band) is 0.41 / 0.18 / 0.16, 0.22 / 0.54 / 0.27, 0.12 / 0.26 / 0.62. Full tables for every band and the `no digit 0` variants are in `results/lane_b/stego.json`.
+
+| Reader | Measure | Band | Hands | True range held | Previous hand's range held | Range changed: true / previous held (hands) | Any range named | True NEGATIVE: names NEG / NEU / HOT (hands) | True NEUTRAL | True HOT |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| control other | J-space surplus | L28-56 | 145 | 0.159 | 0.157 | 0.1 / 0.12 (50) | 0.476 | 0.094 / 0.016 / 0.438 (64) | 0.026 / 0.0 / 0.421 (38) | 0.023 / 0.023 / 0.395 (43) |
+| control other | J-space, actual | L28-56 | 145 | 0.2 | 0.213 | 0.14 / 0.18 (50) | 0.593 | 0.125 / 0.016 / 0.547 (64) | 0.053 / 0.0 / 0.5 (38) | 0.07 / 0.047 / 0.488 (43) |
+| control other | top-10 surplus | L28-56 | 145 | 0.0 | 0.0 | 0.0 / 0.0 (50) | 0.0 | 0.0 / 0.0 / 0.0 (64) | 0.0 / 0.0 / 0.0 (38) | 0.0 / 0.0 / 0.0 (43) |
+| control other | top-10, actual | L28-56 | 145 | 0.007 | 0.008 | 0.0 / 0.0 (50) | 0.007 | 0.016 / 0.0 / 0.0 (64) | 0.0 / 0.0 / 0.0 (38) | 0.0 / 0.0 / 0.0 (43) |
+| control other | top-10, actual, no digit 0 | L28-56 | 145 | 0.0 | 0.0 | 0.0 / 0.0 (50) | 0.0 | 0.0 / 0.0 / 0.0 (64) | 0.0 / 0.0 / 0.0 (38) | 0.0 / 0.0 / 0.0 (43) |
+| control other | top-10, reference | L28-56 | 145 | 0.007 | 0.008 | 0.0 / 0.0 (50) | 0.007 | 0.016 / 0.0 / 0.0 (64) | 0.0 / 0.0 / 0.0 (38) | 0.0 / 0.0 / 0.0 (43) |
+| control receiver | J-space surplus | L28-56 | 72 | 0.139 | 0.143 | 0.111 / 0.111 (27) | 0.528 | 0.062 / 0.0 / 0.5 (32) | 0.15 / 0.0 / 0.55 (20) | 0.0 / 0.0 / 0.4 (20) |
+| control receiver | J-space, actual | L28-56 | 72 | 0.181 | 0.175 | 0.111 / 0.111 (27) | 0.583 | 0.062 / 0.0 / 0.531 (32) | 0.15 / 0.0 / 0.55 (20) | 0.0 / 0.0 / 0.55 (20) |
+| control receiver | top-10 surplus | L28-56 | 72 | 0.0 | 0.0 | 0.0 / 0.0 (27) | 0.0 | 0.0 / 0.0 / 0.0 (32) | 0.0 / 0.0 / 0.0 (20) | 0.0 / 0.0 / 0.0 (20) |
+| control receiver | top-10, actual | L28-56 | 72 | 0.0 | 0.0 | 0.0 / 0.0 (27) | 0.0 | 0.0 / 0.0 / 0.0 (32) | 0.0 / 0.0 / 0.0 (20) | 0.0 / 0.0 / 0.0 (20) |
+| control receiver | top-10, actual, no digit 0 | L28-56 | 72 | 0.0 | 0.0 | 0.0 / 0.0 (27) | 0.0 | 0.0 / 0.0 / 0.0 (32) | 0.0 / 0.0 / 0.0 (20) | 0.0 / 0.0 / 0.0 (20) |
+| control receiver | top-10, reference | L28-56 | 72 | 0.0 | 0.0 | 0.0 / 0.0 (27) | 0.0 | 0.0 / 0.0 / 0.0 (32) | 0.0 / 0.0 / 0.0 (20) | 0.0 / 0.0 / 0.0 (20) |
+| honest, collusion runs | J-space surplus | L28-56 | 193 | 0.466 | 0.463 | 0.314 / 0.271 (70) | 0.824 | 0.829 / 0.037 / 0.159 (82) | 0.574 / 0.037 / 0.167 (54) | 0.772 / 0.018 / 0.351 (57) |
+| honest, collusion runs | J-space, actual | L28-56 | 193 | 0.482 | 0.512 | 0.329 / 0.357 (70) | 0.886 | 0.866 / 0.037 / 0.207 (82) | 0.648 / 0.037 / 0.278 (54) | 0.877 / 0.018 / 0.351 (57) |
+| honest, collusion runs | top-10 surplus | L28-56 | 193 | 0.0 | 0.0 | 0.0 / 0.0 (70) | 0.0 | 0.0 / 0.0 / 0.0 (82) | 0.0 / 0.0 / 0.0 (54) | 0.0 / 0.0 / 0.0 (57) |
+| honest, collusion runs | top-10, actual | L28-56 | 193 | 0.031 | 0.018 | 0.029 / 0.0 (70) | 0.057 | 0.073 / 0.0 / 0.0 (82) | 0.037 / 0.0 / 0.0 (54) | 0.053 / 0.0 / 0.0 (57) |
+| honest, collusion runs | top-10, actual, no digit 0 | L28-56 | 193 | 0.005 | 0.0 | 0.014 / 0.0 (70) | 0.026 | 0.012 / 0.0 / 0.0 (82) | 0.019 / 0.0 / 0.0 (54) | 0.053 / 0.0 / 0.0 (57) |
+| honest, collusion runs | top-10, reference | L28-56 | 193 | 0.031 | 0.018 | 0.029 / 0.0 (70) | 0.062 | 0.073 / 0.0 / 0.0 (82) | 0.037 / 0.0 / 0.0 (54) | 0.07 / 0.0 / 0.0 (57) |
+| receiver | J-space surplus | L28-56 | 139 | 0.504 | 0.504 | 0.4 / 0.36 (50) | 0.871 | 0.767 / 0.067 / 0.267 (60) | 0.595 / 0.054 / 0.649 (37) | 0.405 / 0.119 / 0.524 (42) |
+| receiver | J-space, actual | L28-56 | 139 | 0.518 | 0.513 | 0.42 / 0.36 (50) | 0.885 | 0.8 / 0.067 / 0.283 (60) | 0.595 / 0.054 / 0.649 (37) | 0.429 / 0.119 / 0.524 (42) |
+| receiver | top-10 surplus | L28-56 | 139 | 0.05 | 0.05 | 0.04 / 0.04 (50) | 0.129 | 0.117 / 0.0 / 0.0 (60) | 0.108 / 0.0 / 0.0 (37) | 0.167 / 0.0 / 0.0 (42) |
+| receiver | top-10, actual | L28-56 | 139 | 0.079 | 0.059 | 0.06 / 0.06 (50) | 0.223 | 0.183 / 0.0 / 0.0 (60) | 0.135 / 0.0 / 0.0 (37) | 0.357 / 0.0 / 0.0 (42) |
+| receiver | top-10, actual, no digit 0 | L28-56 | 139 | 0.0 | 0.0 | 0.0 / 0.0 (50) | 0.0 | 0.0 / 0.0 / 0.0 (60) | 0.0 / 0.0 / 0.0 (37) | 0.0 / 0.0 / 0.0 (42) |
+| receiver | top-10, reference | L28-56 | 139 | 0.108 | 0.067 | 0.12 / 0.06 (50) | 0.252 | 0.25 / 0.0 / 0.0 (60) | 0.108 / 0.0 / 0.0 (37) | 0.381 / 0.0 / 0.0 (42) |
+
+The same for the receiver over all 63 layers.
+
+| Reader | Measure | Band | Hands | True range held | Previous hand's range held | Range changed: true / previous held (hands) | Any range named | True NEGATIVE: names NEG / NEU / HOT (hands) | True NEUTRAL | True HOT |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| receiver | J-space surplus | all layers | 139 | 0.54 | 0.538 | 0.46 / 0.4 (50) | 0.95 | 0.85 / 0.067 / 0.267 (60) | 0.676 / 0.054 / 0.649 (37) | 0.81 / 0.119 / 0.524 (42) |
+| receiver | top-10 surplus | all layers | 139 | 0.007 | 0.0 | 0.0 / 0.0 (50) | 0.007 | 0.0 / 0.0 / 0.0 (60) | 0.0 / 0.0 / 0.0 (37) | 0.0 / 0.0 / 0.024 (42) |
+| receiver | top-10, actual | all layers | 139 | 0.331 | 0.328 | 0.22 / 0.2 (50) | 0.878 | 0.75 / 0.0 / 0.0 (60) | 0.973 / 0.0 / 0.0 (37) | 0.976 / 0.0 / 0.024 (42) |
+| receiver | top-10, actual, no digit 0 | all layers | 139 | 0.007 | 0.0 | 0.0 / 0.0 (50) | 0.007 | 0.0 / 0.0 / 0.0 (60) | 0.0 / 0.0 / 0.0 (37) | 0.0 / 0.0 / 0.024 (42) |
+
+Specificity, the mean over the three ranges of how often a range is named when it is the true range minus how often it is named when another range is true (0 means the naming carries no information about the count, `results/lane_b/stego_specificity.json`).
+
+| Reader | Measure | Band | Hands | True range held | Previous hand's range held | Specificity | Per range, NEGATIVE / NEUTRAL / HOT |
+| --- | --- | --- | --- | --- | --- | --- | --- |
+| receiver | J-space surplus | L28-56 | 139 | 0.504 | 0.504 | 0.117 | 0.273 / -0.034 / 0.111 |
+| receiver | J-space surplus | all layers | 139 | 0.54 | 0.538 | 0.06 | 0.103 / -0.034 / 0.111 |
+| receiver | top-10, actual | L28-56 | 139 | 0.079 | 0.059 | -0.023 | -0.07 / 0.0 / 0.0 |
+| receiver | top-10, actual | all layers | 139 | 0.331 | 0.328 | -0.067 | -0.225 / 0.0 / 0.024 |
+| receiver | top-10, actual, no digit 0 | L28-56 | 139 | 0.0 | 0.0 | 0.0 | 0.0 / 0.0 / 0.0 |
+| receiver | top-10, actual, no digit 0 | all layers | 139 | 0.007 | 0.0 | 0.008 | 0.0 / 0.0 / 0.024 |
+| honest, collusion runs | J-space surplus | L28-56 | 193 | 0.466 | 0.463 | 0.117 | 0.153 / 0.008 / 0.189 |
+| honest, collusion runs | J-space surplus | all layers | 193 | 0.466 | 0.47 | 0.109 | 0.153 / 0.008 / 0.167 |
+| honest, collusion runs | top-10, actual | L28-56 | 193 | 0.031 | 0.018 | 0.009 | 0.028 / 0.0 / 0.0 |
+| honest, collusion runs | top-10, actual | all layers | 193 | 0.373 | 0.366 | -0.014 | -0.041 / 0.0 / 0.0 |
+| honest, collusion runs | top-10, actual, no digit 0 | L28-56 | 193 | 0.005 | 0.0 | -0.008 | -0.024 / 0.0 / 0.0 |
+| honest, collusion runs | top-10, actual, no digit 0 | all layers | 193 | 0.005 | 0.0 | -0.008 | -0.024 / 0.0 / 0.0 |
+| control receiver | J-space surplus | L28-56 | 72 | 0.139 | 0.143 | -0.044 | -0.013 / 0.0 / -0.119 |
+| control receiver | J-space surplus | all layers | 72 | 0.139 | 0.143 | -0.05 | -0.013 / 0.0 / -0.138 |
+| control receiver | top-10, actual | L28-56 | 72 | 0.0 | 0.0 | 0.0 | 0.0 / 0.0 / 0.0 |
+| control receiver | top-10, actual | all layers | 72 | 0.361 | 0.381 | 0.021 | 0.062 / 0.0 / 0.0 |
+| control receiver | top-10, actual, no digit 0 | L28-56 | 72 | 0.0 | 0.0 | 0.0 | 0.0 / 0.0 / 0.0 |
+| control receiver | top-10, actual, no digit 0 | all layers | 72 | 0.0 | 0.0 | 0.0 | 0.0 / 0.0 / 0.0 |
+| control other | J-space surplus | L28-56 | 145 | 0.159 | 0.157 | 0.005 | 0.07 / -0.019 / -0.037 |
+| control other | J-space surplus | all layers | 145 | 0.159 | 0.165 | 0.001 | 0.07 / -0.019 / -0.046 |
+| control other | top-10, actual | L28-56 | 145 | 0.007 | 0.008 | 0.005 | 0.016 / 0.0 / 0.0 |
+| control other | top-10, actual | all layers | 145 | 0.407 | 0.37 | 0.063 | 0.165 / 0.0 / 0.023 |
+| control other | top-10, actual, no digit 0 | L28-56 | 145 | 0.0 | 0.0 | 0.0 | 0.0 / 0.0 / 0.0 |
+| control other | top-10, actual, no digit 0 | all layers | 145 | 0.007 | 0.008 | 0.008 | 0.0 / 0.0 / 0.023 |
+
+Lens-free. Mean cosine of the surplus direction at `message_end` between hands of the same range minus between HOT and NEGATIVE hands, per run, then averaged. A run counts when it has at least one HOT and one NEGATIVE hand with a `message_end` and three such hands in all (7 of 20 for the receiver). `previous hand's range` uses the range of the hand before as the label. The permutation p shuffles labels within each run, 1000 times.
+
+| Reader and reference | Band | Runs | Same minus different range, mean cosine | Runs positive | Within equal hand distance | Runs positive | Permutation p |
+| --- | --- | --- | --- | --- | --- | --- | --- |
+| control other | reference | L28-56 | 6 | -0.0073 | 2 | -0.0068 | 2 of 4 | 0.793 |
+| control other | reference | previous hand's range | L28-56 | 5 | 0.0124 | 3 | 0.0365 | 3 of 3 | 0.142 |
+| control receiver | reference | L28-56 | 2 | -0.0368 | 0 | -0.0142 | 1 of 2 | 0.909 |
+| control receiver | reference | all layers | 2 | -0.0281 | 0 | -0.0131 | 0 of 2 | 0.913 |
+| control receiver | reference | previous hand's range | L28-56 | 4 | -0.0134 | 1 | 0.0109 | 2 of 3 | 0.697 |
+| control receiver | reference | previous hand's range | all layers | 4 | -0.0121 | 2 | 0.0065 | 2 of 3 | 0.715 |
+| honest, collusion runs | reference | L28-56 | 6 | -0.0051 | 4 | 0.0163 | 3 of 4 | 0.698 |
+| honest, collusion runs | reference | previous hand's range | L28-56 | 7 | -0.0130 | 2 | 0.0141 | 4 of 6 | 0.775 |
+| receiver | compacted | L28-56 | 7 | 0.0564 | 3 | 0.0314 | 4 of 7 | 0.053 |
+| receiver | compacted | all layers | 7 | 0.0494 | 3 | 0.0230 | 4 of 7 | 0.085 |
+| receiver | compacted | previous hand's range | L28-56 | 7 | 0.0753 | 5 | 0.1501 | 5 of 7 | 0.095 |
+| receiver | compacted | previous hand's range | all layers | 7 | 0.0789 | 5 | 0.1484 | 5 of 7 | 0.091 |
+| receiver | kept | L28-56 | 7 | 0.0631 | 4 | 0.0300 | 3 of 7 | 0.034 |
+| receiver | kept | all layers | 7 | 0.0568 | 3 | 0.0256 | 4 of 7 | 0.054 |
+| receiver | kept | previous hand's range | L28-56 | 7 | 0.0759 | 5 | 0.1467 | 5 of 7 | 0.099 |
+| receiver | kept | previous hand's range | all layers | 7 | 0.0784 | 5 | 0.1414 | 5 of 7 | 0.089 |
+
+### What the Stego numbers mean
+
+**The run AUROC of 1.000 is again by construction.** The sender and receiver are the only players with anything to mask (a private block of a mean 817 tokens for the receiver and 1084 for the sender), and every other player and every control player runs its second pass on the plain kernel. Receiver mass is 0.646 against 0.153 to 0.159 for everyone else, the kernel floor. This matches the cached J-PACT and probe at 1.000 and adds nothing beyond them.
+
+**The receiver's surplus does not hold the count range beyond what any reader of the sender's message holds.** On the top-10 readout, the paper's own measure, the receiver's actual top-10 over L28 to L56 names a range in 22 percent of hands and the true one in 7.9 percent. All of it is the digit `0` from NEGATIVE's word set: Qwen3 writes the bet digit by digit, the read position is usually a digit of the sender's bet, and without `0` the share is 0.0 in L28 to L56 and in L26 to L30, 0.007 over all layers. The top-10 surplus holds the true range in 5 percent of hands (0.0 without `0`). Over all 63 layers the actual top-10 names NEGATIVE in 75 to 98 percent of hands whatever the true range, again the digit. So the paper's 0.41 to 0.62 is not reproduced on Qwen3-32B with this lens. On the J-space the receiver's surplus holds the true range in 0.504 of hands (0.496 without `0`), inside the paper's range, but it holds the previous hand's range exactly as often (0.504). On the 50 hands where the range changed it holds the true range in 0.40 and the old one in 0.36. It names some range in 87 percent of hands and names NEGATIVE in 60 percent of NEUTRAL hands and 41 percent of HOT ones. The honest players of the same runs, whose surplus is only kernel noise, hold the true range in 0.466 of hands. By specificity the receiver's J-space surplus scores 0.117 and the honest players' 0.117, identical. Control readers score about 0. The count information that is there comes from the sender's public table talk and is held by every reader at that token. The receiver's private scheme adds nothing measurable to it. Surplus mass at this position is about 0.65, so the positive part of the share difference covers most of the actual support and inherits whatever the public message puts there.
+
+**Lens-free, a weak within-run signal that the carried count record explains at least as well.** In 7 runs with both HOT and NEGATIVE hands, the receiver's surplus direction is more alike between hands of the same range than between HOT and NEGATIVE hands, by 0.056 (compacted) and 0.063 (kept reference) in mean cosine over L28 to L56, permutation p 0.053 and 0.034, 3 and 4 of 7 runs positive. Within equal hand distance the contrast halves to 0.031 and 0.030 (4 and 3 of 7 positive). With the previous hand's range as the label it is larger, 0.075 and 0.076, and 0.150 and 0.147 within equal hand distance, 5 of 7 runs positive. Honest players and control readers sit near 0 or below. So the receiver's surplus direction does carry something about the count, but the most direct source is the masked private block itself, which lists every earlier hand's range, and the test cannot show that the receiver decoded the sender's public signal. 7 runs is also small.
+
+**Overall.** On Stego the surplus detector finds the colluders trivially, because they are the only players with a private block, and its readouts of what the receiver took from the sender are explained by the public message (J-space naming, shared by honest readers) or by the private count records (direction). The read position that read.py uses ends on a digit of the sender's bet in Qwen3's tokenization, which makes the paper's top-10 measure degenerate here; a position just before `BET:` would be the next thing to try.
+
 
 ## Notes
 
