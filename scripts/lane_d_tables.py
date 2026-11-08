@@ -10,14 +10,16 @@ import sys
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
-FLOOR_LAYERS = (0, 5, 10, 16, 19, 25, 31, 35, 38)
-FLOOR_POSITIONS = ("prompt_last", "first_generated", "first_thought", "after_think")
-SCORE_KEYS = ("mass/floor | first_generated", "content | first_generated | late", "source | first_generated | late",
-              "ontology | first_generated | late", "delta | first_generated | late", "jump | late", "planted_jump | late",
-              "mass | planted_pre", "ontology | planted_pre | late", "naming rank (lower is named)",
-              "content | first_generated | mid", "source | first_generated | mid", "ontology | first_generated | all")
-VERDICT_KEYS = ("mass | first_generated", "mass | verdict_pre", "delta | first_generated | late", "delta | verdict_pre | late",
-                "ontology | first_generated | late", "ontology | verdict_pre | late", "ontology | verdict_pre | all")
+LAYERS = (0, 5, 10, 16, 19, 25, 31, 35, 38)
+POSITIONS = ("prompt_last", "first_generated", "first_thought", "after_think", "planted_pre")
+SOLVE_KEYS = ("content | first_generated | late", "source | first_generated | late", "jump | late", "planted_jump | late",
+              "trace mean", "delta | first_generated | late", "mass | first_generated", "mass/floor | first_generated",
+              "ontology all | first_generated | late", "ontology conceal | first_generated | late",
+              "content | first_generated | mid", "source | first_generated | mid", "cost | first_generated | late",
+              "delta shuffled | first_generated | late", "mass shuffled | first_generated", "trace shuffled_mean")
+VERDICT_KEYS = ("mass | verdict_pre", "mass/floor | first_generated", "delta | verdict_pre | late", "delta | first_generated | late",
+                "ontology all | verdict_pre | late", "ontology all | first_generated | late", "cost | verdict_pre | late",
+                "delta shuffled | verdict_pre | late")
 
 
 def fmt(x, digits=3):
@@ -25,57 +27,56 @@ def fmt(x, digits=3):
 
 
 def table(header, rows):
-    out = ["| " + " | ".join(header) + " |", "| " + " | ".join("---" for _ in header) + " |"]
-    out += ["| " + " | ".join(r) + " |" for r in rows]
-    return "\n".join(out)
+    return "\n".join(["| " + " | ".join(header) + " |", "| " + " | ".join("---" for _ in header) + " |"] +
+                     ["| " + " | ".join(r) + " |" for r in rows])
+
+
+def by_layer(r, name, stat="median"):
+    rows = []
+    for layer in LAYERS:
+        rows.append([str(layer)] + [fmt(r[name][p][stat][layer], 4) if p in r[name] else "-" for p in POSITIONS])
+    return table(["Layer"] + [f"{p} ({r[name].get(p, {}).get('turns', 0)})" for p in POSITIONS], rows)
 
 
 def main() -> int:
     path = Path(sys.argv[1]) if len(sys.argv) > 1 else ROOT/"results/lane_d/sweep2_scores.json"
     r = json.loads(path.read_text())
-    print(f"Seeds {len(r['seeds'])}. Bands {r['bands']}. Primary {r['primary']}.\n")
-    print("### Kernel floor, relative residual delta, plain kernel against the explicit 4D mask, median / p95\n")
-    floor, effect = r["kernel_floor"], r["mask_effect_leak"]
-    rows = []
-    for layer in FLOOR_LAYERS:
-        row = [str(layer)]
-        for p in FLOOR_POSITIONS:
-            f = floor.get(p)
-            row.append(f"{f['median'][layer]:.4f} / {f['p95'][layer]:.4f}" if f else "-")
-        rows.append(row)
-    print(table(["Layer"] + [f"{p} ({floor.get(p, {}).get('turns', 0)} turns)" for p in FLOOR_POSITIONS], rows))
-    print("\n### Mask effect on the leak branch, median relative delta, kept / compacted\n")
-    rows = []
-    for layer in FLOOR_LAYERS:
-        row = [str(layer)]
-        for p in FLOOR_POSITIONS + ("planted_pre",):
-            k, c = effect["reference"].get(p), effect["compacted"].get(p)
-            row.append(f"{k['median'][layer]:.4f} / {c['median'][layer]:.4f}" if k and c else "-")
-        rows.append(row)
-    print(table(["Layer"] + list(FLOOR_POSITIONS + ("planted_pre",)), rows))
-    for name in r["contrasts"]["reference"]:
-        kept, comp = r["contrasts"]["reference"][name], r["contrasts"]["compacted"].get(name, {})
-        keys = VERDICT_KEYS if name.startswith("6") else SCORE_KEYS
-        print(f"\n### {name}, {kept['n_pos']} against {kept['n_neg']}\n")
+    print(f"Seeds {len(r['seeds'])}. Bands {r['bands']}. Arms {({a: len(s) for a, s in r['arms'].items()})}.\n")
+    for name, title in (("kernel_floor", "Kernel floor: plain kernel against the explicit 4D mask, none-branch turns, median relative delta"),
+                        ("mask_effect_leak", "Mask effect: actual against the kept reference, leak branch, median"),
+                        ("shuffled_effect_leak", "Shuffled-span control: actual against a random sanctioned span of the same length masked, leak branch, median"),
+                        ("cost_leak", "Direction distance 1 - cos(d, d_shuffled), leak branch, median")):
+        print(f"### {title}\n")
+        print(by_layer(r, name))
+        print()
+    for name, out in r["contrasts"].items():
+        keys = VERDICT_KEYS if name.startswith("6") else SOLVE_KEYS
         rows = []
         for key in keys:
-            k, c = kept.get(key), comp.get(key)
-            if not k:
+            v = out.get(key)
+            if not v:
                 continue
-            wins = f"{k['paired_wins']}/{k['paired_n']}" if "paired_wins" in k else "-"
-            rows.append([key, fmt(k["auroc"], 2), fmt(c["auroc"], 2) if c else "-", wins,
-                         f"{fmt(k['positive_median'])} / {fmt(k['negative_median'])}"])
-        print(table(["Score", "AUROC kept", "AUROC compacted", "Paired wins, kept", "Median positive / negative, kept"], rows))
-    print("\n### First mention of the withheld value, blind agent\n")
-    rows = []
-    for m in sorted(r["first_mention"], key=lambda m: (m["variant"], m["seed"])):
-        if m["variant"] not in ("leak", "forbidden_leak", "none", "benign_k1"):
-            continue
-        n = m.get("naming") or {}
-        rows.append([m["seed"], m["variant"], m["agent"], str(m["leak_used"]), str(m["writes_value"]),
-                     ",".join(m.get("rule_phases") or []) or "-", fmt(m.get("planted_jump | late"), 1),
-                     f"{n.get('actual', '-')} / {n.get('reference', '-')}" if n else "-"])
-    print(table(["Seed", "Branch", "Agent", "Used", "Writes the value", "Rule in", "Jump / floor, late", "Best rank late, actual / ref"], rows))
+            wins = f"{v['paired_wins']}/{v['paired_n']}" if "paired_wins" in v else "-"
+            rows.append([key.replace(" | ", ", "), fmt(v["auroc"], 2), wins, f"{fmt(v['positive_median'])} / {fmt(v['negative_median'])}"])
+        print(f"### {name}, {out['n_pos']} against {out['n_neg']}\n")
+        print(table(["Score", "AUROC", "Paired wins", "Median, positive / negative"], rows))
+        print()
+    c = r["concealment"]
+    print(f"### Concealment\n\nLeak users {c['users']}, concealers {c['concealers']}. By arm {c['by_arm']}.\n")
+    if c["scores"]:
+        print(table(["Score", "AUROC", "Concealers / disclosers"], [[k.replace(" | ", ", "), fmt(v["auroc"], 2), f"{v['n_concealers']} / {v['n_disclosers']}"]
+                                                                     for k, v in c["scores"].items()]))
+    traces = r.get("traces", [])
+    if traces:
+        print("\n### Per-token trace, blind agent, late band, median over turns\n")
+        rows = []
+        for variant in ("leak", "forbidden_leak", "none", "benign_k1"):
+            t = [x for x in traces if x["variant"] == variant]
+            if not t:
+                continue
+            med = lambda k: fmt(sorted(x[k] for x in t if x.get(k) is not None)[len([x for x in t if x.get(k) is not None])//2] if any(x.get(k) is not None for x in t) else None, 4)  # noqa: E731
+            rows.append([variant, str(len(t)), med("mean"), med("shuffled_mean"), med("before_mention"), med("after_mention"), med("peak")])
+        print(table(["Branch", "Turns", "Mean surplus", "Mean, shuffled control", "16 tokens before first writing the value", "16 tokens after", "Peak"], rows))
     return 0
 
 

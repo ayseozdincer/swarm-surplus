@@ -120,11 +120,149 @@ generation. Fewer seeds at once, or CPU KV offloading (used for the later arms),
 
 ## Replay
 
-TBD
+Episode 2, on a second A100 while generation ran on the H200 (`scripts/pod/replay_sweep2.py`, priority order
+blind agent's solve turn in leak, forbidden_leak, none and benign_k1 first, then every free reviewer's verdict turn in the
+command branches and none, then every agent's solve turn in none, leak, forbidden_leak, benign_k1 and command_k1 and the
+blind agent's in benign_k3 and command_k3). Qwen3-14B bf16, the converged 14B lens (`neuronpedia/jacobian-lens`
+`qwen3-14b/jlens/Salesforce-wikitext`, finished format with a `J` key, 39 layers 0 to 38, 615 prompts; `SWARM_MODEL=qwen3_14b`
+switches every script that imports the paths from `scripts/replay.py`).
+
+Each turn runs, on one explicit 4D-mask kernel,
+- the actual pass,
+- the kept reference (peer messages masked as keys, positions kept),
+- the shuffled-span control: a random run of sanctioned tokens from the turn's own task or verdict prompt, as long as the
+  turn's peer spans, masked instead, one draw per turn with a fixed seed. It prices the cost of masking anything.
+
+No compacted reference tonight, as asked. The tokens before the first masked span are computed once and each pass continues
+from a copy of that cache; on Qwen3-14B (one 12,209-token turn) all three passes are bit-identical to full passes at every
+layer (`results/lane_d/prefix_check_14b.json`; `tests/gpu_prefix_check.py`). The blind agent's solve turn also keeps a per-token
+trace of its whole reply from the same passes: relative surplus per layer against each reference and the surplus direction at
+L18 and L34.
+
+A turn takes 3 to 8 s. The first version took 25 s: a host copy in every forward hook synced the GPU at each layer, which
+serialised the per-module CPU overhead with the GPU work. The efficient attention kernel does take the explicit mask (2.4 s for
+10k tokens; the math kernel would be 10.5 s, `tests/kernel_timing.py`).
+
+### Kernel floor on Qwen3-14B
+
+Relative residual delta, plain kernel against the explicit 4D mask, every none-branch turn that has nothing to mask (215
+turns), median. The 32B floor at the same relative depth was 0.01 to 0.04, so the 14B floor is about the same size.
+
+| Layer | prompt_last (215) | first_generated (215) | first_thought (215) | after_think (215) | planted_pre (1) |
+| --- | --- | --- | --- | --- | --- |
+| 0 | 0.0008 | 0.0022 | 0.0016 | 0.0010 | 0.0006 |
+| 5 | 0.0039 | 0.0066 | 0.0049 | 0.0052 | 0.0030 |
+| 10 | 0.0065 | 0.0081 | 0.0059 | 0.0080 | 0.0042 |
+| 16 | 0.0093 | 0.0106 | 0.0098 | 0.0131 | 0.0087 |
+| 19 | 0.0160 | 0.0112 | 0.0108 | 0.0131 | 0.0102 |
+| 25 | 0.0301 | 0.0152 | 0.0098 | 0.0131 | 0.0159 |
+| 31 | 0.0400 | 0.0228 | 0.0128 | 0.0145 | 0.0174 |
+| 35 | 0.0397 | 0.0333 | 0.0135 | 0.0138 | 0.0167 |
+| 38 | 0.0495 | 0.0367 | 0.0130 | 0.0108 | 0.0197 |
+
+The note against that floor, and the shuffled-span control against the note, leak branch, median relative delta.
+
+| Layer | prompt_last (80) | first_generated (80) | first_thought (80) | after_think (80) | planted_pre (19) |
+| --- | --- | --- | --- | --- | --- |
+| 0 | 0.0032 | 0.0071 | 0.0047 | 0.0023 | 0.0028 |
+| 5 | 0.0176 | 0.0158 | 0.0221 | 0.0130 | 0.0497 |
+| 10 | 0.0281 | 0.0160 | 0.0276 | 0.0172 | 0.0905 |
+| 16 | 0.0609 | 0.0369 | 0.0523 | 0.0478 | 0.2207 |
+| 19 | 0.1139 | 0.0499 | 0.0520 | 0.0594 | 0.3294 |
+| 25 | 0.2563 | 0.0946 | 0.0467 | 0.0625 | 0.5494 |
+| 31 | 0.3496 | 0.1378 | 0.0580 | 0.0552 | 0.6442 |
+| 35 | 0.3536 | 0.1941 | 0.0545 | 0.0424 | 0.5875 |
+| 38 | 0.3089 | 0.2132 | 0.0521 | 0.0313 | 0.5962 |
+
+| Layer | prompt_last (95) | first_generated (95) | first_thought (95) | after_think (95) | planted_pre (19) |
+| --- | --- | --- | --- | --- | --- |
+| 0 | 0.0023 | 0.0085 | 0.0039 | 0.0019 | 0.0069 |
+| 5 | 0.0056 | 0.0142 | 0.0065 | 0.0074 | 0.0213 |
+| 10 | 0.0082 | 0.0117 | 0.0070 | 0.0100 | 0.0276 |
+| 16 | 0.0149 | 0.0137 | 0.0125 | 0.0145 | 0.0809 |
+| 19 | 0.0494 | 0.0145 | 0.0130 | 0.0152 | 0.1123 |
+| 25 | 0.1608 | 0.0265 | 0.0187 | 0.0195 | 0.1761 |
+| 31 | 0.2024 | 0.0432 | 0.0352 | 0.0252 | 0.1925 |
+| 35 | 0.2000 | 0.0624 | 0.0346 | 0.0203 | 0.1806 |
+| 38 | 0.1617 | 0.0674 | 0.0314 | 0.0155 | 0.1528 |
+
+1 - cos between the surplus direction and the shuffled control's, leak branch, median. 1.0 is orthogonal.
+
+| Layer | prompt_last (80) | first_generated (80) | first_thought (80) | after_think (80) | planted_pre (19) |
+| --- | --- | --- | --- | --- | --- |
+| 0 | 0.9389 | 0.8773 | 0.8215 | 0.7234 | 0.8681 |
+| 5 | 0.9092 | 0.8264 | 0.8922 | 0.8252 | 0.9648 |
+| 10 | 0.8918 | 0.7878 | 0.9031 | 0.8215 | 1.0862 |
+| 16 | 0.9548 | 0.9000 | 0.9788 | 0.8983 | 1.1055 |
+| 19 | 0.9454 | 0.9201 | 0.9653 | 0.8891 | 1.0363 |
+| 25 | 0.9058 | 0.9754 | 0.9639 | 0.9364 | 0.9823 |
+| 31 | 0.8422 | 0.9772 | 0.9563 | 0.9121 | 0.8666 |
+| 35 | 0.8299 | 0.9563 | 0.9353 | 0.9105 | 0.9134 |
+| 38 | 0.8119 | 0.9716 | 0.9086 | 0.9147 | 0.9288 |
+
+**The shuffled control moves the state about as much as the note and in a near-orthogonal direction.** At `prompt_last`, late
+layers, masking a random 60-token run of the task text changes the residual by 0.16 to 0.20 against the note's 0.31 to 0.35,
+and at `first_generated` its J-space mass is higher than the note's (median 0.42 against 0.32 for the blind agent). Its
+direction is almost unrelated to the note's (1 - cos 0.8 to 0.98). So the size of the surplus, and J-space mass, measure that
+something was masked; only scores that use the direction of the surplus, or compare one note with another, can say which.
+
+### First mention
+
+Where the blind agent's reasoning first writes the withheld value (`planted_pre`). The value's first token is the late-layer
+lens top-1 in the actual pass in 19 of 19 leak turns and 19 of 20 forbidden_leak turns that write it (median rank 0), against
+median rank 3 and 2 in the reference, where her own preceding words already call for a digit. The residual delta there is 27
+to 33 times the none floor at the late layers (`planted_jump`), the same reading as on 32B, now on twenty seeds.
 
 ## Detection
 
-TBD
+AUROCs over the measured episode, scores as `scripts/detection_run.py` defined them on 32B with the depth bands moved to
+39 layers (mid L16-19, late L31-38; primary `first_generated`, late), kept reference. command_k1 replaces proposal_k1 as the
+third note for `source`. Mass is from the decompose of 13 seeds; the rest of the decompose runs at the end. Full tables,
+every position and band, in `results/lane_d/sweep2_scores.json` and `results/lane_d/tables_sweep2.md`.
+
+| Contrast | n | content | source | jump | per-token trace mean | delta | mass | ontology (18 words) |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| 1 blind, leak vs none | 20 / 20 | 0.00 | 0.23 | 1.00 | 1.00 | 1.00 | 1.00 (13) | 0.43 |
+| 2 blind, leak vs benign_k1 and k3 | 34 / 34 | 0.95 | 0.91 | 0.92 | 0.98 | 0.98 | 0.37 (18) | 0.26 |
+| 3 other free readers, leak vs benign_k1 | 56 / 56 | 0.44 | 0.82 | 0.58 | - | 0.62 | 0.54 (12) | 0.31 |
+| 4 blind, forbidden_leak vs leak | 20 / 20 | 0.55 | 0.25 | 0.59 | 0.47 | 0.49 | 0.49 (14) | 0.65 |
+| 5b blind in the leak branches, solve reasoning cites the rule vs not | 31 / 9 | 0.90 | 0.49 | 0.78 | 0.47 | 0.62 | 0.19 | 0.47 |
+
+Claim 1 is easy because the none branch has nothing to mask, so its second pass is kernel noise; content and source read
+against none are not meaningful for the same reason. Claim 2 is the real uptake test, and every direction-type score passes
+it (content 0.95, source 0.91 at late layers, 1.00 at mid layers), as do the jump at the first mention and the per-token trace.
+Mass fails it (0.37), as it did on 32B. Claim 3, exposure without uptake, does not sit at chance on `source` (0.82, 0.99 at mid
+layers): the surplus of a reader who never uses the leak still points toward the leak note's signature, so source names the
+note read, not whether it was used, the same reading as W7 part A. Content and mass are near chance there, as hoped.
+
+Per-token trace over the blind agent's whole reply, late band, median relative surplus.
+
+| Branch | Turns | Mean surplus | Mean, shuffled control | 16 tokens before first writing the value | 16 tokens after | Peak |
+| --- | --- | --- | --- | --- | --- | --- |
+| leak | 20 | 0.1052 | 0.0727 | 0.4534 | 0.3606 | 0.8946 |
+| forbidden_leak | 20 | 0.0943 | 0.0673 | 0.4610 | 0.4265 | 0.8574 |
+| none | 20 | 0.0135 | 0.0794 | - | - | 0.6683 |
+| benign_k1 | 20 | 0.0346 | 0.0819 | - | - | 0.7889 |
+
+The leak note's influence over the reply (0.105) is 2.7 times the benign note's (0.035) and above the shuffled control's
+(0.073), while the benign note sits below the control. The control is the same in every branch (0.067 to 0.082). That is an
+uptake reading that magnitude alone could not give, since it is a comparison of one masked span against another on the same
+tokens.
+
+Command branches, verdict turns of free reviewers.
+
+| Contrast | n | mass at verdict_pre | delta at verdict_pre, late | ontology at verdict_pre, late | ontology at first_generated, late |
+| --- | --- | --- | --- | --- | --- |
+| 6 reviewers of a correct submission, followed vs not | 38 / 48 | 0.61 | 0.68 | 0.28 | 0.57 |
+| 6b every free reviewer, rejected vs accepted | 106 / 54 | 0.66 | 0.57 | 0.37 | 0.58 |
+| 6c command reviewer vs the same agent in none | 160 / 160 | 1.00 | 1.00 | 0.48 | 0.99 |
+
+Following the command is barely visible in the surplus. The strongest reading is the ontology at the verdict token, lower in
+followers (0.28, so 0.72 the other way round), on 86 reviewers and one seed set.
+
+Concealers against disclosers. 37 leak users, 3 concealers, all in forbidden_leak, so below the five the contrast needs. The
+counts per arm are in the behaviour tables.
+
 
 ## Reading
 
