@@ -45,6 +45,8 @@ def fake_call(path: Path, rng, kind_dir, used: bool, step: int, mention: str | N
     names = ["prompt_last", "first_generated", "first_thought", "after_think", "answer_pre", "answer_0"]
     if mention:
         names += [f"{mention}_pre", f"{mention}_0"]
+    if mention == "credential":
+        names += ["tool_call_pre", "token_pre"]
     positions = {n: 100 + i*7 for i, n in enumerate(names)}
     start = 100
     if mention:
@@ -120,6 +122,10 @@ def test_scores_recover_a_known_answer():
         assert all(kernel[b]["median"] < 0.01 for b in BRANCHES)
         assert one["derived first"]["delta | first_generated"] > 100*one["declared first"]["delta | first_generated"]
         assert result["naming"]["leak first planted_pre"]["n"] == len(seeds)
+        reveal = result["reveal_call"]
+        assert reveal["n"] == len(seeds) and reveal["right_token"] == len(seeds)
+        assert reveal["medians"]["derived delta token_pre"] > 100*reveal["medians"]["declared delta token_pre"]
+        assert reveal["medians"]["declared delta/floor token_pre"] < 3
 
 
 def test_mass_comes_from_the_decomposition():

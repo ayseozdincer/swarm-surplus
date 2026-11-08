@@ -199,6 +199,30 @@ def add_direction_scores(seeds: dict, seed: str, branch_name: str, ref: str, whi
                 out[f"source{suffix} | {position}"] = cos(d, s_kind) - cos(d, s_benign)
 
 
+def reveal_calls(seeds: dict) -> dict:
+    """The credential branch's uptake position. At the token before the reveal_input call and before its token value, delta and mass
+    under both references, and delta against the same target's none turn at first_generated (kernel noise)."""
+    rows = []
+    for seed, branches in seeds.items():
+        branch = branches.get("credential")
+        call = next((c for c in branch["calls"] if "token_pre" in c["row"]["positions"]), None) if branch else None
+        if call is None:
+            continue
+        row = {"seed": seed, "target": branch["target"], "step": call["row"]["step"], "right_token": bool(branch["label"]["reveal_token_right"])}
+        none = branches.get("none")
+        floor = none["calls"][0]["delta"].get("declared", {}).get("first_generated") if none else None
+        for ref in REFERENCES:
+            for position in ("tool_call_pre", "token_pre"):
+                row[f"{ref} delta {position}"] = call["delta"][ref].get(position)
+                row[f"{ref} mass {position}"] = call["mass"][ref].get(position)
+                if floor and call["delta"][ref].get(position) is not None:
+                    row[f"{ref} delta/floor {position}"] = call["delta"][ref][position]/floor
+        rows.append(row)
+    keys = sorted({k for r in rows for k, v in r.items() if isinstance(v, float)})
+    medians = {k: float(np.median([r[k] for r in rows if r.get(k) is not None])) for k in keys if any(r.get(k) is not None for r in rows)}
+    return {"n": len(rows), "right_token": sum(r["right_token"] for r in rows), "medians": medians, "rows": rows}
+
+
 def main() -> int:
     runs_root, replay_root, result_path = Path(sys.argv[1]), Path(sys.argv[2]), Path(sys.argv[3])
     seeds: dict[str, dict] = {}
@@ -264,7 +288,9 @@ def main() -> int:
                 if d or n:
                     table[f"{which} | {lookup}"] = {"derived": d and d["auroc"], "declared": n and n["auroc"]}
         headline[title] = table
-    result = {"seeds": sorted(seeds), "band": [BAND[0], BAND[-1]], "headline": headline, "kernel": kernel, "naming": naming, "contrasts": contrasts, "rows": rows}
+    reveal = reveal_calls(seeds)
+    result = {"seeds": sorted(seeds), "band": [BAND[0], BAND[-1]], "headline": headline, "kernel": kernel, "naming": naming, "reveal_call": reveal,
+              "contrasts": contrasts, "rows": rows}
     result_path.parent.mkdir(parents=True, exist_ok=True)
     result_path.write_text(json.dumps(result, indent=1, default=float) + "\n")
     for title, table in headline.items():
@@ -273,6 +299,8 @@ def main() -> int:
             fmt = lambda x: "  -  " if x is None else f"{x:5.2f}"  # noqa: E731
             print(f"   {key:<36} declared {fmt(v['declared'])}   derived {fmt(v['derived'])}")
     print(json.dumps(kernel))
+    print("reveal_input call", json.dumps({k: reveal[k] for k in ("n", "right_token", "medians")}))
+    print("naming", json.dumps(naming))
     print("wrote", result_path)
     return 0
 
