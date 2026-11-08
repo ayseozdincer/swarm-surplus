@@ -106,3 +106,62 @@ Tier 0 starts at once in this session. Two lane sessions start for tier 1 with t
 2. Any tier 2 item now, or none.
 3. The abstract's headline, lead with the jump and present the count as a gate with its failure stated, as recommended here.
 4. Whether the draft mirrors to a Claude Doc at the end.
+
+## F. Gaps against the Apart judging rubric (added 8 November, evening)
+
+Source, `APART_JUDGING_CRITERIA.rtf` and `RESOURCES.rtf` from Ayse.
+
+### Submission requirements
+
+| Requirement | State | Gap |
+| --- | --- | --- |
+| Research report as PDF in the official Google Doc template | Nothing yet | The final artefact is a PDF from that template, not a Claude Doc. The draft stays markdown in `results/paper/`, then is poured into the template |
+| At most 8 pages before references and appendices | Outline in B has nine sections and ten arms | Cut to three claims in the body. Released benchmarks, kernel noise, kept against compacted, per-seed tables, plant texts and label sheets go to appendices |
+| Abstract 150 to 250 words | Current draft about 420 words | Rewrite, leading with the jump as recommended in A |
+| Authors and affiliations | Ayse Ozdincer, Máté Lakner | Confirm affiliations |
+| Required appendix, Limitations and Dual-Use / Ethical Considerations | Limitations exist across reports, no dual-use text anywhere | Write it. Dual-use content is in the table below |
+| Prior work must be stated, pre-sprint code marked in README and report | Not done | Declare the vendored J-space code (`third_party/maj-lens`), NARCBench data and the Neuronpedia lenses as others' work. The harness commit a595dc5 is dated 6 November 23:59 Pacific and the proposal was written that evening. If the sprint opened on Friday evening these are in scope, if it opened on Saturday they must be marked preexisting. Ayse decides from the official start time |
+| Public GitHub repo (optional) | Private repo | Decide whether to make it public. If so, remove `.env`, pod ids and the labelled traces' raw model text where it quotes NARCBench |
+| 3 to 5 minute video (optional) | The three-minute deck exists | Record over the deck if time allows |
+
+### Dimension 1, impact and innovation. "Is this new, or replicating recent work?"
+
+A judge who knows the area will ask three things and the body must answer each in one paragraph.
+
+| They will say | We answer, with the evidence that backs it |
+| --- | --- |
+| The activation delta between clean and poisoned context is TaskTracker (2024) | Agreed in print. What is new is deciding the mask from provenance tags rather than from a labelled poisoned set, reading it along the reply rather than at one position, and the attribution by per-candidate reference. TaskTracker needs a trained probe, ours has none |
+| Collusion from activations is NARCBench's probe and J-PACT | The probe is supervised on anticipated tactics. J-PACT compares an agent to its peers and needs exchangeable honest agents, a minority pair and several rounds. Ours compares an agent to its own replay, so roles, majorities and single turns are in scope. Transfer at 0.556 against 0.963 under placebo shows the point, with its caveats |
+| Provenance for agents is CaMeL, FIDES, Spotlighting, NeuroTaint | Those run provenance forward through text and values to enforce a policy. We run it backward as a counterfactual on the hidden states and block nothing. The derived tag is the write-then-read edge of provenance-based intrusion detection applied to a swarm |
+
+Theory of change, one paragraph. An orchestrator already has the tags and the weights. The monitor gates on mass, runs the full read only on turns where peer content moved the agent, and reports engagement, taking, source and content per turn, leaving the policy question to the environment. The Hugging Face case is the derived tag.
+
+### Dimension 2, execution. "Report variance and baselines"
+
+| Gap | Fix | Cost |
+| --- | --- | --- |
+| No baseline is run on our own environment. Every baseline number is on NARCBench | Add four on the same turns. (a) Text monitor, the note-citation regex and an LLM judge reading the reasoning, which is strong when agents verbalise and blind for the 9 of 13 solvable submitters who never mention the note, the 7 of 20 2c leak targets who name no source and the concealers. (b) J-PACT pair-against-group over our six agents from the existing J-space rows at fixed positions. (c) A supervised linear probe on the residuals with seed-grouped cross-validation, to show what a label-free rule gives up against a fitted one. (d) The write log alone, which equals exposure. | (a) CPU plus about 2 USD OpenRouter for the judge. (b) CPU. (c) needs the arrays, folds into E1.1. (d) CPU |
+| Hyperparameters chosen by hand on the pilot (10 times the floor, first 256 tokens, 16-token window, band L16 to L38) | Sensitivity table in the appendix over 5, 10 and 20 times the floor, 128, 256 and 512 tokens, 8, 16 and 32-token windows, mid and late bands. Thresholds chosen on sweep14b and applied to sweep2 and 2c | CPU for the blind turns, E1.1 for the rest |
+| Variance reported unevenly | Bootstrap interval over seeds and paired wins on every headline number, binomial p on the counts | CPU |
+| Same model generated the plants and the receivers | State it, and note that plants are quarantined and receivers never see the instruction | Write-up |
+
+### Dimension 3, presentation
+
+Three claims in the body, each with one figure. Where the leak is read (the trace figure). Taking against engaging (the per-turn jump table with the threshold line and the method-tip failure). Whose content, and the derived tag (leak2 and 2c in one table). Everything else is appendix. A half-page glossary of the measures replaces the briefing's long table.
+
+### Dual-use text the required appendix must carry
+
+- The paper names where uptake is read. An agent that restates peer content in its own words before using it launders the signal into the reference, and one that splits a value across turns or routes it through a tool result it obtained with the peer's help weakens the first-writing read. The 2c credential branch shows the second effect.
+- The derived tag is defeated by unlogged writes, renamed or mirrored resources and content seeded one hop upstream. Publishing that is a map for evasion and also the list an operator must close.
+- The planted-channel harness is a recipe for seeding coordination in a swarm. It is released for detection research with matched controls, and the plants are generated under a quarantined instruction.
+- Nothing here raises capability. The method needs weight access, so it helps the operator and not an outside attacker.
+
+## G. Answers to Ayse's four questions
+
+**More scenario kinds or more cases per scenario.** More cases, on the scenarios that carry a claim, with one exception. The rubric scores convincing validation, and our thin spots are counts and false positives, not variety of attacks. Leak2 at ten turns, copiers at thirteen, concealers at eight. The exception is the harmless side. The count fails on an on-task procedure, so the false-positive set needs a variety of harmless notes (tips, procedures, partial restatements of the task, off-task chatter), not more kinds of leak.
+
+**Expand scope or sharpen current findings.** Sharpen. Ten arms, three benchmark tiers and two models already exceed what eight pages can carry. The body should make three claims with thresholds, intervals and baselines, and the rest becomes appendix or follow-up.
+
+**What has been fitted to the surplus.** Almost nothing in the learning sense, and the paper should say so as a feature with one honest cost. The detector has no trained component. Scores are hand-defined statistics, the relative residual delta over a measured kernel floor, the count of reply tokens above a fixed multiple in a fixed window, a sliding-window maximum, cosines to leave-one-out mean directions, and the lens rank. Evaluation is nonparametric, AUROC with a scenario bootstrap, paired wins, binomial and Fisher tests, a permutation test on Stego. The only fits are the Core size regression (mass against log changed tokens, R squared 0.93 on honest agents, colluders scored by residual), the control-run z-score calibration on Transfer, and the J-space sparse decomposition, which is the J-space paper's method. The cost is that the four hyperparameters were chosen by eye on the pilot, so the paper needs the held-out threshold test (sweep14b to sweep2 to 2c), the sensitivity table, and a fitted comparator (the probe in F) to show how much a learned detector would add. How much more data. For a false-positive rate near 2 percent with a defensible interval, about 150 to 300 negatives per task type, which E1.1 gets by replaying runs that already exist. For attribution, 30 leak2 turns instead of 10 (E1.2). For copied against computed, 20 more true copiers, which the hint plants give (E1.3). Beyond that the next axis is model family, not more Qwen3-14B turns.
+
+**External benchmarks, reformatted.** Yes, one or two, as a robustness appendix rather than a headline, and with the reformatting stated. The reformat is the same every time. Tag the span the dataset injected as the masked provenance class and ask the detector whether the agent used it. The dataset supplies the per-sample uptake label. This is a fair test, unlike NARCBench Core, because every sample has a masked span and only some agents act on it, so the mask is not the label. In order of fit. TaskTracker (Abdelnabi et al. 2024), clean against poisoned prompts with a per-sample label of whether the injected task was executed, single agent, thousands of samples, responses regenerated on Qwen3-14B, the cleanest outside test of the jump and the count and the largest false-positive set, about 5 to 8 USD. The insider-trading pressure eval (Scheurer et al. 2023), a colleague's tip with use and concealment labels, the shape of our forbidden leak and the concealment lead, a few hundred runs, about 4 USD. AgentDojo, tool-result injections with security labels, needs a full agent loop, about a day. ColludeBench, instructed colluders again, lowest value. Swarm Traces and collusion.wiki from the resources list are text without weights, so no surplus can be read, but the derived tag's write-then-read matching could be demonstrated on them as a graph reconstruction, which is a discussion item. The 8-page cap means at most one of these appears in the body.
