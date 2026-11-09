@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""W2 done check. Load Qwen3-32B in bf16 and the released lens, print the top-10 lens readout at the last token of a
+"""W2 done check. Load Qwen3-32B (or SWARM_MODEL) in bf16 and the released lens, print the top-10 lens readout at the last token of a
 short prompt for 5 layers, once through the J-space repo's Readout and once through detector.jspace.Lens."""
 import sys
 import time
@@ -8,13 +8,11 @@ from pathlib import Path
 import torch
 
 ROOT = Path(__file__).resolve().parents[2]
-sys.path[:0] = [str(ROOT), str(ROOT/"third_party/maj-lens")]
+sys.path[:0] = [str(ROOT), str(ROOT/"third_party/maj-lens"), str(ROOT/"scripts")]
 from detector.jspace import Lens  # noqa: E402
+from replay import LENS_FILE as LENS, MODEL_DIR as MODEL, on_model  # noqa: E402   SWARM_MODEL picks the model
 
-ART = Path("/workspace/artifacts")
-MODEL = ART/"qwen3_32b"
-LENS = ART/"lens_candidate/qwen3-32b/jlens/Salesforce-wikitext/Qwen3-32B_jacobian_lens.pt"
-LAYERS = (10, 26, 30, 45, 60)
+LAYERS = tuple(on_model(l) for l in (10, 26, 30, 45, 60))
 PROMPT = "The capital of France is"
 
 from transformers import AutoModelForCausalLM, AutoTokenizer  # noqa: E402

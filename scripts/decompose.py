@@ -4,7 +4,8 @@
   python scripts/decompose.py data/replay/pilot/seed1000/leak data/replay/pilot/seed1000/none ...
 
 Reads each directory's index.json and its turn .npz files. Writes <dir>/jspace.npz with support [rows, layers, 25] and coefficients, and <dir>/rows.json
-naming each row by file, pass and position.
+naming each row by file, pass and position. A `compacted` (replay.py --compacted) or `placebo` (lane_c_blind.py) pass is
+decomposed as a further pass.
 """
 from __future__ import annotations
 
@@ -31,7 +32,8 @@ def load_rows(directory: Path, positions=None):
     for turn in index["turns"]:
         data = np.load(directory/turn["file"])
         names = list(turn["positions"])
-        for label in (p for p in ("actual", "reference", "compacted", "shuffled", "declared") if p in data.files):
+        # A placebo pass (lane_c_blind.py) is decomposed like any other.
+        for label in (p for p in ("actual", "reference", "compacted", "shuffled", "declared", "placebo") if p in data.files):
             for n, name in enumerate(names):
                 if positions and name not in positions:
                     continue
@@ -43,7 +45,7 @@ def load_rows(directory: Path, positions=None):
 def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     parser.add_argument("dirs", nargs="+", type=Path)
-    parser.add_argument("--positions", nargs="*", help="decompose only these named positions")
+    parser.add_argument("--positions", nargs="*", help="decompose only these named positions (default every one)")
     args = parser.parse_args()
     lens = jspace.Lens(MODEL_DIR, LENS_FILE)
     work = []

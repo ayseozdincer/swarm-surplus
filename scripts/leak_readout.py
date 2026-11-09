@@ -24,9 +24,9 @@ import torch
 ROOT = Path(__file__).resolve().parents[1]
 sys.path[:0] = [str(ROOT), str(ROOT/"third_party/maj-lens"), str(ROOT/"scripts")]
 from detector import jspace  # noqa: E402
-from replay import LENS_FILE, MODEL_DIR  # noqa: E402
+from replay import LENS_FILE, MODEL_DIR, band  # noqa: E402
 
-BAND = (26, 27, 28, 29, 30)
+BAND = tuple(band(26, 30))          # NARCBench's Qwen3-32B probing band, at the same depth on other models
 POSITIONS = ("first_generated", "prompt_last", "after_think")
 DIGITS = "0123456789"
 

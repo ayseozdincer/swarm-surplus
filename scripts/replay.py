@@ -14,6 +14,8 @@ plain kernel instead, marked reference_kind plain_kernel, which measures that no
 
 Writes <out>/<agent>_e<episode>_<phase>.npz, arrays actual and reference [positions, layers, d_model] float32 and the
 top-10 readout ids and logits for each, and <out>/index.json with the positions, the masked spans and the token text.
+--compacted adds a third pass, `compacted`, the reference with position ids closed up after the masked spans.
+SWARM_MODEL=qwen3_14b replays Qwen3-14B with its own lens; the default is Qwen3-32B.
 Run with --decompose to add the J-space shares (detector.jspace.pursuit) to index.json.
 
 The model comes from SWARM_MODEL (qwen3_32b, the default, or qwen3_14b) under SWARM_ARTIFACTS (default /workspace/artifacts),
@@ -59,6 +61,18 @@ MODEL_DIR = ARTIFACTS/MODELS[MODEL_NAME][0]
 LENS_FILE = ARTIFACTS/MODELS[MODEL_NAME][1]
 LENS_LAYERS = MODELS[MODEL_NAME][2]
 PHASES = ("solve", "verdict", "reflection")
+MODEL = MODEL_NAME
+
+
+def on_model(layer: int) -> int:
+    """A Qwen3-32B lens layer (0 to 62) at the same relative depth of this model's lens, so bands chosen on 32B carry over.
+    The identity on 32B."""
+    return round(layer*(len(LENS_LAYERS) - 1)/62)
+
+
+def band(first: int, last: int) -> list[int]:
+    """The 32B band first..last, both included, on this model."""
+    return sorted({on_model(l) for l in range(first, last + 1)})
 
 
 def load_model():
@@ -80,7 +94,9 @@ def attention_mask_4d(n: int, keep=None):
 
 
 class Capture:
-    """Forward hooks on every lens layer; after a pass, `take` stacks the residual at the given positions."""
+    """Forward hooks on every lens layer; after a pass, `take` stacks the residual at the given positions. The hooks keep
+    their copies on the GPU and the pass moves them to the CPU once at the end: a copy to the CPU in every hook synchronises
+    each layer, which made a 14B pass about six times slower, with bit-identical values."""
 
     def __init__(self, model, layers):
         self.layers, self.saved, self.handles = list(layers), {}, []
@@ -332,10 +348,15 @@ def main() -> int:
     parser.add_argument("--resume", action="store_true", help="skip run directories that already have an index.json")
     parser.add_argument("--shared-prefix", action="store_true", help="compute the tokens before the first peer span once")
     parser.add_argument("--compacted", action="store_true", help="add the compacted reference pass")
+    parser.add_argument("--free-only", action="store_true", help="only agents not instructed in the episode (run.json)")
+    parser.add_argument("--uncompressed", action="store_true", help="accepted for the lane C job scripts; every .npz is uncompressed now")
+    parser.add_argument("--lens-on-gpu", action="store_true", help="keep every J on the GPU instead of copying one per readout")
     args = parser.parse_args()
     from detector.jspace import Lens
     model, tokenizer = load_model()
     lens = Lens(MODEL_DIR, LENS_FILE)
+    if args.lens_on_gpu:
+        lens.J = {layer: J.to(lens.device) for layer, J in lens.J.items()}
     capture = Capture(model, lens.layers)
     for run_dir in args.run_dirs:
         out = args.out_root/Path(*run_dir.parts[-3:])
@@ -346,10 +367,14 @@ def main() -> int:
         blind = blind_agents(run_dir, args.episode) if args.blind_only else None
         planted = planted_answers(run_dir, args.episode)
         rows = []
+        instructed = set()
+        if args.free_only:
+            agents = json.loads((run_dir/"run.json").read_text())["results"][args.episode]["agents"]
+            instructed = {a for a, r in agents.items() if r.get("instructed")}
         for turn in load_turns(run_dir):
             if turn["episode_index"] != args.episode or turn["phase"] not in args.phases:
                 continue
-            if (args.agents and turn["agent"] not in args.agents) or (blind is not None and turn["agent"] not in blind):
+            if (args.agents and turn["agent"] not in args.agents) or (blind is not None and turn["agent"] not in blind) or turn["agent"] in instructed:
                 continue
             path = out/f"{turn['agent']}_e{turn['episode_index']}_{turn['phase']}.npz"
             if path.name in done and path.exists():

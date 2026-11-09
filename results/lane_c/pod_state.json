@@ -1,0 +1,10 @@
+{
+ "pod_id": "c61tivxdev57zx",
+ "created_at": "2026-11-07T22:56:36.242067+00:00",
+ "gpu": "NVIDIA A100-SXM4-80GB",
+ "cost_per_hr": 1.79,
+ "image": "runpod/pytorch:1.0.3-cu1281-torch280-ubuntu2404",
+ "running_seconds": 8360,
+ "estimated_cost_usd": 4.16,
+ "watchdog_at": "2026-11-08T01:37:58.146707+00:00"
+}

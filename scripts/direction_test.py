@@ -26,6 +26,7 @@ import numpy as np
 
 ROOT = Path(__file__).resolve().parents[1]
 sys.path[:0] = [str(ROOT), str(ROOT/"third_party/maj-lens"), str(ROOT/"scripts")]
+from replay import LENS_LAYERS, band, on_model  # noqa: E402
 
 RUN = ROOT/"runs/pilot/seed1000"
 REPLAY = ROOT/"data/replay/pilot/seed1000"
@@ -35,8 +36,8 @@ RESULT = ROOT/"results/direction_test.json"
 BRANCHES = ("leak", "benign_k1", "proposal_k1")
 READERS = ("alice", "bob", "carol", "dave", "erin")
 POSITIONS = ("prompt_last", "first_generated", "first_thought")
-BANDS = {"L26-30": range(26, 31), "L50-62": range(50, 63), "all": range(63)}
-SHOW = (15, 26, 30, 36, 40, 45, 50, 56, 60, 62)
+BANDS = {"L26-30": band(26, 30), "L50-62": band(50, 62), "all": list(LENS_LAYERS)}   # 32B names, same depth on other models
+SHOW = tuple(sorted({on_model(l) for l in (15, 26, 30, 36, 40, 45, 50, 56, 60, 62)}))
 
 
 def unit(x):
@@ -46,7 +47,7 @@ def unit(x):
 def collect(args):
     import torch
     from detector.render import compacted_positions, find_turn, load_turns, render_turn
-    from replay import LENS_LAYERS, Capture, attention_mask_4d, load_model
+    from replay import Capture, attention_mask_4d, load_model
     model, tok = load_model()
     capture = Capture(model, LENS_LAYERS)
     OUT.mkdir(parents=True, exist_ok=True)
