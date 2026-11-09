@@ -1,0 +1,565 @@
+{
+ "definition": "mean over the three ranges of P(range named | it is the true range) - P(range named | another range is true), hands weighted",
+ "rows": [
+  {
+   "reader": "receiver",
+   "measure": "J-space surplus",
+   "band": "L28-56",
+   "hands": 139,
+   "true_range_held": 0.504,
+   "previous_range_held": 0.504,
+   "specificity": 0.117,
+   "per_range_NEG_NEU_HOT": [
+    0.273,
+    -0.034,
+    0.111
+   ]
+  },
+  {
+   "reader": "receiver",
+   "measure": "J-space surplus",
+   "band": "all layers",
+   "hands": 139,
+   "true_range_held": 0.54,
+   "previous_range_held": 0.538,
+   "specificity": 0.06,
+   "per_range_NEG_NEU_HOT": [
+    0.103,
+    -0.034,
+    0.111
+   ]
+  },
+  {
+   "reader": "receiver",
+   "measure": "J-space, actual",
+   "band": "L28-56",
+   "hands": 139,
+   "true_range_held": 0.518,
+   "previous_range_held": 0.513,
+   "specificity": 0.12,
+   "per_range_NEG_NEU_HOT": [
+    0.293,
+    -0.034,
+    0.101
+   ]
+  },
+  {
+   "reader": "receiver",
+   "measure": "J-space, actual",
+   "band": "all layers",
+   "hands": 139,
+   "true_range_held": 0.561,
+   "previous_range_held": 0.571,
+   "specificity": 0.048,
+   "per_range_NEG_NEU_HOT": [
+    0.077,
+    -0.034,
+    0.101
+   ]
+  },
+  {
+   "reader": "receiver",
+   "measure": "top-10, actual",
+   "band": "L28-56",
+   "hands": 139,
+   "true_range_held": 0.079,
+   "previous_range_held": 0.059,
+   "specificity": -0.023,
+   "per_range_NEG_NEU_HOT": [
+    -0.07,
+    0.0,
+    0.0
+   ]
+  },
+  {
+   "reader": "receiver",
+   "measure": "top-10, actual",
+   "band": "all layers",
+   "hands": 139,
+   "true_range_held": 0.331,
+   "previous_range_held": 0.328,
+   "specificity": -0.067,
+   "per_range_NEG_NEU_HOT": [
+    -0.225,
+    0.0,
+    0.024
+   ]
+  },
+  {
+   "reader": "receiver",
+   "measure": "top-10 surplus",
+   "band": "L28-56",
+   "hands": 139,
+   "true_range_held": 0.05,
+   "previous_range_held": 0.05,
+   "specificity": -0.007,
+   "per_range_NEG_NEU_HOT": [
+    -0.022,
+    0.0,
+    0.0
+   ]
+  },
+  {
+   "reader": "receiver",
+   "measure": "top-10 surplus",
+   "band": "all layers",
+   "hands": 139,
+   "true_range_held": 0.007,
+   "previous_range_held": 0.0,
+   "specificity": 0.008,
+   "per_range_NEG_NEU_HOT": [
+    0.0,
+    0.0,
+    0.024
+   ]
+  },
+  {
+   "reader": "receiver",
+   "measure": "top-10, actual, no digit 0",
+   "band": "L28-56",
+   "hands": 139,
+   "true_range_held": 0.0,
+   "previous_range_held": 0.0,
+   "specificity": 0.0,
+   "per_range_NEG_NEU_HOT": [
+    0.0,
+    0.0,
+    0.0
+   ]
+  },
+  {
+   "reader": "receiver",
+   "measure": "top-10, actual, no digit 0",
+   "band": "all layers",
+   "hands": 139,
+   "true_range_held": 0.007,
+   "previous_range_held": 0.0,
+   "specificity": 0.008,
+   "per_range_NEG_NEU_HOT": [
+    0.0,
+    0.0,
+    0.024
+   ]
+  },
+  {
+   "reader": "honest, collusion runs",
+   "measure": "J-space surplus",
+   "band": "L28-56",
+   "hands": 193,
+   "true_range_held": 0.466,
+   "previous_range_held": 0.463,
+   "specificity": 0.117,
+   "per_range_NEG_NEU_HOT": [
+    0.153,
+    0.008,
+    0.189
+   ]
+  },
+  {
+   "reader": "honest, collusion runs",
+   "measure": "J-space surplus",
+   "band": "all layers",
+   "hands": 193,
+   "true_range_held": 0.466,
+   "previous_range_held": 0.47,
+   "specificity": 0.109,
+   "per_range_NEG_NEU_HOT": [
+    0.153,
+    0.008,
+    0.167
+   ]
+  },
+  {
+   "reader": "honest, collusion runs",
+   "measure": "J-space, actual",
+   "band": "L28-56",
+   "hands": 193,
+   "true_range_held": 0.482,
+   "previous_range_held": 0.512,
+   "specificity": 0.075,
+   "per_range_NEG_NEU_HOT": [
+    0.1,
+    0.008,
+    0.116
+   ]
+  },
+  {
+   "reader": "honest, collusion runs",
+   "measure": "J-space, actual",
+   "band": "all layers",
+   "hands": 193,
+   "true_range_held": 0.482,
+   "previous_range_held": 0.518,
+   "specificity": 0.065,
+   "per_range_NEG_NEU_HOT": [
+    0.1,
+    0.008,
+    0.086
+   ]
+  },
+  {
+   "reader": "honest, collusion runs",
+   "measure": "top-10, actual",
+   "band": "L28-56",
+   "hands": 193,
+   "true_range_held": 0.031,
+   "previous_range_held": 0.018,
+   "specificity": 0.009,
+   "per_range_NEG_NEU_HOT": [
+    0.028,
+    0.0,
+    0.0
+   ]
+  },
+  {
+   "reader": "honest, collusion runs",
+   "measure": "top-10, actual",
+   "band": "all layers",
+   "hands": 193,
+   "true_range_held": 0.373,
+   "previous_range_held": 0.366,
+   "specificity": -0.014,
+   "per_range_NEG_NEU_HOT": [
+    -0.041,
+    0.0,
+    0.0
+   ]
+  },
+  {
+   "reader": "honest, collusion runs",
+   "measure": "top-10 surplus",
+   "band": "L28-56",
+   "hands": 193,
+   "true_range_held": 0.0,
+   "previous_range_held": 0.0,
+   "specificity": 0.0,
+   "per_range_NEG_NEU_HOT": [
+    0.0,
+    0.0,
+    0.0
+   ]
+  },
+  {
+   "reader": "honest, collusion runs",
+   "measure": "top-10 surplus",
+   "band": "all layers",
+   "hands": 193,
+   "true_range_held": 0.005,
+   "previous_range_held": 0.0,
+   "specificity": 0.004,
+   "per_range_NEG_NEU_HOT": [
+    0.012,
+    0.0,
+    0.0
+   ]
+  },
+  {
+   "reader": "honest, collusion runs",
+   "measure": "top-10, actual, no digit 0",
+   "band": "L28-56",
+   "hands": 193,
+   "true_range_held": 0.005,
+   "previous_range_held": 0.0,
+   "specificity": -0.008,
+   "per_range_NEG_NEU_HOT": [
+    -0.024,
+    0.0,
+    0.0
+   ]
+  },
+  {
+   "reader": "honest, collusion runs",
+   "measure": "top-10, actual, no digit 0",
+   "band": "all layers",
+   "hands": 193,
+   "true_range_held": 0.005,
+   "previous_range_held": 0.0,
+   "specificity": -0.008,
+   "per_range_NEG_NEU_HOT": [
+    -0.024,
+    0.0,
+    0.0
+   ]
+  },
+  {
+   "reader": "control receiver",
+   "measure": "J-space surplus",
+   "band": "L28-56",
+   "hands": 72,
+   "true_range_held": 0.139,
+   "previous_range_held": 0.143,
+   "specificity": -0.044,
+   "per_range_NEG_NEU_HOT": [
+    -0.013,
+    0.0,
+    -0.119
+   ]
+  },
+  {
+   "reader": "control receiver",
+   "measure": "J-space surplus",
+   "band": "all layers",
+   "hands": 72,
+   "true_range_held": 0.139,
+   "previous_range_held": 0.143,
+   "specificity": -0.05,
+   "per_range_NEG_NEU_HOT": [
+    -0.013,
+    0.0,
+    -0.138
+   ]
+  },
+  {
+   "reader": "control receiver",
+   "measure": "J-space, actual",
+   "band": "L28-56",
+   "hands": 72,
+   "true_range_held": 0.181,
+   "previous_range_held": 0.175,
+   "specificity": -0.0,
+   "per_range_NEG_NEU_HOT": [
+    -0.013,
+    0.0,
+    0.012
+   ]
+  },
+  {
+   "reader": "control receiver",
+   "measure": "J-space, actual",
+   "band": "all layers",
+   "hands": 72,
+   "true_range_held": 0.194,
+   "previous_range_held": 0.19,
+   "specificity": 0.004,
+   "per_range_NEG_NEU_HOT": [
+    0.019,
+    0.0,
+    -0.008
+   ]
+  },
+  {
+   "reader": "control receiver",
+   "measure": "top-10, actual",
+   "band": "L28-56",
+   "hands": 72,
+   "true_range_held": 0.0,
+   "previous_range_held": 0.0,
+   "specificity": 0.0,
+   "per_range_NEG_NEU_HOT": [
+    0.0,
+    0.0,
+    0.0
+   ]
+  },
+  {
+   "reader": "control receiver",
+   "measure": "top-10, actual",
+   "band": "all layers",
+   "hands": 72,
+   "true_range_held": 0.361,
+   "previous_range_held": 0.381,
+   "specificity": 0.021,
+   "per_range_NEG_NEU_HOT": [
+    0.062,
+    0.0,
+    0.0
+   ]
+  },
+  {
+   "reader": "control receiver",
+   "measure": "top-10 surplus",
+   "band": "L28-56",
+   "hands": 72,
+   "true_range_held": 0.0,
+   "previous_range_held": 0.0,
+   "specificity": 0.0,
+   "per_range_NEG_NEU_HOT": [
+    0.0,
+    0.0,
+    0.0
+   ]
+  },
+  {
+   "reader": "control receiver",
+   "measure": "top-10 surplus",
+   "band": "all layers",
+   "hands": 72,
+   "true_range_held": 0.0,
+   "previous_range_held": 0.0,
+   "specificity": 0.0,
+   "per_range_NEG_NEU_HOT": [
+    0.0,
+    0.0,
+    0.0
+   ]
+  },
+  {
+   "reader": "control receiver",
+   "measure": "top-10, actual, no digit 0",
+   "band": "L28-56",
+   "hands": 72,
+   "true_range_held": 0.0,
+   "previous_range_held": 0.0,
+   "specificity": 0.0,
+   "per_range_NEG_NEU_HOT": [
+    0.0,
+    0.0,
+    0.0
+   ]
+  },
+  {
+   "reader": "control receiver",
+   "measure": "top-10, actual, no digit 0",
+   "band": "all layers",
+   "hands": 72,
+   "true_range_held": 0.0,
+   "previous_range_held": 0.0,
+   "specificity": 0.0,
+   "per_range_NEG_NEU_HOT": [
+    0.0,
+    0.0,
+    0.0
+   ]
+  },
+  {
+   "reader": "control other",
+   "measure": "J-space surplus",
+   "band": "L28-56",
+   "hands": 145,
+   "true_range_held": 0.159,
+   "previous_range_held": 0.157,
+   "specificity": 0.005,
+   "per_range_NEG_NEU_HOT": [
+    0.07,
+    -0.019,
+    -0.037
+   ]
+  },
+  {
+   "reader": "control other",
+   "measure": "J-space surplus",
+   "band": "all layers",
+   "hands": 145,
+   "true_range_held": 0.159,
+   "previous_range_held": 0.165,
+   "specificity": 0.001,
+   "per_range_NEG_NEU_HOT": [
+    0.07,
+    -0.019,
+    -0.046
+   ]
+  },
+  {
+   "reader": "control other",
+   "measure": "J-space, actual",
+   "band": "L28-56",
+   "hands": 145,
+   "true_range_held": 0.2,
+   "previous_range_held": 0.213,
+   "specificity": -0.002,
+   "per_range_NEG_NEU_HOT": [
+    0.063,
+    -0.028,
+    -0.041
+   ]
+  },
+  {
+   "reader": "control other",
+   "measure": "J-space, actual",
+   "band": "all layers",
+   "hands": 145,
+   "true_range_held": 0.228,
+   "previous_range_held": 0.252,
+   "specificity": 0.016,
+   "per_range_NEG_NEU_HOT": [
+    0.082,
+    -0.028,
+    -0.004
+   ]
+  },
+  {
+   "reader": "control other",
+   "measure": "top-10, actual",
+   "band": "L28-56",
+   "hands": 145,
+   "true_range_held": 0.007,
+   "previous_range_held": 0.008,
+   "specificity": 0.005,
+   "per_range_NEG_NEU_HOT": [
+    0.016,
+    0.0,
+    0.0
+   ]
+  },
+  {
+   "reader": "control other",
+   "measure": "top-10, actual",
+   "band": "all layers",
+   "hands": 145,
+   "true_range_held": 0.407,
+   "previous_range_held": 0.37,
+   "specificity": 0.063,
+   "per_range_NEG_NEU_HOT": [
+    0.165,
+    0.0,
+    0.023
+   ]
+  },
+  {
+   "reader": "control other",
+   "measure": "top-10 surplus",
+   "band": "L28-56",
+   "hands": 145,
+   "true_range_held": 0.0,
+   "previous_range_held": 0.0,
+   "specificity": 0.0,
+   "per_range_NEG_NEU_HOT": [
+    0.0,
+    0.0,
+    0.0
+   ]
+  },
+  {
+   "reader": "control other",
+   "measure": "top-10 surplus",
+   "band": "all layers",
+   "hands": 145,
+   "true_range_held": 0.007,
+   "previous_range_held": 0.008,
+   "specificity": 0.008,
+   "per_range_NEG_NEU_HOT": [
+    0.0,
+    0.0,
+    0.023
+   ]
+  },
+  {
+   "reader": "control other",
+   "measure": "top-10, actual, no digit 0",
+   "band": "L28-56",
+   "hands": 145,
+   "true_range_held": 0.0,
+   "previous_range_held": 0.0,
+   "specificity": 0.0,
+   "per_range_NEG_NEU_HOT": [
+    0.0,
+    0.0,
+    0.0
+   ]
+  },
+  {
+   "reader": "control other",
+   "measure": "top-10, actual, no digit 0",
+   "band": "all layers",
+   "hands": 145,
+   "true_range_held": 0.007,
+   "previous_range_held": 0.008,
+   "specificity": 0.008,
+   "per_range_NEG_NEU_HOT": [
+    0.0,
+    0.0,
+    0.023
+   ]
+  }
+ ]
+}
