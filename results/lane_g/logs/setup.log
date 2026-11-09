@@ -1,0 +1,19 @@
+WARNING: Running pip as the 'root' user can result in broken permissions and conflicting behaviour with the system package manager, possibly rendering your system unusable. It is recommended to use a virtual environment instead: https://pip.pypa.io/warnings/venv. Use the --root-user-action option if you know what you are doing and want to suppress this warning.
+Fetching 18 files:   0%|          | 0/18 [00:00<?, ?it/s]Warning: You are sending unauthenticated requests to the HF Hub. Please set a HF_TOKEN to enable higher rate limits and faster downloads.
+Fetching 18 files:   6%|▌         | 1/18 [00:00<00:02,  6.27it/s]Fetching 18 files:  33%|███▎      | 6/18 [00:00<00:00, 22.94it/s]Fetching 18 files:  50%|█████     | 9/18 [00:12<00:15,  1.70s/it]Fetching 18 files:  56%|█████▌    | 10/18 [00:12<00:11,  1.44s/it]Fetching 18 files:  67%|██████▋   | 12/18 [00:13<00:07,  1.17s/it]Fetching 18 files:  78%|███████▊  | 14/18 [00:15<00:04,  1.09s/it]Fetching 18 files:  83%|████████▎ | 15/18 [00:16<00:03,  1.14s/it]Fetching 18 files:  89%|████████▉ | 16/18 [00:18<00:02,  1.26s/it]Fetching 18 files:  94%|█████████▍| 17/18 [00:19<00:01,  1.22s/it]Fetching 18 files: 100%|██████████| 18/18 [00:22<00:00,  1.68s/it]Fetching 18 files: 100%|██████████| 18/18 [00:22<00:00,  1.25s/it]
+/root/hf/hub/models--Qwen--Qwen3-14B/snapshots/40c069824f4251a91eefaf281ebe4c544efd3e18
+Warning: You are sending unauthenticated requests to the HF Hub. Please set a HF_TOKEN to enable higher rate limits and faster downloads.
+/root/artifacts/lens_candidate/qwen3-14b/jlens/Salesforce-wikitext/Qwen3-14B_jacobian_lens.pt
+/root/artifacts/lens_candidate/qwen3-14b/jlens/Salesforce-wikitext/config.yaml
+/root/artifacts/lens_candidate/qwen3-14b/jlens/Salesforce-wikitext/Qwen3-14B_convergence.csv
+W: https://developer.download.nvidia.com/compute/cuda/repos/ubuntu2404/x86_64/InRelease: Key is stored in legacy trusted.gpg keyring (/etc/apt/trusted.gpg), see the DEPRECATION section in apt-key(8) for details.
+debconf: delaying package configuration, since apt-utils is not installed
+Selecting previously unselected package cuda-compat-13-0.
+(Reading database ... (Reading database ... 5%(Reading database ... 10%(Reading database ... 15%(Reading database ... 20%(Reading database ... 25%(Reading database ... 30%(Reading database ... 35%(Reading database ... 40%(Reading database ... 45%(Reading database ... 50%(Reading database ... 55%(Reading database ... 60%(Reading database ... 65%(Reading database ... 70%(Reading database ... 75%(Reading database ... 80%(Reading database ... 85%(Reading database ... 90%(Reading database ... 95%(Reading database ... 100%(Reading database ... 49062 files and directories currently installed.)
+Preparing to unpack .../cuda-compat-13-0_580.196.07-1ubuntu1_amd64.deb ...
+Unpacking cuda-compat-13-0 (580.196.07-1ubuntu1) ...
+Setting up cuda-compat-13-0 (580.196.07-1ubuntu1) ...
+Processing triggers for libc-bin (2.39-0ubuntu8.6) ...
+vllm 0.33.0 torch 2.14.0+cu130
+setup done
+exit 0

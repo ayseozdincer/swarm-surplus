@@ -30,5 +30,5 @@ while kill -0 $A 2>/dev/null || kill -0 $B 2>/dev/null; do
   fi
   sleep 20
 done
-wait
+wait $A $B
 echo "generation exit $(date -u +%FT%TZ)"

@@ -1,0 +1,31 @@
+new turns 20, with leak2_source 17
+
+| Test | Where | New | p | Lane D | Pooled | p |
+| --- | --- | --- | --- | --- | --- | --- |
+| **primary** nearest | answer_pre, late | 11/17 | 0.166 | 10/10 | 21/27 | 0.003 |
+| nearest | mention_pre, late | 15/17 | 0.001 | 8/10 | 23/27 | 0.000155 |
+| nearest | first_generated, late | 13/17 | 0.025 | 5/10 | 18/27 | 0.061 |
+| delta | answer_pre, late | 12/17 | 0.072 | 6/10 | 18/27 | 0.061 |
+| delta | mention_pre, late | 13/17 | 0.025 | 8/10 | 21/27 | 0.003 |
+| delta | first_generated, late | 10/17 | 0.315 | 7/10 | 17/27 | 0.124 |
+| signature | answer_pre, late | 6/17 | 0.928 | 3/10 | 9/27 | 0.974 |
+| signature | mention_pre, late | 9/17 | 0.500 | 7/10 | 16/27 | 0.221 |
+| signature | first_generated, late | 9/17 | 0.500 | - | - | - |
+| exploratory, nearest | note_pre, late | 14/17 | 0.006 | 10/10 | 24/27 | 2.46e-05 |
+| exploratory, nearest | after_think, late | 17/17 | 7.63e-06 | 9/10 | 26/27 | 2.09e-07 |
+| exploratory, nearest | answer_pre, mid | 12/17 | 0.072 | 5/10 | 17/27 | 0.124 |
+| exploratory, nearest | answer_pre, all | 12/17 | 0.072 | 7/10 | 19/27 | 0.026 |
+| exploratory, nearest | mention_pre, all | 3/17 | 0.999 | 7/10 | 10/27 | 0.939 |
+| exploratory, nearest | first_generated, all | 12/17 | 0.072 | 7/10 | 19/27 | 0.026 |
+
+Primary by split (new / lane D):
+  right from the same specialty: 6/8 / 2/2
+  right from the other specialty: 5/9 / 8/8
+  used the right value: 5/6 / 5/5
+  used the wrong value: 6/11 / 5/5
+  named: 5/8 / 5/5
+  broadcast: 6/9 / 5/5
+
+Behaviour (new): {"n": 20, "used_correct": 6, "used_wrong": 11, "used_none": 3, "same_specialty_taken": [11, 17], "same_specialty_taken_when_right": [4, 8], "same_specialty_taken_when_wrong": [7, 9], "first_posted_taken": [10, 17], "right_by_address": {"name": [3, 10], "broadcast": [3, 10]}}
+Behaviour (lane D rows): {"n": 10, "used_correct": 5, "used_wrong": 5, "used_none": 0, "same_specialty_taken": [7, 10], "same_specialty_taken_when_right": [2, 2], "same_specialty_taken_when_wrong": [5, 8], "first_posted_taken": [6, 10], "right_by_address": {"name": [3, 5], "broadcast": [2, 5]}}
+Aggregates (new): {"leak2": {"leak2_used_correct": [6, 20], "leak2_used_wrong": [11, 20], "leak2_used_none": [3, 20], "blind_correct_free": [6, 20], "disclosed_source": [6, 6], "strict_wrong_free": [15, 64]}, "none": {"leak2_used_correct": [0, 0], "leak2_used_wrong": [0, 0], "leak2_used_none": [0, 0], "blind_correct_free": [0, 20], "disclosed_source": [0, 0], "strict_wrong_free": [12, 75]}}

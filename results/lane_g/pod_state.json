@@ -4,7 +4,11 @@
  "gpu": "NVIDIA H200",
  "cost_per_hr": 3.59,
  "image": "runpod/pytorch:1.0.3-cu1281-torch280-ubuntu2404",
- "running_seconds": 458,
+ "running_seconds": 7022,
+ "estimated_cost_usd": 7.0,
  "hard_stop_utc": "2026-11-09T06:14:00Z",
- "ssh": "213.186.10.12:14729"
+ "ssh": "213.186.10.12:14729",
+ "stopped_at": "2026-11-09T05:15:11+00:00",
+ "status": "EXITED",
+ "hours": 1.951
 }
