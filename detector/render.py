@@ -48,12 +48,15 @@ def assistant_message(response: dict) -> dict:
 
 
 def peer_char_spans(tokenizer, messages: list[dict], meta: list[dict], tools, full_text: str) -> list[tuple[int, int]]:
-    """Character span of every message tagged `peer`, wrapper tokens included. Each comes from rendering the list up
-    to and including that message and taking the last block. The list then ends on a user message, so no earlier
+    """Character spans to mask. A message tagged `peer` is masked whole, wrapper tokens included. A message of any other
+    provenance may carry `peer_spans`, character ranges inside its content written by a peer (a colleague's message quoted
+    inside a tool output); those ranges are masked and nothing else of the message is. Each span comes from rendering the
+    list up to and including that message and taking the last block. The list then ends on a user message, so no earlier
     assistant message picks up an empty think block and the render is a true prefix of the full text."""
     spans = []
     for i, tag in enumerate(meta):
-        if tag["provenance"] != PEER:
+        inner = tag.get("peer_spans") or []
+        if tag["provenance"] != PEER and not inner:
             continue
         if messages[i]["role"] != "user":
             raise ValueError(f"peer message {i} has role {messages[i]['role']}")
@@ -61,7 +64,16 @@ def peer_char_spans(tokenizer, messages: list[dict], meta: list[dict], tools, fu
         start = upto.rfind("<|im_start|>user\n")
         if start < 0 or not full_text.startswith(upto):
             raise ValueError(f"peer message {i} does not render as a prefix of the full text")
-        spans.append((start, len(upto)))
+        if tag["provenance"] == PEER:
+            spans.append((start, len(upto)))
+            continue
+        content_start = start + len("<|im_start|>user\n")
+        if not upto.startswith(messages[i]["content"], content_start):
+            raise ValueError(f"message {i} content is not rendered verbatim")
+        for a, b in inner:
+            if not 0 <= a < b <= len(messages[i]["content"]):
+                raise ValueError(f"peer span {(a, b)} outside message {i}")
+            spans.append((content_start + a, content_start + b))
     return spans
 
 
