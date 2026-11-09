@@ -1,6 +1,6 @@
 # Swarm Surplus. Reading what an agent took from its peers by replaying it without them
 
-AUTHORS: Ayse Ozdincer, Daphni, ayse@daphni.ai. Máté Lakner, affiliation to confirm.
+AUTHORS: Ayse Ozdincer, Daphni, ayseozdincer@gmail.com. Máté Lakner, affiliation to confirm.
 
 ## Abstract
 
@@ -20,7 +20,7 @@ Our main contributions are the following.
 
 ## 2. Related Work
 
-NARCBench releases transcripts, prompts and activations for instructed collusion in three tiers and trains a supervised probe at a per-model layer band (Rose et al., 2026). The J-space paper fits a per-layer Jacobian lens, decomposes a residual onto at most 25 lens directions, and scores pairs by shared concept mass beyond the outsiders, reaching 0.984 on Core and 0.556 on Transfer for Qwen3-32B (Molinari and Bettineschi, 2026). Motwani et al. (2024) frame steganographic coordination. TaskTracker detects task drift by comparing activations before and after an LLM processes external data, with a probe trained on clean against poisoned pairs (Abdelnabi et al., 2024). The delta is our intuition too. We decide the mask from provenance tags rather than a labelled set, read it at every reply token, and attribute it by a reference per candidate. Spotlighting (Hines et al., 2024), CaMeL (Debenedetti et al., 2025) and FIDES (Costa et al., 2025) run provenance forward through text and values to enforce a policy. We run it backward, as the input to a counterfactual on the hidden states, and block nothing. ColludeBench (Tailor, 2025), AgentDojo (Debenedetti et al., 2024) and the insider-trading pressure eval (Scheurer et al., 2023) are the nearest environments, and none labels per-agent, per-turn uptake with provenance tags on open weights. This method is for the tactic nobody anticipated and the agent that does not verbalise.
+NARCBench releases transcripts, prompts and activations for instructed collusion in three tiers and trains a supervised probe at a per-model layer band (Rose et al., 2026). The J-space paper fits a per-layer Jacobian lens, decomposes a residual onto at most 25 lens directions, and scores pairs by shared concept mass beyond the outsiders, reaching 0.984 on Core and 0.556 on Transfer for Qwen3-32B (Molinari and Bettineschi, 2026). Motwani et al. (2024) frame steganographic coordination. TaskTracker detects task drift by comparing activations before and after an LLM processes external data, with a probe trained on clean against poisoned pairs (Abdelnabi et al., 2024). The same before-and-after delta is our mechanism, reached from the J-space paper's counterfactual, and we credit it as the nearest prior art. We decide the mask from provenance tags rather than a labelled set, read it at every reply token, and attribute it by a reference per candidate. Spotlighting (Hines et al., 2024), CaMeL (Debenedetti et al., 2025) and FIDES (Costa et al., 2025) run provenance forward through text and values to enforce a policy. We run it backward, as the input to a counterfactual on the hidden states, and block nothing. ColludeBench (Tailor, 2025), AgentDojo (Debenedetti et al., 2024) and the insider-trading pressure eval (Scheurer et al., 2023) are the nearest environments, and none labels per-agent, per-turn uptake with provenance tags on open weights. This method is for the tactic nobody anticipated and the agent that does not verbalise.
 
 ## 3. Methods
 

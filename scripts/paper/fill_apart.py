@@ -160,16 +160,27 @@ def main():
     r = title_par.add_run(title)
     if fmt is not None:
         r._element.insert(0, fmt)
-    # authors grid and abstract cell
+    # authors: remove the nested author table (narrow columns) and write centred lines before the abstract table
     second = outer.rows[1].cells[0]
-    grid = second.tables[0].rows[0].cells[0].tables[0]
-    cells = [c for row in grid.rows for c in row.cells]
-    for k, cell in enumerate(cells):
-        if k < len(authors):
-            set_cell_lines(cell, [authors[k][0], authors[k][1]])
-        else:
-            set_cell_lines(cell, [""])
-    abs_cell = second.tables[1].rows[0].cells[0]
+    author_tbl = second.tables[0]._tbl
+    abstract_tbl = second.tables[1]._tbl
+    author_tbl.getparent().remove(author_tbl)
+    # the cell's own paragraphs: keep the first (blank) one, then insert author lines before the abstract table
+    def insert_par_before(anchor, text, size=11, bold=False, italic=False, space_after=0):
+        new_p = OxmlElement("w:p")
+        anchor.addprevious(new_p)
+        par = Paragraph(new_p, second)
+        par.alignment = WD_ALIGN_PARAGRAPH.CENTER
+        par.paragraph_format.space_after = Pt(space_after)
+        r = par.add_run(text); set_font(r, size, bold=bold, italic=italic)
+        return par
+    for name, aff in authors:
+        insert_par_before(abstract_tbl, name, size=12, bold=True)
+        insert_par_before(abstract_tbl, aff, size=11, space_after=8)
+    insert_par_before(abstract_tbl, "With", size=11, bold=True)
+    insert_par_before(abstract_tbl, "Apart Research", size=11, space_after=14)
+    # remove the template's 'Abstract' label duplicates? keep the existing label paragraph, which sits before the tables
+    abs_cell = Table(abstract_tbl, second).rows[0].cells[0]
     set_cell_lines(abs_cell, [abstract])
     for r in abs_cell.paragraphs[0].runs:
         r.italic = False
@@ -209,7 +220,10 @@ def main():
         if m:
             level = len(m.group(1)); text = m.group(2).strip()
             p = add_par("Heading 2" if level == 2 else "Heading 3")
-            r = p.add_run(text); set_font(r, 14 if level == 2 else 13)
+            r = p.add_run(text); set_font(r, 14 if level == 2 else 13, bold=True)
+            rpr = r._element.get_or_add_rPr(); col = OxmlElement("w:color"); col.set(qn("w:val"), "434343"); rpr.append(col)
+            p.paragraph_format.space_before = Pt(10); p.paragraph_format.space_after = Pt(0)
+            p.paragraph_format.line_spacing = 1.5
             i += 1; continue
         if line.startswith("# "):
             i += 1; continue
@@ -239,8 +253,7 @@ def main():
         p = add_par()
         add_runs(p, text, size=(9.5 if is_caption else None), italic=(True if is_caption else None))
         p.paragraph_format.space_after = Pt(6)
-        if not is_caption:
-            p.alignment = WD_ALIGN_PARAGRAPH.JUSTIFY
+        p.alignment = WD_ALIGN_PARAGRAPH.LEFT
     # python-docx appends new elements before sectPr already; ensure order
     body.remove(sect); body.append(sect)
     doc.save(a.out)
