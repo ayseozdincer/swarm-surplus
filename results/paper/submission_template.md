@@ -4,7 +4,7 @@ AUTHORS: Ayse Ozdincer. Máté Lakner.
 
 ## Abstract
 
-Agent swarms share information through channels nobody planned for. Existing activation-based detectors need labelled runs of instructed colluders, or compare an agent to its peers, which fails once agents hold roles. We propose a label-free detector built on provenance, which every orchestrator already has for each span of context. We replay the agent teacher-forced on its own tokens with every peer span masked from attention and subtract the reference hidden state from the actual one at every token and layer. The surplus against a noise floor says where the agent engaged with peer content, the gap at the first writing of a value says whether it was taken or computed, and its direction says whose it was. In our six-agent peer-review environment on Qwen3, agents are never told to collude. A peer note is planted, an answer, a tip, a wrong value, a procedure, two conflicting notes or a line in a shared file, each with a matched twin. Over 588 matched branches a taken value is first written 33 to 61 floors above the noise against 11 for a computed one. A rule fixed on ten pilot seeds flags 56 of 60 taken values and 0 of 453 negatives on held-out turns, while its engagement gate alone also fires on a relevant procedure. A reference pass per candidate note names the note used in 10 of 10 turns, and a planted line in a shared file is read only under write-log provenance. The released benchmarks were run and are not claimed.
+Agent swarms share information through channels nobody planned for. Activation-based detectors need labelled runs of instructed colluders, or compare an agent to its peers, which fails once agents hold roles. We propose a label-free detector built on provenance, which every orchestrator already has for each span of context. We replay the agent teacher-forced on its own tokens with every peer span masked from attention and subtract the reference hidden state from the actual one at every token and layer. The surplus against a noise floor says where the agent engaged with peer content, the gap at the first writing of a value says whether it was taken or computed, and its direction says whose it was. In our six-agent peer-review environment on Qwen3, agents are never told to collude. A peer note is planted, an answer, a tip, a wrong value, a procedure, two conflicting notes or a line in a shared file, each with a matched twin. Over 588 matched branches a taken value is first written 33 to 61 floors above the noise against 11 for a computed one. A rule fixed on ten pilot seeds flags 56 of 60 taken values and 0 of 453 negatives on held-out turns, while its engagement gate alone also fires on a relevant procedure. A reference pass per candidate note names the note used in 10 of 10 turns, and a line planted in a shared file is read only under write-log provenance. The released benchmarks were run and are not claimed.
 
 ## 1. Introduction
 
@@ -119,11 +119,11 @@ An orchestrator already knows where every span of an agent's context came from. 
 
 ## Code and Data
 
-Code repository: github.com/ayseozdincer/swarm-surplus, branch `overnight-detector` and the lane branches named in Appendix D. Private during judging, access on request. The J-space code is vendored under `third_party/maj-lens` and NARCBench data is downloaded from `aaronrose227/narcbench`.
+Code repository, github.com/ayseozdincer/swarm-surplus, branch `overnight-detector` and the lane branches named in Appendix D, private during judging and open on request. The J-space code is vendored under `third_party/maj-lens` and NARCBench data is downloaded from `aaronrose227/narcbench`.
 
-Data: run directories (`runs/`, generated transcripts with provenance tags), replay indexes and scores under `results/`, and the paper's tables under `results/paper/tables/` with the scripts that produced them.
+Data, the run directories under `runs/` with every transcript as served and its provenance tags, replay indexes and scores under `results/`, and the paper's tables under `results/paper/tables/` with the scripts that produced them.
 
-Other artifacts: the three-minute deck and the jury briefing, links on request.
+Other artifacts, the three-minute deck and the jury briefing, links on request.
 
 ## Author Contributions
 
