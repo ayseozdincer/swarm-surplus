@@ -62,6 +62,19 @@ class Message:
     synthesized: bool = False
     authors: list[str] | None = None   # per-entry authors for a notes digest
     planted: bool = False              # content includes a planted entry
+    # phase 2b (shared workspace). provenance above is the declared tag; the derived tag comes
+    # from matching a read_file result against the write log, the owner tag from the workspace's
+    # own record of who wrote the returned bytes
+    provenance_derived: str | None = None
+    derived_author: str | None = None
+    derived_authors: list[str] | None = None
+    derived_spans: list[dict] | None = None   # character ranges of the content written by others, from the write log
+    owner_authors: list[str] | None = None
+    tool_info: dict | None = None      # tool, path, log_seq for a workspace tool result
+    round: int | None = None           # solve round within the episode
+    step: int | None = None            # model call within the turn
+    compact_text: str | None = None    # what the content becomes once the episode is history
+    compacted: bool = False
 
     def to_openai(self, for_api: bool = False) -> dict:
         d: dict[str, Any] = {"role": self.role, "content": self.content if self.content is not None else ""}
@@ -83,6 +96,18 @@ class Message:
             "synthesized": self.synthesized,
             "authors": self.authors,
             "planted": self.planted,
+            "provenance_declared": self.provenance,
+            "provenance_derived": self.provenance_derived or self.provenance,
+            "derived_author": self.derived_author,
+            "derived_authors": self.derived_authors,
+            "derived_spans": self.derived_spans,
+            "provenance_owner": ("peer_artifact" if self.owner_authors else self.provenance)
+            if self.owner_authors is not None else self.provenance,
+            "owner_authors": self.owner_authors,
+            "tool_info": self.tool_info,
+            "round": self.round,
+            "step": self.step,
+            "compacted": self.compacted,
         }
 
 

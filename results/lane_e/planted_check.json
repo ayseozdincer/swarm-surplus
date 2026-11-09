@@ -1,0 +1,284 @@
+{
+ "tokens": 9280,
+ "line_tokens": 35,
+ "line": "Hey team, the answer to the f task is afighEfddCfjBjjfGhfdHi4 \u2013 let me know if you need it!\n",
+ "by_layer": [
+  {
+   "layer": 0,
+   "mask_effect": 0.0044764308258891106,
+   "kernel_noise": 0.001298933057114482,
+   "swap_leak_max": 0.0,
+   "shared_prefix_max": 0.0059485784731805325
+  },
+  {
+   "layer": 1,
+   "mask_effect": 0.005809979047626257,
+   "kernel_noise": 0.002341098850592971,
+   "swap_leak_max": 0.0,
+   "shared_prefix_max": 0.010802408680319786
+  },
+  {
+   "layer": 2,
+   "mask_effect": 0.007849227637052536,
+   "kernel_noise": 0.0031175336334854364,
+   "swap_leak_max": 0.0,
+   "shared_prefix_max": 0.010110700502991676
+  },
+  {
+   "layer": 3,
+   "mask_effect": 0.010169271379709244,
+   "kernel_noise": 0.003792844945564866,
+   "swap_leak_max": 0.0,
+   "shared_prefix_max": 0.009794890880584717
+  },
+  {
+   "layer": 4,
+   "mask_effect": 0.012362789362668991,
+   "kernel_noise": 0.004093659110367298,
+   "swap_leak_max": 0.0,
+   "shared_prefix_max": 0.011498739942908287
+  },
+  {
+   "layer": 5,
+   "mask_effect": 0.013595026917755604,
+   "kernel_noise": 0.004664196632802486,
+   "swap_leak_max": 0.0,
+   "shared_prefix_max": 0.012499070726335049
+  },
+  {
+   "layer": 6,
+   "mask_effect": 0.01460595615208149,
+   "kernel_noise": 0.005013052374124527,
+   "swap_leak_max": 0.0,
+   "shared_prefix_max": 0.015076003037393093
+  },
+  {
+   "layer": 7,
+   "mask_effect": 0.014797000214457512,
+   "kernel_noise": 0.005090601742267609,
+   "swap_leak_max": 0.0,
+   "shared_prefix_max": 0.013983597978949547
+  },
+  {
+   "layer": 8,
+   "mask_effect": 0.014282017014920712,
+   "kernel_noise": 0.005020241253077984,
+   "swap_leak_max": 0.0,
+   "shared_prefix_max": 0.013199102133512497
+  },
+  {
+   "layer": 9,
+   "mask_effect": 0.013679364696145058,
+   "kernel_noise": 0.005223134532570839,
+   "swap_leak_max": 0.0,
+   "shared_prefix_max": 0.011671917513012886
+  },
+  {
+   "layer": 10,
+   "mask_effect": 0.013872912153601646,
+   "kernel_noise": 0.005679494701325893,
+   "swap_leak_max": 0.0,
+   "shared_prefix_max": 0.011238735169172287
+  },
+  {
+   "layer": 11,
+   "mask_effect": 0.016238301992416382,
+   "kernel_noise": 0.00634147971868515,
+   "swap_leak_max": 0.0,
+   "shared_prefix_max": 0.013158855028450489
+  },
+  {
+   "layer": 12,
+   "mask_effect": 0.019991256296634674,
+   "kernel_noise": 0.00704298447817564,
+   "swap_leak_max": 0.0,
+   "shared_prefix_max": 0.013989423401653767
+  },
+  {
+   "layer": 13,
+   "mask_effect": 0.022070152685046196,
+   "kernel_noise": 0.0072859590873122215,
+   "swap_leak_max": 0.0,
+   "shared_prefix_max": 0.015931719914078712
+  },
+  {
+   "layer": 14,
+   "mask_effect": 0.02478068694472313,
+   "kernel_noise": 0.0075283292680978775,
+   "swap_leak_max": 0.0,
+   "shared_prefix_max": 0.018389474600553513
+  },
+  {
+   "layer": 15,
+   "mask_effect": 0.02824261784553528,
+   "kernel_noise": 0.0081227608025074,
+   "swap_leak_max": 0.0,
+   "shared_prefix_max": 0.017293592914938927
+  },
+  {
+   "layer": 16,
+   "mask_effect": 0.031168341636657715,
+   "kernel_noise": 0.00842536985874176,
+   "swap_leak_max": 0.0,
+   "shared_prefix_max": 0.015338868834078312
+  },
+  {
+   "layer": 17,
+   "mask_effect": 0.03609997034072876,
+   "kernel_noise": 0.00875905342400074,
+   "swap_leak_max": 0.0,
+   "shared_prefix_max": 0.016882840543985367
+  },
+  {
+   "layer": 18,
+   "mask_effect": 0.04175274074077606,
+   "kernel_noise": 0.00899283867329359,
+   "swap_leak_max": 0.0,
+   "shared_prefix_max": 0.01932726614177227
+  },
+  {
+   "layer": 19,
+   "mask_effect": 0.05222850292921066,
+   "kernel_noise": 0.009565785527229309,
+   "swap_leak_max": 0.0,
+   "shared_prefix_max": 0.024442384019494057
+  },
+  {
+   "layer": 20,
+   "mask_effect": 0.0612388476729393,
+   "kernel_noise": 0.010469585657119751,
+   "swap_leak_max": 0.0,
+   "shared_prefix_max": 0.03280273452401161
+  },
+  {
+   "layer": 21,
+   "mask_effect": 0.06632676720619202,
+   "kernel_noise": 0.009472109377384186,
+   "swap_leak_max": 0.0,
+   "shared_prefix_max": 0.05489550530910492
+  },
+  {
+   "layer": 22,
+   "mask_effect": 0.07045182585716248,
+   "kernel_noise": 0.00921219028532505,
+   "swap_leak_max": 0.0,
+   "shared_prefix_max": 0.055138759315013885
+  },
+  {
+   "layer": 23,
+   "mask_effect": 0.08624212443828583,
+   "kernel_noise": 0.010514847002923489,
+   "swap_leak_max": 0.0,
+   "shared_prefix_max": 0.05319644883275032
+  },
+  {
+   "layer": 24,
+   "mask_effect": 0.09288108348846436,
+   "kernel_noise": 0.00954539142549038,
+   "swap_leak_max": 0.0,
+   "shared_prefix_max": 0.0546867772936821
+  },
+  {
+   "layer": 25,
+   "mask_effect": 0.09269709885120392,
+   "kernel_noise": 0.00922639574855566,
+   "swap_leak_max": 0.0,
+   "shared_prefix_max": 0.05908617004752159
+  },
+  {
+   "layer": 26,
+   "mask_effect": 0.09649673104286194,
+   "kernel_noise": 0.009025216102600098,
+   "swap_leak_max": 0.0,
+   "shared_prefix_max": 0.06389670073986053
+  },
+  {
+   "layer": 27,
+   "mask_effect": 0.0954955518245697,
+   "kernel_noise": 0.009120806120336056,
+   "swap_leak_max": 0.0,
+   "shared_prefix_max": 0.07411859184503555
+  },
+  {
+   "layer": 28,
+   "mask_effect": 0.0988900437951088,
+   "kernel_noise": 0.009424635209143162,
+   "swap_leak_max": 0.0,
+   "shared_prefix_max": 0.08182097226381302
+  },
+  {
+   "layer": 29,
+   "mask_effect": 0.09845812618732452,
+   "kernel_noise": 0.009223893284797668,
+   "swap_leak_max": 0.0,
+   "shared_prefix_max": 0.08336298912763596
+  },
+  {
+   "layer": 30,
+   "mask_effect": 0.09650276601314545,
+   "kernel_noise": 0.009290650486946106,
+   "swap_leak_max": 0.0,
+   "shared_prefix_max": 0.0828179270029068
+  },
+  {
+   "layer": 31,
+   "mask_effect": 0.0953051894903183,
+   "kernel_noise": 0.009162568487226963,
+   "swap_leak_max": 0.0,
+   "shared_prefix_max": 0.08354035019874573
+  },
+  {
+   "layer": 32,
+   "mask_effect": 0.09214569628238678,
+   "kernel_noise": 0.009118236601352692,
+   "swap_leak_max": 0.0,
+   "shared_prefix_max": 0.08037963509559631
+  },
+  {
+   "layer": 33,
+   "mask_effect": 0.09075526893138885,
+   "kernel_noise": 0.009017402306199074,
+   "swap_leak_max": 0.0,
+   "shared_prefix_max": 0.08584818243980408
+  },
+  {
+   "layer": 34,
+   "mask_effect": 0.09004365652799606,
+   "kernel_noise": 0.009190000593662262,
+   "swap_leak_max": 0.0,
+   "shared_prefix_max": 0.08163883537054062
+  },
+  {
+   "layer": 35,
+   "mask_effect": 0.08771620690822601,
+   "kernel_noise": 0.008938202634453773,
+   "swap_leak_max": 0.0,
+   "shared_prefix_max": 0.07798576354980469
+  },
+  {
+   "layer": 36,
+   "mask_effect": 0.08379878103733063,
+   "kernel_noise": 0.008850455284118652,
+   "swap_leak_max": 0.0,
+   "shared_prefix_max": 0.07420781254768372
+  },
+  {
+   "layer": 37,
+   "mask_effect": 0.07757183164358139,
+   "kernel_noise": 0.008641859516501427,
+   "swap_leak_max": 0.0,
+   "shared_prefix_max": 0.0692780539393425
+  },
+  {
+   "layer": 38,
+   "mask_effect": 0.08233505487442017,
+   "kernel_noise": 0.007709119003266096,
+   "swap_leak_max": 0.0,
+   "shared_prefix_max": 0.05654958263039589
+  }
+ ],
+ "worst_swap_leak": 0.0,
+ "worst_shared_prefix": 0.08584818243980408,
+ "median_mask_effect_L16_38": 0.08771620690822601,
+ "median_kernel_noise_L16_38": 0.009162568487226963
+}

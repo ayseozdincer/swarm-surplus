@@ -125,13 +125,21 @@ class Lens:
         self.head = tensors["lm_head.weight"][:self.vocab].to(device).float()
         self.norm_weight = tensors["model.norm.weight"].to(device).float()
 
+    def J_on_device(self, layer: int) -> torch.Tensor:
+        """J for one layer, copied to the device once and kept (39 layers of Qwen3-14B in float16 take 2 GB), since a
+        host-to-device copy per readout call cost more than the forward passes of a replayed turn."""
+        cache = self.__dict__.setdefault("_J_device", {})
+        if layer not in cache:
+            cache[layer] = self.J[layer].to(self.device)
+        return cache[layer]
+
     def top(self, H: torch.Tensor, layer: int, k: int = TOPK):
         """top-k token ids and logits of the lens readout at rows of H."""
-        logits = lens_logits(H.to(self.device), self.J[layer].to(self.device), self.norm_weight, self.head, self.eps)
+        logits = lens_logits(H.to(self.device), self.J_on_device(layer), self.norm_weight, self.head, self.eps)
         return logits.topk(k, dim=-1)
 
     def logits(self, H: torch.Tensor, layer: int) -> torch.Tensor:
-        return lens_logits(H.to(self.device), self.J[layer].to(self.device), self.norm_weight, self.head, self.eps)
+        return lens_logits(H.to(self.device), self.J_on_device(layer), self.norm_weight, self.head, self.eps)
 
     def atoms(self, layer: int):
         a = self.head @ self.J[layer].to(self.device).float()
