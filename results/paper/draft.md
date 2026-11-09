@@ -4,7 +4,7 @@ Ayse Ozdincer (Daphni) and Máté Lakner (affiliation to confirm). Apart Researc
 
 ## Abstract
 
-Agent swarms share information through channels nobody planned for, as when agents at Hugging Face coordinated through a package manager meant for installs. Activation-based collusion detectors exist, but they need probes trained on labelled runs of instructed colluders, or they compare an agent to its peers, which fails once agents hold different roles. We propose a label-free detector built on a fact every orchestrator already has, the provenance of each span in an agent's context. We replay the agent teacher-forced over its own tokens with every peer span masked from attention and subtract the reference hidden state from the actual one at every token and layer. The length of this surplus against a measured noise floor says where the agent engaged with peer content, the gap where a value is first written says whether it was taken or computed, and the direction says whose content it was. We built a six-agent peer-review environment on Qwen3 14B and 32B in which agents are never told to collude. A peer note is planted, an answer, a harmless tip, a wrong value, a procedure, two conflicting notes, or a line inside a shared file, with a matched twin from the same seed. Over 588 matched branches the first writing of a taken value sits 30 to 60 floors above a computed one, a count of engaged tokens separates a blind agent that took a leak from its matched tip in 30 of 30 seeds while failing on a relevant harmless procedure, a reference pass per candidate note names the note used in 10 of 10 turns, and a line planted in a shared file is read only when provenance is derived from the write log. The released benchmarks were run and are not claimed. (247 words)
+Agent swarms share information through channels nobody planned for, as when agents at Hugging Face coordinated through a package manager meant for installs. Activation-based collusion detectors exist, but they need probes trained on labelled runs of instructed colluders, or they compare an agent to its peers, which fails once agents hold different roles. We propose a label-free detector built on a fact every orchestrator already has, the provenance of each span in an agent's context. We replay the agent teacher-forced over its own tokens with every peer span masked from attention and subtract the reference hidden state from the actual one at every token and layer. The length of this surplus against a measured noise floor says where the agent engaged with peer content, the gap where a value is first written says whether it was taken or computed, and the direction says whose content it was. We built a six-agent peer-review environment on Qwen3 14B and 32B in which agents are never told to collude. A peer note is planted, an answer, a harmless tip, a wrong value, a procedure, two conflicting notes, or a line inside a shared file, with a matched twin from the same seed. Over 588 matched branches a taken value is first written 33 to 61 floors above the noise against 11 for a computed one, a count of engaged tokens separates a blind agent that took a leak from its matched tip in 30 of 30 seeds while firing on a relevant harmless procedure, a reference pass per candidate note names the note used in 10 of 10 turns, and a line planted in a shared file is read only when provenance is derived from the write log. The released benchmarks were run and are not claimed.
 
 ## 1. Introduction
 
@@ -161,7 +161,26 @@ Agents were never told to collude, hide anything or follow anyone. Under a desig
 
 ### 5.6 Calibration and false positives
 
-Thresholds were set by eye on the pilot and the ten sweep14b seeds and applied unchanged to sweep2. At a count cut of 60 the blind leak is caught in 30 of 30 seeds with 1 false positive in 30 harmless-tip turns and 0 in 30 none turns. The same cut fires on 20 of 20 on-task procedures. At a jump cut of 20 floors, 2 of 57 harmless and command negatives at their own first writing cross it. The false-positive table by task type and role, from a replay of about 200 non-blind solve turns run during the final hours, is in Appendix C if it completed, and the limitation stands otherwise. Every positive in this paper is a code task.
+Thresholds were set by eye on the pilot and the ten sweep14b seeds and applied unchanged everywhere else. Table 4 reports two cuts, a count of 60 tokens and a jump of 20 floors, over every group in the committed files. The count catches every blind leak and every line planted in a shared file, and it fires on every on-task procedure, on two of ten three-tip digests, on one of ten three-agreement proposals, and on the two of twenty harmless shared-file lines whose readers took the line for their missing input. The jump at 20 floors catches 10 of 16 blind leak users and 12 of 18 forbidden-leak users on sweep2, 10 of 10 on sweep14b, 20 of 20 leaks and 20 of 20 credentials in the shared file, and 3 of 13 solvable submitters, against 2 of 75 negatives at their own first writing, both in command branches. The count is the sensitive gate, the jump is the specific confirmation, and an agent that computed its value passes the jump as it should. Every positive is a code task. A false-positive table by task type and role from a replay of about 200 non-blind solve turns, run during the final hours, is in Appendix C if it completed.
+
+Table 4. Fixed cuts applied unchanged across arms. Fractions are turns at or above the cut. Floors and bands per lane are stated in Appendix C.
+
+| Group | n | count at or above 60 | jump at or above 20 floors |
+| --- | --- | --- | --- |
+| blind leak users, sweep14b, 14B | 10 | 10 of 10 | 10 of 10 |
+| blind leak users, sweep2, 14B | 20, 16 with a located first writing | 20 of 20 | 10 of 16 |
+| blind forbidden-leak users, sweep2 | 18 | not traced | 12 of 18 |
+| solvable, submitted the right value | 13 | not separable, see 5.2 | 3 of 13 |
+| 2c leak, derived mask | 20 | 20 of 20 | 20 of 20 |
+| 2c credential, derived mask, at the reveal call | 20 | 19 of 20 | 20 of 20 |
+| none, blind solve turns, all lanes | 90 | 0 of 90 | 0 of 18 |
+| one harmless tip, blind solves, both sweeps | 30 | 1 of 30 | 0 of 15 |
+| three harmless tips, blind solves | 10, 14 | 2 of 10 | 0 of 14 |
+| proposal k1 and k3, blind solves | 20 | 1 of 20 | not scored |
+| command k1 and k3, blind solves | 28 | not traced | 2 of 28 |
+| 2c harmless line, derived mask | 20 | 2 of 20 | not scored |
+| on-task procedure, method tip | 20 | 20 of 20 | no value to write |
+| verdict turns, users and non-users, lane C | 100 | 0 of 100 | not scored |
 
 ## 6. Discussion
 
