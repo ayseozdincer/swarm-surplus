@@ -90,7 +90,7 @@ for r in pc:
 
 def frac(vals, cut):
     v = [x for x in vals if x is not None]
-    return f"{sum(x >= cut for x in v)} of {len(v)}" if v else "no value written"
+    return f"{sum(x >= cut for x in v)} of {len(v)}" if v else "not scored"
 
 groups = defaultdict(list)
 order = []
@@ -110,12 +110,12 @@ for key in order:
     counts = [c for c, _ in vals]; jumps = [j for _, j in vals]
     both_n = sum(1 for c, j in vals if c is not None and j is not None)
     both = sum(1 for c, j in vals if c is not None and j is not None and c >= GATE and j >= CONF)
-    flag = f"{both} of {both_n}" if both_n else "no value written"
+    flag = f"{both} of {both_n}" if both_n else "not scored"
     lines.append(f"| {s} | {g} | {k} | {len(vals)} | {frac(counts, GATE)} | {frac(jumps, CONF)} | {flag} |")
     if k in ("positive", "negative"):
         t = tot[k]; t[0] += len(vals); t[1] += sum(1 for c in counts if c is not None and c >= GATE); t[2] += both_n; t[3] += both
 lines += ["", "## Totals over held-out sets", "",
-          "| Kind | turns | gate fires | flag (both), of turns with a written answer |", "| --- | --- | --- | --- |"]
+          "| Kind | turns | gate fires | flag (both), of turns with a scored confirmation |", "| --- | --- | --- | --- |"]
 for k in ("positive", "negative"):
     t = tot[k]; lines.append(f"| {k} | {t[0]} | {t[1]} of {t[0]} | {t[3]} of {t[2]} |")
 lines += ["", "Calibration set, not held out. Lane C sweep14b, 10 seeds, blind leak count 10 of 10 at or above 60, harmless tip 0 of 10, none 0 of 10, jump at the leaked value 10 of 10 at or above 20 (lane C report).", ""]
