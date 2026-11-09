@@ -88,6 +88,7 @@ class Capture:
             self.handles.append(model.model.layers[layer].register_forward_hook(self._hook(layer)))
         self.index = None
         self.trace_from, self.traced = None, {}
+        self.logprob_from, self.logprobs = None, None   # per-token log-probability of the forced token from this index on
 
     def _hook(self, layer):
         def hook(_module, _inputs, output):
@@ -114,7 +115,14 @@ class Capture:
         position_ids = torch.arange(len(ids), device=device)[None] if position_ids is None else torch.tensor([position_ids], device=device)
         attention_mask = None if mask is None else mask.to(device)
         with torch.no_grad():
-            model.model(input_ids=input_ids, position_ids=position_ids, attention_mask=attention_mask, use_cache=False)
+            out = model.model(input_ids=input_ids, position_ids=position_ids, attention_mask=attention_mask, use_cache=False)
+            self.logprobs = None
+            if self.logprob_from is not None:
+                # log-probability of each forced token ids[t], t >= logprob_from, from the final-norm state at t - 1
+                h = out.last_hidden_state[0, self.logprob_from - 1:-1]
+                lp = torch.log_softmax(model.lm_head(h).float(), dim=-1)
+                self.logprobs = lp.gather(-1, input_ids[0, self.logprob_from:, None]).squeeze(-1).cpu()
+                del lp
         return torch.stack([self.saved[layer] for layer in self.layers], dim=1).cpu()
 
     def prefix(self, model, ids):
@@ -177,7 +185,8 @@ def text_token_span(tokenizer, r: dict, text: str) -> tuple[int, int] | None:
 
 
 def replay_turn(model, tokenizer, capture, turn, lens, out_path, shared_prefix=False, compacted=False, mentions=None,
-                shuffled=False, trace=False, extra_refs=None, mask_mode="peer", declared=False, trace_direction=True):
+                shuffled=False, trace=False, extra_refs=None, mask_mode="peer", declared=False, trace_direction=True,
+                logprobs=False, mentions_reply=None):
     """shuffled adds a reference that masks a random sanctioned span as long as the turn's peer spans (shuffled_span).
     trace keeps, for every token of the reply, the relative surplus per layer against each reference and the surplus
     direction at TRACE_LAYERS, from the same passes. extra_refs maps a name to a text in the prompt (one note of a digest);
@@ -186,7 +195,7 @@ def replay_turn(model, tokenizer, capture, turn, lens, out_path, shared_prefix=F
     trace_direction=False keeps the per-token relative surplus (trace_delta_*) but not the direction arrays (trace_d_*), which
     are 20 KB a token. With trace and compacted, the compacted reference is traced too (trace_delta_compacted)."""
     import torch
-    r = render_turn(tokenizer, turn, mentions, mask_mode)
+    r = render_turn(tokenizer, turn, mentions, mask_mode, mentions_reply)
     names = list(r["positions"])
     positions = [r["positions"][n] for n in names]
     started = time.perf_counter()
@@ -226,12 +235,17 @@ def replay_turn(model, tokenizer, capture, turn, lens, out_path, shared_prefix=F
                 passes[f"mask_{name}"] = capture.run_suffix(model, cache, r["ids"], split, positions, keep)
         del cache
     capture.trace_from = r["prompt_tokens"] if trace else None
+    capture.logprob_from = r["prompt_tokens"] if logprobs else None     # full passes only, not the shared-prefix path
+    lps = {}
     if "actual" not in passes:
         passes["actual"] = capture.run(model, r["ids"], positions, attention_mask_4d(len(r["ids"])))
         traces["actual"] = capture.trace() if trace else None
+        lps["actual"] = capture.logprobs
     if "reference" not in passes:
         passes["reference"] = capture.run(model, r["ids"], positions, attention_mask_4d(len(r["ids"]), r["mask"]) if masked else None)
         traces["reference"] = capture.trace() if trace else None
+        lps["reference"] = capture.logprobs
+    capture.logprob_from = None
     if compacted and "compacted" not in passes:
         if masked:
             passes["compacted"] = capture.run(model, r["ids"], positions, attention_mask_4d(len(r["ids"]), r["mask"]), compacted_positions(r["mask"]))
@@ -247,6 +261,9 @@ def replay_turn(model, tokenizer, capture, turn, lens, out_path, shared_prefix=F
     capture.trace_from, capture.traced = None, {}
     actual, reference = passes["actual"], passes["reference"]
     arrays = {label: H.numpy() for label, H in passes.items()}
+    for label, lp in lps.items():
+        if lp is not None:
+            arrays[f"logprob_{label}"] = lp.numpy().astype(np.float32)
     if trace:
         # layer by layer: a 12k-token reply makes a whole [tokens, layers, d_model] float32 tensor 9 GB
         A = traces.pop("actual")

@@ -44,8 +44,6 @@ def main() -> int:
     state = json.loads(STATE.read_text())
     pod_id, seconds = state["pod_id"], float(state.get("running_seconds", 0))
     last, idle_since = time.time(), None
-    if state.get("watchdog_at"):                     # resume: count the gap since the last watchdog tick as running time
-        last = min(last, datetime.fromisoformat(state["watchdog_at"]).timestamp())
     while True:
         time.sleep(60)
         try:
