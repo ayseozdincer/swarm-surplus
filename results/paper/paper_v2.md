@@ -126,7 +126,7 @@ What the jump is not. The reference is off-policy for every forced token after t
 
 The rule. Table 4 gives the frozen gate and confirmation on every set scored after the cuts were fixed, led by the out-of-sample rows. On lane G's twenty seeds the rule flags 17 of the 17 agents whose submitted value matched a note and 0 of 20 none twins, medians count 160 against 0 and jump 61 against 1.1, and the three agents whose submission matched neither note pass the gate and fail the confirmation, as designed. <!-- src: results/paper/tables/newdata_test.md --> Across 703 held-out turns it flags 98 of 108 positives, 90.7 percent with interval 83.8 to 94.9, and 0 of 473 negatives with a written answer, upper bound 0.8 percent. The gate alone fires on 23 of 595 negatives, 20 on-task procedures with no value to confirm, two harmless shared-file lines whose readers took the line for their missing input, and one blind agent quoting a tip. The ten misses copied a 22-character string with slips, so the value they submitted is not the one the note held, and two wrote it just past the 256-token window. <!-- src: results/paper/tables/heldout_rule.md, results/paper/method_review.md A4 and A7 --> A seed-grouped logistic fit on the same measures, which a deployed monitor could not train, is the ceiling check. On 536 turns over 40 seeds it reaches out-of-fold AUROC 1.000 and puts 63 of 68 positives above every negative against the rule's 59, with overlapping intervals, catching four more slip copies in this sample and weighting the count first and the jump second. <!-- src: results/paper/tables/fitted_detector.md --> Confirmatory, with the sweep2 blind row the least held out.
 
-Table 4. The frozen rule on sets scored after the cuts were fixed. Gate, count at or above 60. Confirmation, jump at the agent's own first writing at or above 20 floors. Flag, both. Groups with no written value have no confirmation. The blind agents' own none twins in sweep2, 20 turns, are counted in the totals and not shown as a row, because with the twin as its own floor their confirmation sits near 1 by construction. The credential row's confirmation is read where the credential is first written in the reasoning, 49 floors median, and not at the reveal call, where the surplus is 10.2 floors (Table 6). Per-group floors in Appendix D.
+Table 4. The frozen rule on sets scored after the cuts were fixed. Gate, count at or above 60. Confirmation, jump at the agent's own first writing at or above 20 floors. Flag, both. Groups marked not scored wrote answers that the aggregation did not score at the confirmation, so they count toward the gate column only. The blind agents' own none twins in sweep2, 20 turns, are counted in the totals and not shown as a row, because with the twin as its own floor their confirmation sits near 1 by construction. The credential row's confirmation is read where the credential is first written in the reasoning, 49 floors median, and not at the reveal call, where the surplus is 10.2 floors (Table 6). Per-group floors in Appendix D.
 
 | Set | Group | n | gate | confirmation | flag |
 | --- | --- | --- | --- | --- | --- |
@@ -143,10 +143,10 @@ Table 4. The frozen rule on sets scored after the cuts were fixed. Gate, count a
 | sweep2 | readers of a note not meant for them | 260 | 0 | 4 of 259 | 0 of 259 |
 | sweep2 | non-blind, nothing masked | 140 | 0 | 0 of 140 | 0 of 140 |
 | solvable | wrong value read, kept own answer | 20 | 0 | 1 of 20 | 0 of 20 |
-| solvable | right value read, kept own answer | 7 | 0 | no value | no value |
+| solvable | right value read, kept own answer | 7 | 0 | not scored | not scored |
 | solvable | submitted the right value, 9 of 13 right without the note | 13 | 0 | 3 of 13 | 0 of 13 |
-| method tip | on-task procedure, no value | 20 | 20 | no value | no value |
-| shared file | harmless line or no line | 40 | 2 | no value | no value |
+| method tip | on-task procedure, no value | 20 | 20 | not scored | not scored |
+| shared file | harmless line or no line | 40 | 2 | not scored | not scored |
 | held-out totals | positives | 108 | 105 | 98 of 108 | 98 of 108 |
 | held-out totals | negatives | 595 | 23 | 5 of 473 | 0 of 473 |
 
