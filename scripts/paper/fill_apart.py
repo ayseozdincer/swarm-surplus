@@ -174,11 +174,12 @@ def main():
         par.paragraph_format.space_after = Pt(space_after)
         r = par.add_run(text); set_font(r, size, bold=bold, italic=italic)
         return par
+    label = next(par._element for par in second.paragraphs if par.text.strip() == "Abstract")
     for name, aff in authors:
-        insert_par_before(abstract_tbl, name, size=12, bold=True)
-        insert_par_before(abstract_tbl, aff, size=11, space_after=8)
-    insert_par_before(abstract_tbl, "With", size=11, bold=True)
-    insert_par_before(abstract_tbl, "Apart Research", size=11, space_after=14)
+        insert_par_before(label, name, size=12, bold=True)
+        insert_par_before(label, aff, size=11, space_after=8)
+    insert_par_before(label, "With", size=11, bold=True)
+    insert_par_before(label, "Apart Research", size=11, space_after=14)
     # remove the template's 'Abstract' label duplicates? keep the existing label paragraph, which sits before the tables
     abs_cell = Table(abstract_tbl, second).rows[0].cells[0]
     set_cell_lines(abs_cell, [abstract])
