@@ -174,11 +174,13 @@ def text_token_span(tokenizer, r: dict, text: str) -> tuple[int, int] | None:
 
 
 def replay_turn(model, tokenizer, capture, turn, lens, out_path, shared_prefix=False, compacted=False, mentions=None,
-                shuffled=False, trace=False, extra_refs=None):
+                shuffled=False, trace=False, extra_refs=None, trace_direction=True):
     """shuffled adds a reference that masks a random sanctioned span as long as the turn's peer spans (shuffled_span).
     trace keeps, for every token of the reply, the relative surplus per layer against each reference and the surplus
     direction at TRACE_LAYERS, from the same passes. extra_refs maps a name to a text in the prompt (one note of a digest);
-    each adds a reference pass `mask_<name>` that masks only that text, for attributing the surplus to one note."""
+    each adds a reference pass `mask_<name>` that masks only that text, for attributing the surplus to one note.
+    trace_direction=False keeps the per-token relative surplus (trace_delta_*) but not the direction arrays (trace_d_*), which
+    are 20 KB a token. With trace and compacted, the compacted reference is traced too (trace_delta_compacted)."""
     import torch
     r = render_turn(tokenizer, turn, mentions)
     names = list(r["positions"])
@@ -211,6 +213,7 @@ def replay_turn(model, tokenizer, capture, turn, lens, out_path, shared_prefix=F
             traces["shuffled"] = capture.trace() if trace else None
         if compacted and masked:
             passes["compacted"] = capture.run_suffix(model, cache, r["ids"], split, positions, r["mask"], compacted_positions(r["mask"]))
+            traces["compacted"] = capture.trace() if trace else None
         for name, span in extra_spans.items():
             if span and span[0] >= split:
                 keep = [1]*len(r["ids"])
@@ -226,8 +229,11 @@ def replay_turn(model, tokenizer, capture, turn, lens, out_path, shared_prefix=F
         passes["reference"] = capture.run(model, r["ids"], positions, attention_mask_4d(len(r["ids"]), r["mask"]) if masked else None)
         traces["reference"] = capture.trace() if trace else None
     if compacted and "compacted" not in passes:
-        passes["compacted"] = (capture.run(model, r["ids"], positions, attention_mask_4d(len(r["ids"]), r["mask"]),
-                                           compacted_positions(r["mask"])) if masked else passes["reference"])
+        if masked:
+            passes["compacted"] = capture.run(model, r["ids"], positions, attention_mask_4d(len(r["ids"]), r["mask"]), compacted_positions(r["mask"]))
+            traces["compacted"] = capture.trace() if trace else None
+        else:
+            passes["compacted"] = passes["reference"]
     capture.trace_from, capture.traced = None, {}
     actual, reference = passes["actual"], passes["reference"]
     arrays = {label: H.numpy() for label, H in passes.items()}
@@ -238,13 +244,16 @@ def replay_turn(model, tokenizer, capture, turn, lens, out_path, shared_prefix=F
         nA = torch.stack([torch.linalg.vector_norm(A[:, li].float(), dim=-1) for li in layers], dim=1)
         arrays["trace_actual_norm"] = nA.cpu().numpy().astype(np.float32)
         trace_layers = [capture.layers.index(l) for l in TRACE_LAYERS if l in capture.layers]
-        for label in ("reference", "shuffled"):
+        for label in ("reference", "shuffled", "compacted"):
             R = traces.pop(label, None)
             if R is None:
+                if label == "compacted" and compacted and not masked and "trace_delta_reference" in arrays:
+                    arrays["trace_delta_compacted"] = arrays["trace_delta_reference"]      # nothing masked: the same pass
                 continue
             nD = torch.stack([torch.linalg.vector_norm(A[:, li].float() - R[:, li].float(), dim=-1) for li in layers], dim=1)
             arrays[f"trace_delta_{label}"] = (nD/nA).cpu().numpy().astype(np.float32)
-            arrays[f"trace_d_{label}"] = torch.stack([A[:, li].float() - R[:, li].float() for li in trace_layers], dim=1).half().cpu().numpy()
+            if trace_direction:
+                arrays[f"trace_d_{label}"] = torch.stack([A[:, li].float() - R[:, li].float() for li in trace_layers], dim=1).half().cpu().numpy()
             del R
         del A, traces
         torch.cuda.empty_cache()
