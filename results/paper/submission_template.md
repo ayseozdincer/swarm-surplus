@@ -1,6 +1,6 @@
 # Swarm Surplus. Reading what an agent took from its peers by replaying it without them
 
-AUTHORS: Ayse Ozdincer, Daphni, ayseozdincer@gmail.com. Máté Lakner, affiliation to confirm.
+AUTHORS: Ayse Ozdincer. Máté Lakner.
 
 ## Abstract
 
@@ -107,7 +107,7 @@ Other artifacts: the three-minute deck and the jury briefing, links on request.
 
 ## Author Contributions
 
-[A.O. designed the detector and the environment, ran the experiments and wrote the report. M.L. ... Please complete.]
+Ayse Ozdincer and Máté Lakner designed the work, ran the experiments and wrote this report together.
 
 ## References
 

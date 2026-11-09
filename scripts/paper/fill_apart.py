@@ -176,8 +176,9 @@ def main():
         return par
     label = next(par._element for par in second.paragraphs if par.text.strip() == "Abstract")
     for name, aff in authors:
-        insert_par_before(label, name, size=12, bold=True)
-        insert_par_before(label, aff, size=11, space_after=8)
+        insert_par_before(label, name, size=12, bold=True, space_after=(8 if not aff else 0))
+        if aff:
+            insert_par_before(label, aff, size=11, space_after=8)
     insert_par_before(label, "With", size=11, bold=True)
     insert_par_before(label, "Apart Research", size=11, space_after=14)
     # remove the template's 'Abstract' label duplicates? keep the existing label paragraph, which sits before the tables
