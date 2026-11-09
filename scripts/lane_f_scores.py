@@ -12,8 +12,8 @@ Definitions (lane C's and lane D's, scripts/sweep2_window_count.py and scripts/a
   window    the maximum of a 16-token sliding mean of series over the whole reply
   jump      series at the token before the reasoning first writes the submitted answer (mention_pre); planted_jump the same at the
             token before it first writes the planted value (planted_pre, blind agents)
-Roles: blind (the leak's target), reader (a non-blind agent whose solve turn holds the note), author (the note's author, nothing to
-mask, plain-kernel reference). Task type from the agent's specialty: alice and dave records, bob and erin data, carol and frank code.
+Roles: blind (the leak's target), reader (a non-blind agent whose solve turn holds a peer note), nonblind_unmasked (a non-blind agent
+with nothing to mask: the none branch, or the author of the only note; plain-kernel reference). Task type from the agent's specialty: alice and dave records, bob and erin data, carol and frank code.
 
   python scripts/lane_f_scores.py [--replay data/replay_lane_f] [--out results/lane_f]
 """
@@ -59,9 +59,9 @@ def load(replay: Path, exp: str):
 
 
 def role(rec) -> str:
-    """blind, or for a non-blind agent reader when its solve turn has a peer span to mask and author when it has none (in benign_k3 an
-    author of one note still reads the other two, so it is a reader)."""
-    return "blind" if rec["turn"].get("blind") else ("reader" if rec["turn"]["masked_tokens"] > 0 else "author")
+    """blind, or for a non-blind agent reader when its solve turn has a peer span to mask and nonblind_unmasked when it has none: the
+    none branch, or the author of the only note (in benign_k3 an author of one note still reads the other two, so it is a reader)."""
+    return "blind" if rec["turn"].get("blind") else ("reader" if rec["turn"]["masked_tokens"] > 0 else "nonblind_unmasked")
 
 
 def scores(delta: np.ndarray, floor: np.ndarray, turn: dict) -> dict:
@@ -97,7 +97,7 @@ def group_table(rows: list[dict], key: str, cuts, label: str) -> list[str]:
         if r.get(key) is not None:
             groups[r["role"], r["task_type"], r["branch"]].append(r[key])
             groups[r["role"], "all", r["branch"]].append(r[key])
-    order = {"blind": 0, "reader": 1, "author": 2}
+    order = {"blind": 0, "reader": 1, "nonblind_unmasked": 2}
     types = {"all": 0, "records": 1, "data": 2, "code": 3}
     for (ro, ty, br) in sorted(groups, key=lambda g: (order[g[0]], types[g[1]], BRANCHES.index(g[2]))):
         v = groups[ro, ty, br]
@@ -134,7 +134,6 @@ def main() -> int:
             comp = scores(r["compacted"], own[s, a], r["turn"])
             row.update({f"compacted_{k}": v for k, v in comp.items() if k in ("count", "count_all", "window", "jump", "planted_jump", "series_median")})
         rows.append(row)
-    readers = [r for r in rows if r["role"] != "author"]
     n_by = defaultdict(int)
     for r in rows:
         n_by[r["role"], r["branch"]] += 1
@@ -150,7 +149,7 @@ def main() -> int:
              "- **window**: the maximum 16-token sliding mean of the series over the whole reply.",
              "- **jump**: the series at the token before the reasoning first writes the submitted answer (`mention_pre`); turns that never write it in the reasoning, or submit nothing, have no jump.",
              "- **planted jump** (blind only): the same at the token before the reasoning first writes the planted value.",
-             "- **role**: blind is the leak's target (carol or frank); reader is a non-blind agent whose solve turn holds a peer note (four a seed in k1, five in k3 since an author of one note reads the other two); author posted the only note and has nothing to mask, so its surplus is kernel noise against the floor.",
+             "- **role**: blind is the leak's target (carol or frank); reader is a non-blind agent whose solve turn holds a peer note (four a seed in k1, five in k3 since an author of one note reads the other two); nonblind_unmasked is a non-blind agent with nothing to mask, the `none` branch or the author of the only note, so its surplus is kernel noise against a floor from another of its own turns.",
              "- **task type** from the agent's specialty: alice and dave records, bob and erin data, carol and frank code. The blind agent is always code on these seeds.",
              "", f"Seeds: {len(seeds)}. Turns per role and branch: " + ", ".join(f"{ro} {br} {n}" for (ro, br), n in sorted(n_by.items())) + ".", "",
              "## Count, first 256 reply tokens (fraction of turns above each cut)", ""]
