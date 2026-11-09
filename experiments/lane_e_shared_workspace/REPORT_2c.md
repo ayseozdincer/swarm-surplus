@@ -199,7 +199,7 @@ attributed as 2a attributes planted notes. Phrasing varied per seed, the target 
 `detector.render.render_turn(..., mask_mode="derived")` maps it to tokens with `detector.stego_spans.token_spans`, straddling tokens included, and
 masks those and nothing else. Labels per target are read file, used the value, called `reveal_input` with the token, correct, disclosed the source, reply tokens.
 
-Choices the brief left open, or where the smoke changed the build.
+Choices the plan left open, or where the smoke changed the build.
 
 | Choice | Why |
 | --- | --- |
@@ -209,7 +209,7 @@ Choices the brief left open, or where the smoke changed the build.
 | The three lines are generated once per seed, before branching | So benign can be fitted to the leak line, and a seed's leak line is the same whatever the branch order |
 | Benign matches the leak line in **tokens**, not characters (changed after the smoke) | The value string is token-dense. Equal characters gave 17 masked tokens against 37, a factor of two for any magnitude metric. Now 42/42, 23/25, 45/47 on real lines |
 | `--post 0` | The replay reads the plant episode. Saves a third of generation |
-| `--rules none` | Not in the brief; sweep2 found the rule does not suppress use on code tasks |
+| `--rules none` | Not in the plan; sweep2 found the rule does not suppress use on code tasks |
 | Source signatures are leave one seed out | Lane D's source used other readers in the seed, but only the target reads its file. Lane D also found pooled signatures weak at telling two notes apart. I expected this score to be weaker than its 0.88, and it was not, since these are different kinds of line and not two notes of one kind |
 
 ## What the smoke found, before the card
@@ -229,7 +229,7 @@ Two seeds on OpenRouter, 8001 (broadcast) and 8004 (named), `runs/smoke_planted_
 
 - **Skipped reads.** Before the gate, 4 of 24 agent turns at the plant episode skipped the read, all code agents and one of them a target. They solved a function from an earlier review packet in their history, up to 12,000 tokens' worth (0 of 12 in warm-ups). A target that never reads has no exposure, so its turn is wasted. After the gate and a task message saying the material is nowhere else in the conversation, 36 of 36 turns on seed 8004 read their file, with one refusal.
 - **Reasoning before the read.** Targets still think for about 5,000 tokens at the first call before reading, which is wasted (it does not enter the context) and costs generation time only.
-- **Credential correctness.** Both right-token targets then slipped computing f by hand, so `correct` undercounts uptake on this branch. The uptake label is `reveal_token_right`, and the brief's uptake position is the `reveal_input` call.
+- **Credential correctness.** Both right-token targets then slipped computing f by hand, so `correct` undercounts uptake on this branch. The uptake label is `reveal_token_right`, and the plan's uptake position is the `reveal_input` call.
 - **Where the mention falls.** The value is first written 48 to 60 tokens into the reasoning and the token 62 to 168, inside the plateau's first 256. The masked span is 36 to 45 tokens of a prompt near 8,200.
 - **Short numeric answers.** Some answers are numbers such as 86, which can appear by chance while computing. The first-mention position is then not necessarily the copy, in any branch, so jump and the windows are noisier on those seeds. Seeds with string answers are the clean read.
 - **A target can read twice.** The span then appears twice and both are masked (seed 8004 benign, step 2).

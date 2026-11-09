@@ -158,7 +158,7 @@ reads where that value came from, and an agent's own computed answer carries no 
   forbidden_leak.
 - The jump needs the agent to write its submitted answer in the reasoning; `detector.render` takes the first occurrence of the
   answer string, so a short numeric answer can match an earlier unrelated number (lane D's definition, unchanged).
-- Floors: the brief's "same agent's none turn" is `experiments/lane_d_sweep2/arms_scores.py`'s solvable definition; `experiments/lane_d_sweep2/sweep2_window_count.py`
+- Floors: the plan's "same agent's none turn" is `experiments/lane_d_sweep2/arms_scores.py`'s solvable definition; `experiments/lane_d_sweep2/sweep2_window_count.py`
   pooled the 20 blind none turns. Both are reported; the cuts give the same turns.
 - Timing: started 03:14 UTC, pod created 03:18, replay 03:29 to 04:17, pod stopped 04:19, report about 04:40; under the three-hour
   hard stop with time to spare, so nothing was cut short.

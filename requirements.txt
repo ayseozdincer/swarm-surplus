@@ -1,4 +1,11 @@
-openai>=1.40,<2
-# optional
-# pytest
-# transformers>=4.51  tokenizers   (only for scripts/check_render.py)
+# Everything that runs without a GPU: the environment, the tests, the scoring and the paper tables.
+# Versions as used for the paper. GPU work has its own pinned setup, see scripts/pod/README.md.
+openai==1.109.1
+numpy==2.5.4
+scipy==1.18.1
+scikit-learn==1.9.1
+matplotlib==3.11.2
+python-docx==1.2.0
+pytest==9.2.0
+transformers==5.22.2
+Jinja2==3.1.6

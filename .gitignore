@@ -8,6 +8,7 @@ __pycache__/
 # fetched with scripts/fetch_data.sh or regenerated, see REPRODUCING.md
 data/
 runs/
+*.tar.gz
 third_party/maj-lens/artifacts
 third_party/maj-lens/logs/
 third_party/maj-lens/narcbench/

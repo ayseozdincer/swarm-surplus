@@ -60,7 +60,7 @@ and not from cross-seed signatures. Ten turns, one arm.
 | Per-token trace CSVs | done | sweep2 seeds 5034 and 5046, leak and benign_k1, lane C's format and placebo (`experiments/lane_d_sweep2/results/trace_seed5034.csv`, `trace_seed5046.csv`, notes in `*_notes.json`) |
 | Solvable per-token traces | done | whole replies, note branch and none, no placebo: 5006 the computed case, 5021 the checked case (`experiments/lane_d_sweep2/results/trace_solvable_5006_computed.csv`, `trace_solvable_5021_checked.csv`, `experiments/lane_d_sweep2/solvable_trace_csv.py`). 5006's none branch has one unexplained spike around reply token 895, a 16-token mean of 95.3 against a median of 1.05, on a turn with no note |
 
-## Setup, and what changed from the brief
+## Setup, and what changed from the plan
 
 **Seeds.** The brief lists 5000, 5003, ... and states the rule seed mod 6 in {0, 3}. Those disagree: 5000 mod 6 is 2, and with
 two warm-up episodes the blind agent at episode 2 is `names[(seed + 2) % 6]`, erin or bob for 5000 and 5003, both data_search.

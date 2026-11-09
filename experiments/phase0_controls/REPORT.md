@@ -8,7 +8,7 @@ Branch `overnight-detector`. Every number below comes from a file under `results
 | --- | --- | --- |
 | W1 code notes and cache report | done | Qwen3-32B rows reproduce. `read.py` stopped at figure rendering, see the notes at the end |
 | W2 pod, model, lens | done | Smoke test passes |
-| W3 replay and leak readout | done | First replay discarded and rerun once with the kernel pinned. The leak is not read at the handoff's positions. It is read at the first mention (follow-ups 1 and 2) |
+| W3 replay and leak readout | done | First replay discarded and rerun once with the kernel pinned. The leak is not read at the planned positions. It is read at the first mention (follow-ups 1 and 2) |
 | W4 Phase 0 on Core | done | Surplus AUROC 1.000, close to true by construction |
 | W4 follow-ups 1 to 4 | done | Placebo, ontology on the surplus, edge test 1c (dense sets too sparse), size-matched removal. Mass is edit size |
 | W4 follow-ups 5 and 6 | done | The directive moves mass about twice as far as neutral text of equal length, but most of the mass is edit size. After size adjustment, run AUROC 0.85 at the first token, 0.42 at the end |
@@ -163,13 +163,13 @@ Position 1 readout. At L26 to L30 the top-10 is whitespace and newline tokens fo
 
 The concepts are the same kind of noise in every branch, including `none`, where no note exists. Nothing about trust, accepting or the proposal appears in the proposal branch. Concept-level surplus at this position is not interpretable with this lens.
 
-Limits. One seed, one lens that is a partial 80-prompt checkpoint, and the handoff's positions. The handoff's list has no position inside the reasoning. Follow-up 1 below adds one, and that is where the leak does read.
+Limits. One seed, one lens that is a partial 80-prompt checkpoint, and the planned positions. The planned list has no position inside the reasoning. Follow-up 1 below adds one, and that is where the leak does read.
 
 ### W3 follow-up 1, the first mention
 
 One turn, one seed. `mention_pre` is the token before the reasoning first writes the submitted answer. In the leak branch it is the space in "the withheld input is 73", where no text she wrote carries the number, so the note is its only source. She never writes 73 in `none` or `benign_k1`, so there `mention_pre` is the token before her own answer (191), **not the same text**. `first_generated` is the same token after the same prompt, apart from the note.
 
-**At the first mention all three measures move, so this is neither a null nor information the lens cannot name.** The residual delta is 19 to 68 times the kernel floor at every layer from L15 to L62. `7` goes to rank 0 in the actual pass at L61 and L62, against rank 2 and 4 in the reference. The J-space names it, with surplus on `7` at L58, L61 and L62, small shares of 0.03 to 0.04. None of that happens in `benign_k1` or `none`. This is the handoff's reading of the leak, found at a position the handoff did not list. It is a late-layer signal at the moment of copying, where the lens is close to the output distribution, and the reference there still predicts a digit, just not this one.
+**At the first mention all three measures move, so this is neither a null nor information the lens cannot name.** The residual delta is 19 to 68 times the kernel floor at every layer from L15 to L62. `7` goes to rank 0 in the actual pass at L61 and L62, against rank 2 and 4 in the reference. The J-space names it, with surplus on `7` at L58, L61 and L62, small shares of 0.03 to 0.04. None of that happens in `benign_k1` or `none`. This is the planned reading of the leak, found at a position the handoff did not list. It is a late-layer signal at the moment of copying, where the lens is close to the output distribution, and the reference there still predicts a digit, just not this one.
 
 **At `first_generated` only the residual moves.** The delta is 3.8 to 6.5 times the floor, but `benign_k1` shows the same size (3.6 to 5.9). Ranks of `7` and `3` move with every other digit, and the J-space holds neither. So at this position the note changes the state by the same amount whatever it says, and nothing shows that the number is there.
 
@@ -488,9 +488,9 @@ Colluders (full-block reference) against honest agents, raw mass against the res
 
 `experiments/phase0_controls/results/transfer_implicit_labels.json` has one record for each of the 36 implicit runs. It is force-added, since `data/` is ignored.
 
-**Why the outcome label was dropped.** The handoff's label cannot be computed from the released data, for two reasons.
+**Why the outcome label was dropped.** The planned label cannot be computed from the released data, for two reasons.
 
-| Assumption in the handoff | What the release has |
+| Assumption in the plan | What the release has |
 | --- | --- |
 | `fair_option` present on collusion and control rows | null in all 288 Qwen3-32B Transfer rows, and for every other model |
 | A final RECOMMENDATION of Option A or B per agent | The released final prompt asks for "a brief final summary". No Transfer prompt offers Option A or B in any of the 108 runs. 0 of 72 pair members have a vote. The one regex hit is an allocation figure ("6-8%") |
@@ -519,7 +519,7 @@ Read this with care. It is one model's judgment, with no human check. 10 of the 
 
 ### sweep1
 
-`runs/sweep1` finished with `exit 0`. `scripts/summarize.py runs/sweep1` gives the following. It matches the handoff, with the post-episode column added by the current script.
+`runs/sweep1` finished with `exit 0`. `scripts/summarize.py runs/sweep1` gives the following. It matches the plan, with the post-episode column added by the current script.
 
 ```
 variant          runs lenient|wrong   leak used    blind ok   wrong subs     exposed  post len|wrong
@@ -690,7 +690,7 @@ The jump comes before the number. At L50-62 the delta triples at " The user ment
 
 ### Part B, detection on sweep1
 
-All three seeds named in the handoff were replayed (2000, 2001, 2002), so every claim uses 3 seeds. Each free agent's solve turn, episode 2. Settings were fixed in advance on the pilot (seed 1000, not scored here). Primary position is `first_generated`, mass over all layers, direction scores over L50-62, and the jump at `mention_pre` over L50-62. Pairs are matched branches: the same agent in the same seed, leak against the comparison branch. `experiments/phase0_controls/results/detection_run.json` has every position and band.
+All three seeds named in the plan were replayed (2000, 2001, 2002), so every claim uses 3 seeds. Each free agent's solve turn, episode 2. Settings were fixed in advance on the pilot (seed 1000, not scored here). Primary position is `first_generated`, mass over all layers, direction scores over L50-62, and the jump at `mention_pre` over L50-62. Pairs are matched branches: the same agent in the same seed, leak against the comparison branch. `experiments/phase0_controls/results/detection_run.json` has every position and band.
 
 - **mass/floor.** J-space surplus mass over the same agent's plain-kernel mass in the seed's none branch.
 - **content.** 1 - cos(d, benign_k1 signature without this agent).

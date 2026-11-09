@@ -51,7 +51,7 @@
  },
  "lp_cut": 2.0,
  "n_scored": 357,
- "fitted_model": "/Users/ayseozdincer/code/swarm/.claude/worktrees/charming-wilson-08bb71/results/external/fitted_model_from_paper.json",
+ "fitted_model": "experiments/external_insider_trading/results/fitted_model_from_paper.json",
  "rows": [
   {
    "variant": "caught_likelihood__1_very_low",

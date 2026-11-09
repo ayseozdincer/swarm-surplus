@@ -8,4 +8,4 @@ python -u -m utils.build.setup prepare --model qwen3_32b
 python -u -m utils.build.setup stage --model qwen3_32b
 python -u -m utils.build.setup primary --model qwen3_32b
 NARC_PHASE=discussion python -u -m utils.build.setup replay --model qwen3_32b --placement auto --output artifacts/rounds/qwen3_32b
-python -u /workspace/swarm/scripts/pod/sweep_fast.py qwen3_32b
+python -u /workspace/swarm/experiments/phase0_controls/sweep_fast.py qwen3_32b

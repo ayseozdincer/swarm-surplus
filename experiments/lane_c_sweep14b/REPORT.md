@@ -3,7 +3,7 @@
 Branch `claude/lane-c-14b-8c893e`. Complete: both stages, ten seeds, six branches. Readout data in
 `experiments/lane_c_sweep14b/results/readout.json.gz` (gzip of the pod's `readout.json`), `readout_stage1.json`, `window.json`, `found.json`,
 `kernel_floor.json`, the per-token trace of seed 3000 in `trace_seed3000.csv`, every table in `tables.md`. Replayed arrays
-(about 20 GB) are not kept in this repository, `jobs/replay_a.sh` regenerates them.
+(about 20 GB) are not kept in this repository, `jobs/stages.sh` regenerates them.
 
 ## Headline
 
@@ -81,7 +81,7 @@ concepts at a verdict turn's response start are the same kind of junk in every b
   The blind agent is carol or frank on a code task in every seed and used the leak in all ten. Its submission equals the
   planted answer in all ten (checked against the plant's note text). Five answers are numbers (291, 7, 111, 328, 497) and five
   are 22 to 23 character strings.
-- Replayed turns, in the order the lead session set. Stage 1, the blind agent's solve turn in every branch of every seed
+- Replayed turns, in the order set. Stage 1, the blind agent's solve turn in every branch of every seed
   (`experiments/lane_c_sweep14b/blind.py`), three passes on the explicit 4D-mask kernel: actual, kept reference (peer note masked,
   positions kept) and a placebo reference (a random designer span of the note's token length masked instead, one draw per
   turn with a fixed seed; in none, the length of the same seed's leak note). In the same passes every token of the reply is
@@ -110,14 +110,14 @@ found-location composition), `experiments/lane_c_sweep14b/jobs/stages.sh`, `run_
 | --- | --- | --- |
 | Pod, model, lens, smoke test | done 15:07 | |
 | Kernel floor | done | one honest turn, below |
-| First part A replay (every free agent, solve and verdict, with the compacted reference) | stopped at 15:42 | superseded by the lead session's reorder; 63 turns of seeds 3000 and 3003 stay on the pod volume, unused |
+| First part A replay (every free agent, solve and verdict, with the compacted reference) | stopped at 15:42 | superseded by the reorder; 63 turns of seeds 3000 and 3003 stay on the pod volume, unused |
 | Stage 1, blind agent's solve turn, 6 branches x 10 seeds, actual / kept / placebo, per-token trace | done 16:01 | 60 turns, decomposed at 9 positions |
-| Stage 1 readouts, reported to the lead session | done 16:06 | |
+| Stage 1 readouts, reported | done 16:06 | |
 | Position-blind trace score, length control, seed 3000 CSV | done | CPU on the stage-1 traces |
 | Found-location composition | done 16:51 | on the second pod |
 | Stage 2, free agents' verdict turns, 6 branches x 10 seeds, actual / kept | done 17:20 | 310 turns, split across two pods from 16:40 |
 | Final readout, direction test, content and source, claim 3 | done 17:34 | |
-| Compacted reference | not run | dropped by the lead session's decision. The 32B pod measured it, and matched-branch comparisons are within one model |
+| Compacted reference | not run | dropped by decision. The 32B pod measured it, and matched-branch comparisons are within one model |
 | Placebo on the verdict turns | not run | asked for the blind agent's turns only |
 | Per-token trace for the exposed non-users | done 18:44 | verdict turns of users and non-users in leak and benign_k1, on a third pod; their solve turns are not traced |
 
@@ -780,7 +780,7 @@ Reading the claims.
   Fixed in `scripts/replay.py` (`Capture` keeps the copies on the GPU until the end of the pass), bit-identical. Compressed
   saves cost about 9 s a turn on the pod's network volume, so `--uncompressed`. Both flags are off by default for 32B.
 - The first part A replay ran with every free agent's solve and verdict turn and the compacted reference, and was stopped when
-  the lead session reordered the work. Its 63 turns are unused.
+  the work was reordered. Its 63 turns are unused.
 - The second pod's package install took 28 minutes against 5 on the first (another datacentre), so the split saved less time
   than planned.
 - After the Mac's network dropped, pod 2's verdict data could not be relayed through the Mac. Pod 1 pulled it straight from

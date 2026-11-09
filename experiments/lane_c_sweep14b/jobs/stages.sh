@@ -1,4 +1,4 @@
-# Lane C after the lead session's reorder (no compacted reference). Stage 1, the blind agent's solve turn in every branch
+# Lane C after the reorder (no compacted reference). Stage 1, the blind agent's solve turn in every branch
 # of every seed with the per-token trace and the placebo reference, then its J-space decomposition. Stage 2, the free agents'
 # verdict turns, actual and kept reference only, then theirs.
 . /workspace/venv/bin/activate
