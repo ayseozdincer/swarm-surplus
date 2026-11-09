@@ -60,7 +60,7 @@ Figure 1. The two passes. The same tokens are run twice, once under the ordinary
 
 **3.3 The floor.** The passes are compared in units of a noise floor, the difference between two attention kernels on turns with nothing to mask, about one percent of the residual per layer and position with heavy single-token outliers, so no statistic here uses a single-token maximum. <!-- src: results/gpu_checks.json and results/OVERNIGHT.md kernel section --> Both passes run through one explicit-mask kernel, under which the same pass twice is bit-identical. The deployable floor is pooled, measured once per model and kernel over unmasked turns. The experiments also had a matched twin of every turn, and the paired comparisons use the twin's own floor. Scored both ways, no decision moved. <!-- src: results/lane_f/REPORT.md -->
 
-**3.4 Measures.** Let delta be the relative residual difference between the passes at a token and layer, divided by the floor and averaged over layers 16 to 38 of 39 unless stated. The unit of detection is a token the agent could only have produced because of the peer span. Table 2 gives the three measures the body uses and the control that fixed each one's job. Mass, the 16-token window and the lens rank are in Appendix C.
+**3.4 Measures.** Let delta be the relative residual difference between the passes at a token and layer, divided by the floor and averaged over layers 16 to 38 of 39 unless stated. The unit of detection is a token the agent could only have produced because of the peer span. Table 2 gives the three measures the body uses and the control that fixed each one's job. Mass, the 16-token window and the lens rank are in Appendix C. The general form of the confirmation, the log-probability the actual pass gives the forced token minus the reference's, read along the reply, is measured on the external set in Section 4.7 and not in the game.
 
 Table 2. The three measures in the body, what each reads, the control that pinned it, and where it fails.
 
@@ -193,7 +193,7 @@ Size is a gate and not a verdict. Surplus mass looks like a perfect detector on 
 
 ### 4.7 Outside the game.
 
-Two external checks are running at submission time under the rule of Section 3.6 and the frozen fitted model exported from the sweep2 fit, chosen because each passes the fairness rule of Section 3.7. <!-- src: results/paper/tables/fitted_model.json --> In the insider-trading pressure eval (Scheurer et al., 2023) on Qwen3-14B, Sally's two tip messages are the peer span, the eval's own label says whether the agent traded on the tip, and a judge says whether it concealed that in its report. [SLOT insider trading. File results/external/ on branch claude/charming-wilson-08bb71. Report n runs, traded on the tip, flagged by the rule and by the frozen fit, false positives among runs that did not trade, and the concealment direction if the counts allow.] In a TaskTracker-shaped set, question-answering passages carry a mechanically injected target sentence and a label of whether the target string appears in the reply, which tests the count and the jump on a different distribution with thousands of negatives. [SLOT TaskTracker-shaped. File results/external/ on branch claude/clever-mayer-c077dc. Report n, flagged, false positives, and the frozen fit's AUROC.] Either check that does not finish before the deadline is reported as not run.
+Two external checks are running at submission time under the rule of Section 3.6 and the frozen fitted model exported from the sweep2 fit, chosen because each passes the fairness rule of Section 3.7. <!-- src: results/paper/tables/fitted_model.json --> In the insider-trading pressure eval (Scheurer et al., 2023) on Qwen3-14B, Sally's two tip messages are the peer span, the eval's own label says whether the agent traded on the tip, and a judge says whether it concealed that in its report. [SLOT insider trading. File results/external/ on branch claude/charming-wilson-08bb71. Report n runs, traded on the tip, flagged by the rule and by the frozen fit, false positives among runs that did not trade, and the concealment direction if the counts allow.] In a TaskTracker-shaped set, question-answering passages carry a mechanically injected target sentence and a label of whether the reply followed it, which tests the count and the jump on a different distribution, with short replies, hundreds of clean twins, and the log-probability peak measured beside the rule. [SLOT TaskTracker-shaped. File results/external/tables.md and tasktracker_scores.json on branch claude/clever-mayer-c077dc. Report poisoned and clean turns, followed against not followed, the gate's fire rate and why reply length caps the count, the confirmation at the target and at the answer line, clean false positives, the AUROCs of count, window, jump and log-probability peak for followed against the poisoned negatives and against clean, and the frozen fit's AUROC.] Either check that does not finish before the deadline is reported as not run.
 
 ## 5. Discussion
 
@@ -217,7 +217,7 @@ Two external checks are running at submission time under the rule of Section 3.6
 
 ### Future work
 
-The log-probability form of the confirmation, a replay that saves the forced token's log-probability at every position, so that outputs that are not values can be confirmed. The sensitivity table on the existing traces. Taint propagation through tool arguments. Positives on data and record tasks once the withheld piece is declared there, hint and partial-value plants, a second family, the external checks of Section 4.7 completed, and longer emergence runs.
+The log-probability form of the confirmation carried back into the game, a replay that saves the forced token's log-probability at every position, so that outputs that are not values can be confirmed. The sensitivity table on the existing traces. Taint propagation through tool arguments. Positives on data and record tasks once the withheld piece is declared there, hint and partial-value plants, a second family, the external checks of Section 4.7 completed, and longer emergence runs.
 
 ## 6. Conclusion
 
@@ -335,7 +335,7 @@ EDITORIAL NOTES, remove before submission (paper-draft session, 8 and 9 November
 Slots still open
 - [SLOT sensitivity table] Section 3.6. CPU work on lane F's traces, no file yet.
 - [SLOT insider trading] Section 4.7. results/external/ on branch claude/charming-wilson-08bb71.
-- [SLOT TaskTracker-shaped] Section 4.7. results/external/ on branch claude/clever-mayer-c077dc.
+- [SLOT TaskTracker-shaped] Section 4.7. results/external/tables.md on branch claude/clever-mayer-c077dc, uncommitted at 22:50 Pacific with 600 turns scored and a log-probability peak column. When it lands, Section 3.4's sentence on the log-probability form and limitation 7 may need a word.
 - [SLOT author contributions] and Máté Lakner's affiliation on the title line.
 - LLM usage statement to confirm.
 
