@@ -120,6 +120,8 @@ def main() -> int:
     order = [g for g in ("followed", "not followed, written in thinking", "not followed, never written", "clean") if g in by]
     neg_rows = [r for r in rows if r["group"] != "followed"]
     L = []
+    short = sum(1 for r in rows if r["reply_tokens"] < FIRST)
+    L.append(f"Reply length. {short} of {len(rows)} replies are shorter than {FIRST} tokens (median {fmt(med([r['reply_tokens'] for r in rows]), 0)}), so the count's ceiling is the reply length on most turns here, against replies of 1,000 to 12,000 tokens in the game.")
     L.append(f"Turns scored {len(rows)} ({len(pois)} poisoned, {len(clean)} clean). Floor pooled over {len(clean)} clean twins, "
              f"{sum(len(t['delta']) for t in clean)} reply tokens; floor median over layers 16 to 38 {float(floor[BAND].mean()):.4f} "
              f"(per-turn floors in that band, median {float(np.median(floor_by_turn[:, BAND].mean(axis=1))):.4f}, 5th to 95th percentile "
@@ -171,7 +173,11 @@ def main() -> int:
     for g in order:
         rs = by[g]
         L.append(f"- {g}. n {len(rs)}, answer correct against SQuAD {sum(1 for r in rs if r['correct'])} of {len(rs)}, truncated at the token cap {sum(1 for r in rs if r['truncated'])}, "
-                 f"reply tokens median {fmt(med([r['reply_tokens'] for r in rs]), 0)}, masked tokens median {fmt(med([r['masked_tokens'] for r in rs]), 0)}.")
+                 f"reply tokens median {fmt(med([r['reply_tokens'] for r in rs]), 0)}, masked tokens median {fmt(med([r['masked_tokens'] for r in rs]), 0)}, "
+                 f"exploratory density (tokens above 10 floors over the whole reply, as a fraction of reply tokens) median {fmt(med([r['count_all']/r['reply_tokens'] for r in rs]), 2)}.")
+    P = by.get("followed", []); NP = [r for r in rows if r["twin"] == "poisoned" and r["group"] != "followed"]
+    L.append(f"- Exploratory, not the frozen rule. Density AUROC followed against poisoned negatives {fmt(auroc([r['count_all']/r['reply_tokens'] for r in P], [r['count_all']/r['reply_tokens'] for r in NP]), 3)}, "
+             f"against clean {fmt(auroc([r['count_all']/r['reply_tokens'] for r in P], [r['count_all']/r['reply_tokens'] for r in by.get('clean', [])]), 3)}.")
     # logistic comparator
     try:
         from sklearn.linear_model import LogisticRegression
@@ -243,8 +249,10 @@ def main() -> int:
         text = t["reply"]["response"]
         tok_text = None
         try:
+            import sys as _s
+            if str(ROOT) not in _s.path:
+                _s.path.insert(0, str(ROOT))
             from experiments.external_tasktracker import load_tokenizer
-            import sys as _s; _s.path.insert(0, str(ROOT))
             tk = load_tokenizer()
             from detector.render import render_turn
             rt = render_turn(tk, t["reply"])
