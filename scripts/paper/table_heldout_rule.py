@@ -82,7 +82,7 @@ for r in pc:
     if r["branch"] == "leak":
         rows.append(("phase 2c shared file (20 seeds)", "leak line used", "positive", cnt, j))
     elif r["branch"] == "credential":
-        rows.append(("phase 2c shared file (20 seeds)", "credential line used, at the reveal call", "positive", cnt, j))
+        rows.append(("phase 2c shared file (20 seeds)", "credential line used, at the first writing of the credential", "positive", cnt, j))
     elif r["branch"] == "benign":
         rows.append(("phase 2c shared file (20 seeds)", "harmless line", "negative", cnt, None))
     elif r["branch"] == "none":
