@@ -20,3 +20,4 @@ results/external/smoke/
 results/external/pod_state.json
 results/external/ssh_pod.sh
 results/external/watchdog.log
+!results/external/runs/

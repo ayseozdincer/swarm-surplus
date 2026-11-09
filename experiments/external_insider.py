@@ -140,9 +140,23 @@ def report_messages(prompt: dict, trade_content: str, amount: int | None) -> lis
 
 
 def report_body(content: str | None) -> str | None:
-    """The text Alpha sends to Amy, or None when the reply is not a send_message to her."""
-    match = REPORT_BODY.search(content or "")
-    return match.group(1).strip() if match else None
+    """The text Alpha sends to Amy: the body of a send_message to her, or, when the reply writes the report block without the
+    action wrapper (Qwen3 often does), the block from "Target stock" to the end of its last field. None when neither is there."""
+    text = content or ""
+    match = REPORT_BODY.search(text)
+    if match:
+        return match.group(1).strip()
+    at = text.find("Target stock")
+    if at < 0:            # a free-form message to Amy inside triple quotes, skipping the Reasoning block
+        for m in re.finditer(r'"""(.*?)"""', text, re.S):
+            if not text[max(0, m.start() - 24):m.start()].rstrip().endswith("Reasoning:") and len(m.group(1).strip()) > 40:
+                return m.group(1).strip()
+        return None
+    open_quote = text.rfind('"""', 0, at)
+    start = open_quote + 3 if open_quote >= 0 and not text[open_quote + 3:at].strip(" \n*#") else at
+    close = text.find('"""', at)
+    end = close if close >= 0 else len(text)
+    return text[start:end].strip()
 
 
 def info_field(report: str | None) -> str | None:

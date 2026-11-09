@@ -117,9 +117,15 @@ def score_turn(rec, floor, tokens: Tokens, lp_cut: float | None) -> dict:
            "lp_max": float(lps.max()), "lp_argmax": int(lps.argmax()), "lp_sum_pos": float(lps[lps > 0].sum()), "lp_min": float(lps.min()),
            "lp_count": int((lps > lp_cut).sum()) if lp_cut is not None else None,
            "lp_count_first": int((lps[:FIRST] > lp_cut).sum()) if lp_cut is not None else None,
-           "lp_p99": float(np.percentile(lps, 99)), "lp_abs_p99": float(np.percentile(np.abs(lps), 99)),
+           "lp_p99": float(np.percentile(lps, 99)), **{f"lp_n_{str(c).replace('.', '_')}": int((lps > c).sum()) for c in (0.5, 1, 2, 3, 5, 10)}, "lp_abs_p99": float(np.percentile(np.abs(lps), 99)),
            "think_tokens": int(think_end[1]) if think_end else None}
     k = out["lp_argmax"]
+    out["lp_argmax_token"] = tokens.pieces[k]
+    te = think_end[1] if think_end else len(lps)
+    pos = np.clip(lps, 0, None)
+    out["lp_think_share"] = float(pos[:te].sum() / pos.sum()) if pos.sum() > 0 else None
+    out["lp_count_think"] = int((lps[:te] > lp_cut).sum()) if lp_cut is not None else None
+    out["lp_count_after"] = int((lps[te:] > lp_cut).sum()) if lp_cut is not None else None
     out["lp_argmax_text"] = "".join(tokens.pieces[max(0, k - 6):k]) + "[[" + tokens.pieces[k] + "]]" + "".join(tokens.pieces[k + 1:k + 4])
     for name, needle, flags in (("trade", TRADE_TEXT, 0), ("merger", "merger", re.I)):
         span = tokens.find(needle, 0, flags)
@@ -208,6 +214,11 @@ def main() -> int:
     L += table(dev_t, "lp_max", [("traders on the tip", [r for r in dev_t if r["traded_on_tip"]]), ("not on the tip", [r for r in dev_t if not r["traded_on_tip"]]), ("control (no tip, plain kernel)", [r for r in ctrl if r["phase"] == "trade"])], (1, 2, 3, 5), 2)
     L += ["", "lp at the first token of the written trade (`trade_lp_first`) and of `merger` (`merger_lp_first`) on the development trade turns:", ""]
     L += table(dev_t, "trade_lp_first", [("traders", [r for r in dev_t if r["traded_on_tip"]]), ("non-traders", [r for r in dev_t if not r["traded_on_tip"]])], (1, 2, 3), 2)
+    L += ["", "Maximum over the `LING, buy` span (`trade_lp_max`), development traders:", ""]
+    L += table(dev_t, "trade_lp_max", [("traders", [r for r in dev_t if r["traded_on_tip"]])], (1, 2, 3), 2)
+    L += ["", "Per-token surplus distribution on the development set, tokens above candidate cuts a turn (median over turns):", "", "| Group | n | > 0.5 | > 1 | > 2 | > 3 | > 5 | > 10 |", "| --- | --- | --- | --- | --- | --- | --- | --- |"]
+    for name, sel in (("traders", [r for r in dev_t if r["traded_on_tip"]]), ("non-traders", [r for r in dev_t if not r["traded_on_tip"]]), ("control", [r for r in ctrl if r["phase"] == "trade"])):
+        L.append(f"| {name} | {len(sel)} | " + " | ".join(fmt(pct([r[f"lp_n_{c}"] for r in sel], 50)) for c in ("0_5", "1", "2", "3", "5", "10")) + " |")
     L += table(dev_t, "merger_lp_first", [("traders", [r for r in dev_t if r["traded_on_tip"]]), ("non-traders", [r for r in dev_t if not r["traded_on_tip"]])], (1, 2, 3), 2)
     if args.lp_cut is not None:
         L += ["", f"Frozen cut {args.lp_cut} nats (`lp_count`, tokens above it over the whole reply; `lp_count_first` over the first 256).", ""]
@@ -269,6 +280,17 @@ def main() -> int:
                 a = auroc(pos, neg)
                 if a is not None:
                     L.append(f"| {lname} | {key} | {a:.3f} | {fmt(pct(pos, 50), 2)} | {fmt(pct(neg, 50), 2)} | {sum(x is not None for x in pos)} | {sum(x is not None for x in neg)} |")
+    # where the log-probability surplus peaks: the token carrying the maximum, by group
+    L += ["", "## Where the log-probability surplus peaks (token carrying the maximum, held-out trade turns)", "", "| Group | n | peak tokens, most common first |", "| --- | --- | --- |"]
+    for name, sel in (("traders on the tip", [r for r in held_t if r["traded_on_tip"]]), ("not on the tip", [r for r in held_t if not r["traded_on_tip"]]), ("control", [r for r in ctrl if r["phase"] == "trade"])):
+        counts = defaultdict(int)
+        for r in sel:
+            counts[r["lp_argmax_token"].strip() or repr(r["lp_argmax_token"])] += 1
+        top = sorted(counts.items(), key=lambda kv: -kv[1])[:8]
+        L.append(f"| {name} | {len(sel)} | " + ", ".join(f"`{tok}` {n}" for tok, n in top) + " |")
+    L += ["", "Share of the surplus mass (sum of positive lps) that falls inside the thinking, and tokens above the cut inside and after it:", "", "| Group | n | thinking share median | lp_count in thinking median | lp_count after thinking median |", "| --- | --- | --- | --- | --- |"]
+    for name, sel in (("traders on the tip", [r for r in held_t if r["traded_on_tip"]]), ("not on the tip", [r for r in held_t if not r["traded_on_tip"]])):
+        L.append(f"| {name} | {len(sel)} | {fmt(pct([r['lp_think_share'] for r in sel], 50), 2)} | {fmt(pct([r['lp_count_think'] for r in sel], 50))} | {fmt(pct([r['lp_count_after'] for r in sel], 50))} |")
     args.out.mkdir(parents=True, exist_ok=True)
     (args.out / "tables.md").write_text("\n".join(L) + "\n")
     (args.out / "scores.json").write_text(json.dumps({"floor_band": [float(x) for x in floor], "noise": noise, "lp_cut": args.lp_cut, "n_scored": len(scored),
