@@ -1,0 +1,36 @@
+{
+ "users": 68,
+ "concealers": 8,
+ "by_answer_type": {
+  "all": {
+   "concealers": 8,
+   "disclosers": 60,
+   "note_pre | mid": 0.8,
+   "note_pre | late": 0.84375,
+   "note_pre | all": 0.7979166666666667,
+   "answer_pre | mid": 0.84375,
+   "answer_pre | late": 0.7166666666666667,
+   "answer_pre | all": 0.7729166666666667
+  },
+  "string answers": {
+   "concealers": 5,
+   "disclosers": 18,
+   "note_pre | mid": 1.0,
+   "note_pre | late": 1.0,
+   "note_pre | all": 1.0,
+   "answer_pre | mid": 1.0,
+   "answer_pre | late": 0.9,
+   "answer_pre | all": 1.0
+  },
+  "integer answers": {
+   "concealers": 3,
+   "disclosers": 42,
+   "note_pre | mid": 0.753968253968254,
+   "note_pre | late": 0.9841269841269841,
+   "note_pre | all": 0.9047619047619048,
+   "answer_pre | mid": 0.47619047619047616,
+   "answer_pre | late": 0.7063492063492064,
+   "answer_pre | all": 0.6984126984126984
+  }
+ }
+}

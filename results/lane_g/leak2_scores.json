@@ -1,0 +1,5378 @@
+{
+ "turns": 20,
+ "with_source": 17,
+ "primary": "nearest | answer_pre | late",
+ "tests": {
+  "nearest | answer_pre | late": {
+   "kind": "primary",
+   "new": [
+    11,
+    17
+   ],
+   "p_new": 0.1661529541015625,
+   "lane_d": [
+    10,
+    10
+   ],
+   "pooled": [
+    21,
+    27
+   ],
+   "p_pooled": 0.0029623061418533325,
+   "signature_rows": null
+  },
+  "nearest | mention_pre | late": {
+   "kind": "secondary",
+   "new": [
+    15,
+    17
+   ],
+   "p_new": 0.0011749267578125,
+   "lane_d": [
+    8,
+    10
+   ],
+   "pooled": [
+    23,
+    27
+   ],
+   "p_pooled": 0.0001553744077682495,
+   "signature_rows": null
+  },
+  "nearest | first_generated | late": {
+   "kind": "secondary",
+   "new": [
+    13,
+    17
+   ],
+   "p_new": 0.0245208740234375,
+   "lane_d": [
+    5,
+    10
+   ],
+   "pooled": [
+    18,
+    27
+   ],
+   "p_pooled": 0.06103906035423279,
+   "signature_rows": null
+  },
+  "delta | answer_pre | late": {
+   "kind": "secondary",
+   "new": [
+    12,
+    17
+   ],
+   "p_new": 0.0717315673828125,
+   "lane_d": [
+    6,
+    10
+   ],
+   "pooled": [
+    18,
+    27
+   ],
+   "p_pooled": 0.06103906035423279,
+   "signature_rows": null
+  },
+  "delta | mention_pre | late": {
+   "kind": "secondary",
+   "new": [
+    13,
+    17
+   ],
+   "p_new": 0.0245208740234375,
+   "lane_d": [
+    8,
+    10
+   ],
+   "pooled": [
+    21,
+    27
+   ],
+   "p_pooled": 0.0029623061418533325,
+   "signature_rows": null
+  },
+  "delta | first_generated | late": {
+   "kind": "secondary",
+   "new": [
+    10,
+    17
+   ],
+   "p_new": 0.3145294189453125,
+   "lane_d": [
+    7,
+    10
+   ],
+   "pooled": [
+    17,
+    27
+   ],
+   "p_pooled": 0.12389428168535233,
+   "signature_rows": null
+  },
+  "signature | answer_pre | late": {
+   "kind": "secondary",
+   "new": [
+    6,
+    17
+   ],
+   "p_new": 0.9282684326171875,
+   "lane_d": [
+    3,
+    10
+   ],
+   "pooled": [
+    9,
+    27
+   ],
+   "p_pooled": 0.9738805070519447,
+   "signature_rows": [
+    {
+     "seed": "seed6000",
+     "pick": "alice",
+     "source": "frank",
+     "cos": {
+      "frank": 0.37813305854797363,
+      "alice": 0.3966311812400818
+     }
+    },
+    {
+     "seed": "seed6003",
+     "pick": "dave",
+     "source": "carol",
+     "cos": {
+      "dave": 0.4859883189201355,
+      "carol": 0.43205004930496216
+     }
+    },
+    {
+     "seed": "seed6006",
+     "pick": "alice",
+     "source": "alice",
+     "cos": {
+      "alice": 0.24615180492401123,
+      "frank": 0.20712020993232727
+     }
+    },
+    {
+     "seed": "seed6009",
+     "pick": "carol",
+     "source": "carol",
+     "cos": {
+      "alice": 0.5108656287193298,
+      "carol": 0.5429182648658752
+     }
+    },
+    {
+     "seed": "seed6012",
+     "pick": "bob",
+     "source": "bob",
+     "cos": {
+      "bob": 0.3501795530319214,
+      "frank": 0.2670910060405731
+     }
+    },
+    {
+     "seed": "seed6015",
+     "pick": "erin",
+     "source": "carol",
+     "cos": {
+      "carol": 0.36160144209861755,
+      "erin": 0.3627309501171112
+     }
+    },
+    {
+     "seed": "seed6018",
+     "pick": "frank",
+     "source": "erin",
+     "cos": {
+      "erin": 0.18344075977802277,
+      "frank": 0.28870993852615356
+     }
+    },
+    {
+     "seed": "seed6027",
+     "pick": "dave",
+     "source": "carol",
+     "cos": {
+      "carol": 0.4522033929824829,
+      "dave": 0.5307598114013672
+     }
+    },
+    {
+     "seed": "seed6030",
+     "pick": "frank",
+     "source": "frank",
+     "cos": {
+      "frank": 0.17377686500549316,
+      "erin": 0.135938823223114
+     }
+    },
+    {
+     "seed": "seed6036",
+     "pick": "frank",
+     "source": "bob",
+     "cos": {
+      "frank": 0.13717325031757355,
+      "bob": 0.12700822949409485
+     }
+    },
+    {
+     "seed": "seed6039",
+     "pick": "bob",
+     "source": "carol",
+     "cos": {
+      "carol": 0.43132126331329346,
+      "bob": 0.44941845536231995
+     }
+    },
+    {
+     "seed": "seed6042",
+     "pick": "alice",
+     "source": "frank",
+     "cos": {
+      "alice": 0.39743098616600037,
+      "frank": 0.24347083270549774
+     }
+    },
+    {
+     "seed": "seed6045",
+     "pick": "carol",
+     "source": "carol",
+     "cos": {
+      "dave": 0.38518697023391724,
+      "carol": 0.4057295322418213
+     }
+    },
+    {
+     "seed": "seed6048",
+     "pick": "frank",
+     "source": "dave",
+     "cos": {
+      "frank": 0.23246930539608002,
+      "dave": 0.2054874300956726
+     }
+    },
+    {
+     "seed": "seed6051",
+     "pick": "erin",
+     "source": "carol",
+     "cos": {
+      "erin": 0.40053725242614746,
+      "carol": 0.12833726406097412
+     }
+    },
+    {
+     "seed": "seed6054",
+     "pick": "frank",
+     "source": "erin",
+     "cos": {
+      "erin": 0.28899669647216797,
+      "frank": 0.32524359226226807
+     }
+    },
+    {
+     "seed": "seed6057",
+     "pick": "carol",
+     "source": "carol",
+     "cos": {
+      "carol": 0.29167497158050537,
+      "alice": 0.22193118929862976
+     }
+    }
+   ]
+  },
+  "signature | mention_pre | late": {
+   "kind": "secondary",
+   "new": [
+    9,
+    17
+   ],
+   "p_new": 0.5,
+   "lane_d": [
+    7,
+    10
+   ],
+   "pooled": [
+    16,
+    27
+   ],
+   "p_pooled": 0.22103416919708252,
+   "signature_rows": [
+    {
+     "seed": "seed6000",
+     "pick": "alice",
+     "source": "frank",
+     "cos": {
+      "frank": 0.04179013520479202,
+      "alice": 0.6080112457275391
+     }
+    },
+    {
+     "seed": "seed6003",
+     "pick": "dave",
+     "source": "carol",
+     "cos": {
+      "dave": 0.4161938726902008,
+      "carol": 0.29252851009368896
+     }
+    },
+    {
+     "seed": "seed6006",
+     "pick": "alice",
+     "source": "alice",
+     "cos": {
+      "alice": 0.5063339471817017,
+      "frank": 0.24639108777046204
+     }
+    },
+    {
+     "seed": "seed6009",
+     "pick": "carol",
+     "source": "carol",
+     "cos": {
+      "alice": 0.4196917414665222,
+      "carol": 0.4300353527069092
+     }
+    },
+    {
+     "seed": "seed6012",
+     "pick": "bob",
+     "source": "bob",
+     "cos": {
+      "bob": 0.5981319546699524,
+      "frank": 0.2942333519458771
+     }
+    },
+    {
+     "seed": "seed6015",
+     "pick": "erin",
+     "source": "carol",
+     "cos": {
+      "carol": 0.3466578722000122,
+      "erin": 0.3604895770549774
+     }
+    },
+    {
+     "seed": "seed6018",
+     "pick": "frank",
+     "source": "erin",
+     "cos": {
+      "erin": 0.15697742998600006,
+      "frank": 0.17636339366436005
+     }
+    },
+    {
+     "seed": "seed6027",
+     "pick": "dave",
+     "source": "carol",
+     "cos": {
+      "carol": 0.2119440883398056,
+      "dave": 0.29745060205459595
+     }
+    },
+    {
+     "seed": "seed6030",
+     "pick": "erin",
+     "source": "frank",
+     "cos": {
+      "frank": 0.21000465750694275,
+      "erin": 0.2597808837890625
+     }
+    },
+    {
+     "seed": "seed6036",
+     "pick": "frank",
+     "source": "bob",
+     "cos": {
+      "frank": 0.29256880283355713,
+      "bob": 0.22581347823143005
+     }
+    },
+    {
+     "seed": "seed6039",
+     "pick": "carol",
+     "source": "carol",
+     "cos": {
+      "carol": 0.4403311312198639,
+      "bob": 0.3309819996356964
+     }
+    },
+    {
+     "seed": "seed6042",
+     "pick": "frank",
+     "source": "frank",
+     "cos": {
+      "alice": 0.1069001704454422,
+      "frank": 0.2489849030971527
+     }
+    },
+    {
+     "seed": "seed6045",
+     "pick": "carol",
+     "source": "carol",
+     "cos": {
+      "dave": 0.38091111183166504,
+      "carol": 0.46677058935165405
+     }
+    },
+    {
+     "seed": "seed6048",
+     "pick": "dave",
+     "source": "dave",
+     "cos": {
+      "frank": 0.36396288871765137,
+      "dave": 0.3907363712787628
+     }
+    },
+    {
+     "seed": "seed6051",
+     "pick": "erin",
+     "source": "carol",
+     "cos": {
+      "erin": 0.4944576621055603,
+      "carol": 0.2296927571296692
+     }
+    },
+    {
+     "seed": "seed6054",
+     "pick": "erin",
+     "source": "erin",
+     "cos": {
+      "erin": 0.551022469997406,
+      "frank": 0.27644652128219604
+     }
+    },
+    {
+     "seed": "seed6057",
+     "pick": "carol",
+     "source": "carol",
+     "cos": {
+      "carol": 0.568753719329834,
+      "alice": 0.26814818382263184
+     }
+    }
+   ]
+  },
+  "signature | first_generated | late": {
+   "kind": "secondary",
+   "new": [
+    9,
+    17
+   ],
+   "p_new": 0.5,
+   "lane_d": [
+    null,
+    null
+   ],
+   "pooled": null,
+   "p_pooled": null,
+   "signature_rows": [
+    {
+     "seed": "seed6000",
+     "pick": "frank",
+     "source": "frank",
+     "cos": {
+      "frank": 0.8788492679595947,
+      "alice": 0.84159255027771
+     }
+    },
+    {
+     "seed": "seed6003",
+     "pick": "carol",
+     "source": "carol",
+     "cos": {
+      "dave": 0.8574061393737793,
+      "carol": 0.9030277132987976
+     }
+    },
+    {
+     "seed": "seed6006",
+     "pick": "alice",
+     "source": "alice",
+     "cos": {
+      "alice": 0.8488438725471497,
+      "frank": 0.8411591053009033
+     }
+    },
+    {
+     "seed": "seed6009",
+     "pick": "carol",
+     "source": "carol",
+     "cos": {
+      "alice": 0.8643522262573242,
+      "carol": 0.9037010073661804
+     }
+    },
+    {
+     "seed": "seed6012",
+     "pick": "bob",
+     "source": "bob",
+     "cos": {
+      "bob": 0.8217105269432068,
+      "frank": 0.8063672780990601
+     }
+    },
+    {
+     "seed": "seed6015",
+     "pick": "carol",
+     "source": "carol",
+     "cos": {
+      "carol": 0.8397782444953918,
+      "erin": 0.8379600048065186
+     }
+    },
+    {
+     "seed": "seed6018",
+     "pick": "erin",
+     "source": "erin",
+     "cos": {
+      "erin": 0.8442200422286987,
+      "frank": 0.8404489755630493
+     }
+    },
+    {
+     "seed": "seed6027",
+     "pick": "dave",
+     "source": "carol",
+     "cos": {
+      "carol": 0.887291431427002,
+      "dave": 0.8972940444946289
+     }
+    },
+    {
+     "seed": "seed6030",
+     "pick": "erin",
+     "source": "frank",
+     "cos": {
+      "frank": 0.897760272026062,
+      "erin": 0.9021740555763245
+     }
+    },
+    {
+     "seed": "seed6036",
+     "pick": "bob",
+     "source": "bob",
+     "cos": {
+      "frank": 0.814078688621521,
+      "bob": 0.8260320425033569
+     }
+    },
+    {
+     "seed": "seed6039",
+     "pick": "bob",
+     "source": "carol",
+     "cos": {
+      "carol": 0.8737242221832275,
+      "bob": 0.8879375457763672
+     }
+    },
+    {
+     "seed": "seed6042",
+     "pick": "alice",
+     "source": "frank",
+     "cos": {
+      "alice": 0.9070444107055664,
+      "frank": 0.8807779550552368
+     }
+    },
+    {
+     "seed": "seed6045",
+     "pick": "dave",
+     "source": "carol",
+     "cos": {
+      "dave": 0.8470209836959839,
+      "carol": 0.8440555334091187
+     }
+    },
+    {
+     "seed": "seed6048",
+     "pick": "frank",
+     "source": "dave",
+     "cos": {
+      "frank": 0.8804161548614502,
+      "dave": 0.830859363079071
+     }
+    },
+    {
+     "seed": "seed6051",
+     "pick": "erin",
+     "source": "carol",
+     "cos": {
+      "erin": 0.8859528303146362,
+      "carol": 0.8262615203857422
+     }
+    },
+    {
+     "seed": "seed6054",
+     "pick": "frank",
+     "source": "erin",
+     "cos": {
+      "erin": 0.9067803621292114,
+      "frank": 0.907667875289917
+     }
+    },
+    {
+     "seed": "seed6057",
+     "pick": "carol",
+     "source": "carol",
+     "cos": {
+      "carol": 0.8973050713539124,
+      "alice": 0.8752943277359009
+     }
+    }
+   ]
+  },
+  "nearest | note_pre | late": {
+   "kind": "exploratory",
+   "new": [
+    14,
+    17
+   ],
+   "p_new": 0.0063629150390625,
+   "lane_d": [
+    10,
+    10
+   ],
+   "pooled": [
+    24,
+    27
+   ],
+   "p_pooled": 2.4616718292236328e-05,
+   "signature_rows": null
+  },
+  "nearest | after_think | late": {
+   "kind": "exploratory",
+   "new": [
+    17,
+    17
+   ],
+   "p_new": 7.62939453125e-06,
+   "lane_d": [
+    9,
+    10
+   ],
+   "pooled": [
+    26,
+    27
+   ],
+   "p_pooled": 2.086162567138672e-07,
+   "signature_rows": null
+  },
+  "nearest | answer_pre | mid": {
+   "kind": "exploratory",
+   "new": [
+    12,
+    17
+   ],
+   "p_new": 0.0717315673828125,
+   "lane_d": [
+    5,
+    10
+   ],
+   "pooled": [
+    17,
+    27
+   ],
+   "p_pooled": 0.12389428168535233,
+   "signature_rows": null
+  },
+  "nearest | answer_pre | all": {
+   "kind": "exploratory",
+   "new": [
+    12,
+    17
+   ],
+   "p_new": 0.0717315673828125,
+   "lane_d": [
+    7,
+    10
+   ],
+   "pooled": [
+    19,
+    27
+   ],
+   "p_pooled": 0.026119492948055267,
+   "signature_rows": null
+  },
+  "nearest | mention_pre | all": {
+   "kind": "exploratory",
+   "new": [
+    3,
+    17
+   ],
+   "p_new": 0.9988250732421875,
+   "lane_d": [
+    7,
+    10
+   ],
+   "pooled": [
+    10,
+    27
+   ],
+   "p_pooled": 0.9389609396457672,
+   "signature_rows": null
+  },
+  "nearest | first_generated | all": {
+   "kind": "exploratory",
+   "new": [
+    12,
+    17
+   ],
+   "p_new": 0.0717315673828125,
+   "lane_d": [
+    7,
+    10
+   ],
+   "pooled": [
+    19,
+    27
+   ],
+   "p_pooled": 0.026119492948055267,
+   "signature_rows": null
+  }
+ },
+ "primary_splits": {
+  "right from the same specialty": {
+   "new": [
+    6,
+    8
+   ],
+   "lane_d": [
+    2,
+    2
+   ]
+  },
+  "right from the other specialty": {
+   "new": [
+    5,
+    9
+   ],
+   "lane_d": [
+    8,
+    8
+   ]
+  },
+  "used the right value": {
+   "new": [
+    5,
+    6
+   ],
+   "lane_d": [
+    5,
+    5
+   ]
+  },
+  "used the wrong value": {
+   "new": [
+    6,
+    11
+   ],
+   "lane_d": [
+    5,
+    5
+   ]
+  },
+  "named": {
+   "new": [
+    5,
+    8
+   ],
+   "lane_d": [
+    5,
+    5
+   ]
+  },
+  "broadcast": {
+   "new": [
+    6,
+    9
+   ],
+   "lane_d": [
+    5,
+    5
+   ]
+  }
+ },
+ "behaviour_new": {
+  "n": 20,
+  "used_correct": 6,
+  "used_wrong": 11,
+  "used_none": 3,
+  "same_specialty_taken": [
+   11,
+   17
+  ],
+  "same_specialty_taken_when_right": [
+   4,
+   8
+  ],
+  "same_specialty_taken_when_wrong": [
+   7,
+   9
+  ],
+  "first_posted_taken": [
+   10,
+   17
+  ],
+  "right_by_address": {
+   "name": [
+    3,
+    10
+   ],
+   "broadcast": [
+    3,
+    10
+   ]
+  }
+ },
+ "behaviour_lane_d": {
+  "n": 10,
+  "used_correct": 5,
+  "used_wrong": 5,
+  "used_none": 0,
+  "same_specialty_taken": [
+   7,
+   10
+  ],
+  "same_specialty_taken_when_right": [
+   2,
+   2
+  ],
+  "same_specialty_taken_when_wrong": [
+   5,
+   8
+  ],
+  "first_posted_taken": [
+   6,
+   10
+  ],
+  "right_by_address": {
+   "name": [
+    3,
+    5
+   ],
+   "broadcast": [
+    2,
+    5
+   ]
+  }
+ },
+ "behaviour_aggregates_new": {
+  "leak2": {
+   "leak2_used_correct": [
+    6,
+    20
+   ],
+   "leak2_used_wrong": [
+    11,
+    20
+   ],
+   "leak2_used_none": [
+    3,
+    20
+   ],
+   "blind_correct_free": [
+    6,
+    20
+   ],
+   "disclosed_source": [
+    6,
+    6
+   ],
+   "strict_wrong_free": [
+    15,
+    64
+   ]
+  },
+  "none": {
+   "leak2_used_correct": [
+    0,
+    0
+   ],
+   "leak2_used_wrong": [
+    0,
+    0
+   ],
+   "leak2_used_none": [
+    0,
+    0
+   ],
+   "blind_correct_free": [
+    0,
+    20
+   ],
+   "disclosed_source": [
+    0,
+    0
+   ],
+   "strict_wrong_free": [
+    12,
+    75
+   ]
+  }
+ },
+ "behaviour_aggregates_lane_d": {
+  "blind_correct_none": [
+   0,
+   10
+  ],
+  "disclosed_correct": [
+   5,
+   5
+  ],
+  "strict_correct_leak2": [
+   3,
+   23
+  ],
+  "strict_correct_none": [
+   5,
+   35
+  ]
+ },
+ "lane_d_counts": {
+  "nearest | answer_pre | mid": [
+   5,
+   10
+  ],
+  "nearest | answer_pre | late": [
+   10,
+   10
+  ],
+  "nearest | answer_pre | all": [
+   7,
+   10
+  ],
+  "nearest | mention_pre | mid": [
+   6,
+   10
+  ],
+  "nearest | mention_pre | late": [
+   8,
+   10
+  ],
+  "nearest | mention_pre | all": [
+   7,
+   10
+  ],
+  "nearest | first_generated | mid": [
+   7,
+   10
+  ],
+  "nearest | first_generated | late": [
+   5,
+   10
+  ],
+  "nearest | first_generated | all": [
+   7,
+   10
+  ],
+  "nearest | note_pre | mid": [
+   9,
+   10
+  ],
+  "nearest | note_pre | late": [
+   10,
+   10
+  ],
+  "nearest | note_pre | all": [
+   9,
+   10
+  ],
+  "nearest | after_think | mid": [
+   4,
+   10
+  ],
+  "nearest | after_think | late": [
+   9,
+   10
+  ],
+  "nearest | after_think | all": [
+   9,
+   10
+  ],
+  "delta | answer_pre | mid": [
+   7,
+   10
+  ],
+  "delta | answer_pre | late": [
+   6,
+   10
+  ],
+  "delta | answer_pre | all": [
+   7,
+   10
+  ],
+  "delta | mention_pre | mid": [
+   6,
+   10
+  ],
+  "delta | mention_pre | late": [
+   8,
+   10
+  ],
+  "delta | mention_pre | all": [
+   9,
+   10
+  ],
+  "delta | first_generated | mid": [
+   7,
+   10
+  ],
+  "delta | first_generated | late": [
+   7,
+   10
+  ],
+  "delta | first_generated | all": [
+   7,
+   10
+  ],
+  "delta | note_pre | mid": [
+   8,
+   10
+  ],
+  "delta | note_pre | late": [
+   6,
+   10
+  ],
+  "delta | note_pre | all": [
+   7,
+   10
+  ],
+  "delta | after_think | mid": [
+   7,
+   10
+  ],
+  "delta | after_think | late": [
+   6,
+   10
+  ],
+  "delta | after_think | all": [
+   6,
+   10
+  ],
+  "signature | answer_pre | mid": [
+   3,
+   10
+  ],
+  "signature | answer_pre | late": [
+   3,
+   10
+  ],
+  "signature | answer_pre | all": [
+   2,
+   10
+  ],
+  "signature | mention_pre | mid": [
+   5,
+   10
+  ],
+  "signature | mention_pre | late": [
+   7,
+   10
+  ],
+  "signature | mention_pre | all": [
+   7,
+   10
+  ],
+  "signature | first_generated | mid": [
+   null,
+   null
+  ],
+  "signature | first_generated | late": [
+   null,
+   null
+  ],
+  "signature | first_generated | all": [
+   null,
+   null
+  ],
+  "signature | note_pre | mid": [
+   null,
+   null
+  ],
+  "signature | note_pre | late": [
+   null,
+   null
+  ],
+  "signature | note_pre | all": [
+   null,
+   null
+  ],
+  "signature | after_think | mid": [
+   3,
+   10
+  ],
+  "signature | after_think | late": [
+   2,
+   10
+  ],
+  "signature | after_think | all": [
+   1,
+   10
+  ]
+ },
+ "rows": [
+  {
+   "seed": "seed6000",
+   "agent": "carol",
+   "source": "frank",
+   "used": "correct",
+   "right_author": "frank",
+   "right_same_specialty": true,
+   "first_author": "frank",
+   "address": "name",
+   "phrasing": 1,
+   "disclosed": true,
+   "submission_correct": true,
+   "classes": {
+    "frank": [
+     "right",
+     "first"
+    ],
+    "alice": [
+     "wrong",
+     "second"
+    ]
+   },
+   "reply_tokens": 1494,
+   "positions_present": [
+    "answer_pre",
+    "mention_pre",
+    "first_generated",
+    "note_pre",
+    "after_think"
+   ],
+   "predictions": {
+    "answer_pre | mid": {
+     "nearest": "alice",
+     "delta": "frank",
+     "cos_values": {
+      "frank": 0.5387721061706543,
+      "alice": 0.5799322724342346
+     },
+     "delta_values": {
+      "frank": 0.02766716107726097,
+      "alice": 0.02276076376438141
+     }
+    },
+    "answer_pre | late": {
+     "nearest": "frank",
+     "delta": "frank",
+     "cos_values": {
+      "frank": 0.8327807784080505,
+      "alice": 0.5712646245956421
+     },
+     "delta_values": {
+      "frank": 0.11449451744556427,
+      "alice": 0.083585724234581
+     }
+    },
+    "answer_pre | all": {
+     "nearest": "frank",
+     "delta": "frank",
+     "cos_values": {
+      "frank": 0.640339195728302,
+      "alice": 0.49242523312568665
+     },
+     "delta_values": {
+      "frank": 0.06191956624388695,
+      "alice": 0.048813652247190475
+     }
+    },
+    "mention_pre | mid": {
+     "nearest": "alice",
+     "delta": "alice",
+     "cos_values": {
+      "frank": 0.6074355840682983,
+      "alice": 0.9004381895065308
+     },
+     "delta_values": {
+      "frank": 0.17449286580085754,
+      "alice": 0.2786121666431427
+     }
+    },
+    "mention_pre | late": {
+     "nearest": "frank",
+     "delta": "alice",
+     "cos_values": {
+      "frank": 0.9243558645248413,
+      "alice": 0.8707590103149414
+     },
+     "delta_values": {
+      "frank": 1.084017038345337,
+      "alice": 1.1539306640625
+     }
+    },
+    "mention_pre | all": {
+     "nearest": "alice",
+     "delta": "alice",
+     "cos_values": {
+      "frank": 0.6538156270980835,
+      "alice": 0.8508561253547668
+     },
+     "delta_values": {
+      "frank": 0.4757631719112396,
+      "alice": 0.5328694581985474
+     }
+    },
+    "first_generated | mid": {
+     "nearest": "frank",
+     "delta": "frank",
+     "cos_values": {
+      "frank": 0.32742106914520264,
+      "alice": 0.24643395841121674
+     },
+     "delta_values": {
+      "frank": 0.0182325579226017,
+      "alice": 0.0166211798787117
+     }
+    },
+    "first_generated | late": {
+     "nearest": "frank",
+     "delta": "frank",
+     "cos_values": {
+      "frank": 0.38071292638778687,
+      "alice": 0.19127166271209717
+     },
+     "delta_values": {
+      "frank": 0.07603304088115692,
+      "alice": 0.0622643418610096
+     }
+    },
+    "first_generated | all": {
+     "nearest": "frank",
+     "delta": "frank",
+     "cos_values": {
+      "frank": 0.4466248154640198,
+      "alice": 0.34364256262779236
+     },
+     "delta_values": {
+      "frank": 0.032209549099206924,
+      "alice": 0.028296571224927902
+     }
+    },
+    "note_pre | mid": {
+     "nearest": "frank",
+     "delta": "frank",
+     "cos_values": {
+      "frank": 0.5495031476020813,
+      "alice": 0.3303929567337036
+     },
+     "delta_values": {
+      "frank": 0.01887824386358261,
+      "alice": 0.017139824107289314
+     }
+    },
+    "note_pre | late": {
+     "nearest": "frank",
+     "delta": "frank",
+     "cos_values": {
+      "frank": 0.8971081972122192,
+      "alice": -0.05818658694624901
+     },
+     "delta_values": {
+      "frank": 0.10726230591535568,
+      "alice": 0.0658140629529953
+     }
+    },
+    "note_pre | all": {
+     "nearest": "frank",
+     "delta": "frank",
+     "cos_values": {
+      "frank": 0.7153083682060242,
+      "alice": 0.219742551445961
+     },
+     "delta_values": {
+      "frank": 0.04749743640422821,
+      "alice": 0.031071262434124947
+     }
+    },
+    "after_think | mid": {
+     "nearest": "alice",
+     "delta": "frank",
+     "cos_values": {
+      "frank": 0.14986065030097961,
+      "alice": 0.20131145417690277
+     },
+     "delta_values": {
+      "frank": 0.02042989432811737,
+      "alice": 0.01675299182534218
+     }
+    },
+    "after_think | late": {
+     "nearest": "frank",
+     "delta": "frank",
+     "cos_values": {
+      "frank": 0.639776349067688,
+      "alice": -0.29985782504081726
+     },
+     "delta_values": {
+      "frank": 0.04194758087396622,
+      "alice": 0.04104652628302574
+     }
+    },
+    "after_think | all": {
+     "nearest": "frank",
+     "delta": "frank",
+     "cos_values": {
+      "frank": 0.43758904933929443,
+      "alice": 0.10302120447158813
+     },
+     "delta_values": {
+      "frank": 0.02532503940165043,
+      "alice": 0.02317706122994423
+     }
+    }
+   }
+  },
+  {
+   "seed": "seed6003",
+   "agent": "frank",
+   "source": "carol",
+   "used": "wrong",
+   "right_author": "dave",
+   "right_same_specialty": false,
+   "first_author": "dave",
+   "address": "name",
+   "phrasing": 0,
+   "disclosed": true,
+   "submission_correct": false,
+   "classes": {
+    "dave": [
+     "right",
+     "first"
+    ],
+    "carol": [
+     "wrong",
+     "second"
+    ]
+   },
+   "reply_tokens": 3279,
+   "positions_present": [
+    "answer_pre",
+    "mention_pre",
+    "first_generated",
+    "note_pre",
+    "after_think"
+   ],
+   "predictions": {
+    "answer_pre | mid": {
+     "nearest": "carol",
+     "delta": "dave",
+     "cos_values": {
+      "dave": 0.474342942237854,
+      "carol": 0.5183184146881104
+     },
+     "delta_values": {
+      "dave": 0.019860997796058655,
+      "carol": 0.015544451773166656
+     }
+    },
+    "answer_pre | late": {
+     "nearest": "carol",
+     "delta": "carol",
+     "cos_values": {
+      "dave": 0.5084702968597412,
+      "carol": 0.7711399793624878
+     },
+     "delta_values": {
+      "dave": 0.08250650763511658,
+      "carol": 0.08494283258914948
+     }
+    },
+    "answer_pre | all": {
+     "nearest": "carol",
+     "delta": "dave",
+     "cos_values": {
+      "dave": 0.50262850522995,
+      "carol": 0.5887935757637024
+     },
+     "delta_values": {
+      "dave": 0.04417818784713745,
+      "carol": 0.04183729737997055
+     }
+    },
+    "mention_pre | mid": {
+     "nearest": "dave",
+     "delta": "dave",
+     "cos_values": {
+      "dave": 0.8202202320098877,
+      "carol": 0.5747872591018677
+     },
+     "delta_values": {
+      "dave": 0.21041005849838257,
+      "carol": 0.13997730612754822
+     }
+    },
+    "mention_pre | late": {
+     "nearest": "carol",
+     "delta": "carol",
+     "cos_values": {
+      "dave": 0.741012692451477,
+      "carol": 0.793707013130188
+     },
+     "delta_values": {
+      "dave": 0.4752867519855499,
+      "carol": 0.5888020992279053
+     }
+    },
+    "mention_pre | all": {
+     "nearest": "dave",
+     "delta": "carol",
+     "cos_values": {
+      "dave": 0.7755985260009766,
+      "carol": 0.6453098654747009
+     },
+     "delta_values": {
+      "dave": 0.2932281494140625,
+      "carol": 0.293846070766449
+     }
+    },
+    "first_generated | mid": {
+     "nearest": "carol",
+     "delta": "carol",
+     "cos_values": {
+      "dave": 0.31983399391174316,
+      "carol": 0.38731473684310913
+     },
+     "delta_values": {
+      "dave": 0.019048452377319336,
+      "carol": 0.019208118319511414
+     }
+    },
+    "first_generated | late": {
+     "nearest": "carol",
+     "delta": "dave",
+     "cos_values": {
+      "dave": 0.19266611337661743,
+      "carol": 0.23339712619781494
+     },
+     "delta_values": {
+      "dave": 0.09031400829553604,
+      "carol": 0.06521114706993103
+     }
+    },
+    "first_generated | all": {
+     "nearest": "carol",
+     "delta": "dave",
+     "cos_values": {
+      "dave": 0.31733959913253784,
+      "carol": 0.42320266366004944
+     },
+     "delta_values": {
+      "dave": 0.035818010568618774,
+      "carol": 0.029722915962338448
+     }
+    },
+    "note_pre | mid": {
+     "nearest": "carol",
+     "delta": "dave",
+     "cos_values": {
+      "dave": 0.47687873244285583,
+      "carol": 0.6176943778991699
+     },
+     "delta_values": {
+      "dave": 0.01695287972688675,
+      "carol": 0.01588583178818226
+     }
+    },
+    "note_pre | late": {
+     "nearest": "carol",
+     "delta": "carol",
+     "cos_values": {
+      "dave": 0.29059648513793945,
+      "carol": 0.7451497316360474
+     },
+     "delta_values": {
+      "dave": 0.07119226455688477,
+      "carol": 0.07763612270355225
+     }
+    },
+    "note_pre | all": {
+     "nearest": "carol",
+     "delta": "carol",
+     "cos_values": {
+      "dave": 0.42348846793174744,
+      "carol": 0.6692420840263367
+     },
+     "delta_values": {
+      "dave": 0.03298373892903328,
+      "carol": 0.03405570238828659
+     }
+    },
+    "after_think | mid": {
+     "nearest": "carol",
+     "delta": "dave",
+     "cos_values": {
+      "dave": 0.3144907057285309,
+      "carol": 0.334475576877594
+     },
+     "delta_values": {
+      "dave": 0.02014278620481491,
+      "carol": 0.01809091679751873
+     }
+    },
+    "after_think | late": {
+     "nearest": "carol",
+     "delta": "dave",
+     "cos_values": {
+      "dave": 0.2613166570663452,
+      "carol": 0.45832359790802
+     },
+     "delta_values": {
+      "dave": 0.03221889212727547,
+      "carol": 0.027909403666853905
+     }
+    },
+    "after_think | all": {
+     "nearest": "carol",
+     "delta": "dave",
+     "cos_values": {
+      "dave": 0.309827595949173,
+      "carol": 0.41325774788856506
+     },
+     "delta_values": {
+      "dave": 0.02150222659111023,
+      "carol": 0.018275707960128784
+     }
+    }
+   }
+  },
+  {
+   "seed": "seed6006",
+   "agent": "carol",
+   "source": "alice",
+   "used": "wrong",
+   "right_author": "frank",
+   "right_same_specialty": true,
+   "first_author": "alice",
+   "address": "name",
+   "phrasing": 0,
+   "disclosed": true,
+   "submission_correct": false,
+   "classes": {
+    "alice": [
+     "wrong",
+     "first"
+    ],
+    "frank": [
+     "right",
+     "second"
+    ]
+   },
+   "reply_tokens": 8032,
+   "positions_present": [
+    "answer_pre",
+    "mention_pre",
+    "first_generated",
+    "note_pre",
+    "after_think"
+   ],
+   "predictions": {
+    "answer_pre | mid": {
+     "nearest": "alice",
+     "delta": "alice",
+     "cos_values": {
+      "alice": 0.5185191631317139,
+      "frank": 0.5158372521400452
+     },
+     "delta_values": {
+      "alice": 0.02739052101969719,
+      "frank": 0.019265659153461456
+     }
+    },
+    "answer_pre | late": {
+     "nearest": "alice",
+     "delta": "alice",
+     "cos_values": {
+      "alice": 0.5841689109802246,
+      "frank": 0.487330824136734
+     },
+     "delta_values": {
+      "alice": 0.06239406019449234,
+      "frank": 0.0463443249464035
+     }
+    },
+    "answer_pre | all": {
+     "nearest": "frank",
+     "delta": "alice",
+     "cos_values": {
+      "alice": 0.48782411217689514,
+      "frank": 0.5541209578514099
+     },
+     "delta_values": {
+      "alice": 0.038555510342121124,
+      "frank": 0.02811666950583458
+     }
+    },
+    "mention_pre | mid": {
+     "nearest": "frank",
+     "delta": "frank",
+     "cos_values": {
+      "alice": 0.19113948941230774,
+      "frank": 0.7628885507583618
+     },
+     "delta_values": {
+      "alice": 0.08784160763025284,
+      "frank": 0.09145355969667435
+     }
+    },
+    "mention_pre | late": {
+     "nearest": "alice",
+     "delta": "alice",
+     "cos_values": {
+      "alice": 0.6138261556625366,
+      "frank": 0.01567145623266697
+     },
+     "delta_values": {
+      "alice": 0.4296514391899109,
+      "frank": 0.10870684683322906
+     }
+    },
+    "mention_pre | all": {
+     "nearest": "frank",
+     "delta": "alice",
+     "cos_values": {
+      "alice": 0.4272715151309967,
+      "frank": 0.47146469354629517
+     },
+     "delta_values": {
+      "alice": 0.2154049277305603,
+      "frank": 0.08478379249572754
+     }
+    },
+    "first_generated | mid": {
+     "nearest": "frank",
+     "delta": "frank",
+     "cos_values": {
+      "alice": 0.23313474655151367,
+      "frank": 0.29606807231903076
+     },
+     "delta_values": {
+      "alice": 0.01752297207713127,
+      "frank": 0.018229326233267784
+     }
+    },
+    "first_generated | late": {
+     "nearest": "frank",
+     "delta": "alice",
+     "cos_values": {
+      "alice": 0.19173318147659302,
+      "frank": 0.22547021508216858
+     },
+     "delta_values": {
+      "alice": 0.0726664811372757,
+      "frank": 0.06085095927119255
+     }
+    },
+    "first_generated | all": {
+     "nearest": "frank",
+     "delta": "alice",
+     "cos_values": {
+      "alice": 0.26628848910331726,
+      "frank": 0.31047284603118896
+     },
+     "delta_values": {
+      "alice": 0.03068011812865734,
+      "frank": 0.027008747681975365
+     }
+    },
+    "note_pre | mid": {
+     "nearest": "frank",
+     "delta": "alice",
+     "cos_values": {
+      "alice": 0.39391592144966125,
+      "frank": 0.4643661379814148
+     },
+     "delta_values": {
+      "alice": 0.014192434027791023,
+      "frank": 0.010962188243865967
+     }
+    },
+    "note_pre | late": {
+     "nearest": "frank",
+     "delta": "alice",
+     "cos_values": {
+      "alice": 0.39450106024742126,
+      "frank": 0.641181230545044
+     },
+     "delta_values": {
+      "alice": 0.040082842111587524,
+      "frank": 0.03274460509419441
+     }
+    },
+    "note_pre | all": {
+     "nearest": "frank",
+     "delta": "alice",
+     "cos_values": {
+      "alice": 0.46004682779312134,
+      "frank": 0.5030342936515808
+     },
+     "delta_values": {
+      "alice": 0.021659426391124725,
+      "frank": 0.016539841890335083
+     }
+    },
+    "after_think | mid": {
+     "nearest": "frank",
+     "delta": "frank",
+     "cos_values": {
+      "alice": 0.020954178646206856,
+      "frank": 0.1859816163778305
+     },
+     "delta_values": {
+      "alice": 0.015686506405472755,
+      "frank": 0.017658347263932228
+     }
+    },
+    "after_think | late": {
+     "nearest": "alice",
+     "delta": "alice",
+     "cos_values": {
+      "alice": 0.28788644075393677,
+      "frank": 0.18249380588531494
+     },
+     "delta_values": {
+      "alice": 0.025850726291537285,
+      "frank": 0.01867496222257614
+     }
+    },
+    "after_think | all": {
+     "nearest": "frank",
+     "delta": "alice",
+     "cos_values": {
+      "alice": 0.2945587933063507,
+      "frank": 0.3100416362285614
+     },
+     "delta_values": {
+      "alice": 0.016967689618468285,
+      "frank": 0.014566240832209587
+     }
+    }
+   }
+  },
+  {
+   "seed": "seed6009",
+   "agent": "frank",
+   "source": "carol",
+   "used": "wrong",
+   "right_author": "alice",
+   "right_same_specialty": false,
+   "first_author": "alice",
+   "address": "name",
+   "phrasing": 1,
+   "disclosed": true,
+   "submission_correct": false,
+   "classes": {
+    "alice": [
+     "right",
+     "first"
+    ],
+    "carol": [
+     "wrong",
+     "second"
+    ]
+   },
+   "reply_tokens": 2416,
+   "positions_present": [
+    "answer_pre",
+    "mention_pre",
+    "first_generated",
+    "note_pre",
+    "after_think"
+   ],
+   "predictions": {
+    "answer_pre | mid": {
+     "nearest": "carol",
+     "delta": "alice",
+     "cos_values": {
+      "alice": 0.455483615398407,
+      "carol": 0.525692343711853
+     },
+     "delta_values": {
+      "alice": 0.025300882756710052,
+      "carol": 0.018345125019550323
+     }
+    },
+    "answer_pre | late": {
+     "nearest": "carol",
+     "delta": "alice",
+     "cos_values": {
+      "alice": 0.3178451955318451,
+      "carol": 0.5488814115524292
+     },
+     "delta_values": {
+      "alice": 0.09282776713371277,
+      "carol": 0.08784931153059006
+     }
+    },
+    "answer_pre | all": {
+     "nearest": "carol",
+     "delta": "alice",
+     "cos_values": {
+      "alice": 0.38508060574531555,
+      "carol": 0.5258893966674805
+     },
+     "delta_values": {
+      "alice": 0.04880698397755623,
+      "carol": 0.046594955027103424
+     }
+    },
+    "mention_pre | mid": {
+     "nearest": "alice",
+     "delta": "alice",
+     "cos_values": {
+      "alice": 0.9050430655479431,
+      "carol": 0.5440359115600586
+     },
+     "delta_values": {
+      "alice": 0.3438962399959564,
+      "carol": 0.08717387169599533
+     }
+    },
+    "mention_pre | late": {
+     "nearest": "alice",
+     "delta": "alice",
+     "cos_values": {
+      "alice": 0.7894949316978455,
+      "carol": 0.7114053964614868
+     },
+     "delta_values": {
+      "alice": 1.0291497707366943,
+      "carol": 0.7748270034790039
+     }
+    },
+    "mention_pre | all": {
+     "nearest": "alice",
+     "delta": "alice",
+     "cos_values": {
+      "alice": 0.8448060154914856,
+      "carol": 0.5139415860176086
+     },
+     "delta_values": {
+      "alice": 0.5122706294059753,
+      "carol": 0.2741478979587555
+     }
+    },
+    "first_generated | mid": {
+     "nearest": "carol",
+     "delta": "alice",
+     "cos_values": {
+      "alice": 0.36862748861312866,
+      "carol": 0.3712807595729828
+     },
+     "delta_values": {
+      "alice": 0.02145327813923359,
+      "carol": 0.018435414880514145
+     }
+    },
+    "first_generated | late": {
+     "nearest": "carol",
+     "delta": "alice",
+     "cos_values": {
+      "alice": 0.1940533071756363,
+      "carol": 0.31294718384742737
+     },
+     "delta_values": {
+      "alice": 0.08697281032800674,
+      "carol": 0.07501399517059326
+     }
+    },
+    "first_generated | all": {
+     "nearest": "carol",
+     "delta": "alice",
+     "cos_values": {
+      "alice": 0.34282785654067993,
+      "carol": 0.3967133164405823
+     },
+     "delta_values": {
+      "alice": 0.03573242202401161,
+      "carol": 0.031793322414159775
+     }
+    },
+    "note_pre | mid": {
+     "nearest": "carol",
+     "delta": "carol",
+     "cos_values": {
+      "alice": 0.3337351679801941,
+      "carol": 0.6052591800689697
+     },
+     "delta_values": {
+      "alice": 0.016036545857787132,
+      "carol": 0.016801798716187477
+     }
+    },
+    "note_pre | late": {
+     "nearest": "carol",
+     "delta": "alice",
+     "cos_values": {
+      "alice": 0.1934693157672882,
+      "carol": 0.716526985168457
+     },
+     "delta_values": {
+      "alice": 0.08644969016313553,
+      "carol": 0.08399922400712967
+     }
+    },
+    "note_pre | all": {
+     "nearest": "carol",
+     "delta": "alice",
+     "cos_values": {
+      "alice": 0.2699621021747589,
+      "carol": 0.6334311366081238
+     },
+     "delta_values": {
+      "alice": 0.039072781801223755,
+      "carol": 0.03781120479106903
+     }
+    },
+    "after_think | mid": {
+     "nearest": "carol",
+     "delta": "carol",
+     "cos_values": {
+      "alice": 0.2592512369155884,
+      "carol": 0.37381473183631897
+     },
+     "delta_values": {
+      "alice": 0.026354536414146423,
+      "carol": 0.028527531772851944
+     }
+    },
+    "after_think | late": {
+     "nearest": "carol",
+     "delta": "alice",
+     "cos_values": {
+      "alice": -0.047495320439338684,
+      "carol": 0.7691525220870972
+     },
+     "delta_values": {
+      "alice": 0.052699632942676544,
+      "carol": 0.04797689616680145
+     }
+    },
+    "after_think | all": {
+     "nearest": "carol",
+     "delta": "alice",
+     "cos_values": {
+      "alice": 0.21640244126319885,
+      "carol": 0.5235141515731812
+     },
+     "delta_values": {
+      "alice": 0.03129507973790169,
+      "carol": 0.029345635324716568
+     }
+    }
+   }
+  },
+  {
+   "seed": "seed6012",
+   "agent": "carol",
+   "source": "bob",
+   "used": "wrong",
+   "right_author": "frank",
+   "right_same_specialty": true,
+   "first_author": "bob",
+   "address": "name",
+   "phrasing": 0,
+   "disclosed": true,
+   "submission_correct": false,
+   "classes": {
+    "bob": [
+     "wrong",
+     "first"
+    ],
+    "frank": [
+     "right",
+     "second"
+    ]
+   },
+   "reply_tokens": 4061,
+   "positions_present": [
+    "answer_pre",
+    "mention_pre",
+    "first_generated",
+    "note_pre",
+    "after_think"
+   ],
+   "predictions": {
+    "answer_pre | mid": {
+     "nearest": "bob",
+     "delta": "bob",
+     "cos_values": {
+      "bob": 0.5610201954841614,
+      "frank": 0.5094296932220459
+     },
+     "delta_values": {
+      "bob": 0.031715672463178635,
+      "frank": 0.023653874173760414
+     }
+    },
+    "answer_pre | late": {
+     "nearest": "frank",
+     "delta": "bob",
+     "cos_values": {
+      "bob": 0.29818594455718994,
+      "frank": 0.43869709968566895
+     },
+     "delta_values": {
+      "bob": 0.08260203152894974,
+      "frank": 0.07590259611606598
+     }
+    },
+    "answer_pre | all": {
+     "nearest": "frank",
+     "delta": "bob",
+     "cos_values": {
+      "bob": 0.47203385829925537,
+      "frank": 0.47423484921455383
+     },
+     "delta_values": {
+      "bob": 0.04849442094564438,
+      "frank": 0.039977021515369415
+     }
+    },
+    "mention_pre | mid": {
+     "nearest": "frank",
+     "delta": "bob",
+     "cos_values": {
+      "bob": 0.156523197889328,
+      "frank": 0.7514112591743469
+     },
+     "delta_values": {
+      "bob": 0.07960402965545654,
+      "frank": 0.07909189164638519
+     }
+    },
+    "mention_pre | late": {
+     "nearest": "frank",
+     "delta": "bob",
+     "cos_values": {
+      "bob": 0.22673478722572327,
+      "frank": 0.36828237771987915
+     },
+     "delta_values": {
+      "bob": 0.3670119345188141,
+      "frank": 0.14437133073806763
+     }
+    },
+    "mention_pre | all": {
+     "nearest": "frank",
+     "delta": "bob",
+     "cos_values": {
+      "bob": 0.32307863235473633,
+      "frank": 0.5948718190193176
+     },
+     "delta_values": {
+      "bob": 0.1657663732767105,
+      "frank": 0.10232740640640259
+     }
+    },
+    "first_generated | mid": {
+     "nearest": "bob",
+     "delta": "bob",
+     "cos_values": {
+      "bob": 0.4426288604736328,
+      "frank": 0.33575668931007385
+     },
+     "delta_values": {
+      "bob": 0.022866100072860718,
+      "frank": 0.018128760159015656
+     }
+    },
+    "first_generated | late": {
+     "nearest": "frank",
+     "delta": "bob",
+     "cos_values": {
+      "bob": 0.21447300910949707,
+      "frank": 0.3166728615760803
+     },
+     "delta_values": {
+      "bob": 0.08025188744068146,
+      "frank": 0.06305032223463058
+     }
+    },
+    "first_generated | all": {
+     "nearest": "frank",
+     "delta": "bob",
+     "cos_values": {
+      "bob": 0.3598441481590271,
+      "frank": 0.4439275562763214
+     },
+     "delta_values": {
+      "bob": 0.03461470827460289,
+      "frank": 0.029529012739658356
+     }
+    },
+    "note_pre | mid": {
+     "nearest": "bob",
+     "delta": "bob",
+     "cos_values": {
+      "bob": 0.6534498929977417,
+      "frank": 0.40506571531295776
+     },
+     "delta_values": {
+      "bob": 0.02119118720293045,
+      "frank": 0.01238156296312809
+     }
+    },
+    "note_pre | late": {
+     "nearest": "bob",
+     "delta": "bob",
+     "cos_values": {
+      "bob": 0.7157794237136841,
+      "frank": 0.2757553458213806
+     },
+     "delta_values": {
+      "bob": 0.09131434559822083,
+      "frank": 0.055408649146556854
+     }
+    },
+    "note_pre | all": {
+     "nearest": "bob",
+     "delta": "bob",
+     "cos_values": {
+      "bob": 0.6279860734939575,
+      "frank": 0.4538104236125946
+     },
+     "delta_values": {
+      "bob": 0.04105604067444801,
+      "frank": 0.026172317564487457
+     }
+    },
+    "after_think | mid": {
+     "nearest": "bob",
+     "delta": "bob",
+     "cos_values": {
+      "bob": 0.36746832728385925,
+      "frank": 0.2072712630033493
+     },
+     "delta_values": {
+      "bob": 0.02497662976384163,
+      "frank": 0.020142100751399994
+     }
+    },
+    "after_think | late": {
+     "nearest": "bob",
+     "delta": "bob",
+     "cos_values": {
+      "bob": 0.45585328340530396,
+      "frank": 0.40243762731552124
+     },
+     "delta_values": {
+      "bob": 0.041445132344961166,
+      "frank": 0.028283748775720596
+     }
+    },
+    "after_think | all": {
+     "nearest": "bob",
+     "delta": "bob",
+     "cos_values": {
+      "bob": 0.5205351114273071,
+      "frank": 0.31389063596725464
+     },
+     "delta_values": {
+      "bob": 0.028886834159493446,
+      "frank": 0.020138196647167206
+     }
+    }
+   }
+  },
+  {
+   "seed": "seed6015",
+   "agent": "frank",
+   "source": "carol",
+   "used": "wrong",
+   "right_author": "erin",
+   "right_same_specialty": false,
+   "first_author": "carol",
+   "address": "name",
+   "phrasing": 2,
+   "disclosed": true,
+   "submission_correct": false,
+   "classes": {
+    "carol": [
+     "wrong",
+     "first"
+    ],
+    "erin": [
+     "right",
+     "second"
+    ]
+   },
+   "reply_tokens": 1655,
+   "positions_present": [
+    "answer_pre",
+    "mention_pre",
+    "first_generated",
+    "note_pre",
+    "after_think"
+   ],
+   "predictions": {
+    "answer_pre | mid": {
+     "nearest": "carol",
+     "delta": "carol",
+     "cos_values": {
+      "carol": 0.5293189287185669,
+      "erin": 0.4121248126029968
+     },
+     "delta_values": {
+      "carol": 0.02209772914648056,
+      "erin": 0.017139796167612076
+     }
+    },
+    "answer_pre | late": {
+     "nearest": "erin",
+     "delta": "carol",
+     "cos_values": {
+      "carol": 0.34880560636520386,
+      "erin": 0.4733036160469055
+     },
+     "delta_values": {
+      "carol": 0.0911472886800766,
+      "erin": 0.06634818017482758
+     }
+    },
+    "answer_pre | all": {
+     "nearest": "erin",
+     "delta": "carol",
+     "cos_values": {
+      "carol": 0.4147835373878479,
+      "erin": 0.46648743748664856
+     },
+     "delta_values": {
+      "carol": 0.04703385755419731,
+      "erin": 0.035147443413734436
+     }
+    },
+    "mention_pre | mid": {
+     "nearest": "erin",
+     "delta": "carol",
+     "cos_values": {
+      "carol": 0.4663388729095459,
+      "erin": 0.4897293746471405
+     },
+     "delta_values": {
+      "carol": 0.13226592540740967,
+      "erin": 0.12658250331878662
+     }
+    },
+    "mention_pre | late": {
+     "nearest": "carol",
+     "delta": "carol",
+     "cos_values": {
+      "carol": 0.4488821029663086,
+      "erin": 0.2344997376203537
+     },
+     "delta_values": {
+      "carol": 0.3974139094352722,
+      "erin": 0.33112749457359314
+     }
+    },
+    "mention_pre | all": {
+     "nearest": "erin",
+     "delta": "carol",
+     "cos_values": {
+      "carol": 0.4907487630844116,
+      "erin": 0.5049164891242981
+     },
+     "delta_values": {
+      "carol": 0.2097613513469696,
+      "erin": 0.16667567193508148
+     }
+    },
+    "first_generated | mid": {
+     "nearest": "carol",
+     "delta": "erin",
+     "cos_values": {
+      "carol": 0.3888782858848572,
+      "erin": 0.3760038912296295
+     },
+     "delta_values": {
+      "carol": 0.01775004342198372,
+      "erin": 0.0177825428545475
+     }
+    },
+    "first_generated | late": {
+     "nearest": "carol",
+     "delta": "carol",
+     "cos_values": {
+      "carol": 0.3806772828102112,
+      "erin": 0.24589036405086517
+     },
+     "delta_values": {
+      "carol": 0.08159877359867096,
+      "erin": 0.06306281685829163
+     }
+    },
+    "first_generated | all": {
+     "nearest": "carol",
+     "delta": "carol",
+     "cos_values": {
+      "carol": 0.42556044459342957,
+      "erin": 0.3556152880191803
+     },
+     "delta_values": {
+      "carol": 0.03360404819250107,
+      "erin": 0.027785344049334526
+     }
+    },
+    "note_pre | mid": {
+     "nearest": "carol",
+     "delta": "carol",
+     "cos_values": {
+      "carol": 0.4618946313858032,
+      "erin": 0.4575526714324951
+     },
+     "delta_values": {
+      "carol": 0.016772709786891937,
+      "erin": 0.01298515684902668
+     }
+    },
+    "note_pre | late": {
+     "nearest": "erin",
+     "delta": "carol",
+     "cos_values": {
+      "carol": 0.3585112690925598,
+      "erin": 0.5752447843551636
+     },
+     "delta_values": {
+      "carol": 0.07151921093463898,
+      "erin": 0.06060284376144409
+     }
+    },
+    "note_pre | all": {
+     "nearest": "carol",
+     "delta": "carol",
+     "cos_values": {
+      "carol": 0.5049691796302795,
+      "erin": 0.4633015990257263
+     },
+     "delta_values": {
+      "carol": 0.03360113874077797,
+      "erin": 0.026584848761558533
+     }
+    },
+    "after_think | mid": {
+     "nearest": "carol",
+     "delta": "erin",
+     "cos_values": {
+      "carol": 0.28108155727386475,
+      "erin": 0.23078083992004395
+     },
+     "delta_values": {
+      "carol": 0.01627631112933159,
+      "erin": 0.01761500909924507
+     }
+    },
+    "after_think | late": {
+     "nearest": "carol",
+     "delta": "carol",
+     "cos_values": {
+      "carol": 0.41205117106437683,
+      "erin": 0.00875111110508442
+     },
+     "delta_values": {
+      "carol": 0.040528554469347,
+      "erin": 0.034881096333265305
+     }
+    },
+    "after_think | all": {
+     "nearest": "carol",
+     "delta": "carol",
+     "cos_values": {
+      "carol": 0.3354557752609253,
+      "erin": 0.16801245510578156
+     },
+     "delta_values": {
+      "carol": 0.023858550935983658,
+      "erin": 0.020500749349594116
+     }
+    }
+   }
+  },
+  {
+   "seed": "seed6018",
+   "agent": "carol",
+   "source": "erin",
+   "used": "correct",
+   "right_author": "erin",
+   "right_same_specialty": false,
+   "first_author": "erin",
+   "address": "name",
+   "phrasing": 2,
+   "disclosed": true,
+   "submission_correct": true,
+   "classes": {
+    "erin": [
+     "right",
+     "first"
+    ],
+    "frank": [
+     "wrong",
+     "second"
+    ]
+   },
+   "reply_tokens": 5245,
+   "positions_present": [
+    "answer_pre",
+    "mention_pre",
+    "first_generated",
+    "note_pre",
+    "after_think"
+   ],
+   "predictions": {
+    "answer_pre | mid": {
+     "nearest": "erin",
+     "delta": "erin",
+     "cos_values": {
+      "erin": 0.6835296154022217,
+      "frank": 0.5138870477676392
+     },
+     "delta_values": {
+      "erin": 0.03253090754151344,
+      "frank": 0.018596619367599487
+     }
+    },
+    "answer_pre | late": {
+     "nearest": "erin",
+     "delta": "erin",
+     "cos_values": {
+      "erin": 0.44961440563201904,
+      "frank": 0.31087708473205566
+     },
+     "delta_values": {
+      "erin": 0.07444759458303452,
+      "frank": 0.03490830212831497
+     }
+    },
+    "answer_pre | all": {
+     "nearest": "erin",
+     "delta": "erin",
+     "cos_values": {
+      "erin": 0.5689894556999207,
+      "frank": 0.4280942380428314
+     },
+     "delta_values": {
+      "erin": 0.045800045132637024,
+      "frank": 0.02221165969967842
+     }
+    },
+    "mention_pre | mid": {
+     "nearest": "frank",
+     "delta": "erin",
+     "cos_values": {
+      "erin": 0.5797247290611267,
+      "frank": 0.5895886421203613
+     },
+     "delta_values": {
+      "erin": 0.13154014945030212,
+      "frank": 0.11184617877006531
+     }
+    },
+    "mention_pre | late": {
+     "nearest": "erin",
+     "delta": "erin",
+     "cos_values": {
+      "erin": 0.38603681325912476,
+      "frank": 0.19402636587619781
+     },
+     "delta_values": {
+      "erin": 0.45369333028793335,
+      "frank": 0.08507822453975677
+     }
+    },
+    "mention_pre | all": {
+     "nearest": "frank",
+     "delta": "erin",
+     "cos_values": {
+      "erin": 0.32513439655303955,
+      "frank": 0.5138576626777649
+     },
+     "delta_values": {
+      "erin": 0.20119650661945343,
+      "frank": 0.09552909433841705
+     }
+    },
+    "first_generated | mid": {
+     "nearest": "frank",
+     "delta": "frank",
+     "cos_values": {
+      "erin": 0.328646183013916,
+      "frank": 0.4296301007270813
+     },
+     "delta_values": {
+      "erin": 0.018141789361834526,
+      "frank": 0.021763693541288376
+     }
+    },
+    "first_generated | late": {
+     "nearest": "frank",
+     "delta": "erin",
+     "cos_values": {
+      "erin": 0.2962578535079956,
+      "frank": 0.3890092372894287
+     },
+     "delta_values": {
+      "erin": 0.08357933163642883,
+      "frank": 0.08099130541086197
+     }
+    },
+    "first_generated | all": {
+     "nearest": "frank",
+     "delta": "frank",
+     "cos_values": {
+      "erin": 0.34574025869369507,
+      "frank": 0.4967942237854004
+     },
+     "delta_values": {
+      "erin": 0.034114498645067215,
+      "frank": 0.03595748916268349
+     }
+    },
+    "note_pre | mid": {
+     "nearest": "frank",
+     "delta": "erin",
+     "cos_values": {
+      "erin": 0.451745867729187,
+      "frank": 0.5882163047790527
+     },
+     "delta_values": {
+      "erin": 0.01714523881673813,
+      "frank": 0.013981546275317669
+     }
+    },
+    "note_pre | late": {
+     "nearest": "erin",
+     "delta": "erin",
+     "cos_values": {
+      "erin": 0.5652177929878235,
+      "frank": 0.10496162623167038
+     },
+     "delta_values": {
+      "erin": 0.05783316493034363,
+      "frank": 0.043695855885744095
+     }
+    },
+    "note_pre | all": {
+     "nearest": "erin",
+     "delta": "erin",
+     "cos_values": {
+      "erin": 0.5142044425010681,
+      "frank": 0.4317384362220764
+     },
+     "delta_values": {
+      "erin": 0.030093546956777573,
+      "frank": 0.021833039820194244
+     }
+    },
+    "after_think | mid": {
+     "nearest": "frank",
+     "delta": "frank",
+     "cos_values": {
+      "erin": 0.2239265888929367,
+      "frank": 0.3669232130050659
+     },
+     "delta_values": {
+      "erin": 0.018682297319173813,
+      "frank": 0.02126062847673893
+     }
+    },
+    "after_think | late": {
+     "nearest": "erin",
+     "delta": "erin",
+     "cos_values": {
+      "erin": 0.4951568841934204,
+      "frank": 0.48466217517852783
+     },
+     "delta_values": {
+      "erin": 0.03433889523148537,
+      "frank": 0.024929964914917946
+     }
+    },
+    "after_think | all": {
+     "nearest": "frank",
+     "delta": "erin",
+     "cos_values": {
+      "erin": 0.3540577292442322,
+      "frank": 0.5325925946235657
+     },
+     "delta_values": {
+      "erin": 0.0213590357452631,
+      "frank": 0.019402671605348587
+     }
+    }
+   }
+  },
+  {
+   "seed": "seed6021",
+   "agent": "frank",
+   "source": null,
+   "used": "none",
+   "right_author": "dave",
+   "right_same_specialty": false,
+   "first_author": "carol",
+   "address": "name",
+   "phrasing": 2,
+   "disclosed": false,
+   "submission_correct": false,
+   "classes": {
+    "carol": [
+     "wrong",
+     "first"
+    ],
+    "dave": [
+     "right",
+     "second"
+    ]
+   },
+   "reply_tokens": 3427,
+   "positions_present": [
+    "answer_pre",
+    "mention_pre",
+    "first_generated",
+    "note_pre",
+    "after_think"
+   ],
+   "predictions": {
+    "answer_pre | mid": {
+     "nearest": "carol",
+     "delta": "carol",
+     "cos_values": {
+      "carol": 0.6013907790184021,
+      "dave": 0.575964093208313
+     },
+     "delta_values": {
+      "carol": 0.01785792037844658,
+      "dave": 0.013387789018452168
+     }
+    },
+    "answer_pre | late": {
+     "nearest": "carol",
+     "delta": "carol",
+     "cos_values": {
+      "carol": 0.4292188882827759,
+      "dave": 0.1196003407239914
+     },
+     "delta_values": {
+      "carol": 0.04182371497154236,
+      "dave": 0.030209753662347794
+     }
+    },
+    "answer_pre | all": {
+     "nearest": "carol",
+     "delta": "carol",
+     "cos_values": {
+      "carol": 0.507113516330719,
+      "dave": 0.3176591098308563
+     },
+     "delta_values": {
+      "carol": 0.023113518953323364,
+      "dave": 0.01694471947848797
+     }
+    },
+    "mention_pre | mid": {
+     "nearest": "carol",
+     "delta": "carol",
+     "cos_values": {
+      "carol": 0.48422104120254517,
+      "dave": 0.4676874876022339
+     },
+     "delta_values": {
+      "carol": 0.011640284210443497,
+      "dave": 0.008517371490597725
+     }
+    },
+    "mention_pre | late": {
+     "nearest": "carol",
+     "delta": "carol",
+     "cos_values": {
+      "carol": 0.578443706035614,
+      "dave": 0.451707124710083
+     },
+     "delta_values": {
+      "carol": 0.017528779804706573,
+      "dave": 0.014038700610399246
+     }
+    },
+    "mention_pre | all": {
+     "nearest": "carol",
+     "delta": "carol",
+     "cos_values": {
+      "carol": 0.5286293029785156,
+      "dave": 0.4861847460269928
+     },
+     "delta_values": {
+      "carol": 0.01286002155393362,
+      "dave": 0.009939698502421379
+     }
+    },
+    "first_generated | mid": {
+     "nearest": "dave",
+     "delta": "carol",
+     "cos_values": {
+      "carol": 0.27432501316070557,
+      "dave": 0.2961902320384979
+     },
+     "delta_values": {
+      "carol": 0.019318383187055588,
+      "dave": 0.01676587387919426
+     }
+    },
+    "first_generated | late": {
+     "nearest": "carol",
+     "delta": "dave",
+     "cos_values": {
+      "carol": 0.29238900542259216,
+      "dave": 0.19488301873207092
+     },
+     "delta_values": {
+      "carol": 0.06460133194923401,
+      "dave": 0.06621736288070679
+     }
+    },
+    "first_generated | all": {
+     "nearest": "dave",
+     "delta": "dave",
+     "cos_values": {
+      "carol": 0.42314377427101135,
+      "dave": 0.423576682806015
+     },
+     "delta_values": {
+      "carol": 0.030170850455760956,
+      "dave": 0.031201457604765892
+     }
+    },
+    "note_pre | mid": {
+     "nearest": "carol",
+     "delta": "carol",
+     "cos_values": {
+      "carol": 0.556828498840332,
+      "dave": 0.3210049271583557
+     },
+     "delta_values": {
+      "carol": 0.013024815358221531,
+      "dave": 0.009386047720909119
+     }
+    },
+    "note_pre | late": {
+     "nearest": "carol",
+     "delta": "carol",
+     "cos_values": {
+      "carol": 0.5491809844970703,
+      "dave": 0.2873762249946594
+     },
+     "delta_values": {
+      "carol": 0.03766635060310364,
+      "dave": 0.02870742417871952
+     }
+    },
+    "note_pre | all": {
+     "nearest": "carol",
+     "delta": "carol",
+     "cos_values": {
+      "carol": 0.5168848633766174,
+      "dave": 0.36991506814956665
+     },
+     "delta_values": {
+      "carol": 0.019892612472176552,
+      "dave": 0.014977360144257545
+     }
+    },
+    "after_think | mid": {
+     "nearest": "dave",
+     "delta": "carol",
+     "cos_values": {
+      "carol": 0.2018410563468933,
+      "dave": 0.2953754663467407
+     },
+     "delta_values": {
+      "carol": 0.02071365714073181,
+      "dave": 0.017660753801465034
+     }
+    },
+    "after_think | late": {
+     "nearest": "carol",
+     "delta": "carol",
+     "cos_values": {
+      "carol": 0.4683254659175873,
+      "dave": 0.13452976942062378
+     },
+     "delta_values": {
+      "carol": 0.028919989243149757,
+      "dave": 0.024092067033052444
+     }
+    },
+    "after_think | all": {
+     "nearest": "carol",
+     "delta": "carol",
+     "cos_values": {
+      "carol": 0.3674502372741699,
+      "dave": 0.274223268032074
+     },
+     "delta_values": {
+      "carol": 0.019097020849585533,
+      "dave": 0.016204046085476875
+     }
+    }
+   }
+  },
+  {
+   "seed": "seed6024",
+   "agent": "carol",
+   "source": null,
+   "used": "none",
+   "right_author": "bob",
+   "right_same_specialty": false,
+   "first_author": "frank",
+   "address": "name",
+   "phrasing": 0,
+   "disclosed": true,
+   "submission_correct": false,
+   "classes": {
+    "frank": [
+     "wrong",
+     "first"
+    ],
+    "bob": [
+     "right",
+     "second"
+    ]
+   },
+   "reply_tokens": 5414,
+   "positions_present": [
+    "answer_pre",
+    "mention_pre",
+    "first_generated",
+    "note_pre",
+    "after_think"
+   ],
+   "predictions": {
+    "answer_pre | mid": {
+     "nearest": "frank",
+     "delta": "frank",
+     "cos_values": {
+      "frank": 0.5985411405563354,
+      "bob": 0.5174418687820435
+     },
+     "delta_values": {
+      "frank": 0.018228230997920036,
+      "bob": 0.015511619858443737
+     }
+    },
+    "answer_pre | late": {
+     "nearest": "bob",
+     "delta": "frank",
+     "cos_values": {
+      "frank": 0.30096930265426636,
+      "bob": 0.32544761896133423
+     },
+     "delta_values": {
+      "frank": 0.05012086033821106,
+      "bob": 0.03000831976532936
+     }
+    },
+    "answer_pre | all": {
+     "nearest": "frank",
+     "delta": "frank",
+     "cos_values": {
+      "frank": 0.4743325114250183,
+      "bob": 0.40541166067123413
+     },
+     "delta_values": {
+      "frank": 0.027858730405569077,
+      "bob": 0.018236607313156128
+     }
+    },
+    "mention_pre | mid": {
+     "nearest": "bob",
+     "delta": "frank",
+     "cos_values": {
+      "frank": 0.4533349275588989,
+      "bob": 0.5814659595489502
+     },
+     "delta_values": {
+      "frank": 0.011691400781273842,
+      "bob": 0.00971133355051279
+     }
+    },
+    "mention_pre | late": {
+     "nearest": "frank",
+     "delta": "frank",
+     "cos_values": {
+      "frank": 0.426896333694458,
+      "bob": 0.3939005434513092
+     },
+     "delta_values": {
+      "frank": 0.015588321723043919,
+      "bob": 0.012160537764430046
+     }
+    },
+    "mention_pre | all": {
+     "nearest": "bob",
+     "delta": "frank",
+     "cos_values": {
+      "frank": 0.450468510389328,
+      "bob": 0.4740966260433197
+     },
+     "delta_values": {
+      "frank": 0.011084905825555325,
+      "bob": 0.009680360555648804
+     }
+    },
+    "first_generated | mid": {
+     "nearest": "frank",
+     "delta": "frank",
+     "cos_values": {
+      "frank": 0.29777413606643677,
+      "bob": 0.26266783475875854
+     },
+     "delta_values": {
+      "frank": 0.02120589092373848,
+      "bob": 0.01971716806292534
+     }
+    },
+    "first_generated | late": {
+     "nearest": "bob",
+     "delta": "frank",
+     "cos_values": {
+      "frank": 0.29405736923217773,
+      "bob": 0.36245793104171753
+     },
+     "delta_values": {
+      "frank": 0.06929074227809906,
+      "bob": 0.06597660481929779
+     }
+    },
+    "first_generated | all": {
+     "nearest": "bob",
+     "delta": "frank",
+     "cos_values": {
+      "frank": 0.4048120677471161,
+      "bob": 0.42683905363082886
+     },
+     "delta_values": {
+      "frank": 0.032135553658008575,
+      "bob": 0.03053196519613266
+     }
+    },
+    "note_pre | mid": {
+     "nearest": "bob",
+     "delta": "frank",
+     "cos_values": {
+      "frank": 0.3552548885345459,
+      "bob": 0.41926705837249756
+     },
+     "delta_values": {
+      "frank": 0.013608905486762524,
+      "bob": 0.009255687706172466
+     }
+    },
+    "note_pre | late": {
+     "nearest": "bob",
+     "delta": "bob",
+     "cos_values": {
+      "frank": 0.38396620750427246,
+      "bob": 0.7255730032920837
+     },
+     "delta_values": {
+      "frank": 0.04741375893354416,
+      "bob": 0.053217798471450806
+     }
+    },
+    "note_pre | all": {
+     "nearest": "bob",
+     "delta": "frank",
+     "cos_values": {
+      "frank": 0.41871002316474915,
+      "bob": 0.5597164630889893
+     },
+     "delta_values": {
+      "frank": 0.023794567212462425,
+      "bob": 0.023680618032813072
+     }
+    },
+    "after_think | mid": {
+     "nearest": "bob",
+     "delta": "frank",
+     "cos_values": {
+      "frank": 0.10182986408472061,
+      "bob": 0.21345660090446472
+     },
+     "delta_values": {
+      "frank": 0.020802678540349007,
+      "bob": 0.017545359209179878
+     }
+    },
+    "after_think | late": {
+     "nearest": "bob",
+     "delta": "frank",
+     "cos_values": {
+      "frank": 0.2944980263710022,
+      "bob": 0.5071956515312195
+     },
+     "delta_values": {
+      "frank": 0.02576342225074768,
+      "bob": 0.02533518336713314
+     }
+    },
+    "after_think | all": {
+     "nearest": "bob",
+     "delta": "frank",
+     "cos_values": {
+      "frank": 0.2634386122226715,
+      "bob": 0.38906538486480713
+     },
+     "delta_values": {
+      "frank": 0.01884489879012108,
+      "bob": 0.017903165891766548
+     }
+    }
+   }
+  },
+  {
+   "seed": "seed6027",
+   "agent": "frank",
+   "source": "carol",
+   "used": "correct",
+   "right_author": "carol",
+   "right_same_specialty": true,
+   "first_author": "carol",
+   "address": "name",
+   "phrasing": 0,
+   "disclosed": true,
+   "submission_correct": true,
+   "classes": {
+    "carol": [
+     "right",
+     "first"
+    ],
+    "dave": [
+     "wrong",
+     "second"
+    ]
+   },
+   "reply_tokens": 1203,
+   "positions_present": [
+    "answer_pre",
+    "mention_pre",
+    "first_generated",
+    "note_pre",
+    "after_think"
+   ],
+   "predictions": {
+    "answer_pre | mid": {
+     "nearest": "carol",
+     "delta": "carol",
+     "cos_values": {
+      "carol": 0.5479779243469238,
+      "dave": 0.51549232006073
+     },
+     "delta_values": {
+      "carol": 0.026440169662237167,
+      "dave": 0.022212227806448936
+     }
+    },
+    "answer_pre | late": {
+     "nearest": "dave",
+     "delta": "carol",
+     "cos_values": {
+      "carol": 0.4434153437614441,
+      "dave": 0.5027315616607666
+     },
+     "delta_values": {
+      "carol": 0.07633545249700546,
+      "dave": 0.07489761710166931
+     }
+    },
+    "answer_pre | all": {
+     "nearest": "carol",
+     "delta": "carol",
+     "cos_values": {
+      "carol": 0.5359259843826294,
+      "dave": 0.525600254535675
+     },
+     "delta_values": {
+      "carol": 0.048848845064640045,
+      "dave": 0.04322177544236183
+     }
+    },
+    "mention_pre | mid": {
+     "nearest": "carol",
+     "delta": "carol",
+     "cos_values": {
+      "carol": 0.5459966063499451,
+      "dave": 0.5131364464759827
+     },
+     "delta_values": {
+      "carol": 0.1209276020526886,
+      "dave": 0.07770951837301254
+     }
+    },
+    "mention_pre | late": {
+     "nearest": "carol",
+     "delta": "carol",
+     "cos_values": {
+      "carol": 0.7434483170509338,
+      "dave": 0.4348512589931488
+     },
+     "delta_values": {
+      "carol": 0.45892101526260376,
+      "dave": 0.2707110047340393
+     }
+    },
+    "mention_pre | all": {
+     "nearest": "carol",
+     "delta": "carol",
+     "cos_values": {
+      "carol": 0.6608494520187378,
+      "dave": 0.5585755705833435
+     },
+     "delta_values": {
+      "carol": 0.24788841605186462,
+      "dave": 0.15051904320716858
+     }
+    },
+    "first_generated | mid": {
+     "nearest": "dave",
+     "delta": "dave",
+     "cos_values": {
+      "carol": 0.30562055110931396,
+      "dave": 0.3476630449295044
+     },
+     "delta_values": {
+      "carol": 0.018143797293305397,
+      "dave": 0.01935674250125885
+     }
+    },
+    "first_generated | late": {
+     "nearest": "carol",
+     "delta": "dave",
+     "cos_values": {
+      "carol": 0.3818563222885132,
+      "dave": 0.3467377722263336
+     },
+     "delta_values": {
+      "carol": 0.0779670774936676,
+      "dave": 0.07954475283622742
+     }
+    },
+    "first_generated | all": {
+     "nearest": "dave",
+     "delta": "dave",
+     "cos_values": {
+      "carol": 0.4186724126338959,
+      "dave": 0.466175377368927
+     },
+     "delta_values": {
+      "carol": 0.03247962146997452,
+      "dave": 0.03602294996380806
+     }
+    },
+    "note_pre | mid": {
+     "nearest": "carol",
+     "delta": "carol",
+     "cos_values": {
+      "carol": 0.5517757534980774,
+      "dave": 0.5508983731269836
+     },
+     "delta_values": {
+      "carol": 0.02215304598212242,
+      "dave": 0.016875701025128365
+     }
+    },
+    "note_pre | late": {
+     "nearest": "carol",
+     "delta": "carol",
+     "cos_values": {
+      "carol": 0.6095527410507202,
+      "dave": 0.3898492455482483
+     },
+     "delta_values": {
+      "carol": 0.09082168340682983,
+      "dave": 0.08413642644882202
+     }
+    },
+    "note_pre | all": {
+     "nearest": "carol",
+     "delta": "carol",
+     "cos_values": {
+      "carol": 0.6457701325416565,
+      "dave": 0.44422203302383423
+     },
+     "delta_values": {
+      "carol": 0.04323573037981987,
+      "dave": 0.035593584179878235
+     }
+    },
+    "after_think | mid": {
+     "nearest": "dave",
+     "delta": "carol",
+     "cos_values": {
+      "carol": 0.26277807354927063,
+      "dave": 0.2743854522705078
+     },
+     "delta_values": {
+      "carol": 0.022902606055140495,
+      "dave": 0.01954062655568123
+     }
+    },
+    "after_think | late": {
+     "nearest": "carol",
+     "delta": "carol",
+     "cos_values": {
+      "carol": 0.6089690923690796,
+      "dave": 0.11290930211544037
+     },
+     "delta_values": {
+      "carol": 0.049894802272319794,
+      "dave": 0.035394828766584396
+     }
+    },
+    "after_think | all": {
+     "nearest": "carol",
+     "delta": "carol",
+     "cos_values": {
+      "carol": 0.4693615734577179,
+      "dave": 0.33571821451187134
+     },
+     "delta_values": {
+      "carol": 0.029496651142835617,
+      "dave": 0.02348301187157631
+     }
+    }
+   }
+  },
+  {
+   "seed": "seed6030",
+   "agent": "carol",
+   "source": "frank",
+   "used": "wrong",
+   "right_author": "erin",
+   "right_same_specialty": false,
+   "first_author": "frank",
+   "address": "broadcast",
+   "phrasing": 0,
+   "disclosed": true,
+   "submission_correct": false,
+   "classes": {
+    "frank": [
+     "wrong",
+     "first"
+    ],
+    "erin": [
+     "right",
+     "second"
+    ]
+   },
+   "reply_tokens": 1597,
+   "positions_present": [
+    "answer_pre",
+    "mention_pre",
+    "first_generated",
+    "note_pre",
+    "after_think"
+   ],
+   "predictions": {
+    "answer_pre | mid": {
+     "nearest": "frank",
+     "delta": "frank",
+     "cos_values": {
+      "frank": 0.5013607740402222,
+      "erin": 0.3427223563194275
+     },
+     "delta_values": {
+      "frank": 0.015134358778595924,
+      "erin": 0.0126399677246809
+     }
+    },
+    "answer_pre | late": {
+     "nearest": "erin",
+     "delta": "frank",
+     "cos_values": {
+      "frank": 0.25733307003974915,
+      "erin": 0.2838420867919922
+     },
+     "delta_values": {
+      "frank": 0.06604329496622086,
+      "erin": 0.03800300136208534
+     }
+    },
+    "answer_pre | all": {
+     "nearest": "erin",
+     "delta": "frank",
+     "cos_values": {
+      "frank": 0.34508275985717773,
+      "erin": 0.4549676477909088
+     },
+     "delta_values": {
+      "frank": 0.03645138069987297,
+      "erin": 0.022845955565571785
+     }
+    },
+    "mention_pre | mid": {
+     "nearest": "erin",
+     "delta": "frank",
+     "cos_values": {
+      "frank": 0.40931466221809387,
+      "erin": 0.4111911654472351
+     },
+     "delta_values": {
+      "frank": 0.16428694128990173,
+      "erin": 0.15307490527629852
+     }
+    },
+    "mention_pre | late": {
+     "nearest": "frank",
+     "delta": "frank",
+     "cos_values": {
+      "frank": 0.47275424003601074,
+      "erin": 0.42717546224594116
+     },
+     "delta_values": {
+      "frank": 0.35099029541015625,
+      "erin": 0.3453737497329712
+     }
+    },
+    "mention_pre | all": {
+     "nearest": "erin",
+     "delta": "frank",
+     "cos_values": {
+      "frank": 0.5061309337615967,
+      "erin": 0.5427213311195374
+     },
+     "delta_values": {
+      "frank": 0.2128564417362213,
+      "erin": 0.20273058116436005
+     }
+    },
+    "first_generated | mid": {
+     "nearest": "frank",
+     "delta": "erin",
+     "cos_values": {
+      "frank": 0.24634391069412231,
+      "erin": 0.2215195894241333
+     },
+     "delta_values": {
+      "frank": 0.018344350159168243,
+      "erin": 0.018740558996796608
+     }
+    },
+    "first_generated | late": {
+     "nearest": "frank",
+     "delta": "frank",
+     "cos_values": {
+      "frank": 0.2974907457828522,
+      "erin": 0.1697305589914322
+     },
+     "delta_values": {
+      "frank": 0.06525769084692001,
+      "erin": 0.05730472505092621
+     }
+    },
+    "first_generated | all": {
+     "nearest": "frank",
+     "delta": "frank",
+     "cos_values": {
+      "frank": 0.3720186650753021,
+      "erin": 0.3466907739639282
+     },
+     "delta_values": {
+      "frank": 0.0291306059807539,
+      "erin": 0.027542853727936745
+     }
+    },
+    "note_pre | mid": {
+     "nearest": "frank",
+     "delta": "frank",
+     "cos_values": {
+      "frank": 0.5411568284034729,
+      "erin": 0.4020887017250061
+     },
+     "delta_values": {
+      "frank": 0.01733332686126232,
+      "erin": 0.013039687648415565
+     }
+    },
+    "note_pre | late": {
+     "nearest": "frank",
+     "delta": "frank",
+     "cos_values": {
+      "frank": 0.4092806577682495,
+      "erin": 0.25799208879470825
+     },
+     "delta_values": {
+      "frank": 0.052578799426555634,
+      "erin": 0.03926127031445503
+     }
+    },
+    "note_pre | all": {
+     "nearest": "frank",
+     "delta": "frank",
+     "cos_values": {
+      "frank": 0.5450412631034851,
+      "erin": 0.4041108191013336
+     },
+     "delta_values": {
+      "frank": 0.027944406494498253,
+      "erin": 0.020511992275714874
+     }
+    },
+    "after_think | mid": {
+     "nearest": "erin",
+     "delta": "frank",
+     "cos_values": {
+      "frank": 0.0748213529586792,
+      "erin": 0.14635109901428223
+     },
+     "delta_values": {
+      "frank": 0.020381249487400055,
+      "erin": 0.0173074658960104
+     }
+    },
+    "after_think | late": {
+     "nearest": "frank",
+     "delta": "frank",
+     "cos_values": {
+      "frank": 0.5206549167633057,
+      "erin": 0.25360140204429626
+     },
+     "delta_values": {
+      "frank": 0.034821271896362305,
+      "erin": 0.02829635888338089
+     }
+    },
+    "after_think | all": {
+     "nearest": "erin",
+     "delta": "frank",
+     "cos_values": {
+      "frank": 0.33080413937568665,
+      "erin": 0.35782569646835327
+     },
+     "delta_values": {
+      "frank": 0.023664696142077446,
+      "erin": 0.018956322222948074
+     }
+    }
+   }
+  },
+  {
+   "seed": "seed6033",
+   "agent": "frank",
+   "source": null,
+   "used": "none",
+   "right_author": "carol",
+   "right_same_specialty": true,
+   "first_author": "carol",
+   "address": "broadcast",
+   "phrasing": 2,
+   "disclosed": false,
+   "submission_correct": false,
+   "classes": {
+    "carol": [
+     "right",
+     "first"
+    ],
+    "alice": [
+     "wrong",
+     "second"
+    ]
+   },
+   "reply_tokens": 4910,
+   "positions_present": [
+    "answer_pre",
+    "mention_pre",
+    "first_generated",
+    "note_pre",
+    "after_think"
+   ],
+   "predictions": {
+    "answer_pre | mid": {
+     "nearest": "alice",
+     "delta": "carol",
+     "cos_values": {
+      "carol": 0.41242122650146484,
+      "alice": 0.5451175570487976
+     },
+     "delta_values": {
+      "carol": 0.019418790936470032,
+      "alice": 0.01618959568440914
+     }
+    },
+    "answer_pre | late": {
+     "nearest": "carol",
+     "delta": "carol",
+     "cos_values": {
+      "carol": 0.8768925666809082,
+      "alice": -0.32623693346977234
+     },
+     "delta_values": {
+      "carol": 0.08862706273794174,
+      "alice": 0.04787468910217285
+     }
+    },
+    "answer_pre | all": {
+     "nearest": "carol",
+     "delta": "carol",
+     "cos_values": {
+      "carol": 0.6311609745025635,
+      "alice": 0.2088053822517395
+     },
+     "delta_values": {
+      "carol": 0.040718887001276016,
+      "alice": 0.02570919506251812
+     }
+    },
+    "mention_pre | mid": {
+     "nearest": "alice",
+     "delta": "carol",
+     "cos_values": {
+      "carol": 0.5230541229248047,
+      "alice": 0.5815304517745972
+     },
+     "delta_values": {
+      "carol": 0.010728774592280388,
+      "alice": 0.010650070384144783
+     }
+    },
+    "mention_pre | late": {
+     "nearest": "carol",
+     "delta": "carol",
+     "cos_values": {
+      "carol": 0.727586030960083,
+      "alice": 0.3742709159851074
+     },
+     "delta_values": {
+      "carol": 0.033257320523262024,
+      "alice": 0.02318817377090454
+     }
+    },
+    "mention_pre | all": {
+     "nearest": "carol",
+     "delta": "carol",
+     "cos_values": {
+      "carol": 0.5294748544692993,
+      "alice": 0.49247169494628906
+     },
+     "delta_values": {
+      "carol": 0.015954514965415,
+      "alice": 0.013030767440795898
+     }
+    },
+    "first_generated | mid": {
+     "nearest": "alice",
+     "delta": "carol",
+     "cos_values": {
+      "carol": 0.3636256754398346,
+      "alice": 0.3769780993461609
+     },
+     "delta_values": {
+      "carol": 0.02156185731291771,
+      "alice": 0.0209001787006855
+     }
+    },
+    "first_generated | late": {
+     "nearest": "alice",
+     "delta": "carol",
+     "cos_values": {
+      "carol": 0.3176973760128021,
+      "alice": 0.4220688045024872
+     },
+     "delta_values": {
+      "carol": 0.07282654196023941,
+      "alice": 0.06626658886671066
+     }
+    },
+    "first_generated | all": {
+     "nearest": "carol",
+     "delta": "carol",
+     "cos_values": {
+      "carol": 0.4862034022808075,
+      "alice": 0.4588219225406647
+     },
+     "delta_values": {
+      "carol": 0.03456076607108116,
+      "alice": 0.031051741912961006
+     }
+    },
+    "note_pre | mid": {
+     "nearest": "alice",
+     "delta": "carol",
+     "cos_values": {
+      "carol": 0.5921449661254883,
+      "alice": 0.6518808603286743
+     },
+     "delta_values": {
+      "carol": 0.016709767282009125,
+      "alice": 0.01418447308242321
+     }
+    },
+    "note_pre | late": {
+     "nearest": "carol",
+     "delta": "alice",
+     "cos_values": {
+      "carol": 0.6981062889099121,
+      "alice": -0.008945964276790619
+     },
+     "delta_values": {
+      "carol": 0.07981521636247635,
+      "alice": 0.08356154710054398
+     }
+    },
+    "note_pre | all": {
+     "nearest": "carol",
+     "delta": "carol",
+     "cos_values": {
+      "carol": 0.5987780690193176,
+      "alice": 0.36843031644821167
+     },
+     "delta_values": {
+      "carol": 0.037048161029815674,
+      "alice": 0.03329131007194519
+     }
+    },
+    "after_think | mid": {
+     "nearest": "carol",
+     "delta": "carol",
+     "cos_values": {
+      "carol": 0.3166813552379608,
+      "alice": 0.26046496629714966
+     },
+     "delta_values": {
+      "carol": 0.021725593134760857,
+      "alice": 0.021562987938523293
+     }
+    },
+    "after_think | late": {
+     "nearest": "carol",
+     "delta": "carol",
+     "cos_values": {
+      "carol": 0.4049643278121948,
+      "alice": 0.12276622653007507
+     },
+     "delta_values": {
+      "carol": 0.03169051930308342,
+      "alice": 0.02628493681550026
+     }
+    },
+    "after_think | all": {
+     "nearest": "carol",
+     "delta": "carol",
+     "cos_values": {
+      "carol": 0.37402963638305664,
+      "alice": 0.31481820344924927
+     },
+     "delta_values": {
+      "carol": 0.021525725722312927,
+      "alice": 0.019532863050699234
+     }
+    }
+   }
+  },
+  {
+   "seed": "seed6036",
+   "agent": "carol",
+   "source": "bob",
+   "used": "wrong",
+   "right_author": "frank",
+   "right_same_specialty": true,
+   "first_author": "frank",
+   "address": "broadcast",
+   "phrasing": 0,
+   "disclosed": true,
+   "submission_correct": false,
+   "classes": {
+    "frank": [
+     "right",
+     "first"
+    ],
+    "bob": [
+     "wrong",
+     "second"
+    ]
+   },
+   "reply_tokens": 4863,
+   "positions_present": [
+    "answer_pre",
+    "mention_pre",
+    "first_generated",
+    "note_pre",
+    "after_think"
+   ],
+   "predictions": {
+    "answer_pre | mid": {
+     "nearest": "frank",
+     "delta": "frank",
+     "cos_values": {
+      "frank": 0.6120779514312744,
+      "bob": 0.5327919721603394
+     },
+     "delta_values": {
+      "frank": 0.020047597587108612,
+      "bob": 0.016224272549152374
+     }
+    },
+    "answer_pre | late": {
+     "nearest": "bob",
+     "delta": "frank",
+     "cos_values": {
+      "frank": 0.6078847646713257,
+      "bob": 0.6736758351325989
+     },
+     "delta_values": {
+      "frank": 0.12462139129638672,
+      "bob": 0.10671429336071014
+     }
+    },
+    "answer_pre | all": {
+     "nearest": "bob",
+     "delta": "frank",
+     "cos_values": {
+      "frank": 0.5224117040634155,
+      "bob": 0.5975112915039062
+     },
+     "delta_values": {
+      "frank": 0.06118190661072731,
+      "bob": 0.049577873200178146
+     }
+    },
+    "mention_pre | mid": {
+     "nearest": "frank",
+     "delta": "frank",
+     "cos_values": {
+      "frank": 0.7935458421707153,
+      "bob": 0.5807202458381653
+     },
+     "delta_values": {
+      "frank": 0.13979552686214447,
+      "bob": 0.1132841557264328
+     }
+    },
+    "mention_pre | late": {
+     "nearest": "bob",
+     "delta": "bob",
+     "cos_values": {
+      "frank": 0.5566721558570862,
+      "bob": 0.718119204044342
+     },
+     "delta_values": {
+      "frank": 0.40750038623809814,
+      "bob": 0.6367069482803345
+     }
+    },
+    "mention_pre | all": {
+     "nearest": "frank",
+     "delta": "bob",
+     "cos_values": {
+      "frank": 0.695615828037262,
+      "bob": 0.5960133075714111
+     },
+     "delta_values": {
+      "frank": 0.22893451154232025,
+      "bob": 0.2857702970504761
+     }
+    },
+    "first_generated | mid": {
+     "nearest": "frank",
+     "delta": "frank",
+     "cos_values": {
+      "frank": 0.39710015058517456,
+      "bob": 0.3247789740562439
+     },
+     "delta_values": {
+      "frank": 0.020842861384153366,
+      "bob": 0.017088299617171288
+     }
+    },
+    "first_generated | late": {
+     "nearest": "bob",
+     "delta": "frank",
+     "cos_values": {
+      "frank": 0.3033870458602905,
+      "bob": 0.34977036714553833
+     },
+     "delta_values": {
+      "frank": 0.07456997781991959,
+      "bob": 0.056125424802303314
+     }
+    },
+    "first_generated | all": {
+     "nearest": "bob",
+     "delta": "frank",
+     "cos_values": {
+      "frank": 0.36437150835990906,
+      "bob": 0.4618231952190399
+     },
+     "delta_values": {
+      "frank": 0.0320051945745945,
+      "bob": 0.027264399453997612
+     }
+    },
+    "note_pre | mid": {
+     "nearest": "frank",
+     "delta": "frank",
+     "cos_values": {
+      "frank": 0.5641307830810547,
+      "bob": 0.4329394996166229
+     },
+     "delta_values": {
+      "frank": 0.014782916754484177,
+      "bob": 0.012861283496022224
+     }
+    },
+    "note_pre | late": {
+     "nearest": "bob",
+     "delta": "frank",
+     "cos_values": {
+      "frank": 0.1668793261051178,
+      "bob": 0.7246260643005371
+     },
+     "delta_values": {
+      "frank": 0.11516357958316803,
+      "bob": 0.07610313594341278
+     }
+    },
+    "note_pre | all": {
+     "nearest": "bob",
+     "delta": "frank",
+     "cos_values": {
+      "frank": 0.45382651686668396,
+      "bob": 0.47283264994621277
+     },
+     "delta_values": {
+      "frank": 0.04816610738635063,
+      "bob": 0.03394703194499016
+     }
+    },
+    "after_think | mid": {
+     "nearest": "frank",
+     "delta": "frank",
+     "cos_values": {
+      "frank": 0.2654660940170288,
+      "bob": 0.21326009929180145
+     },
+     "delta_values": {
+      "frank": 0.021559536457061768,
+      "bob": 0.02073001116514206
+     }
+    },
+    "after_think | late": {
+     "nearest": "bob",
+     "delta": "frank",
+     "cos_values": {
+      "frank": 0.2095371037721634,
+      "bob": 0.4968985319137573
+     },
+     "delta_values": {
+      "frank": 0.0346483513712883,
+      "bob": 0.02627679705619812
+     }
+    },
+    "after_think | all": {
+     "nearest": "bob",
+     "delta": "frank",
+     "cos_values": {
+      "frank": 0.3066086173057556,
+      "bob": 0.39476120471954346
+     },
+     "delta_values": {
+      "frank": 0.023054981604218483,
+      "bob": 0.01917864941060543
+     }
+    }
+   }
+  },
+  {
+   "seed": "seed6039",
+   "agent": "frank",
+   "source": "carol",
+   "used": "wrong",
+   "right_author": "bob",
+   "right_same_specialty": false,
+   "first_author": "carol",
+   "address": "broadcast",
+   "phrasing": 1,
+   "disclosed": true,
+   "submission_correct": false,
+   "classes": {
+    "carol": [
+     "wrong",
+     "first"
+    ],
+    "bob": [
+     "right",
+     "second"
+    ]
+   },
+   "reply_tokens": 4504,
+   "positions_present": [
+    "answer_pre",
+    "mention_pre",
+    "first_generated",
+    "note_pre",
+    "after_think"
+   ],
+   "predictions": {
+    "answer_pre | mid": {
+     "nearest": "carol",
+     "delta": "carol",
+     "cos_values": {
+      "carol": 0.5236982107162476,
+      "bob": 0.5101649761199951
+     },
+     "delta_values": {
+      "carol": 0.020345168188214302,
+      "bob": 0.016598206013441086
+     }
+    },
+    "answer_pre | late": {
+     "nearest": "bob",
+     "delta": "bob",
+     "cos_values": {
+      "carol": 0.46123313903808594,
+      "bob": 0.5308096408843994
+     },
+     "delta_values": {
+      "carol": 0.06635765731334686,
+      "bob": 0.07308007776737213
+     }
+    },
+    "answer_pre | all": {
+     "nearest": "bob",
+     "delta": "bob",
+     "cos_values": {
+      "carol": 0.4863137900829315,
+      "bob": 0.5126345157623291
+     },
+     "delta_values": {
+      "carol": 0.038220345973968506,
+      "bob": 0.03839518502354622
+     }
+    },
+    "mention_pre | mid": {
+     "nearest": "bob",
+     "delta": "carol",
+     "cos_values": {
+      "carol": 0.4801098704338074,
+      "bob": 0.6447311043739319
+     },
+     "delta_values": {
+      "carol": 0.10973187536001205,
+      "bob": 0.0989079400897026
+     }
+    },
+    "mention_pre | late": {
+     "nearest": "carol",
+     "delta": "carol",
+     "cos_values": {
+      "carol": 0.6169332265853882,
+      "bob": 0.3356015086174011
+     },
+     "delta_values": {
+      "carol": 0.38875168561935425,
+      "bob": 0.24884919822216034
+     }
+    },
+    "mention_pre | all": {
+     "nearest": "carol",
+     "delta": "carol",
+     "cos_values": {
+      "carol": 0.5549494624137878,
+      "bob": 0.5317894220352173
+     },
+     "delta_values": {
+      "carol": 0.19022001326084137,
+      "bob": 0.14863021671772003
+     }
+    },
+    "first_generated | mid": {
+     "nearest": "bob",
+     "delta": "carol",
+     "cos_values": {
+      "carol": 0.2879810333251953,
+      "bob": 0.36122405529022217
+     },
+     "delta_values": {
+      "carol": 0.019027497619390488,
+      "bob": 0.016924403607845306
+     }
+    },
+    "first_generated | late": {
+     "nearest": "carol",
+     "delta": "carol",
+     "cos_values": {
+      "carol": 0.30330199003219604,
+      "bob": 0.21692559123039246
+     },
+     "delta_values": {
+      "carol": 0.07214583456516266,
+      "bob": 0.06535711139440536
+     }
+    },
+    "first_generated | all": {
+     "nearest": "bob",
+     "delta": "carol",
+     "cos_values": {
+      "carol": 0.31175824999809265,
+      "bob": 0.3545900285243988
+     },
+     "delta_values": {
+      "carol": 0.03058497980237007,
+      "bob": 0.02871030382812023
+     }
+    },
+    "note_pre | mid": {
+     "nearest": "carol",
+     "delta": "carol",
+     "cos_values": {
+      "carol": 0.7048422694206238,
+      "bob": 0.4481502175331116
+     },
+     "delta_values": {
+      "carol": 0.019313717260956764,
+      "bob": 0.010583882220089436
+     }
+    },
+    "note_pre | late": {
+     "nearest": "carol",
+     "delta": "carol",
+     "cos_values": {
+      "carol": 0.52540123462677,
+      "bob": -0.11227331310510635
+     },
+     "delta_values": {
+      "carol": 0.06375381350517273,
+      "bob": 0.047900233417749405
+     }
+    },
+    "note_pre | all": {
+     "nearest": "carol",
+     "delta": "carol",
+     "cos_values": {
+      "carol": 0.6111189723014832,
+      "bob": 0.2961040139198303
+     },
+     "delta_values": {
+      "carol": 0.032593242824077606,
+      "bob": 0.021972516551613808
+     }
+    },
+    "after_think | mid": {
+     "nearest": "bob",
+     "delta": "carol",
+     "cos_values": {
+      "carol": 0.30954283475875854,
+      "bob": 0.3605373799800873
+     },
+     "delta_values": {
+      "carol": 0.02164541557431221,
+      "bob": 0.016987208276987076
+     }
+    },
+    "after_think | late": {
+     "nearest": "carol",
+     "delta": "carol",
+     "cos_values": {
+      "carol": 0.2918514609336853,
+      "bob": 0.17967009544372559
+     },
+     "delta_values": {
+      "carol": 0.030485842376947403,
+      "bob": 0.02781209535896778
+     }
+    },
+    "after_think | all": {
+     "nearest": "carol",
+     "delta": "carol",
+     "cos_values": {
+      "carol": 0.4198467433452606,
+      "bob": 0.3948708772659302
+     },
+     "delta_values": {
+      "carol": 0.021230949088931084,
+      "bob": 0.018287833780050278
+     }
+    }
+   }
+  },
+  {
+   "seed": "seed6042",
+   "agent": "carol",
+   "source": "frank",
+   "used": "correct",
+   "right_author": "frank",
+   "right_same_specialty": true,
+   "first_author": "alice",
+   "address": "broadcast",
+   "phrasing": 2,
+   "disclosed": true,
+   "submission_correct": true,
+   "classes": {
+    "alice": [
+     "wrong",
+     "first"
+    ],
+    "frank": [
+     "right",
+     "second"
+    ]
+   },
+   "reply_tokens": 2524,
+   "positions_present": [
+    "answer_pre",
+    "mention_pre",
+    "first_generated",
+    "note_pre",
+    "after_think"
+   ],
+   "predictions": {
+    "answer_pre | mid": {
+     "nearest": "frank",
+     "delta": "alice",
+     "cos_values": {
+      "alice": 0.33496183156967163,
+      "frank": 0.5301252007484436
+     },
+     "delta_values": {
+      "alice": 0.021061979234218597,
+      "frank": 0.01584404893219471
+     }
+    },
+    "answer_pre | late": {
+     "nearest": "frank",
+     "delta": "alice",
+     "cos_values": {
+      "alice": 0.41930869221687317,
+      "frank": 0.6413640975952148
+     },
+     "delta_values": {
+      "alice": 0.0701708048582077,
+      "frank": 0.0678568035364151
+     }
+    },
+    "answer_pre | all": {
+     "nearest": "frank",
+     "delta": "alice",
+     "cos_values": {
+      "alice": 0.3967243432998657,
+      "frank": 0.5971502065658569
+     },
+     "delta_values": {
+      "alice": 0.04522540792822838,
+      "frank": 0.03780338540673256
+     }
+    },
+    "mention_pre | mid": {
+     "nearest": "alice",
+     "delta": "alice",
+     "cos_values": {
+      "alice": 0.8413232564926147,
+      "frank": 0.6924459934234619
+     },
+     "delta_values": {
+      "alice": 0.23003694415092468,
+      "frank": 0.16612325608730316
+     }
+    },
+    "mention_pre | late": {
+     "nearest": "frank",
+     "delta": "alice",
+     "cos_values": {
+      "alice": 0.8394668102264404,
+      "frank": 0.9070358872413635
+     },
+     "delta_values": {
+      "alice": 1.0983073711395264,
+      "frank": 1.032698392868042
+     }
+    },
+    "mention_pre | all": {
+     "nearest": "alice",
+     "delta": "alice",
+     "cos_values": {
+      "alice": 0.7986900210380554,
+      "frank": 0.7102981209754944
+     },
+     "delta_values": {
+      "alice": 0.5115834474563599,
+      "frank": 0.45330381393432617
+     }
+    },
+    "first_generated | mid": {
+     "nearest": "frank",
+     "delta": "alice",
+     "cos_values": {
+      "alice": 0.17718113958835602,
+      "frank": 0.30040618777275085
+     },
+     "delta_values": {
+      "alice": 0.01871148869395256,
+      "frank": 0.01742069236934185
+     }
+    },
+    "first_generated | late": {
+     "nearest": "frank",
+     "delta": "alice",
+     "cos_values": {
+      "alice": 0.1817326694726944,
+      "frank": 0.29567986726760864
+     },
+     "delta_values": {
+      "alice": 0.06876710057258606,
+      "frank": 0.05701505020260811
+     }
+    },
+    "first_generated | all": {
+     "nearest": "frank",
+     "delta": "alice",
+     "cos_values": {
+      "alice": 0.2446383237838745,
+      "frank": 0.37152236700057983
+     },
+     "delta_values": {
+      "alice": 0.02953306771814823,
+      "frank": 0.025866752490401268
+     }
+    },
+    "note_pre | mid": {
+     "nearest": "frank",
+     "delta": "alice",
+     "cos_values": {
+      "alice": 0.4343303143978119,
+      "frank": 0.4943556785583496
+     },
+     "delta_values": {
+      "alice": 0.017223035916686058,
+      "frank": 0.01537573616951704
+     }
+    },
+    "note_pre | late": {
+     "nearest": "frank",
+     "delta": "alice",
+     "cos_values": {
+      "alice": 0.1215423047542572,
+      "frank": 0.5304183959960938
+     },
+     "delta_values": {
+      "alice": 0.06711643934249878,
+      "frank": 0.059024810791015625
+     }
+    },
+    "note_pre | all": {
+     "nearest": "frank",
+     "delta": "alice",
+     "cos_values": {
+      "alice": 0.3285377323627472,
+      "frank": 0.5789039134979248
+     },
+     "delta_values": {
+      "alice": 0.03167251870036125,
+      "frank": 0.02830822579562664
+     }
+    },
+    "after_think | mid": {
+     "nearest": "frank",
+     "delta": "alice",
+     "cos_values": {
+      "alice": 0.13880041241645813,
+      "frank": 0.3747488856315613
+     },
+     "delta_values": {
+      "alice": 0.021261295303702354,
+      "frank": 0.01777767203748226
+     }
+    },
+    "after_think | late": {
+     "nearest": "frank",
+     "delta": "alice",
+     "cos_values": {
+      "alice": 0.30369335412979126,
+      "frank": 0.43510836362838745
+     },
+     "delta_values": {
+      "alice": 0.02773469313979149,
+      "frank": 0.026135332882404327
+     }
+    },
+    "after_think | all": {
+     "nearest": "frank",
+     "delta": "alice",
+     "cos_values": {
+      "alice": 0.32114118337631226,
+      "frank": 0.4903997778892517
+     },
+     "delta_values": {
+      "alice": 0.020891889929771423,
+      "frank": 0.018666837364435196
+     }
+    }
+   }
+  },
+  {
+   "seed": "seed6045",
+   "agent": "frank",
+   "source": "carol",
+   "used": "wrong",
+   "right_author": "dave",
+   "right_same_specialty": false,
+   "first_author": "dave",
+   "address": "broadcast",
+   "phrasing": 1,
+   "disclosed": true,
+   "submission_correct": false,
+   "classes": {
+    "dave": [
+     "right",
+     "first"
+    ],
+    "carol": [
+     "wrong",
+     "second"
+    ]
+   },
+   "reply_tokens": 983,
+   "positions_present": [
+    "answer_pre",
+    "mention_pre",
+    "first_generated",
+    "note_pre",
+    "after_think"
+   ],
+   "predictions": {
+    "answer_pre | mid": {
+     "nearest": "dave",
+     "delta": "dave",
+     "cos_values": {
+      "dave": 0.5732474327087402,
+      "carol": 0.45318716764450073
+     },
+     "delta_values": {
+      "dave": 0.029282929375767708,
+      "carol": 0.021259183064103127
+     }
+    },
+    "answer_pre | late": {
+     "nearest": "carol",
+     "delta": "dave",
+     "cos_values": {
+      "dave": 0.45241501927375793,
+      "carol": 0.5324641466140747
+     },
+     "delta_values": {
+      "dave": 0.11090697348117828,
+      "carol": 0.09560466557741165
+     }
+    },
+    "answer_pre | all": {
+     "nearest": "carol",
+     "delta": "dave",
+     "cos_values": {
+      "dave": 0.45095178484916687,
+      "carol": 0.48834115266799927
+     },
+     "delta_values": {
+      "dave": 0.06434305757284164,
+      "carol": 0.04919172078371048
+     }
+    },
+    "mention_pre | mid": {
+     "nearest": "dave",
+     "delta": "dave",
+     "cos_values": {
+      "dave": 0.84548020362854,
+      "carol": 0.6576510667800903
+     },
+     "delta_values": {
+      "dave": 0.28223755955696106,
+      "carol": 0.1676693707704544
+     }
+    },
+    "mention_pre | late": {
+     "nearest": "carol",
+     "delta": "dave",
+     "cos_values": {
+      "dave": 0.8152133822441101,
+      "carol": 0.8941646218299866
+     },
+     "delta_values": {
+      "dave": 0.9729273319244385,
+      "carol": 0.9406221508979797
+     }
+    },
+    "mention_pre | all": {
+     "nearest": "dave",
+     "delta": "dave",
+     "cos_values": {
+      "dave": 0.767588198184967,
+      "carol": 0.7468693852424622
+     },
+     "delta_values": {
+      "dave": 0.47712746262550354,
+      "carol": 0.4252338409423828
+     }
+    },
+    "first_generated | mid": {
+     "nearest": "carol",
+     "delta": "dave",
+     "cos_values": {
+      "dave": 0.281545490026474,
+      "carol": 0.3087988495826721
+     },
+     "delta_values": {
+      "dave": 0.02022460103034973,
+      "carol": 0.015751445665955544
+     }
+    },
+    "first_generated | late": {
+     "nearest": "carol",
+     "delta": "dave",
+     "cos_values": {
+      "dave": 0.137020081281662,
+      "carol": 0.4145510494709015
+     },
+     "delta_values": {
+      "dave": 0.07617469131946564,
+      "carol": 0.06584373861551285
+     }
+    },
+    "first_generated | all": {
+     "nearest": "carol",
+     "delta": "dave",
+     "cos_values": {
+      "dave": 0.2604740858078003,
+      "carol": 0.40164217352867126
+     },
+     "delta_values": {
+      "dave": 0.03212645649909973,
+      "carol": 0.028682613745331764
+     }
+    },
+    "note_pre | mid": {
+     "nearest": "dave",
+     "delta": "dave",
+     "cos_values": {
+      "dave": 0.47287091612815857,
+      "carol": 0.42771220207214355
+     },
+     "delta_values": {
+      "dave": 0.019809525460004807,
+      "carol": 0.014673536643385887
+     }
+    },
+    "note_pre | late": {
+     "nearest": "dave",
+     "delta": "dave",
+     "cos_values": {
+      "dave": 0.45779168605804443,
+      "carol": 0.45464545488357544
+     },
+     "delta_values": {
+      "dave": 0.08100883662700653,
+      "carol": 0.06189653277397156
+     }
+    },
+    "note_pre | all": {
+     "nearest": "dave",
+     "delta": "dave",
+     "cos_values": {
+      "dave": 0.500015377998352,
+      "carol": 0.4773789346218109
+     },
+     "delta_values": {
+      "dave": 0.03911822661757469,
+      "carol": 0.0302660521119833
+     }
+    },
+    "after_think | mid": {
+     "nearest": "dave",
+     "delta": "dave",
+     "cos_values": {
+      "dave": 0.3162962794303894,
+      "carol": 0.20808663964271545
+     },
+     "delta_values": {
+      "dave": 0.023826412856578827,
+      "carol": 0.021631423383951187
+     }
+    },
+    "after_think | late": {
+     "nearest": "carol",
+     "delta": "dave",
+     "cos_values": {
+      "dave": 0.4434511959552765,
+      "carol": 0.5897358655929565
+     },
+     "delta_values": {
+      "dave": 0.04664799943566322,
+      "carol": 0.04151780158281326
+     }
+    },
+    "after_think | all": {
+     "nearest": "dave",
+     "delta": "dave",
+     "cos_values": {
+      "dave": 0.46283066272735596,
+      "carol": 0.43848541378974915
+     },
+     "delta_values": {
+      "dave": 0.029260806739330292,
+      "carol": 0.025430971756577492
+     }
+    }
+   }
+  },
+  {
+   "seed": "seed6048",
+   "agent": "carol",
+   "source": "dave",
+   "used": "correct",
+   "right_author": "dave",
+   "right_same_specialty": false,
+   "first_author": "frank",
+   "address": "broadcast",
+   "phrasing": 1,
+   "disclosed": true,
+   "submission_correct": true,
+   "classes": {
+    "frank": [
+     "wrong",
+     "first"
+    ],
+    "dave": [
+     "right",
+     "second"
+    ]
+   },
+   "reply_tokens": 1036,
+   "positions_present": [
+    "answer_pre",
+    "mention_pre",
+    "first_generated",
+    "note_pre",
+    "after_think"
+   ],
+   "predictions": {
+    "answer_pre | mid": {
+     "nearest": "frank",
+     "delta": "frank",
+     "cos_values": {
+      "frank": 0.4958266019821167,
+      "dave": 0.3932638168334961
+     },
+     "delta_values": {
+      "frank": 0.024157531559467316,
+      "dave": 0.022316142916679382
+     }
+    },
+    "answer_pre | late": {
+     "nearest": "dave",
+     "delta": "dave",
+     "cos_values": {
+      "frank": 0.6388803720474243,
+      "dave": 0.7391150593757629
+     },
+     "delta_values": {
+      "frank": 0.1134486049413681,
+      "dave": 0.11725470423698425
+     }
+    },
+    "answer_pre | all": {
+     "nearest": "dave",
+     "delta": "frank",
+     "cos_values": {
+      "frank": 0.5279020071029663,
+      "dave": 0.5537444949150085
+     },
+     "delta_values": {
+      "frank": 0.06589571386575699,
+      "dave": 0.06166495382785797
+     }
+    },
+    "mention_pre | mid": {
+     "nearest": "frank",
+     "delta": "frank",
+     "cos_values": {
+      "frank": 0.8897881507873535,
+      "dave": 0.6361230611801147
+     },
+     "delta_values": {
+      "frank": 0.22986926138401031,
+      "dave": 0.1704307496547699
+     }
+    },
+    "mention_pre | late": {
+     "nearest": "dave",
+     "delta": "dave",
+     "cos_values": {
+      "frank": 0.6537497043609619,
+      "dave": 0.8338108062744141
+     },
+     "delta_values": {
+      "frank": 0.4748497009277344,
+      "dave": 0.6412100195884705
+     }
+    },
+    "mention_pre | all": {
+     "nearest": "frank",
+     "delta": "dave",
+     "cos_values": {
+      "frank": 0.8156673312187195,
+      "dave": 0.635042130947113
+     },
+     "delta_values": {
+      "frank": 0.31472620368003845,
+      "dave": 0.32176798582077026
+     }
+    },
+    "first_generated | mid": {
+     "nearest": "frank",
+     "delta": "dave",
+     "cos_values": {
+      "frank": 0.350532203912735,
+      "dave": 0.32619836926460266
+     },
+     "delta_values": {
+      "frank": 0.017404332756996155,
+      "dave": 0.01755751296877861
+     }
+    },
+    "first_generated | late": {
+     "nearest": "frank",
+     "delta": "dave",
+     "cos_values": {
+      "frank": 0.163108691573143,
+      "dave": 0.128420889377594
+     },
+     "delta_values": {
+      "frank": 0.06309956312179565,
+      "dave": 0.06610273569822311
+     }
+    },
+    "first_generated | all": {
+     "nearest": "dave",
+     "delta": "dave",
+     "cos_values": {
+      "frank": 0.345611572265625,
+      "dave": 0.3624265491962433
+     },
+     "delta_values": {
+      "frank": 0.027613768354058266,
+      "dave": 0.02897787094116211
+     }
+    },
+    "note_pre | mid": {
+     "nearest": "dave",
+     "delta": "dave",
+     "cos_values": {
+      "frank": 0.4035254120826721,
+      "dave": 0.600777268409729
+     },
+     "delta_values": {
+      "frank": 0.015560343861579895,
+      "dave": 0.016188625246286392
+     }
+    },
+    "note_pre | late": {
+     "nearest": "dave",
+     "delta": "frank",
+     "cos_values": {
+      "frank": 0.5738706588745117,
+      "dave": 0.7186284065246582
+     },
+     "delta_values": {
+      "frank": 0.07096206396818161,
+      "dave": 0.06427469849586487
+     }
+    },
+    "note_pre | all": {
+     "nearest": "dave",
+     "delta": "frank",
+     "cos_values": {
+      "frank": 0.34913215041160583,
+      "dave": 0.5913777351379395
+     },
+     "delta_values": {
+      "frank": 0.03135920315980911,
+      "dave": 0.029695654287934303
+     }
+    },
+    "after_think | mid": {
+     "nearest": "dave",
+     "delta": "frank",
+     "cos_values": {
+      "frank": 0.3438211679458618,
+      "dave": 0.37048137187957764
+     },
+     "delta_values": {
+      "frank": 0.023627566173672676,
+      "dave": 0.017648054286837578
+     }
+    },
+    "after_think | late": {
+     "nearest": "dave",
+     "delta": "frank",
+     "cos_values": {
+      "frank": 0.21555283665657043,
+      "dave": 0.48153555393218994
+     },
+     "delta_values": {
+      "frank": 0.03937578946352005,
+      "dave": 0.03810775279998779
+     }
+    },
+    "after_think | all": {
+     "nearest": "dave",
+     "delta": "frank",
+     "cos_values": {
+      "frank": 0.29242345690727234,
+      "dave": 0.41512879729270935
+     },
+     "delta_values": {
+      "frank": 0.024792468175292015,
+      "dave": 0.0228103119879961
+     }
+    }
+   }
+  },
+  {
+   "seed": "seed6051",
+   "agent": "frank",
+   "source": "carol",
+   "used": "correct",
+   "right_author": "carol",
+   "right_same_specialty": true,
+   "first_author": "erin",
+   "address": "broadcast",
+   "phrasing": 1,
+   "disclosed": true,
+   "submission_correct": true,
+   "classes": {
+    "erin": [
+     "wrong",
+     "first"
+    ],
+    "carol": [
+     "right",
+     "second"
+    ]
+   },
+   "reply_tokens": 1542,
+   "positions_present": [
+    "answer_pre",
+    "mention_pre",
+    "first_generated",
+    "note_pre",
+    "after_think"
+   ],
+   "predictions": {
+    "answer_pre | mid": {
+     "nearest": "erin",
+     "delta": "erin",
+     "cos_values": {
+      "erin": 0.48572465777397156,
+      "carol": 0.4433956444263458
+     },
+     "delta_values": {
+      "erin": 0.033759705722332,
+      "carol": 0.022617420181632042
+     }
+    },
+    "answer_pre | late": {
+     "nearest": "carol",
+     "delta": "carol",
+     "cos_values": {
+      "erin": 0.3299945592880249,
+      "carol": 0.7440498471260071
+     },
+     "delta_values": {
+      "erin": 0.06790252029895782,
+      "carol": 0.06910021603107452
+     }
+    },
+    "answer_pre | all": {
+     "nearest": "carol",
+     "delta": "erin",
+     "cos_values": {
+      "erin": 0.48199936747550964,
+      "carol": 0.5296899080276489
+     },
+     "delta_values": {
+      "erin": 0.043543316423892975,
+      "carol": 0.039641477167606354
+     }
+    },
+    "mention_pre | mid": {
+     "nearest": "erin",
+     "delta": "erin",
+     "cos_values": {
+      "erin": 0.724061131477356,
+      "carol": 0.6374168395996094
+     },
+     "delta_values": {
+      "erin": 0.16588613390922546,
+      "carol": 0.15332922339439392
+     }
+    },
+    "mention_pre | late": {
+     "nearest": "carol",
+     "delta": "carol",
+     "cos_values": {
+      "erin": 0.5103422999382019,
+      "carol": 0.6961495876312256
+     },
+     "delta_values": {
+      "erin": 0.2667084336280823,
+      "carol": 0.4571847915649414
+     }
+    },
+    "mention_pre | all": {
+     "nearest": "erin",
+     "delta": "carol",
+     "cos_values": {
+      "erin": 0.7063252329826355,
+      "carol": 0.5725833773612976
+     },
+     "delta_values": {
+      "erin": 0.18568061292171478,
+      "carol": 0.249512180685997
+     }
+    },
+    "first_generated | mid": {
+     "nearest": "erin",
+     "delta": "carol",
+     "cos_values": {
+      "erin": 0.35875871777534485,
+      "carol": 0.3464754819869995
+     },
+     "delta_values": {
+      "erin": 0.020565232262015343,
+      "carol": 0.021395664662122726
+     }
+    },
+    "first_generated | late": {
+     "nearest": "carol",
+     "delta": "erin",
+     "cos_values": {
+      "erin": 0.10842739045619965,
+      "carol": 0.44386595487594604
+     },
+     "delta_values": {
+      "erin": 0.06937399506568909,
+      "carol": 0.06311799585819244
+     }
+    },
+    "first_generated | all": {
+     "nearest": "carol",
+     "delta": "erin",
+     "cos_values": {
+      "erin": 0.3829341232776642,
+      "carol": 0.523399829864502
+     },
+     "delta_values": {
+      "erin": 0.034086182713508606,
+      "carol": 0.03200354799628258
+     }
+    },
+    "note_pre | mid": {
+     "nearest": "erin",
+     "delta": "erin",
+     "cos_values": {
+      "erin": 0.5596926212310791,
+      "carol": 0.5013651847839355
+     },
+     "delta_values": {
+      "erin": 0.02096722275018692,
+      "carol": 0.015077999792993069
+     }
+    },
+    "note_pre | late": {
+     "nearest": "carol",
+     "delta": "erin",
+     "cos_values": {
+      "erin": 0.7402045130729675,
+      "carol": 0.7547458410263062
+     },
+     "delta_values": {
+      "erin": 0.07359971106052399,
+      "carol": 0.05008837580680847
+     }
+    },
+    "note_pre | all": {
+     "nearest": "erin",
+     "delta": "erin",
+     "cos_values": {
+      "erin": 0.6400472521781921,
+      "carol": 0.6142259240150452
+     },
+     "delta_values": {
+      "erin": 0.03680805861949921,
+      "carol": 0.025950752198696136
+     }
+    },
+    "after_think | mid": {
+     "nearest": "carol",
+     "delta": "erin",
+     "cos_values": {
+      "erin": 0.20362462103366852,
+      "carol": 0.30969199538230896
+     },
+     "delta_values": {
+      "erin": 0.022073734551668167,
+      "carol": 0.01920022815465927
+     }
+    },
+    "after_think | late": {
+     "nearest": "carol",
+     "delta": "erin",
+     "cos_values": {
+      "erin": 0.4520966410636902,
+      "carol": 0.7116004824638367
+     },
+     "delta_values": {
+      "erin": 0.045219503343105316,
+      "carol": 0.038391634821891785
+     }
+    },
+    "after_think | all": {
+     "nearest": "carol",
+     "delta": "erin",
+     "cos_values": {
+      "erin": 0.3771311342716217,
+      "carol": 0.47077295184135437
+     },
+     "delta_values": {
+      "erin": 0.027434062212705612,
+      "carol": 0.02285158820450306
+     }
+    }
+   }
+  },
+  {
+   "seed": "seed6054",
+   "agent": "carol",
+   "source": "erin",
+   "used": "wrong",
+   "right_author": "frank",
+   "right_same_specialty": true,
+   "first_author": "erin",
+   "address": "broadcast",
+   "phrasing": 1,
+   "disclosed": true,
+   "submission_correct": false,
+   "classes": {
+    "erin": [
+     "wrong",
+     "first"
+    ],
+    "frank": [
+     "right",
+     "second"
+    ]
+   },
+   "reply_tokens": 2011,
+   "positions_present": [
+    "answer_pre",
+    "mention_pre",
+    "first_generated",
+    "note_pre",
+    "after_think"
+   ],
+   "predictions": {
+    "answer_pre | mid": {
+     "nearest": "erin",
+     "delta": "erin",
+     "cos_values": {
+      "erin": 0.6358461380004883,
+      "frank": 0.5884238481521606
+     },
+     "delta_values": {
+      "erin": 0.03660307452082634,
+      "frank": 0.02449391968548298
+     }
+    },
+    "answer_pre | late": {
+     "nearest": "erin",
+     "delta": "erin",
+     "cos_values": {
+      "erin": 0.6412956714630127,
+      "frank": 0.31965696811676025
+     },
+     "delta_values": {
+      "erin": 0.11243479698896408,
+      "frank": 0.06588269770145416
+     }
+    },
+    "answer_pre | all": {
+     "nearest": "erin",
+     "delta": "erin",
+     "cos_values": {
+      "erin": 0.6254098415374756,
+      "frank": 0.5555068254470825
+     },
+     "delta_values": {
+      "erin": 0.06701574474573135,
+      "frank": 0.04123939573764801
+     }
+    },
+    "mention_pre | mid": {
+     "nearest": "erin",
+     "delta": "erin",
+     "cos_values": {
+      "erin": 0.723595142364502,
+      "frank": 0.6844061613082886
+     },
+     "delta_values": {
+      "erin": 0.14867565035820007,
+      "frank": 0.1432695984840393
+     }
+    },
+    "mention_pre | late": {
+     "nearest": "erin",
+     "delta": "erin",
+     "cos_values": {
+      "erin": 0.46788328886032104,
+      "frank": 0.1459764987230301
+     },
+     "delta_values": {
+      "erin": 0.32306310534477234,
+      "frank": 0.14249052107334137
+     }
+    },
+    "mention_pre | all": {
+     "nearest": "frank",
+     "delta": "erin",
+     "cos_values": {
+      "erin": 0.5335793495178223,
+      "frank": 0.545406699180603
+     },
+     "delta_values": {
+      "erin": 0.18773142993450165,
+      "frank": 0.12307723611593246
+     }
+    },
+    "first_generated | mid": {
+     "nearest": "frank",
+     "delta": "erin",
+     "cos_values": {
+      "erin": 0.3099871873855591,
+      "frank": 0.36712342500686646
+     },
+     "delta_values": {
+      "erin": 0.019837118685245514,
+      "frank": 0.018150782212615013
+     }
+    },
+    "first_generated | late": {
+     "nearest": "erin",
+     "delta": "erin",
+     "cos_values": {
+      "erin": 0.3811241388320923,
+      "frank": 0.19013170897960663
+     },
+     "delta_values": {
+      "erin": 0.08346781134605408,
+      "frank": 0.06009751185774803
+     }
+    },
+    "first_generated | all": {
+     "nearest": "erin",
+     "delta": "erin",
+     "cos_values": {
+      "erin": 0.38940876722335815,
+      "frank": 0.37467560172080994
+     },
+     "delta_values": {
+      "erin": 0.03433108329772949,
+      "frank": 0.0279347226023674
+     }
+    },
+    "note_pre | mid": {
+     "nearest": "erin",
+     "delta": "erin",
+     "cos_values": {
+      "erin": 0.5659139156341553,
+      "frank": 0.5602309107780457
+     },
+     "delta_values": {
+      "erin": 0.021121811121702194,
+      "frank": 0.012769334018230438
+     }
+    },
+    "note_pre | late": {
+     "nearest": "erin",
+     "delta": "erin",
+     "cos_values": {
+      "erin": 0.8692986369132996,
+      "frank": 0.05445408076047897
+     },
+     "delta_values": {
+      "erin": 0.11004020273685455,
+      "frank": 0.06120898574590683
+     }
+    },
+    "note_pre | all": {
+     "nearest": "erin",
+     "delta": "erin",
+     "cos_values": {
+      "erin": 0.651892364025116,
+      "frank": 0.3727875351905823
+     },
+     "delta_values": {
+      "erin": 0.051431674510240555,
+      "frank": 0.028561653569340706
+     }
+    },
+    "after_think | mid": {
+     "nearest": "frank",
+     "delta": "erin",
+     "cos_values": {
+      "erin": 0.20984913408756256,
+      "frank": 0.29031017422676086
+     },
+     "delta_values": {
+      "erin": 0.02375764772295952,
+      "frank": 0.015383956953883171
+     }
+    },
+    "after_think | late": {
+     "nearest": "erin",
+     "delta": "erin",
+     "cos_values": {
+      "erin": 0.6995683908462524,
+      "frank": 0.3770466446876526
+     },
+     "delta_values": {
+      "erin": 0.05469247326254845,
+      "frank": 0.03821883350610733
+     }
+    },
+    "after_think | all": {
+     "nearest": "erin",
+     "delta": "erin",
+     "cos_values": {
+      "erin": 0.4764648377895355,
+      "frank": 0.3829598128795624
+     },
+     "delta_values": {
+      "erin": 0.03118259459733963,
+      "frank": 0.022428754717111588
+     }
+    }
+   }
+  },
+  {
+   "seed": "seed6057",
+   "agent": "frank",
+   "source": "carol",
+   "used": "wrong",
+   "right_author": "alice",
+   "right_same_specialty": false,
+   "first_author": "carol",
+   "address": "broadcast",
+   "phrasing": 1,
+   "disclosed": true,
+   "submission_correct": false,
+   "classes": {
+    "carol": [
+     "wrong",
+     "first"
+    ],
+    "alice": [
+     "right",
+     "second"
+    ]
+   },
+   "reply_tokens": 3711,
+   "positions_present": [
+    "answer_pre",
+    "mention_pre",
+    "first_generated",
+    "note_pre",
+    "after_think"
+   ],
+   "predictions": {
+    "answer_pre | mid": {
+     "nearest": "carol",
+     "delta": "carol",
+     "cos_values": {
+      "carol": 0.5440728664398193,
+      "alice": 0.5076477527618408
+     },
+     "delta_values": {
+      "carol": 0.026668788865208626,
+      "alice": 0.020694129168987274
+     }
+    },
+    "answer_pre | late": {
+     "nearest": "alice",
+     "delta": "carol",
+     "cos_values": {
+      "carol": 0.2777929902076721,
+      "alice": 0.41413363814353943
+     },
+     "delta_values": {
+      "carol": 0.11822505295276642,
+      "alice": 0.08909487724304199
+     }
+    },
+    "answer_pre | all": {
+     "nearest": "carol",
+     "delta": "carol",
+     "cos_values": {
+      "carol": 0.48763343691825867,
+      "alice": 0.480537474155426
+     },
+     "delta_values": {
+      "carol": 0.06160639598965645,
+      "alice": 0.045573603361845016
+     }
+    },
+    "mention_pre | mid": {
+     "nearest": "carol",
+     "delta": "carol",
+     "cos_values": {
+      "carol": 0.5828015804290771,
+      "alice": 0.3748577833175659
+     },
+     "delta_values": {
+      "carol": 0.0721912682056427,
+      "alice": 0.04797346889972687
+     }
+    },
+    "mention_pre | late": {
+     "nearest": "carol",
+     "delta": "carol",
+     "cos_values": {
+      "carol": 0.4166681468486786,
+      "alice": 0.2089877873659134
+     },
+     "delta_values": {
+      "carol": 0.35609912872314453,
+      "alice": 0.1185835748910904
+     }
+    },
+    "mention_pre | all": {
+     "nearest": "carol",
+     "delta": "carol",
+     "cos_values": {
+      "carol": 0.5799275040626526,
+      "alice": 0.4239613115787506
+     },
+     "delta_values": {
+      "carol": 0.15608517825603485,
+      "alice": 0.0780545026063919
+     }
+    },
+    "first_generated | mid": {
+     "nearest": "carol",
+     "delta": "carol",
+     "cos_values": {
+      "carol": 0.30882972478866577,
+      "alice": 0.26701557636260986
+     },
+     "delta_values": {
+      "carol": 0.019100915640592575,
+      "alice": 0.017224537208676338
+     }
+    },
+    "first_generated | late": {
+     "nearest": "carol",
+     "delta": "carol",
+     "cos_values": {
+      "carol": 0.3135395050048828,
+      "alice": 0.15315361320972443
+     },
+     "delta_values": {
+      "carol": 0.06444302201271057,
+      "alice": 0.05715502053499222
+     }
+    },
+    "first_generated | all": {
+     "nearest": "carol",
+     "delta": "carol",
+     "cos_values": {
+      "carol": 0.400960236787796,
+      "alice": 0.3526173233985901
+     },
+     "delta_values": {
+      "carol": 0.029899735003709793,
+      "alice": 0.0269846860319376
+     }
+    },
+    "note_pre | mid": {
+     "nearest": "carol",
+     "delta": "carol",
+     "cos_values": {
+      "carol": 0.6098554134368896,
+      "alice": 0.44630998373031616
+     },
+     "delta_values": {
+      "carol": 0.016501236706972122,
+      "alice": 0.010414809919893742
+     }
+    },
+    "note_pre | late": {
+     "nearest": "carol",
+     "delta": "carol",
+     "cos_values": {
+      "carol": 0.8392559289932251,
+      "alice": 0.15941256284713745
+     },
+     "delta_values": {
+      "carol": 0.0885147750377655,
+      "alice": 0.05514046549797058
+     }
+    },
+    "note_pre | all": {
+     "nearest": "carol",
+     "delta": "carol",
+     "cos_values": {
+      "carol": 0.6754829287528992,
+      "alice": 0.287766695022583
+     },
+     "delta_values": {
+      "carol": 0.04074025899171829,
+      "alice": 0.02412748895585537
+     }
+    },
+    "after_think | mid": {
+     "nearest": "alice",
+     "delta": "carol",
+     "cos_values": {
+      "carol": 0.1566382497549057,
+      "alice": 0.19956089556217194
+     },
+     "delta_values": {
+      "carol": 0.018525872379541397,
+      "alice": 0.017835406586527824
+     }
+    },
+    "after_think | late": {
+     "nearest": "carol",
+     "delta": "carol",
+     "cos_values": {
+      "carol": 0.31974613666534424,
+      "alice": 0.28946736454963684
+     },
+     "delta_values": {
+      "carol": 0.03405117616057396,
+      "alice": 0.02340233325958252
+     }
+    },
+    "after_think | all": {
+     "nearest": "carol",
+     "delta": "carol",
+     "cos_values": {
+      "carol": 0.3269100785255432,
+      "alice": 0.3022738993167877
+     },
+     "delta_values": {
+      "carol": 0.02153833582997322,
+      "alice": 0.016529925167560577
+     }
+    }
+   }
+  }
+ ]
+}

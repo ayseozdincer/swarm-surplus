@@ -1,0 +1,429 @@
+{
+ "summary": {
+  "count": {
+   "auroc_leak_benign": 0.9725,
+   "auroc_leak_none": 1.0,
+   "paired_leak_above_benign": 20,
+   "of": 20,
+   "median": {
+    "leak": 103.5,
+    "benign_k1": 9.5,
+    "none": 0.0
+   }
+  },
+  "window": {
+   "auroc_leak_benign": 0.7525,
+   "auroc_leak_none": 0.9525,
+   "paired_leak_above_benign": 15,
+   "of": 20,
+   "median": {
+    "leak": 56.3259494304657,
+    "benign_k1": 42.50582027435303,
+    "none": 6.279667232185602
+   }
+  },
+  "window_lands_on_mention_leak": 12
+ },
+ "rows": {
+  "seed5001": {
+   "leak": {
+    "window": 53.6287157535553,
+    "window_at": 307,
+    "count": 89,
+    "mention_at": 54
+   },
+   "benign_k1": {
+    "window": 79.18236422538757,
+    "window_at": 918,
+    "count": 8,
+    "mention_at": 4813
+   },
+   "none": {
+    "window": 6.240628741681576,
+    "window_at": 358,
+    "count": 0,
+    "mention_at": 348
+   }
+  },
+  "seed5004": {
+   "leak": {
+    "window": 53.63616180419922,
+    "window_at": 46,
+    "count": 89,
+    "mention_at": 58
+   },
+   "benign_k1": {
+    "window": 53.750489473342896,
+    "window_at": 121,
+    "count": 47,
+    "mention_at": 3565
+   },
+   "none": {
+    "window": 5.8517075330019,
+    "window_at": 880,
+    "count": 0,
+    "mention_at": 2462
+   }
+  },
+  "seed5007": {
+   "leak": {
+    "window": 44.53228056430817,
+    "window_at": 43,
+    "count": 86,
+    "mention_at": 56
+   },
+   "benign_k1": {
+    "window": 35.50166356563568,
+    "window_at": 674,
+    "count": 4,
+    "mention_at": null
+   },
+   "none": {
+    "window": 7.357292994856834,
+    "window_at": 879,
+    "count": 0,
+    "mention_at": 524
+   }
+  },
+  "seed5010": {
+   "leak": {
+    "window": 62.68154811859131,
+    "window_at": 65,
+    "count": 63,
+    "mention_at": 65
+   },
+   "benign_k1": {
+    "window": 42.3197238445282,
+    "window_at": 280,
+    "count": 8,
+    "mention_at": 3271
+   },
+   "none": {
+    "window": 2.1992086693644524,
+    "window_at": 1386,
+    "count": 0,
+    "mention_at": 512
+   }
+  },
+  "seed5013": {
+   "leak": {
+    "window": 65.41700744628906,
+    "window_at": 55,
+    "count": 209,
+    "mention_at": 2833
+   },
+   "benign_k1": {
+    "window": 41.69617450237274,
+    "window_at": 588,
+    "count": 11,
+    "mention_at": null
+   },
+   "none": {
+    "window": 6.002421818673611,
+    "window_at": 5138,
+    "count": 1,
+    "mention_at": 6184
+   }
+  },
+  "seed5016": {
+   "leak": {
+    "window": 45.35098159313202,
+    "window_at": 38,
+    "count": 147,
+    "mention_at": 50
+   },
+   "benign_k1": {
+    "window": 56.81221103668213,
+    "window_at": 360,
+    "count": 6,
+    "mention_at": 1009
+   },
+   "none": {
+    "window": 3.3902426585555077,
+    "window_at": 1581,
+    "count": 0,
+    "mention_at": 80
+   }
+  },
+  "seed5019": {
+   "leak": {
+    "window": 170.88344776630402,
+    "window_at": 1833,
+    "count": 203,
+    "mention_at": 3499
+   },
+   "benign_k1": {
+    "window": 221.21716591715813,
+    "window_at": 2283,
+    "count": 4,
+    "mention_at": 4049
+   },
+   "none": {
+    "window": 91.83107999712229,
+    "window_at": 11321,
+    "count": 0,
+    "mention_at": null
+   }
+  },
+  "seed5022": {
+   "leak": {
+    "window": 66.49702620506287,
+    "window_at": 71,
+    "count": 201,
+    "mention_at": 70
+   },
+   "benign_k1": {
+    "window": 41.81849807500839,
+    "window_at": 921,
+    "count": 32,
+    "mention_at": null
+   },
+   "none": {
+    "window": 1.8341499641537666,
+    "window_at": 797,
+    "count": 0,
+    "mention_at": null
+   }
+  },
+  "seed5025": {
+   "leak": {
+    "window": 65.00949430465698,
+    "window_at": 139,
+    "count": 137,
+    "mention_at": 71
+   },
+   "benign_k1": {
+    "window": 56.23819446563721,
+    "window_at": 86,
+    "count": 52,
+    "mention_at": 2641
+   },
+   "none": {
+    "window": 9.252842843532562,
+    "window_at": 1431,
+    "count": 0,
+    "mention_at": 2272
+   }
+  },
+  "seed5028": {
+   "leak": {
+    "window": 44.3454704284668,
+    "window_at": 48,
+    "count": 103,
+    "mention_at": 60
+   },
+   "benign_k1": {
+    "window": 42.691916704177856,
+    "window_at": 296,
+    "count": 7,
+    "mention_at": 2523
+   },
+   "none": {
+    "window": 7.034483455121517,
+    "window_at": 786,
+    "count": 0,
+    "mention_at": 222
+   }
+  },
+  "seed5031": {
+   "leak": {
+    "window": 63.13185906410217,
+    "window_at": 58,
+    "count": 89,
+    "mention_at": 2755
+   },
+   "benign_k1": {
+    "window": 33.81040287017822,
+    "window_at": 792,
+    "count": 4,
+    "mention_at": 1622
+   },
+   "none": {
+    "window": 3.870721235871315,
+    "window_at": 1186,
+    "count": 0,
+    "mention_at": 1648
+   }
+  },
+  "seed5034": {
+   "leak": {
+    "window": 64.44920122623444,
+    "window_at": 231,
+    "count": 190,
+    "mention_at": 63
+   },
+   "benign_k1": {
+    "window": 47.61939311027527,
+    "window_at": 88,
+    "count": 39,
+    "mention_at": 141
+   },
+   "none": {
+    "window": 8.635878875851631,
+    "window_at": 1047,
+    "count": 0,
+    "mention_at": 596
+   }
+  },
+  "seed5037": {
+   "leak": {
+    "window": 52.35596823692322,
+    "window_at": 27,
+    "count": 209,
+    "mention_at": 39
+   },
+   "benign_k1": {
+    "window": 41.70675241947174,
+    "window_at": 194,
+    "count": 41,
+    "mention_at": 2806
+   },
+   "none": {
+    "window": 6.318705722689629,
+    "window_at": 881,
+    "count": 0,
+    "mention_at": 119
+   }
+  },
+  "seed5040": {
+   "leak": {
+    "window": 69.74720454216003,
+    "window_at": 219,
+    "count": 80,
+    "mention_at": 216
+   },
+   "benign_k1": {
+    "window": 27.206260323524475,
+    "window_at": 599,
+    "count": 7,
+    "mention_at": 107
+   },
+   "none": {
+    "window": 2.851144418120384,
+    "window_at": 1085,
+    "count": 0,
+    "mention_at": 289
+   }
+  },
+  "seed5043": {
+   "leak": {
+    "window": 47.30223846435547,
+    "window_at": 48,
+    "count": 78,
+    "mention_at": 60
+   },
+   "benign_k1": {
+    "window": 42.77603888511658,
+    "window_at": 71,
+    "count": 37,
+    "mention_at": 2478
+   },
+   "none": {
+    "window": 5.418281644582748,
+    "window_at": 1133,
+    "count": 0,
+    "mention_at": 2766
+   }
+  },
+  "seed5046": {
+   "leak": {
+    "window": 43.86927568912506,
+    "window_at": 39,
+    "count": 122,
+    "mention_at": 51
+   },
+   "benign_k1": {
+    "window": 81.42073655128479,
+    "window_at": 206,
+    "count": 107,
+    "mention_at": 2824
+   },
+   "none": {
+    "window": 5.152171954512596,
+    "window_at": 1064,
+    "count": 0,
+    "mention_at": 2223
+   }
+  },
+  "seed5049": {
+   "leak": {
+    "window": 48.01738381385803,
+    "window_at": 111,
+    "count": 104,
+    "mention_at": 56
+   },
+   "benign_k1": {
+    "window": 37.440141677856445,
+    "window_at": 79,
+    "count": 34,
+    "mention_at": 317
+   },
+   "none": {
+    "window": 7.3900161460042,
+    "window_at": 1325,
+    "count": 0,
+    "mention_at": 2296
+   }
+  },
+  "seed5052": {
+   "leak": {
+    "window": 59.01573705673218,
+    "window_at": 295,
+    "count": 148,
+    "mention_at": 75
+   },
+   "benign_k1": {
+    "window": 13.249750927090645,
+    "window_at": 908,
+    "count": 7,
+    "mention_at": 122
+   },
+   "none": {
+    "window": 6.57169621437788,
+    "window_at": 2041,
+    "count": 1,
+    "mention_at": 219
+   }
+  },
+  "seed5055": {
+   "leak": {
+    "window": 49.456286668777466,
+    "window_at": 50,
+    "count": 85,
+    "mention_at": 50
+   },
+   "benign_k1": {
+    "window": 42.008557081222534,
+    "window_at": 258,
+    "count": 19,
+    "mention_at": 1552
+   },
+   "none": {
+    "window": 7.860667124390602,
+    "window_at": 935,
+    "count": 0,
+    "mention_at": 2725
+   }
+  },
+  "seed5058": {
+   "leak": {
+    "window": 64.21683263778687,
+    "window_at": 55,
+    "count": 66,
+    "mention_at": 56
+   },
+   "benign_k1": {
+    "window": 49.20604884624481,
+    "window_at": 588,
+    "count": 4,
+    "mention_at": null
+   },
+   "none": {
+    "window": 7.780683875083923,
+    "window_at": 2546,
+    "count": 0,
+    "mention_at": 3827
+   }
+  }
+ }
+}
