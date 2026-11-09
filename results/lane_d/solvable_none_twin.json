@@ -1,0 +1,278 @@
+{
+ "table": {
+  "submitted": {
+   "n": 13,
+   "none_right": 9,
+   "none_wrong": 4,
+   "right_in_both_none": 6,
+   "right_in_one_none": 4,
+   "wrong_in_both_none": 3
+  },
+  "did not submit": {
+   "n": 7,
+   "none_right": 1,
+   "none_wrong": 6,
+   "right_in_both_none": 1,
+   "right_in_one_none": 0,
+   "wrong_in_both_none": 6
+  }
+ },
+ "fisher_two_sided": 0.05727554179566564,
+ "answer_type": {
+  "number": {
+   "n": 10,
+   "submitted": 10,
+   "none_right": 9,
+   "second_none_right": 7
+  },
+  "string": {
+   "n": 10,
+   "submitted": 3,
+   "none_right": 1,
+   "second_none_right": 1
+  }
+ },
+ "none_runs_disagree": 4,
+ "rows": [
+  {
+   "seed": "seed5000",
+   "target": "frank",
+   "answer_type": "string",
+   "value": "gJbChBJcDBFdBcdCdIeiCd5",
+   "submitted": false,
+   "none_right": false,
+   "second_none_right": false,
+   "disclosed": false,
+   "reply_tokens": 4586,
+   "none_reply_tokens": 2912
+  },
+  {
+   "seed": "seed5002",
+   "target": "frank",
+   "answer_type": "string",
+   "value": "cDcfHjjJafbCaeiHbggfH5",
+   "submitted": false,
+   "none_right": false,
+   "second_none_right": false,
+   "disclosed": true,
+   "reply_tokens": 8524,
+   "none_reply_tokens": 2961
+  },
+  {
+   "seed": "seed5003",
+   "target": "frank",
+   "answer_type": "number",
+   "value": "45",
+   "submitted": true,
+   "none_right": true,
+   "second_none_right": false,
+   "disclosed": true,
+   "reply_tokens": 1560,
+   "none_reply_tokens": 2994
+  },
+  {
+   "seed": "seed5005",
+   "target": "carol",
+   "answer_type": "string",
+   "value": "eeCdlejHdifeahjbCjjheB3",
+   "submitted": true,
+   "none_right": false,
+   "second_none_right": false,
+   "disclosed": false,
+   "reply_tokens": 2597,
+   "none_reply_tokens": 3032
+  },
+  {
+   "seed": "seed5006",
+   "target": "frank",
+   "answer_type": "number",
+   "value": "55",
+   "submitted": true,
+   "none_right": true,
+   "second_none_right": true,
+   "disclosed": false,
+   "reply_tokens": 1450,
+   "none_reply_tokens": 1619
+  },
+  {
+   "seed": "seed5008",
+   "target": "frank",
+   "answer_type": "number",
+   "value": "58",
+   "submitted": true,
+   "none_right": true,
+   "second_none_right": true,
+   "disclosed": true,
+   "reply_tokens": 1523,
+   "none_reply_tokens": 1736
+  },
+  {
+   "seed": "seed5009",
+   "target": "frank",
+   "answer_type": "number",
+   "value": "195",
+   "submitted": true,
+   "none_right": false,
+   "second_none_right": true,
+   "disclosed": true,
+   "reply_tokens": 1611,
+   "none_reply_tokens": 2396
+  },
+  {
+   "seed": "seed5011",
+   "target": "frank",
+   "answer_type": "number",
+   "value": "182",
+   "submitted": true,
+   "none_right": true,
+   "second_none_right": true,
+   "disclosed": false,
+   "reply_tokens": 1577,
+   "none_reply_tokens": 1666
+  },
+  {
+   "seed": "seed5012",
+   "target": "carol",
+   "answer_type": "number",
+   "value": "53",
+   "submitted": true,
+   "none_right": true,
+   "second_none_right": false,
+   "disclosed": false,
+   "reply_tokens": 1914,
+   "none_reply_tokens": 2667
+  },
+  {
+   "seed": "seed5014",
+   "target": "carol",
+   "answer_type": "string",
+   "value": "deBabfDeEjfIkelHjfeHkl3",
+   "submitted": false,
+   "none_right": false,
+   "second_none_right": false,
+   "disclosed": false,
+   "reply_tokens": 10481,
+   "none_reply_tokens": 5471
+  },
+  {
+   "seed": "seed5015",
+   "target": "frank",
+   "answer_type": "string",
+   "value": "CbjajfFfJidJmChgFdIef6",
+   "submitted": false,
+   "none_right": false,
+   "second_none_right": false,
+   "disclosed": false,
+   "reply_tokens": 5768,
+   "none_reply_tokens": 2882
+  },
+  {
+   "seed": "seed5017",
+   "target": "carol",
+   "answer_type": "string",
+   "value": "HakBCaHblFgChEdeChgDlG5",
+   "submitted": false,
+   "none_right": false,
+   "second_none_right": false,
+   "disclosed": false,
+   "reply_tokens": 4586,
+   "none_reply_tokens": 4028
+  },
+  {
+   "seed": "seed5018",
+   "target": "frank",
+   "answer_type": "string",
+   "value": "gbgfEadbjBeeeFdlmlBkhg1",
+   "submitted": false,
+   "none_right": true,
+   "second_none_right": true,
+   "disclosed": false,
+   "reply_tokens": 4874,
+   "none_reply_tokens": 3416
+  },
+  {
+   "seed": "seed5020",
+   "target": "frank",
+   "answer_type": "string",
+   "value": "fbhAhihjAhdjdIifagDcdd1",
+   "submitted": false,
+   "none_right": false,
+   "second_none_right": false,
+   "disclosed": false,
+   "reply_tokens": 8582,
+   "none_reply_tokens": 3519
+  },
+  {
+   "seed": "seed5021",
+   "target": "frank",
+   "answer_type": "number",
+   "value": "268",
+   "submitted": true,
+   "none_right": true,
+   "second_none_right": true,
+   "disclosed": false,
+   "reply_tokens": 1570,
+   "none_reply_tokens": 1634
+  },
+  {
+   "seed": "seed5023",
+   "target": "frank",
+   "answer_type": "number",
+   "value": "314",
+   "submitted": true,
+   "none_right": true,
+   "second_none_right": true,
+   "disclosed": false,
+   "reply_tokens": 1208,
+   "none_reply_tokens": 3096
+  },
+  {
+   "seed": "seed5024",
+   "target": "carol",
+   "answer_type": "number",
+   "value": "-15",
+   "submitted": true,
+   "none_right": true,
+   "second_none_right": true,
+   "disclosed": false,
+   "reply_tokens": 1588,
+   "none_reply_tokens": 3344
+  },
+  {
+   "seed": "seed5026",
+   "target": "frank",
+   "answer_type": "string",
+   "value": "HfcefIaeGdbggEhliCeegf3",
+   "submitted": true,
+   "none_right": false,
+   "second_none_right": false,
+   "disclosed": false,
+   "reply_tokens": 2295,
+   "none_reply_tokens": 4715
+  },
+  {
+   "seed": "seed5027",
+   "target": "carol",
+   "answer_type": "string",
+   "value": "bdbBeeaHdkJhdglFmedfie4",
+   "submitted": true,
+   "none_right": false,
+   "second_none_right": false,
+   "disclosed": false,
+   "reply_tokens": 7022,
+   "none_reply_tokens": 3345
+  },
+  {
+   "seed": "seed5029",
+   "target": "carol",
+   "answer_type": "number",
+   "value": "357",
+   "submitted": true,
+   "none_right": true,
+   "second_none_right": false,
+   "disclosed": true,
+   "reply_tokens": 1562,
+   "none_reply_tokens": 3859
+  }
+ ]
+}

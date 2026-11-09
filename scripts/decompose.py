@@ -25,14 +25,16 @@ from replay import LENS_FILE, MODEL_DIR  # noqa: E402
 BATCH = 384
 
 
-def load_rows(directory: Path):
+def load_rows(directory: Path, positions=None):
     index = json.loads((directory/"index.json").read_text())
     rows, residuals = [], []
     for turn in index["turns"]:
         data = np.load(directory/turn["file"])
         names = list(turn["positions"])
-        for label in ("actual", "reference"):
+        for label in (p for p in ("actual", "reference", "compacted", "shuffled") if p in data.files):
             for n, name in enumerate(names):
+                if positions and name not in positions:
+                    continue
                 rows.append({"file": turn["file"], "pass": label, "position": name})
                 residuals.append(data[label][n])
     return rows, np.stack(residuals)
@@ -41,13 +43,14 @@ def load_rows(directory: Path):
 def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     parser.add_argument("dirs", nargs="+", type=Path)
+    parser.add_argument("--positions", nargs="*", help="decompose only these named positions")
     args = parser.parse_args()
     lens = jspace.Lens(MODEL_DIR, LENS_FILE)
     work = []
     for directory in args.dirs:
-        if (directory/"jspace.npz").exists():
-            continue
-        rows, residuals = load_rows(directory)
+        if (directory/"jspace.npz").exists() and (directory/"jspace.npz").stat().st_mtime > (directory/"index.json").stat().st_mtime:
+            continue                    # up to date; a replay that added turns since makes it stale
+        rows, residuals = load_rows(directory, args.positions)
         work.append((directory, rows, residuals, np.full((len(rows), len(lens.layers), jspace.K), -1, dtype=np.int32),
                      np.zeros((len(rows), len(lens.layers), jspace.K), dtype=np.float32)))
         print(directory, len(rows), "rows", flush=True)
