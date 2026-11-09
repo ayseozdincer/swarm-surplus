@@ -47,21 +47,39 @@ def assistant_message(response: dict) -> dict:
     return message
 
 
+MASKED_SPAN_TAGS = ("peer", "external")   # provenance of a sub-message span (`spans` in a message's meta) that the reference masks
+USER_CLOSE = "<|im_end|>\n"
+
+
 def peer_char_spans(tokenizer, messages: list[dict], meta: list[dict], tools, full_text: str) -> list[tuple[int, int]]:
-    """Character span of every message tagged `peer`, wrapper tokens included. Each comes from rendering the list up
-    to and including that message and taking the last block. The list then ends on a user message, so no earlier
-    assistant message picks up an empty think block and the render is a true prefix of the full text."""
+    """Character span of every message tagged `peer`, wrapper tokens included, and of every sub-message span a message's
+    meta lists under `spans` with a provenance in MASKED_SPAN_TAGS (start and end are offsets into that message's content,
+    e.g. one injected sentence inside an environment-tagged document). Each comes from rendering the list up to and
+    including that message and taking the last block. The list then ends on a user message, so no earlier assistant
+    message picks up an empty think block and the render is a true prefix of the full text."""
     spans = []
     for i, tag in enumerate(meta):
-        if tag["provenance"] != PEER:
+        sub = [s for s in (tag.get("spans") or []) if s.get("provenance") in MASKED_SPAN_TAGS]
+        if tag["provenance"] != PEER and not sub:
             continue
         if messages[i]["role"] != "user":
-            raise ValueError(f"peer message {i} has role {messages[i]['role']}")
+            raise ValueError(f"masked message {i} has role {messages[i]['role']}")
         upto = tokenizer.apply_chat_template(messages[:i + 1], tools=tools, tokenize=False, add_generation_prompt=False)
         start = upto.rfind("<|im_start|>user\n")
         if start < 0 or not full_text.startswith(upto):
-            raise ValueError(f"peer message {i} does not render as a prefix of the full text")
-        spans.append((start, len(upto)))
+            raise ValueError(f"masked message {i} does not render as a prefix of the full text")
+        if tag["provenance"] == PEER:
+            spans.append((start, len(upto)))
+            continue
+        content = messages[i]["content"]
+        content_start = len(upto) - len(USER_CLOSE) - len(content)
+        if upto[content_start:content_start + len(content)] != content:
+            raise ValueError(f"message {i} content is not rendered verbatim")
+        for s in sub:
+            a, b = int(s["start"]), int(s["end"])
+            if not (0 <= a < b <= len(content)):
+                raise ValueError(f"span {a}:{b} outside message {i} content of {len(content)} characters")
+            spans.append((content_start + a, content_start + b))
     return spans
 
 
@@ -90,10 +108,11 @@ def tool_value_span(full_text: str, reply_start: int, key: str) -> tuple[int, in
     return match.end(), end
 
 
-def render_turn(tokenizer, turn: dict, mentions: dict[str, str] | None = None) -> dict:
+def render_turn(tokenizer, turn: dict, mentions: dict[str, str] | None = None, mentions_reply: dict[str, str] | None = None) -> dict:
     """ids, mask (1 keeps a token, 0 is a peer token) and the named read positions of one turn. `mentions` maps a name to
     a string; where the reasoning first writes it, positions <name>_0 and <name>_pre are added (a planted answer, read
-    whether or not the agent submits it)."""
+    whether or not the agent submits it). `mentions_reply` does the same over the whole reply, thinking and answer, for
+    a turn whose answer is plain text rather than a tool call."""
     messages, meta, tools = turn["messages"], turn["message_meta"], turn["tools"]
     prompt = tokenizer.apply_chat_template(messages, tools=tools, tokenize=False, add_generation_prompt=True)
     full = tokenizer.apply_chat_template(messages + [assistant_message(turn["response"])], tools=tools, tokenize=False,
@@ -139,6 +158,11 @@ def render_turn(tokenizer, turn: dict, mentions: dict[str, str] | None = None) -
     if citation:
         positions["citation"] = token_at(offsets, citation.start())
     end = full.rfind("<|im_end|>")
+    for name, text in (mentions_reply or {}).items():
+        at = full.find(text, reply, end) if text else -1
+        if at >= 0:
+            positions[f"{name}_0"] = token_at(offsets, at)
+            positions[f"{name}_pre"] = positions[f"{name}_0"] - 1
     positions["end_of_response"] = token_at(offsets, end - 1)
     return {"text": full, "ids": ids, "mask": mask, "positions": positions, "prompt_chars": reply,
             "peer_token_spans": token_spans, "prompt_tokens": positions["prompt_last"] + 1}
