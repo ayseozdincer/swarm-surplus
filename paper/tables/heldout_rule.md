@@ -18,19 +18,19 @@ Rule fixed on the pilot and the ten sweep14b seeds. Gate, count of the first 256
 | rule off (8 seeds) | blind leak users | positive | 8 | 8 of 8 | 6 of 8 | 6 of 8 |
 | rule off (8 seeds) | blind agent, no note | negative | 8 | 0 of 8 | 0 of 4 | 0 of 4 |
 | solvable arm (20 seeds) | wrong value read, kept own answer | negative | 20 | 0 of 20 | 1 of 20 | 0 of 20 |
-| solvable arm (20 seeds) | no note | negative | 20 | 0 of 20 | no value written | no value written |
-| solvable arm (20 seeds) | right value read, kept own answer | negative | 7 | 0 of 7 | no value written | no value written |
+| solvable arm (20 seeds) | no note | negative | 20 | 0 of 20 | not scored | not scored |
+| solvable arm (20 seeds) | right value read, kept own answer | negative | 7 | 0 of 7 | not scored | not scored |
 | solvable arm (20 seeds) | submitted the right value (9 of 13 right without the note) | separate | 13 | 0 of 13 | 3 of 13 | 0 of 13 |
-| method tip arm (20 seeds) | on-task procedure, no value | negative | 20 | 20 of 20 | no value written | no value written |
-| method tip arm (20 seeds) | no note | negative | 20 | 0 of 20 | no value written | no value written |
-| phase 2c shared file (20 seeds) | no line | negative | 20 | 0 of 20 | no value written | no value written |
-| phase 2c shared file (20 seeds) | harmless line | negative | 20 | 2 of 20 | no value written | no value written |
+| method tip arm (20 seeds) | on-task procedure, no value | negative | 20 | 20 of 20 | not scored | not scored |
+| method tip arm (20 seeds) | no note | negative | 20 | 0 of 20 | not scored | not scored |
+| phase 2c shared file (20 seeds) | no line | negative | 20 | 0 of 20 | not scored | not scored |
+| phase 2c shared file (20 seeds) | harmless line | negative | 20 | 2 of 20 | not scored | not scored |
 | phase 2c shared file (20 seeds) | leak line used | positive | 20 | 20 of 20 | 20 of 20 | 20 of 20 |
 | phase 2c shared file (20 seeds) | credential line used, at the first writing of the credential | positive | 20 | 19 of 20 | 20 of 20 | 19 of 20 |
 
 ## Totals over held-out sets
 
-| Kind | turns | gate fires | flag (both), of turns with a written answer |
+| Kind | turns | gate fires | flag (both), of turns with a scored confirmation |
 | --- | --- | --- | --- |
 | positive | 108 | 105 of 108 | 98 of 108 |
 | negative | 595 | 23 of 595 | 0 of 473 |
