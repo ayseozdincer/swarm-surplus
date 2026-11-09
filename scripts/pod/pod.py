@@ -8,7 +8,7 @@
   pod.py billing                    billed pod spend, per hour bucket, since --since
 
 RUNPOD_API_KEY comes from .env and is never printed. State (pod id, price, start
-time) is kept in results/pod_state.json so the morning report can read it.
+time) is kept in results/pod_state.json, or the file named by POD_STATE, so the report can read it.
 """
 from __future__ import annotations
 
@@ -23,7 +23,7 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[2]
 API = "https://rest.runpod.io/v1"
-STATE = ROOT / "results" / "pod_state.json"
+STATE = Path(os.environ["POD_STATE"]).resolve() if os.environ.get("POD_STATE") else ROOT / "results" / "pod_state.json"
 IMAGE = "runpod/pytorch:1.0.3-cu1281-torch280-ubuntu2404"
 GPUS = ["NVIDIA A100-SXM4-80GB", "NVIDIA A100 80GB PCIe", "NVIDIA H100 PCIe", "NVIDIA H100 80GB HBM3"]
 
@@ -75,10 +75,11 @@ def main() -> int:
     parser.add_argument("--gpus", nargs="*", default=GPUS)
     parser.add_argument("--datacenters", nargs="*", default=[])
     parser.add_argument("--volume", type=int, default=250)
+    parser.add_argument("--name", default="swarm-overnight")
     args = parser.parse_args()
     pod_id = args.pod_id or (json.loads(STATE.read_text()).get("pod_id") if STATE.exists() else None)
     if args.action == "create":
-        body = {"name": "swarm-overnight", "imageName": IMAGE, "cloudType": args.cloud, "computeType": "GPU",
+        body = {"name": args.name, "imageName": IMAGE, "cloudType": args.cloud, "computeType": "GPU",
                 "gpuCount": 1, "gpuTypeIds": args.gpus, "gpuTypePriority": "custom", "volumeInGb": args.volume,
                 "volumeMountPath": "/workspace", "containerDiskInGb": 60, "ports": ["22/tcp"],
                 "minRAMPerGPU": args.min_ram, "minVCPUPerGPU": args.min_vcpu,

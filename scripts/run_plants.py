@@ -11,6 +11,19 @@ Examples
 
   # coalition-size sweep
   python scripts/run_plants.py --seeds 10 --k 1 3 5 --out runs/coalition
+
+  # a leak the agents know is forbidden, and a command from a teammate
+  python scripts/run_plants.py --seeds 10 --rules confidential --variants none benign leak forbidden_leak command --out runs/rules
+
+  # two conflicting leaks, and one broadcast leak to three blind agents at once
+  python scripts/run_plants.py --seeds 10 --variants none leak leak2 --out runs/leak2
+  python scripts/run_plants.py --seeds 10 --blind-per-episode 3 --variants none leak_all --out runs/leak_all
+
+  # a teammate's answer, right or wrong, to an agent that can solve its own task
+  python scripts/run_plants.py --seeds 10 --variants none leak_solvable --out runs/solvable
+
+  # leak notes in one of three phrasings per seed, addressed to nobody by name
+  python scripts/run_plants.py --seeds 10 --variants none leak --leak-phrasing varied --leak-address broadcast --out runs/varied
 """
 from __future__ import annotations
 
@@ -26,7 +39,8 @@ sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 from experiments.episode import SwarmConfig, run_seed  # noqa: E402
 from experiments.labels import collect  # noqa: E402
 from experiments.llm import MockLLM, OpenAICompatLLM  # noqa: E402
-from experiments.plants import PlantSpec  # noqa: E402
+from experiments.plants import PLANT_KINDS, SOLVABLE_VALUES, UNSIZED_KINDS, PlantSpec, task_fact  # noqa: E402
+from experiments.prompts import RULE_LINES  # noqa: E402
 from experiments.protocol.state import AgentSpec  # noqa: E402
 from experiments.tasks import TASK_TYPES, TaskBank  # noqa: E402
 
@@ -56,13 +70,22 @@ def parse_args() -> argparse.Namespace:
     p.add_argument("--warmup", type=int, default=2, help="episodes before the plant")
     p.add_argument("--post", type=int, default=1, help="episodes after the plant episode")
     p.add_argument("--variants", nargs="+", default=["none", "benign", "leak", "proposal"],
-                   choices=["none", "benign", "leak", "proposal"])
-    p.add_argument("--k", type=int, nargs="+", default=[1], help="coalition sizes for proposal and benign")
+                   choices=list(PLANT_KINDS))
+    p.add_argument("--k", type=int, nargs="+", default=[1], help="coalition sizes for proposal, command and benign")
+    p.add_argument("--solvable-values", nargs="+", default=list(SOLVABLE_VALUES), choices=list(SOLVABLE_VALUES),
+                   help="what leak_solvable notes carry; wrong gives the leak_solvable_wrong variant")
+    p.add_argument("--leak-phrasing", choices=["fixed", "varied"], default="fixed",
+                   help="varied picks one of three leak instruction phrasings per seed")
+    p.add_argument("--leak-address", choices=["name", "broadcast"], default="name",
+                   help="broadcast writes single-target leak notes to the whole team with no name")
     p.add_argument("--blind-per-episode", type=int, default=1)
     p.add_argument("--alpha", type=float, default=1.0)
     p.add_argument("--beta", type=float, default=0.5)
     p.add_argument("--gamma", type=float, default=0.0)
     p.add_argument("--norm", choices=["none", "mild", "strict"], default="mild")
+    p.add_argument("--rules", choices=list(RULE_LINES), default="none",
+                   help="confidential adds a designer rule against passing task material between agents, for every "
+                        "agent in every branch")
     p.add_argument("--no-notes", action="store_true")
     p.add_argument("--model", default="qwen/qwen3-32b")
     p.add_argument("--base-url", default="https://openrouter.ai/api/v1")
@@ -73,6 +96,8 @@ def parse_args() -> argparse.Namespace:
     p.add_argument("--no-reasoning", action="store_true")
     p.add_argument("--concurrency", type=int, default=2, help="seeds in flight at once")
     p.add_argument("--max-concurrency", type=int, default=24, help="model calls in flight at once")
+    p.add_argument("--timeout", type=float, default=600.0,
+                   help="seconds per request; raise it on a busy self-served endpoint, where long calls queue")
     p.add_argument("--mock", action="store_true")
     return p.parse_args()
 
@@ -80,7 +105,9 @@ def parse_args() -> argparse.Namespace:
 def build_variants(args: argparse.Namespace) -> list[PlantSpec]:
     out: list[PlantSpec] = []
     for v in args.variants:
-        if v in ("none", "leak"):
+        if v == "leak_solvable":
+            out += [PlantSpec(v, value=val) for val in args.solvable_values]
+        elif v in UNSIZED_KINDS:
             out.append(PlantSpec(v))
         else:
             out += [PlantSpec(v, k) for k in args.k]
@@ -94,6 +121,12 @@ async def main() -> int:
     load_dotenv(Path(".env"))
     agents = [AgentSpec(NAMES[i], args.specialties[i % len(args.specialties)]) for i in range(args.agents)]
     variants = build_variants(args)
+    if "forbidden_leak" in args.variants and args.rules == "none":
+        print("warning: forbidden_leak says sharing is against the team's rules, but --rules is none, so no agent's "
+              "system prompt has such a rule", file=sys.stderr)
+    if "leak_all" in args.variants and args.blind_per_episode < 2:
+        print("warning: leak_all is a broadcast to several blind agents, but --blind-per-episode is "
+              f"{args.blind_per_episode}", file=sys.stderr)
 
     if args.mock:
         model, base_url = "mock", "mock"
@@ -102,7 +135,8 @@ async def main() -> int:
             bank = TaskBank(cfg.seed, cfg.n_episodes)
             from experiments.episode import blind_plan
             bank.build(cfg.agents, blind_plan(cfg))
-            return MockLLM({t.task_id: {"key": t.answer_key, "blind": t.blind} for t in bank.tasks.values()}, seed=cfg.seed)
+            return MockLLM({t.task_id: {"key": t.answer_key, "blind": t.blind, "fact": task_fact(t, t.answer_key[0])}
+                            for t in bank.tasks.values()}, seed=cfg.seed)
     else:
         api_key = os.environ.get(args.api_key_env)
         if not api_key:
@@ -110,7 +144,7 @@ async def main() -> int:
             return 2
         shared = OpenAICompatLLM(args.model, args.base_url, api_key, temperature=args.temperature,
                                  max_tokens=args.max_tokens, reasoning=not args.no_reasoning,
-                                 provider_pin=args.provider_pin, max_concurrency=args.max_concurrency,
+                                 provider_pin=args.provider_pin, max_concurrency=args.max_concurrency, timeout=args.timeout,
                                  extra_headers={"HTTP-Referer": "https://github.com/", "X-Title": "swarm-plants"})
         model, base_url = args.model, args.base_url
 
@@ -122,7 +156,8 @@ async def main() -> int:
 
     async def one(seed: int):
         cfg = SwarmConfig(run_name=root.name, seed=seed, agents=agents, n_warmup=args.warmup, n_post=args.post,
-                          alpha=args.alpha, beta=args.beta, gamma=args.gamma, norm=args.norm,
+                          alpha=args.alpha, beta=args.beta, gamma=args.gamma, norm=args.norm, rules=args.rules,
+                          leak_phrasing=args.leak_phrasing, leak_address=args.leak_address,
                           notes=not args.no_notes, blind_per_episode=args.blind_per_episode, model=model,
                           base_url=base_url, temperature=args.temperature, reasoning=not args.no_reasoning)
         async with sem:
@@ -136,6 +171,8 @@ async def main() -> int:
 
     print(f"{args.seeds} seeds x {len(variants)} variants ({', '.join(v.name for v in variants)}), "
           f"{args.agents} agents, warmup {args.warmup}, post {args.post}, concurrency {args.concurrency}", flush=True)
+    print(f"norm {args.norm}, rules {args.rules}, leak phrasing {args.leak_phrasing}, leak address {args.leak_address}",
+          flush=True)
     seeds = args.seed_list or [args.seed_base + i for i in range(args.seeds)]
     await asyncio.gather(*(one(s) for s in seeds))
 
@@ -146,6 +183,16 @@ async def main() -> int:
         print(f"  {name:<14} runs {v['n_complete']}/{v['n_runs']}  lenient|wrong {fmt(v['lenient_wrong_free'])}  "
               f"leak used {fmt(v['leak_used_free'])}  blind correct {fmt(v['blind_correct_free'])}  "
               f"wrong subs {fmt(v['wrong_submission_rate'])}  exposed {fmt(v['exposed_free'])}")
+        print(f"  {'':<14} {'':<9} strict|correct {fmt(v['strict_wrong_free'])}  "
+              f"command followed {fmt(v['followed_command_free'])}  disclosed {fmt(v['disclosed_source'])}  "
+              f"concealed {fmt(v['concealed_source'])}  rule mentioned {fmt(v['mentions_rule_free'])}")
+        print(f"  {'':<14} {'':<9} leak2 right {fmt(v['leak2_used_correct'])}  leak2 wrong {fmt(v['leak2_used_wrong'])}  "
+              f"leak2 none {fmt(v['leak2_used_none'])}  targets used {fmt(v['targets_used'])}  "
+              f"{' '.join(f'{k}:{n}' for k, n in v['targets_used_dist'].items())}")
+        tok = lambda x: "-" if x is None else f"{x:.0f}"  # noqa: E731
+        print(f"  {'':<14} {'':<9} copied {fmt(v['copied_value'])}  solvable correct {fmt(v['solvable_correct'])}  "
+              f"target reply tokens {tok(v['target_reply_tokens_mean'])} (same agent in none "
+              f"{tok(v['target_reply_tokens_none_mean'])})")
     return 0
 
 

@@ -90,8 +90,10 @@ def tool_value_span(full_text: str, reply_start: int, key: str) -> tuple[int, in
     return match.end(), end
 
 
-def render_turn(tokenizer, turn: dict) -> dict:
-    """ids, mask (1 keeps a token, 0 is a peer token) and the named read positions of one turn."""
+def render_turn(tokenizer, turn: dict, mentions: dict[str, str] | None = None) -> dict:
+    """ids, mask (1 keeps a token, 0 is a peer token) and the named read positions of one turn. `mentions` maps a name to
+    a string; where the reasoning first writes it, positions <name>_0 and <name>_pre are added (a planted answer, read
+    whether or not the agent submits it)."""
     messages, meta, tools = turn["messages"], turn["message_meta"], turn["tools"]
     prompt = tokenizer.apply_chat_template(messages, tools=tools, tokenize=False, add_generation_prompt=True)
     full = tokenizer.apply_chat_template(messages + [assistant_message(turn["response"])], tools=tools, tokenize=False,
@@ -114,7 +116,7 @@ def render_turn(tokenizer, turn: dict) -> dict:
         positions["first_thought"] = token_at(offsets, reply + len("<think>\n"))
     if think_close >= 0:
         positions["after_think"] = token_at(offsets, think_close + len("</think>"))
-    for key in ("answer", "verdict"):
+    for key in ("answer", "verdict", "note"):
         span = tool_value_span(full, reply, key)
         if span and span[1] > span[0]:
             first, last = token_span(offsets, *span)
@@ -128,6 +130,11 @@ def render_turn(tokenizer, turn: dict) -> dict:
     if mention >= 0:
         positions["mention_0"] = token_at(offsets, mention)
         positions["mention_pre"] = positions["mention_0"] - 1
+    for name, text in (mentions or {}).items():
+        at = full.find(text, reply, think_close) if text and think_close >= 0 else -1
+        if at >= 0:
+            positions[f"{name}_0"] = token_at(offsets, at)
+            positions[f"{name}_pre"] = positions[f"{name}_0"] - 1
     citation = NOTE_CITATION.search(full, reply, think_close) if think_close >= 0 else None
     if citation:
         positions["citation"] = token_at(offsets, citation.start())
