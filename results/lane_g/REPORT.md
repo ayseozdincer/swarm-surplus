@@ -4,7 +4,7 @@ Branch `claude/lane-g-leak2-b16938`. 2026-11-09. Session started 03:14 UTC, hard
 
 ## Pre-registration
 
-Written at 03:25 UTC, before any label or replay array of the new seeds existed (the pod was booting). Committed as the
+Written at 03:20 UTC (commit 595d9a1), before any label or replay array of the new seeds existed (the pod was booting). Committed as the
 first commit of this branch so the timestamp is on record. Nothing below this section was known when it was written.
 
 ### Question
