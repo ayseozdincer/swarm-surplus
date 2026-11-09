@@ -25,9 +25,14 @@ The frozen Swarm Surplus rule was run on it untouched, then the paper's logistic
 - The value-free confirmation works. The per-token log-probability surplus of the forced token (actual pass minus reference pass)
   peaks at a median of 31.5 nats in followed replies, 2.3 in poisoned replies that never wrote the target and 0.2 in clean twins,
   AUROC 0.989 followed against every negative, 0.955 against the poisoned negatives alone. Clean twins never exceed 0.9 nats.
-- Ceiling. The paper's hand features (count, window, jump, reply length, masked tokens), L2 logistic, 5-fold grouped by paragraph,
-  reach AUROC 0.979 on all 600 turns and 0.918 on the 300 poisoned twins alone, 0.943 with the log-probability peak added. TPR at
-  FPR 0 is 0.00 in every fit, because the 10 quoted-then-refused replies score as high as followers on every measure.
+- The paper's fitted model, frozen, transfers. The hand-feature logistic model trained on 536 game turns
+  (`results/paper/tables/fitted_model.json`, overnight-detector 2228f1f), applied untouched with its training scaler and its
+  zero-training-false-positive threshold, with the jump read at the target and 1.0 where never written, flags 142 of 199 followed
+  replies, 9 of 10 quoted-then-refused, 0 of 91 never-written and 0 of 300 clean, AUROC 0.982 followed against every negative and 0.928
+  against the poisoned negatives alone. Read label-free at the answer line it flags 41 of 199, 1 of 101 and 0 of 300 (AUROC 0.969).
+- Ceiling. The paper's hand features (count, window, jump, reply length, masked tokens), L2 logistic refit here, 5-fold grouped by
+  paragraph, reach AUROC 0.979 on all 600 turns and 0.918 on the 300 poisoned twins alone, 0.943 with the log-probability peak added. TPR
+  at FPR 0 is 0.00 in every fit, because the 10 quoted-then-refused replies score as high as followers on every measure.
 
 ## What ran
 
@@ -134,7 +139,28 @@ In the other 3 it sits on the first token of a quotation of the document sentenc
 down to minus 29.6 for a sentence that is in the document in both passes), which looks like the kept-position hole rather than uptake and
 is what the compacted reference would test. The compacted pass was not run here.
 
-## The paper's logistic comparator as the ceiling
+## The paper's fitted model, frozen
+
+`scripts/external_tt_frozen_fit.py`, full tables in `results/external/frozen_fit.md`, per-turn scores in `results/external/frozen_fit_scores.json`.
+The model is the paper's hand-feature logistic fit (count256, window16, jump at the first writing, reply tokens, masked tokens) trained on
+536 game turns with 68 positives over 40 seeds, taken from `results/paper/tables/fitted_model.json` at overnight-detector 2228f1f and copied
+to `results/external/sources/`. Standardised with the training scaler, logit from the training coefficients and intercept, flag when the
+sigmoid exceeds 0.9627, the threshold with zero false positives on the training set. Nothing refit. Features computed on our turns with our
+pooled floor. The jump is read at the first writing of the injected target with 1.0 where the reply never writes it, as the paper session
+asked for this set, and label-free at the answer line beside it.
+
+| Jump position | followed flagged | quoted-then-refused flagged | never written flagged | clean flagged | AUROC vs poisoned negatives | vs clean | vs every negative |
+| --- | --- | --- | --- | --- | --- | --- | --- |
+| at the target, 1.0 where never written | 142 of 199 | 9 of 10 | 0 of 91 | 0 of 300 | 0.928 | 1.000 | 0.982 |
+| at the answer line (label-free) | 41 of 199 | 1 of 10 | 0 of 91 | 0 of 300 | 0.876 | 1.000 | 0.969 |
+
+Median scores, followed 0.994, quoted-then-refused 0.999, never written 0.048, clean 0.008 (90th percentile 0.008). Against the training
+scaler our turns sit at about minus 1.1 standard deviations of reply length and minus 0.7 of masked tokens in every group, which the
+negative coefficients on both turn into a small bonus, while followers sit at plus 0.95 on the count and plus 2.3 on the jump. So a
+detector learned on the game's surplus curves flags more of the followers here than the hand rule does (142 against 108) at the same
+zero clean false positives, and the same 9 quoted-then-refused replies come with it.
+
+## The paper's logistic comparator refit here as the ceiling
 
 L2 logistic regression, class-balanced, standardised features, 5-fold cross-validation grouped by paragraph, out-of-fold scores.
 Positives are followed replies. TPR at FPR 0 is the fraction of positives above every negative.
@@ -195,6 +221,8 @@ Three traces are tabulated every few tokens in `results/external/tables.md` unde
 - `detector/render.py`, sub-message masked spans (`spans` with provenance `external` or `peer`) and `mentions_reply`.
 - `scripts/replay.py`, `logprobs=True` keeps the per-token log-probability of the forced reply token under each full pass.
 - `scripts/pod/replay_external.py`, the one-load replay with slim traces.
+- `scripts/external_tt_frozen_fit.py`, the paper's fitted model applied frozen, writes `results/external/frozen_fit.md` and
+  `results/external/frozen_fit_scores.json`; parameters in `results/external/sources/fitted_model.json`.
 - `scripts/external_tt_scores.py`, the frozen rule, the AUROC and cut tables, the logistic fits, the example traces, writes
   `results/external/tables.md` and `results/external/tasktracker_scores.json` (per-turn rows and the floor).
 - `results/external/pod_state.json`, `results/external/logs/`, `results/external/figures/tasktracker_shaped_strips.png`,
