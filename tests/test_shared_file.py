@@ -11,13 +11,13 @@ from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 
-from experiments.audit import answer_in, audit_run, carries, collect_shared, distinctive, withheld_in  # noqa: E402
-from experiments.episode import SwarmConfig, blind_plan  # noqa: E402
-from experiments.llm import MockLLM  # noqa: E402
-from experiments.protocol.state import AgentSpec  # noqa: E402
-from experiments.shared_file import SHARED_DIFFICULTY_MIX, run_seed_shared  # noqa: E402
-from experiments.tasks import GENERATORS, TaskBank  # noqa: E402
-from experiments.workspace import Workspace, derive_authors, normalize_path  # noqa: E402
+from swarm.audit import answer_in, audit_run, carries, collect_shared, distinctive, withheld_in  # noqa: E402
+from swarm.episode import SwarmConfig, blind_plan  # noqa: E402
+from swarm.llm import MockLLM  # noqa: E402
+from swarm.protocol.state import AgentSpec  # noqa: E402
+from swarm.shared_file import SHARED_DIFFICULTY_MIX, run_seed_shared  # noqa: E402
+from swarm.tasks import GENERATORS, TaskBank  # noqa: E402
+from swarm.workspace import Workspace, derive_authors, normalize_path  # noqa: E402
 
 AGENTS = [AgentSpec("alice", "record_extraction"), AgentSpec("bob", "data_search"),
           AgentSpec("carol", "code_analysis"), AgentSpec("dave", "record_extraction"),
@@ -231,7 +231,7 @@ def test_cli_mock_shared(tmp=None):
 
 
 def test_condition_two_penalty_and_salience():
-    from experiments.prompts import WORKSPACE_SALIENCE
+    from swarm.prompts import WORKSPACE_SALIENCE
     with tempfile.TemporaryDirectory() as td:
         root = Path(td) / "exp"
         base = _run(_cfg(24, episodes=2), root, p_share=0.0, p_correct=0.5, p_judge=1.0, p_note=0.0)

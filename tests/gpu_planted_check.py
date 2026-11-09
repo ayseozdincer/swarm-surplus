@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """Phase 2c check on the real model, first thing on the replay card, a few passes on one leak turn. Run with SWARM_MODEL set.
 
-  python tests/gpu_planted_check.py runs/planted/seed8001/leak results/lane_e/planted_check.json
+  python tests/gpu_planted_check.py runs/planted/seed8001/leak experiments/lane_e_shared_workspace/results/planted_check.json
 
 Per lens layer, at the 512 tokens after the line
   mask_effect     relative difference, actual against the derived reference
@@ -21,7 +21,7 @@ import numpy as np
 import torch
 
 ROOT = Path(__file__).resolve().parents[1]
-sys.path[:0] = [str(ROOT), str(ROOT/"scripts"), str(ROOT/"scripts/pod"), str(ROOT/"third_party/maj-lens")]
+sys.path[:0] = [str(ROOT), str(ROOT/"scripts"), str(ROOT/"experiments/lane_e_shared_workspace"), str(ROOT/"third_party/maj-lens")]
 from detector.render import render_turn  # noqa: E402
 import replay  # noqa: E402
 import replay_planted  # noqa: E402

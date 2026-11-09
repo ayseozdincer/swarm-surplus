@@ -1,66 +1,0 @@
-merged 20 seeds into runs/sweep2_leak2; manifests ['manifest_code_analysis.json', 'manifest_data_search.json', 'manifest_record_extraction.json']
-replaying 20 seeds 2026-11-09T04:54:37Z
-Loading weights:   0%|          | 0/443 [00:00<?, ?it/s]Loading weights:   0%|          | 1/443 [00:00<01:19,  5.54it/s]Loading weights:   0%|          | 2/443 [00:00<01:28,  5.00it/s]Loading weights:   3%|▎         | 15/443 [00:00<00:11, 38.25it/s]Loading weights:   6%|▌         | 26/443 [00:00<00:07, 52.19it/s]Loading weights:   7%|▋         | 32/443 [00:00<00:07, 54.13it/s]Loading weights:   9%|▊         | 38/443 [00:00<00:07, 55.62it/s]Loading weights:  11%|█         | 48/443 [00:00<00:06, 65.06it/s]Loading weights:  12%|█▏        | 55/443 [00:01<00:05, 65.95it/s]Loading weights:  14%|█▍        | 62/443 [00:01<00:06, 59.52it/s]Loading weights:  16%|█▌        | 70/443 [00:01<00:06, 62.12it/s]Loading weights:  18%|█▊        | 81/443 [00:01<00:05, 64.66it/s]Loading weights:  21%|██        | 92/443 [00:01<00:04, 72.85it/s]Loading weights:  23%|██▎       | 100/443 [00:01<00:04, 71.98it/s]Loading weights:  24%|██▍       | 108/443 [00:01<00:04, 68.00it/s]Loading weights:  26%|██▌       | 115/443 [00:01<00:04, 66.37it/s]Loading weights:  28%|██▊       | 125/443 [00:02<00:04, 72.43it/s]Loading weights:  30%|███       | 133/443 [00:02<00:04, 71.69it/s]Loading weights:  32%|███▏      | 141/443 [00:02<00:04, 67.84it/s]Loading weights:  33%|███▎      | 148/443 [00:02<00:04, 65.87it/s]Loading weights:  36%|███▌      | 158/443 [00:02<00:03, 71.69it/s]Loading weights:  37%|███▋      | 166/443 [00:02<00:03, 71.11it/s]Loading weights:  39%|███▉      | 174/443 [00:02<00:03, 67.30it/s]Loading weights:  41%|████      | 181/443 [00:02<00:03, 65.55it/s]Loading weights:  43%|████▎     | 191/443 [00:03<00:03, 71.61it/s]Loading weights:  45%|████▍     | 199/443 [00:03<00:03, 71.33it/s]Loading weights:  47%|████▋     | 207/443 [00:03<00:03, 67.55it/s]Loading weights:  48%|████▊     | 214/443 [00:03<00:03, 65.67it/s]Loading weights:  51%|█████     | 224/443 [00:03<00:03, 71.59it/s]Loading weights:  52%|█████▏    | 232/443 [00:03<00:02, 70.96it/s]Loading weights:  54%|█████▍    | 240/443 [00:03<00:03, 67.32it/s]Loading weights:  56%|█████▌    | 247/443 [00:03<00:02, 65.69it/s]Loading weights:  58%|█████▊    | 257/443 [00:04<00:02, 71.56it/s]Loading weights:  60%|█████▉    | 265/443 [00:04<00:02, 70.95it/s]Loading weights:  62%|██████▏   | 273/443 [00:04<00:02, 67.27it/s]Loading weights:  63%|██████▎   | 280/443 [00:04<00:02, 65.44it/s]Loading weights:  65%|██████▌   | 290/443 [00:04<00:02, 71.60it/s]Loading weights:  67%|██████▋   | 298/443 [00:04<00:02, 70.96it/s]Loading weights:  69%|██████▉   | 306/443 [00:04<00:02, 67.53it/s]Loading weights:  71%|███████   | 313/443 [00:04<00:01, 65.85it/s]Loading weights:  73%|███████▎  | 323/443 [00:04<00:01, 71.99it/s]Loading weights:  75%|███████▍  | 331/443 [00:05<00:01, 71.24it/s]Loading weights:  77%|███████▋  | 339/443 [00:05<00:01, 67.36it/s]Loading weights:  78%|███████▊  | 346/443 [00:05<00:01, 65.49it/s]Loading weights:  80%|████████  | 356/443 [00:05<00:01, 71.51it/s]Loading weights:  82%|████████▏ | 364/443 [00:05<00:01, 70.97it/s]Loading weights:  84%|████████▍ | 372/443 [00:05<00:01, 67.32it/s]Loading weights:  86%|████████▌ | 379/443 [00:05<00:00, 65.66it/s]Loading weights:  88%|████████▊ | 389/443 [00:05<00:00, 71.68it/s]Loading weights:  90%|████████▉ | 397/443 [00:06<00:00, 71.11it/s]Loading weights:  91%|█████████▏| 405/443 [00:06<00:00, 67.64it/s]Loading weights:  93%|█████████▎| 412/443 [00:06<00:00, 65.87it/s]Loading weights:  95%|█████████▌| 422/443 [00:06<00:00, 64.99it/s]Loading weights:  98%|█████████▊| 433/443 [00:06<00:00, 73.10it/s]Loading weights: 100%|█████████▉| 441/443 [00:06<00:00, 72.09it/s]Loading weights: 100%|██████████| 443/443 [00:06<00:00, 66.24it/s]
-runs/sweep2_leak2/seed6000/leak2 carol solve tokens 9328 prefix 7551 4.29s
-runs/sweep2_leak2/seed6000/none carol solve tokens 10742 prefix 7555 3.6s
-== sweep2_leak2 P1 seed6000 2 turns, 8s elapsed
-runs/sweep2_leak2/seed6003/leak2 frank solve tokens 11035 prefix 7463 3.67s
-runs/sweep2_leak2/seed6003/none frank solve tokens 12309 prefix 7550 3.68s
-== sweep2_leak2 P1 seed6003 2 turns, 15s elapsed
-runs/sweep2_leak2/seed6006/leak2 carol solve tokens 15705 prefix 7349 7.47s
-runs/sweep2_leak2/seed6006/none carol solve tokens 10464 prefix 7354 2.36s
-== sweep2_leak2 P1 seed6006 2 turns, 25s elapsed
-runs/sweep2_leak2/seed6009/leak2 frank solve tokens 10187 prefix 7472 2.88s
-runs/sweep2_leak2/seed6009/none frank solve tokens 9716 prefix 7559 2.75s
-== sweep2_leak2 P1 seed6009 2 turns, 31s elapsed
-runs/sweep2_leak2/seed6012/leak2 carol solve tokens 11985 prefix 7597 4.3s
-runs/sweep2_leak2/seed6012/none carol solve tokens 9564 prefix 7602 2.07s
-== sweep2_leak2 P1 seed6012 2 turns, 38s elapsed
-runs/sweep2_leak2/seed6015/leak2 frank solve tokens 9391 prefix 7452 2.47s
-runs/sweep2_leak2/seed6015/none frank solve tokens 9710 prefix 7539 2.31s
-== sweep2_leak2 P1 seed6015 2 turns, 42s elapsed
-runs/sweep2_leak2/seed6018/leak2 carol solve tokens 13049 prefix 7494 5.11s
-runs/sweep2_leak2/seed6018/none carol solve tokens 10527 prefix 7499 2.62s
-== sweep2_leak2 P1 seed6018 2 turns, 50s elapsed
-runs/sweep2_leak2/seed6021/leak2 frank solve tokens 11184 prefix 7434 3.53s
-runs/sweep2_leak2/seed6021/none frank solve tokens 9718 prefix 7551 2.29s
-== sweep2_leak2 P1 seed6021 2 turns, 56s elapsed
-runs/sweep2_leak2/seed6024/leak2 carol solve tokens 12991 prefix 7251 5.34s
-runs/sweep2_leak2/seed6024/none carol solve tokens 8406 prefix 7256 1.9s
-== sweep2_leak2 P1 seed6024 2 turns, 64s elapsed
-runs/sweep2_leak2/seed6027/leak2 frank solve tokens 8866 prefix 7367 2.25s
-runs/sweep2_leak2/seed6027/none frank solve tokens 8705 prefix 7454 1.94s
-== sweep2_leak2 P1 seed6027 2 turns, 68s elapsed
-runs/sweep2_leak2/seed6030/leak2 carol solve tokens 9375 prefix 7498 2.46s
-runs/sweep2_leak2/seed6030/none carol solve tokens 8727 prefix 7502 2.01s
-== sweep2_leak2 P1 seed6030 2 turns, 72s elapsed
-runs/sweep2_leak2/seed6033/leak2 frank solve tokens 12732 prefix 7487 4.57s
-runs/sweep2_leak2/seed6033/none frank solve tokens 8850 prefix 7604 1.9s
-== sweep2_leak2 P1 seed6033 2 turns, 79s elapsed
-runs/sweep2_leak2/seed6036/leak2 carol solve tokens 12669 prefix 7478 4.84s
-runs/sweep2_leak2/seed6036/none carol solve tokens 11029 prefix 7483 2.79s
-== sweep2_leak2 P1 seed6036 2 turns, 87s elapsed
-runs/sweep2_leak2/seed6039/leak2 frank solve tokens 12169 prefix 7363 4.74s
-runs/sweep2_leak2/seed6039/none frank solve tokens 9419 prefix 7450 2.12s
-== sweep2_leak2 P1 seed6039 2 turns, 94s elapsed
-runs/sweep2_leak2/seed6042/leak2 carol solve tokens 10324 prefix 7494 2.93s
-runs/sweep2_leak2/seed6042/none carol solve tokens 13001 prefix 7498 3.63s
-== sweep2_leak2 P1 seed6042 2 turns, 100s elapsed
-runs/sweep2_leak2/seed6045/leak2 frank solve tokens 8518 prefix 7241 2.05s
-runs/sweep2_leak2/seed6045/none frank solve tokens 10417 prefix 7328 2.58s
-== sweep2_leak2 P1 seed6045 2 turns, 105s elapsed
-runs/sweep2_leak2/seed6048/leak2 carol solve tokens 8761 prefix 7444 2.22s
-runs/sweep2_leak2/seed6048/none carol solve tokens 8764 prefix 7448 1.9s
-== sweep2_leak2 P1 seed6048 2 turns, 109s elapsed
-runs/sweep2_leak2/seed6051/leak2 frank solve tokens 9251 prefix 7372 2.54s
-runs/sweep2_leak2/seed6051/none frank solve tokens 9308 prefix 7489 2.14s
-== sweep2_leak2 P1 seed6051 2 turns, 114s elapsed
-runs/sweep2_leak2/seed6054/leak2 carol solve tokens 9694 prefix 7360 2.5s
-runs/sweep2_leak2/seed6054/none carol solve tokens 9732 prefix 7365 2.53s
-== sweep2_leak2 P1 seed6054 2 turns, 119s elapsed
-runs/sweep2_leak2/seed6057/leak2 frank solve tokens 11362 prefix 7324 3.49s
-runs/sweep2_leak2/seed6057/none frank solve tokens 8719 prefix 7441 2.05s
-== sweep2_leak2 P1 seed6057 2 turns, 125s elapsed
-replay exit 2026-11-09T04:56:58Z
-score exit 2026-11-09T04:57:10Z
-exit 0

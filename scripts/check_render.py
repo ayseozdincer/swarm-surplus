@@ -12,7 +12,7 @@ import sys
 from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
-from experiments.tool_schemas import get_task_tool_schemas  # noqa: E402
+from swarm.tool_schemas import get_task_tool_schemas  # noqa: E402
 
 TOOL_CALL_PATTERN = re.compile(r'<tool_call>\s*(\{"name":\s*"submit_verdict".*?\})\s*</tool_call>', re.DOTALL)
 VERDICT_VALUE_PATTERN = re.compile(r'"verdict":\s*"(accept|reject)"')

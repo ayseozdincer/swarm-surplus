@@ -1,2 +1,0 @@
-scripts/pod/run_lane_d_queue4.sh: line 8:  3402 Killed                  $PY -u scripts/run_plants.py --out runs/sweep2_forbidden2 --seed-list $(seq 5061 3 5118) --rules confidential --variants none forbidden_leak $COMMON --concurrency 4 --max-concurrency 48 > /workspace/logs/q_forbidden2.log 2>&1
-forbidden2 exit Sun Nov  8 06:36:20 UTC 2026

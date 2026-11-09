@@ -1,11 +1,0 @@
-WARNING: Running pip as the 'root' user can result in broken permissions and conflicting behaviour with the system package manager, possibly rendering your system unusable. It is recommended to use a virtual environment instead: https://pip.pypa.io/warnings/venv. Use the --root-user-action option if you know what you are doing and want to suppress this warning.
-Fetching 18 files:   0%|          | 0/18 [00:00<?, ?it/s]Warning: You are sending unauthenticated requests to the HF Hub. Please set a HF_TOKEN to enable higher rate limits and faster downloads.
-Fetching 18 files:   6%|▌         | 1/18 [00:00<00:01,  9.03it/s]Fetching 18 files:  39%|███▉      | 7/18 [00:38<01:03,  5.74s/it]Fetching 18 files:  50%|█████     | 9/18 [00:54<00:58,  6.49s/it]Fetching 18 files:  56%|█████▌    | 10/18 [00:55<00:42,  5.37s/it]Fetching 18 files:  61%|██████    | 11/18 [00:55<00:30,  4.38s/it]Fetching 18 files:  67%|██████▋   | 12/18 [01:00<00:26,  4.40s/it]Fetching 18 files:  72%|███████▏  | 13/18 [01:09<00:27,  5.58s/it]Fetching 18 files:  78%|███████▊  | 14/18 [01:20<00:27,  6.97s/it]Fetching 18 files:  83%|████████▎ | 15/18 [01:29<00:22,  7.63s/it]Fetching 18 files:  89%|████████▉ | 16/18 [01:30<00:11,  5.79s/it]Fetching 18 files:  94%|█████████▍| 17/18 [01:35<00:05,  5.46s/it]Fetching 18 files: 100%|██████████| 18/18 [01:36<00:00,  4.16s/it]Fetching 18 files: 100%|██████████| 18/18 [01:36<00:00,  5.35s/it]
-/root/hf/hub/models--Qwen--Qwen3-14B/snapshots/40c069824f4251a91eefaf281ebe4c544efd3e18
-Warning: You are sending unauthenticated requests to the HF Hub. Please set a HF_TOKEN to enable higher rate limits and faster downloads.
-/root/artifacts/lens_candidate/qwen3-14b/jlens/Salesforce-wikitext/Qwen3-14B_jacobian_lens.pt
-/root/artifacts/lens_candidate/qwen3-14b/jlens/Salesforce-wikitext/config.yaml
-/root/artifacts/lens_candidate/qwen3-14b/jlens/Salesforce-wikitext/Qwen3-14B_convergence.csv
-vllm 0.33.0 torch 2.14.0+cu130
-setup done
-exit 0

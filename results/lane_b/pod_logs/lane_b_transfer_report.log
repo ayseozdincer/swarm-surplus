@@ -1,7 +1,0 @@
-first_response {"mass": {"real reference": 1.0, "placebo vs swapped": 0.759}, "relative_delta": {"real reference": 1.0, "placebo vs swapped": 0.787}, "ontology": {"real reference": 0.727, "placebo vs swapped": 0.847}}
-first_response pair alignment {"run": 0.9953703703703703, "top_pair_coalition": [36, 36]}
-end_of_response {"mass": {"real reference": 1.0, "placebo vs swapped": 0.963}, "relative_delta": {"real reference": 1.0, "placebo vs swapped": 0.907}, "ontology": {"real reference": 0.87, "placebo vs swapped": 0.958}}
-end_of_response pair alignment {"run": 1.0, "top_pair_coalition": [34, 36]}
-wrote /workspace/swarm/results/lane_b/transfer.json
-REPORT_TRANSFER DONE
-exit 0

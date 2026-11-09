@@ -8,7 +8,7 @@
   pod.py billing                    billed pod spend, per hour bucket, since --since
 
 RUNPOD_API_KEY comes from .env and is never printed. State (pod id, price, start
-time) is kept in results/pod_state.json, or the file named by POD_STATE, so the report can read it.
+time) is kept in .pod_state.json, or the file named by POD_STATE, so the report can read it.
 """
 from __future__ import annotations
 
@@ -23,7 +23,7 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[2]
 API = "https://rest.runpod.io/v1"
-STATE = Path(os.environ["POD_STATE"]).resolve() if os.environ.get("POD_STATE") else ROOT / "results" / "pod_state.json"
+STATE = Path(os.environ["POD_STATE"]).resolve() if os.environ.get("POD_STATE") else ROOT / ".pod_state.json"
 IMAGE = "runpod/pytorch:1.0.3-cu1281-torch280-ubuntu2404"
 GPUS = ["NVIDIA A100-SXM4-80GB", "NVIDIA A100 80GB PCIe", "NVIDIA H100 PCIe", "NVIDIA H100 80GB HBM3"]
 

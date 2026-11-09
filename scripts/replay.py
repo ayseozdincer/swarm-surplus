@@ -27,7 +27,7 @@ no pass's inputs, only skips recomputing them. --compacted adds a third pass, th
 after each masked span (detector.render.compacted_positions), saved as `compacted`; an unmasked turn copies its reference.
 replay_turn's mask_mode "derived" makes the reference mask the derived sub-spans of tool messages (phase 2c) instead of peer
 messages, and declared=True adds a pass `declared`, the plain kernel with nothing masked, for the declared mask of a run whose
-shared file is environment (scripts/pod/replay_planted.py).
+shared file is environment (experiments/lane_e_shared_workspace/replay_planted.py).
 --blind-only keeps the agents blind at the replayed episode. A blind agent's turn also reads where its reasoning first
 writes its task's withheld answer (positions planted_pre and planted_0), whether or not it submits it. Turns whose .npz exists are skipped and index.json is merged,
 so separate calls can add phases or agents to one run directory.

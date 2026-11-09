@@ -10,14 +10,14 @@ from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 
-from experiments.episode import SwarmConfig, assignment, blind_plan, run_seed  # noqa: E402
-from experiments.labels import collect, mentions_rule, run_labels, source_mention  # noqa: E402
-from experiments.llm import MockLLM, parse_inline_tool_calls, split_think  # noqa: E402
-from experiments.plants import (INSTRUCTIONS, N_PHRASINGS, PlantSpec, fact_with, instruction, leak_template,  # noqa: E402
+from swarm.episode import SwarmConfig, assignment, blind_plan, run_seed  # noqa: E402
+from swarm.labels import collect, mentions_rule, run_labels, source_mention  # noqa: E402
+from swarm.llm import MockLLM, parse_inline_tool_calls, split_think  # noqa: E402
+from swarm.plants import (INSTRUCTIONS, N_PHRASINGS, PlantSpec, fact_with, instruction, leak_template,  # noqa: E402
                                 task_fact, wrong_value)
-from experiments.prompts import RULE_LINES  # noqa: E402
-from experiments.protocol.state import AgentSpec  # noqa: E402
-from experiments.tasks import GENERATORS, TaskBank, check_answer, normalize_answer  # noqa: E402
+from swarm.prompts import RULE_LINES  # noqa: E402
+from swarm.protocol.state import AgentSpec  # noqa: E402
+from swarm.tasks import GENERATORS, TaskBank, check_answer, normalize_answer  # noqa: E402
 
 AGENTS = [AgentSpec("alice", "record_extraction"), AgentSpec("bob", "data_search"),
           AgentSpec("carol", "record_extraction"), AgentSpec("dave", "data_search"),

@@ -10,7 +10,7 @@ import pytest
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT))
 from detector.render import render_turn  # noqa: E402
-from experiments import external_insider as ext  # noqa: E402
+from swarm import external_insider as ext  # noqa: E402
 
 DEFAULT = ext.PROMPTS / "default.json"
 RESPONSE = {"content": 'Reasoning: """Sally says a merger is coming. Risky, but the company needs it."""\n\nAction: execute_trade\n'

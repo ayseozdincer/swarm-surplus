@@ -44,16 +44,16 @@ from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 
-from experiments.episode import SwarmConfig, run_seed  # noqa: E402
-from experiments.labels import collect  # noqa: E402
-from experiments.llm import MockLLM, OpenAICompatLLM  # noqa: E402
-from experiments.plants import PLANT_KINDS, SOLVABLE_VALUES, UNSIZED_KINDS, PlantSpec, task_fact  # noqa: E402
-from experiments.prompts import RULE_LINES  # noqa: E402
-from experiments.shared_file import SHARED_DIFFICULTY_MIX, run_seed_shared  # noqa: E402
-from experiments.planted_file import BRANCHES, code_target_seeds, collect_planted, run_seed_planted  # noqa: E402
-from experiments.audit import collect_shared  # noqa: E402
-from experiments.protocol.state import AgentSpec  # noqa: E402
-from experiments.tasks import TASK_TYPES, TaskBank  # noqa: E402
+from swarm.episode import SwarmConfig, run_seed  # noqa: E402
+from swarm.labels import collect  # noqa: E402
+from swarm.llm import MockLLM, OpenAICompatLLM  # noqa: E402
+from swarm.plants import PLANT_KINDS, SOLVABLE_VALUES, UNSIZED_KINDS, PlantSpec, task_fact  # noqa: E402
+from swarm.prompts import RULE_LINES  # noqa: E402
+from swarm.shared_file import SHARED_DIFFICULTY_MIX, run_seed_shared  # noqa: E402
+from swarm.planted_file import BRANCHES, code_target_seeds, collect_planted, run_seed_planted  # noqa: E402
+from swarm.audit import collect_shared  # noqa: E402
+from swarm.protocol.state import AgentSpec  # noqa: E402
+from swarm.tasks import TASK_TYPES, TaskBank  # noqa: E402
 
 NAMES = ["alice", "bob", "carol", "dave", "erin", "frank", "grace", "heidi", "ivan", "judy"]
 
@@ -171,7 +171,7 @@ async def main() -> int:
             shared = cfg.mode == "shared_file"
             bank = TaskBank(cfg.seed, cfg.n_episodes, difficulty_mix=cfg.difficulty_mix or
                             (SHARED_DIFFICULTY_MIX if shared else None), explicit_withheld=shared)
-            from experiments.episode import blind_plan
+            from swarm.episode import blind_plan
             bank.build(cfg.agents, blind_plan(cfg))
             return MockLLM({t.task_id: {"key": t.answer_key, "blind": t.blind, "fact": task_fact(t, t.answer_key[0]),
                                         "withheld": t.meta.get("withheld")}

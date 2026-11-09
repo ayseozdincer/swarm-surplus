@@ -12,14 +12,14 @@ from pathlib import Path
 import numpy as np
 
 ROOT = Path(__file__).resolve().parents[1]
-sys.path[:0] = [str(ROOT), str(ROOT/"scripts"), str(ROOT/"scripts/pod"), str(ROOT/"third_party/maj-lens")]
+sys.path[:0] = [str(ROOT), str(ROOT/"scripts"), str(ROOT/"experiments/lane_e_shared_workspace"), str(ROOT/"third_party/maj-lens")]
 
 from detector.render import load_turns, render_turn  # noqa: E402
-from experiments.episode import SwarmConfig, blind_plan  # noqa: E402
-from experiments.llm import MockLLM  # noqa: E402
-from experiments.planted_file import BRANCHES, code_target_seeds, run_seed_planted  # noqa: E402
-from experiments.protocol.state import AgentSpec  # noqa: E402
-from experiments.tasks import TaskBank  # noqa: E402
+from swarm.episode import SwarmConfig, blind_plan  # noqa: E402
+from swarm.llm import MockLLM  # noqa: E402
+from swarm.planted_file import BRANCHES, code_target_seeds, run_seed_planted  # noqa: E402
+from swarm.protocol.state import AgentSpec  # noqa: E402
+from swarm.tasks import TaskBank  # noqa: E402
 import planted_scores  # noqa: E402
 
 AGENTS = [AgentSpec("alice", "record_extraction"), AgentSpec("bob", "data_search"), AgentSpec("carol", "code_analysis"),

@@ -14,14 +14,14 @@ sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 
 from detector.render import load_turns, render_turn  # noqa: E402
 from detector.stego_spans import token_spans  # noqa: E402
-from experiments.episode import SwarmConfig, assignment, blind_plan  # noqa: E402
-from experiments.llm import MockLLM  # noqa: E402
-from experiments.plants import choose_address, file_line_instruction  # noqa: E402
-from experiments.planted_file import (BRANCHES, access_token, code_target_seeds, collect_planted, fit_tokens, mask_check, run_seed_planted,  # noqa: E402
+from swarm.episode import SwarmConfig, assignment, blind_plan  # noqa: E402
+from swarm.llm import MockLLM  # noqa: E402
+from swarm.plants import choose_address, file_line_instruction  # noqa: E402
+from swarm.planted_file import (BRANCHES, access_token, code_target_seeds, collect_planted, fit_tokens, mask_check, run_seed_planted,  # noqa: E402
                                       source_in_note, target_row, token_counter)
-from experiments.protocol.state import AgentSpec  # noqa: E402
-from experiments.tasks import TaskBank  # noqa: E402
-from experiments.workspace import DESIGNER, Workspace, locate_write  # noqa: E402
+from swarm.protocol.state import AgentSpec  # noqa: E402
+from swarm.tasks import TaskBank  # noqa: E402
+from swarm.workspace import DESIGNER, Workspace, locate_write  # noqa: E402
 
 AGENTS = [AgentSpec("alice", "record_extraction"), AgentSpec("bob", "data_search"), AgentSpec("carol", "code_analysis"),
           AgentSpec("dave", "record_extraction"), AgentSpec("erin", "data_search"), AgentSpec("frank", "code_analysis")]
@@ -167,8 +167,8 @@ def test_credential_branch_and_matched_branches():
         assert lines["input"] in reveal["content"] and reveal["content"].startswith("The withheld input")
         assert [e["ok"] for e in cr["tool_log"] if e["tool"] == "reveal_input"] == [True]
         # the same call in another branch is refused, since no token is valid there
-        from experiments.planted_file import PlantedFileRunner
-        from experiments.protocol.state import ToolCall
+        from swarm.planted_file import PlantedFileRunner
+        from swarm.protocol.state import ToolCall
         cfg = _cfg()
         bank = TaskBank(cfg.seed, cfg.n_episodes).build(cfg.agents, blind_plan(cfg))
         runner = PlantedFileRunner(cfg, None, root/"other", bank)
@@ -240,7 +240,7 @@ def test_submitting_before_reading_is_refused():
                     return LLMResponse("Final answer. 12", "I will just say it.", [], "stop")
                 return super()._file_task_turn(messages, tool_names)
 
-        from experiments.llm import LLMResponse
+        from swarm.llm import LLMResponse
         cfg = _cfg(8004)
         bank = TaskBank(cfg.seed, cfg.n_episodes).build(cfg.agents, blind_plan(cfg))
         llm = TextFirst({t.task_id: {"key": t.answer_key, "blind": t.blind} for t in bank.tasks.values()}, seed=cfg.seed, p_correct=1.0, p_judge=1.0)

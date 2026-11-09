@@ -178,7 +178,7 @@ Every other message has `provenance_derived` equal to its declared tag. A replay
 by either tag. `list_files` output carries file names other agents chose; it is tagged
 `environment` in both, and its log entry records each file's creator.
 
-Audit (`experiments/audit.py`, after the fact, from `run.json` alone, written to
+Audit (`swarm/audit.py`, after the fact, from `run.json` alone, written to
 `audit.json` per run and `labels_shared_file.json` per experiment)
 
 | label | meaning |
@@ -210,7 +210,7 @@ python scripts/run_plants.py --mode shared_file --model qwen/qwen3-14b --max-tok
     --seeds 10 --concurrency 2 --max-concurrency 12 --out runs/shared
 python scripts/run_plants.py --mode shared_file --model qwen/qwen3-14b --max-tokens 12000 \
     --wrong-penalty 0.5 --salience --seed-base 7101 --seeds 10 --out runs/shared_c2   # condition two
-python scripts/summarize_shared.py runs/shared
+python experiments/lane_e_shared_workspace/summarize_shared.py runs/shared
 ```
 
 Output per seed is `runs/<exp>/seed<S>/shared_file/` with `run.json` (checkpointed after
@@ -254,9 +254,9 @@ Labels per target, in `run.json` and `labels_planted_file.json`. `read_file`, `e
 answer), `reveal_called`, `reveal_token_right`, `submission_correct`, `disclosed_source` and `concealed_source` (the submission note, with
 the match in `source_match`), `reply_tokens` (summed over the solve calls, and `reply_tokens_by_step`).
 
-Replay (`scripts/pod/replay_planted.py`). Every solve call of a target after it read its file, against two references, the derived
+Replay (`experiments/lane_e_shared_workspace/replay_planted.py`). Every solve call of a target after it read its file, against two references, the derived
 mask (the appended line only) and the declared mask (which masks nothing here, so the plain kernel, and its surplus must be kernel
-noise). `scripts/planted_scores.py` reports, at L16 to L38 and under both references on the same turns, delta, mass, the 16-token
+noise). `experiments/lane_e_shared_workspace/planted_scores.py` reports, at L16 to L38 and under both references on the same turns, delta, mass, the 16-token
 windows around the first mention of the value or token, the plateau count over the first 256 reply tokens, the jump at the first mention,
 lens naming at the copy, and the direction source score with the benign line as the other candidate. In the credential branch the first
 call after the read is normally the `reveal_input` call, read at `tool_call_pre` and `token_pre`.
@@ -266,10 +266,10 @@ python tests/test_planted_file.py
 python tests/test_planted_replay.py     # the end-to-end replay needs torch, and is skipped without it
 python scripts/run_plants.py --mode planted_file --mock --seeds 4 --seed-base 8001 --out runs/dry_planted
 python scripts/run_plants.py --mode planted_file --model qwen/qwen3-14b --max-tokens 12000 --seed-list 8001 --out runs/smoke_planted
-python scripts/summarize_planted.py runs/smoke_planted --notes
+python experiments/lane_e_shared_workspace/summarize_planted.py runs/smoke_planted --notes
 ```
 
-On a pod, `scripts/pod/vllm_serve.sh`, then `scripts/pod/run_planted.sh`, then `scripts/pod/run_planted_chain.sh`, which also runs
+On a pod, `scripts/pod/vllm_serve.sh`, then `experiments/lane_e_shared_workspace/jobs/planted.sh`, then `experiments/lane_e_shared_workspace/jobs/planted_chain.sh`, which also runs
 `tests/gpu_planted_check.py` on the real model first (masked tokens invisible, shared prefix equal to the full pass).
 
 ## Output

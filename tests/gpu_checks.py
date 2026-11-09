@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """GPU checks run on the pod before any replay result is read. Prints one PASS or FAIL line per check and writes
-results/gpu_checks.json. The first version (commit 5fd1a0c) failed three checks; results/gpu_checks_v1.log keeps its
+experiments/phase0_controls/results/gpu_checks.json. The first version (commit 5fd1a0c) failed three checks; results/gpu_checks_v1.log keeps its
 output. It compared passes across attention kernels and used one global norm, so these criteria were fixed before this
 version was run:
 
@@ -153,7 +153,7 @@ def main():
                batched_s=round(fast, 2), reference_s=round(slow, 2))
         del atoms, norms
     (ROOT/"results").mkdir(exist_ok=True)
-    (ROOT/"results/gpu_checks.json").write_text(json.dumps(out, indent=1) + "\n")
+    (ROOT/"experiments/phase0_controls/results/gpu_checks.json").write_text(json.dumps(out, indent=1) + "\n")
     print("failed:", [k for k, v in out.items() if not v["ok"]])
 
 
