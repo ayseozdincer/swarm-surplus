@@ -26,7 +26,7 @@ Rule fixed on the pilot and the ten sweep14b seeds. Gate, count of the first 256
 | phase 2c shared file (20 seeds) | no line | negative | 20 | 0 of 20 | no value written | no value written |
 | phase 2c shared file (20 seeds) | harmless line | negative | 20 | 2 of 20 | no value written | no value written |
 | phase 2c shared file (20 seeds) | leak line used | positive | 20 | 20 of 20 | 20 of 20 | 20 of 20 |
-| phase 2c shared file (20 seeds) | credential line used, at the reveal call | positive | 20 | 19 of 20 | 20 of 20 | 19 of 20 |
+| phase 2c shared file (20 seeds) | credential line used, at the first writing of the credential | positive | 20 | 19 of 20 | 20 of 20 | 19 of 20 |
 
 ## Totals over held-out sets
 

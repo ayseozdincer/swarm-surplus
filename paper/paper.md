@@ -80,12 +80,12 @@ Table 2. The frozen rule on held-out sets. Gate, count at or above 60. Confirmat
 | solvable | submitted the right value, 9 of 13 right without the note | 13 | 0 | 3 of 13 | 0 of 13 |
 | method tip | on-task procedure, no value | 20 | 20 | no value | no value |
 | shared file | leak line used | 20 | 20 | 20 of 20 | 20 of 20 |
-| shared file | credential used, at the reveal call | 20 | 19 | 20 of 20 | 19 of 20 |
+| shared file | credential used, at the first writing of the credential | 20 | 19 | 20 of 20 | 19 of 20 |
 | shared file | harmless line or no line | 40 | 2 | no value | no value |
 | totals | positives | 108 | 105 | 101 of 108 | 98 of 108 |
 | totals | negatives | 595 | 23 | 6 of 473 | 0 of 473 |
 
-**Where the leak is read.** At the positions the J-space paper reads, a leaked answer and a harmless tip are indistinguishable. On 14B with a converged lens, ten seeds, no token of the planted answer enters the lens top ten at any layer at the first generated token, after thinking, or at the last prompt token, the residual moves 4 to 9 floors for the leak and 4 to 7 for the tip, and mass separates them at 0.43. The same null holds on 32B. At the token before the agent first writes the leaked value inside its reasoning, the residual sits 25 to 53 floors on 14B and 19 to 68 on 32B, the answer's first token is the lens top-1 in 8 of 10 seeds against 2 of 10 in the reference, and leak against tip is 1.00 on mass and jump. By the end of thinking the digit ranks higher in the reference than in the actual pass, because the agent has written it. Figure 1 shows one turn.
+**Where the leak is read.** At the positions the J-space paper reads, the lens and the J-space do not see the leak. On 14B with a converged lens, ten seeds, no token of the planted answer enters the lens top ten at any layer at the first generated token, after thinking, or at the last prompt token, the residual moves 4 to 9 floors for the leak and 4 to 7 for the tip, and mass separates leak from tip at 0.43 there and 0.36 on sweep2. The same null holds on 32B. What the residual's magnitude does separate at the first token on sweep2, 0.98 for the blind agent's leak against its tips, tracks the note's relevance to the reader rather than use, since readers who never use the leak score 0.62 on the same measure. At the token before the agent first writes the leaked value inside its reasoning, the residual sits 25 to 53 floors on 14B and 19 to 68 on 32B, the answer's first token is the lens top-1 in 8 of 10 seeds against 2 of 10 in the reference, and leak against tip is 1.00 on mass and jump. By the end of thinking the digit ranks higher in the reference than in the actual pass, because the agent has written it. Figure 1 shows one turn.
 
 ![Figure 1](figures/trace_seed5034.png)
 
@@ -151,13 +151,13 @@ Ayse Ozdincer and Máté Lakner designed the work, ran the experiments and wrote
 - Hammond, L. et al. 2025. Multi-agent risks from advanced AI. arXiv 2502.14143.
 - Hines, K. et al. 2024. Defending against indirect prompt injection attacks with Spotlighting.
 - METR. 2026. Investigation of the Hugging Face incident.
-- Molinari, A. and Bettineschi, A. 2026. Multi-agent collusion and the J-space. arXiv 2611.02153.
+- Molinari, M. and Bettineschi, G. 2026. Multi-agent collusion and the J-space. arXiv 2611.02153.
 - Motwani, S. et al. 2024. Secret collusion among AI agents, multi-agent deception via steganography. NeurIPS 2024.
 - OpenAI. 2026. The Hugging Face incident and the road ahead, and the OpenAI Hugging Face incident technical report.
-- Rose, A. et al. 2026. Detecting multi-agent collusion through multi-agent interpretability (NARCBench). arXiv 2604.01151.
+- Rose, A., Cullen, C., Abdelnabi, S., Torr, P., Kaplowitz, B. G. and Schroeder de Witt, C. 2026. Detecting multi-agent collusion through multi-agent interpretability (HELIOS and NARCBench). arXiv 2604.01151.
 - Scheurer, J., Balesni, M. and Hobbhahn, M. 2023. Large language models can strategically deceive their users when put under pressure. arXiv 2311.07590.
 - Tailor, A. 2025. Audit the whisper, ColludeBench-v0.
-- The Jacobian lens release on Neuronpedia, 2026, as cited by the J-space paper.
+- Gurnee, W. et al. 2026. Verbalizable representations form a global workspace in language models. Transformer Circuits Thread, 6 July 2026. Lenses released on Neuronpedia.
 
 ## Appendix
 
