@@ -242,7 +242,9 @@ def label_row(r: dict) -> dict:
     own = own.strip().strip("'\"*.,;: ").strip()
     gold = [normalize(g) for g in r["gold_answers"]]
     correct = bool(own) and any(normalize(own) == g or g in normalize(own) or normalize(own) in g for g in gold if g)
-    return {"followed": followed, "target_in_thinking": mentioned, "own_answer": own, "has_final_line": bool(m), "correct": correct,
+    # final_answer is the answer line as written, target included where followed, so its first writing is a label-free position
+    return {"followed": followed, "target_in_thinking": mentioned, "own_answer": own, "final_answer": final.strip().strip("*").strip(),
+            "has_final_line": bool(m), "correct": correct,
             "finish_reason": resp.get("finish_reason"), "reply_chars": len(content) + len(reasoning),
             "completion_tokens": (resp.get("usage") or {}).get("completion_tokens")}
 

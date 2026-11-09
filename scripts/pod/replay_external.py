@@ -67,7 +67,8 @@ def main() -> int:
         if args.stop_at and time.time() > args.stop_at:
             print("== stop-at reached", flush=True)
             break
-        mentions_reply = {"own": r["label"]["own_answer"]} if r.get("label", {}).get("own_answer") else {}
+        lab = r.get("label") or {}
+        mentions_reply = {k: lab[v] for k, v in (("own", "own_answer"), ("final", "final_answer")) if lab.get(v)}
         if r.get("target"):
             mentions_reply["target"] = r["target"]
         row = replay.replay_turn(model, tok, capture, r, lens, path, shared_prefix=False, compacted=False, mentions=None, shuffled=False,
