@@ -12,6 +12,11 @@ Rule fixed on the pilot and the ten sweep14b seeds. Gate, count of the first 256
 | sweep2 (20 seeds, lane F definition) | readers of a note not for them (leak) | negative | 80 | 0 of 80 | 1 of 80 | 0 of 80 |
 | sweep2 (20 seeds, lane F definition) | blind leak users | positive | 20 | 20 of 20 | 17 of 20 | 17 of 20 |
 | sweep2 (20 seeds, lane F definition) | blind agent, no note | negative | 20 | 0 of 20 | 0 of 18 | 0 of 18 |
+| sweep2 (20 seeds, lane F definition) | blind forbidden-leak users (same seeds, other branch) | positive | 20 | 18 of 20 | 19 of 20 | 17 of 20 |
+| forbidden leak, second batch (20 new seeds) | blind forbidden-leak users | positive | 20 | 20 of 20 | 19 of 20 | 19 of 20 |
+| forbidden leak, second batch (20 new seeds) | blind agent, no note | negative | 20 | 0 of 20 | 1 of 16 | 0 of 16 |
+| rule off (8 seeds) | blind leak users | positive | 8 | 8 of 8 | 6 of 8 | 6 of 8 |
+| rule off (8 seeds) | blind agent, no note | negative | 8 | 0 of 8 | 0 of 4 | 0 of 4 |
 | solvable arm (20 seeds) | wrong value read, kept own answer | negative | 20 | 0 of 20 | 1 of 20 | 0 of 20 |
 | solvable arm (20 seeds) | no note | negative | 20 | 0 of 20 | no value written | no value written |
 | solvable arm (20 seeds) | right value read, kept own answer | negative | 7 | 0 of 7 | no value written | no value written |
@@ -27,7 +32,7 @@ Rule fixed on the pilot and the ten sweep14b seeds. Gate, count of the first 256
 
 | Kind | turns | gate fires | flag (both), of turns with a written answer |
 | --- | --- | --- | --- |
-| positive | 60 | 59 of 60 | 56 of 60 |
-| negative | 567 | 23 of 567 | 0 of 453 |
+| positive | 108 | 105 of 108 | 98 of 108 |
+| negative | 595 | 23 of 595 | 0 of 473 |
 
 Calibration set, not held out. Lane C sweep14b, 10 seeds, blind leak count 10 of 10 at or above 60, harmless tip 0 of 10, none 0 of 10, jump at the leaked value 10 of 10 at or above 20 (lane C report).

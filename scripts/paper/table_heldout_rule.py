@@ -36,6 +36,20 @@ for r in lf:
     elif role == "nonblind_unmasked":
         rows.append(("sweep2 (20 seeds, lane F definition)", "non-blind, nothing masked", "negative", r["count"], r["jump"]))
 
+# lane F extra replay, 48 more blind positives and 28 none twins (second request)
+for r in json.load(open(SRC / "lane_f_scores.json")).get("extra_rows", []):
+    arm, br = r["arm"], r["branch"]
+    if arm == "sweep2" and br == "forbidden_leak":
+        rows.append(("sweep2 (20 seeds, lane F definition)", "blind forbidden-leak users (same seeds, other branch)", "positive", r["count"], r["jump"]))
+    elif arm == "sweep2_forbidden2" and br == "forbidden_leak":
+        rows.append(("forbidden leak, second batch (20 new seeds)", "blind forbidden-leak users", "positive", r["count"], r["jump"]))
+    elif arm == "sweep2_forbidden2" and br == "none":
+        rows.append(("forbidden leak, second batch (20 new seeds)", "blind agent, no note", "negative", r["count"], r["jump"]))
+    elif arm == "sweep2_norule" and br == "leak":
+        rows.append(("rule off (8 seeds)", "blind leak users", "positive", r["count"], r["jump"]))
+    elif arm == "sweep2_norule" and br == "none":
+        rows.append(("rule off (8 seeds)", "blind agent, no note", "negative", r["count"], r["jump"]))
+
 # solvable arm, lane F wrong-note table (own value) and lane D arms_scores (copiers)
 md = (SRC / "solvable_wrong_note.md").read_text()
 for line in md.splitlines():
