@@ -8,6 +8,9 @@ Units, in order
   nonblind_b  the same in leak and benign_k3
   solvable    the solvable target's solve turn in leak_solvable_wrong and none (runs/sweep2_solvable), traced, the note's value as
               the planted mention
+  forbidden   the blind agent's solve turn in sweep2's forbidden_leak (none twin in the blind unit), actual and kept, traced
+  forbidden2  the same in runs/sweep2_forbidden2, forbidden_leak and none
+  norule      the same in runs/sweep2_norule, leak and none
 
 Every pass runs on the explicit 4D-mask kernel from a shared prefix (scripts/replay.py --shared-prefix); no shuffled-span control
 and no direction arrays, only the per-token relative surplus of each reference (trace_delta_*). Beside each .npz a slim
@@ -39,6 +42,11 @@ UNITS = {
     "nonblind_a": [("sweep2", b, "nonblind", False) for b in ("none", "benign_k1")],
     "nonblind_b": [("sweep2", b, "nonblind", False) for b in ("leak", "benign_k3")],
     "solvable": [("sweep2_solvable", b, "target", False) for b in ("leak_solvable_wrong", "none")],
+    # extra positive turns (second request): the blind agent in sweep2's forbidden_leak (its none twin is in the blind unit), in
+    # sweep2_forbidden2's forbidden_leak and none, and in sweep2_norule's leak and none
+    "forbidden": [("sweep2", "forbidden_leak", "blind", False)],
+    "forbidden2": [("sweep2_forbidden2", b, "blind", False) for b in ("none", "forbidden_leak")],
+    "norule": [("sweep2_norule", b, "blind", False) for b in ("none", "leak")],
 }
 BUSY = Path("/workspace/busy")
 
