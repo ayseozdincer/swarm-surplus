@@ -126,7 +126,7 @@ What the jump is not. The reference is off-policy for every forced token after t
 
 The rule. Table 4 gives the frozen gate and confirmation on every set scored after the cuts were fixed, led by the out-of-sample rows. On lane G's twenty seeds the rule flags 17 of the 17 agents whose submitted value matched a note and 0 of 20 none twins, medians count 160 against 0 and jump 61 against 1.1, and the three agents whose submission matched neither note pass the gate and fail the confirmation, as designed. <!-- src: results/paper/tables/newdata_test.md --> Across 703 held-out turns it flags 98 of 108 positives, 90.7 percent with interval 83.8 to 94.9, and 0 of 473 negatives with a written answer, upper bound 0.8 percent. The gate alone fires on 23 of 595 negatives, 20 on-task procedures with no value to confirm, two harmless shared-file lines whose readers took the line for their missing input, and one blind agent quoting a tip. The ten misses copied a 22-character string with slips, so the value they submitted is not the one the note held, and two wrote it just past the 256-token window. <!-- src: results/paper/tables/heldout_rule.md, results/paper/method_review.md A4 and A7 --> A seed-grouped logistic fit on the same measures, which a deployed monitor could not train, is the ceiling check. On 536 turns over 40 seeds it reaches out-of-fold AUROC 1.000 and puts 63 of 68 positives above every negative against the rule's 59, with overlapping intervals, catching four more slip copies in this sample and weighting the count first and the jump second. <!-- src: results/paper/tables/fitted_detector.md --> Confirmatory, with the sweep2 blind row the least held out.
 
-Table 4. The frozen rule on sets scored after the cuts were fixed. Gate, count at or above 60. Confirmation, jump at the agent's own first writing at or above 20 floors. Flag, both. Groups with no written value have no confirmation. The blind agents' own none twins in sweep2, 20 turns, are counted in the totals and not shown as a row, because with the twin as its own floor their confirmation sits near 1 by construction. Per-group floors in Appendix D.
+Table 4. The frozen rule on sets scored after the cuts were fixed. Gate, count at or above 60. Confirmation, jump at the agent's own first writing at or above 20 floors. Flag, both. Groups with no written value have no confirmation. The blind agents' own none twins in sweep2, 20 turns, are counted in the totals and not shown as a row, because with the twin as its own floor their confirmation sits near 1 by construction. The credential row's confirmation is read where the credential is first written in the reasoning, 49 floors median, and not at the reveal call, where the surplus is 10.2 floors (Table 6). Per-group floors in Appendix D.
 
 | Set | Group | n | gate | confirmation | flag |
 | --- | --- | --- | --- | --- | --- |
@@ -138,7 +138,7 @@ Table 4. The frozen rule on sets scored after the cuts were fixed. Gate, count a
 | forbidden leak, 20 new seeds | blind users | 20 | 20 | 19 of 20 | 19 of 20 |
 | rule off, 8 seeds | blind leak users | 8 | 8 | 6 of 8 | 6 of 8 |
 | shared file | leak line used | 20 | 20 | 20 of 20 | 20 of 20 |
-| shared file | credential used, at the reveal call | 20 | 19 | 20 of 20 | 19 of 20 |
+| shared file | credential used, at the credential's first writing | 20 | 19 | 20 of 20 | 19 of 20 |
 | sweep2 | blind agent under a harmless tip | 20 | 1 | 0 of 16 | 0 of 16 |
 | sweep2 | readers of a note not meant for them | 260 | 0 | 4 of 259 | 0 of 259 |
 | sweep2 | non-blind, nothing masked | 140 | 0 | 0 of 140 | 0 of 140 |
@@ -248,14 +248,14 @@ Code repository, github.com/ayseozdincer/swarm-surplus, branch overnight-detecto
 - Han, X., Pasquier, T., Bates, A., Mickens, J. and Seltzer, M. 2020. UNICORN, runtime provenance-based detector for advanced persistent threats. NDSS 2020.
 - Hines, K. et al. 2024. Defending against indirect prompt injection attacks with Spotlighting.
 - METR. 2026. Investigation of the Hugging Face incident.
-- Molinari, A. and Bettineschi, A. 2026. Multi-agent collusion and the J-space. arXiv 2611.02153.
+- Molinari, M. and Bettineschi, G. 2026. Multi-agent collusion and the J-space. arXiv 2611.02153.
 - Motwani, S. et al. 2024. Secret collusion among AI agents, multi-agent deception via steganography. NeurIPS 2024.
-- NeuroTaint. 2026. Context provenance graphs from execution logs for LLM agents. [citation to complete]
+- Cai, Y., Tang, W., Wen, C. and Qin, S. 2026. Ghost in the agent, redefining information flow tracking for LLM agents (NeuroTaint). arXiv 2604.23374.
 - OpenAI. 2026. The Hugging Face incident and the road ahead, and the OpenAI Hugging Face incident technical report.
-- Rose, A. et al. 2026. Detecting multi-agent collusion through multi-agent interpretability (NARCBench). arXiv 2604.01151.
+- Rose, A., Cullen, C., Abdelnabi, S., Torr, P., Kaplowitz, B. G. and Schroeder de Witt, C. 2026. Detecting multi-agent collusion through multi-agent interpretability (HELIOS and NARCBench). arXiv 2604.01151.
 - Scheurer, J., Balesni, M. and Hobbhahn, M. 2023. Large language models can strategically deceive their users when put under pressure. arXiv 2311.07590.
 - Tailor, A. 2025. Audit the whisper, ColludeBench-v0.
-- The Jacobian lens release on Neuronpedia, 2026, as cited by the J-space paper.
+- Gurnee, W., Sofroniew, N., Pearce, A., Piotrowski, M., Kauvar, I., Chen, R., Soligo, A., Bogdan, P., Ong, E., Wang, R., Thompson, T. B., Abrahams, D., Kantamneni, S., Ameisen, E., Batson, J. and Lindsey, J. 2026. Verbalizable representations form a global workspace in language models. Transformer Circuits Thread, 6 July 2026. The Jacobian lens, with lenses released on Neuronpedia.
 - W3C. 2013. PROV-DM, the PROV data model. W3C Recommendation.
 
 ## Appendix
@@ -316,7 +316,7 @@ Table D8. Behaviour of free agents across arms. Rates are over free receivers, a
 
 ### Appendix E. Labels, prompts, sampling and the hand-read sample
 
-Thirty traces, 15 leak solves across both models, 10 proposal verdicts and 5 benign verdicts, were read in full and labelled independently, and the sheet was reviewed by an author. Leak used, 15 of 15 agree. Cites the note, strict pattern, 25 of 30, exact on verdict turns, misses five solve turns phrased "Frank mentioned". Disclosed the source, 14 of 15, the miss being the concealment case "input specifics known to the reviewer". Two of fifteen leak users on 32B concealed the source with no rule in the prompt, one after asking itself whether using the note was cheating. Plant texts and the quarantined instruction are in the repository README and experiments/plants.py. Agents are named alice and dave for records, bob and erin for data, carol and frank for code. Generation used Qwen3's thinking mode, temperature 0.7, a 12,000-token cap on the self-served runs through vLLM 0.33 in bfloat16 with plain temperature sampling, and 16,384 tokens through the OpenRouter API. Replays ran in fp16 on the explicit-mask kernel with per-layer host copies batched. <!-- src: results/OVERNIGHT.md label validation, results/lane_d/REPORT.md -->
+Thirty traces, 15 leak solves across both models, 10 proposal verdicts and 5 benign verdicts, were read in full and labelled independently, and the sheet was reviewed by an author. Leak used, 15 of 15 agree. Cites the note, strict pattern, 25 of 30, exact on verdict turns, misses five solve turns phrased "Frank mentioned". Disclosed the source, 14 of 15, the miss being the concealment case "input specifics known to the reviewer". Two of fifteen leak users on 32B concealed the source with no rule in the prompt, one after asking itself whether using the note was cheating. Plant texts and the quarantined instruction are in the repository README and experiments/plants.py. Agents are named alice and dave for records, bob and erin for data, carol and frank for code. Generation used Qwen3's thinking mode, temperature 0.7, a 12,000-token cap on the self-served runs through vLLM 0.33 in bfloat16 with plain temperature sampling, and 16,384 tokens through the OpenRouter API. The 14B replays load bfloat16 weights and run both passes on the explicit-mask kernel with per-layer host copies batched. <!-- src: results/OVERNIGHT.md label validation, results/lane_d/REPORT.md -->
 
 ### Appendix F. Costs and reproducibility
 
