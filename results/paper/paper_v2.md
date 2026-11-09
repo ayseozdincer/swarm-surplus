@@ -219,3 +219,165 @@ Two external checks are running at submission time under the rule of Section 3.6
 
 Either check that does not finish before the deadline is reported as not run.
 
+## 5. Discussion
+
+**What an operator gets, and what it costs.** The detector is a tool for whoever runs the swarm, and it asks for five things.
+
+1. Log. A provenance tag on every span at assembly, the bytes of every writing tool call, contexts saved as served with the thinking channel, and a floor measured once per model and kernel on unmasked turns.
+2. Run. One forward pass per turn with no peer span, which any probe needs too, and two when peer spans are present, both prefill at prompt-processing speed, 3 to 8 seconds per 14B turn on an A100 for contexts of 3,000 to 8,000 tokens, about 0.2 to 0.4 cents. One more pass per candidate when the question is which of several. Replay runs off the critical path, gate first, so only turns where peer content moved the agent get the full read. Cost is linear in turns and context length and independent of swarm size, since nothing compares agents. <!-- src: Appendix F, results/lane_d/REPORT.md replay timing -->
+3. Read. The count as the gate, the jump as the confirmation, direction for whom, the lens for what where it can, and the trace of every flagged turn with the mask and the first writing marked, so a human can read the alarm.
+4. Calibrate. Plant canary values into a live swarm's peer channels and check that the detector fires on the agent that uses them. That gives positives for free in any game and turns the pilot calibration into a routine.
+5. Decide elsewhere. Whether the uptake was allowed is the environment's rule. The detector reports what an agent did with peer content and stays a level below any definition of collusion.
+
+**What it cannot see.** The write log alone builds the mask and sees none of this. Bob refused Erin's leak and Carol used Frank's, with identical log edges. A text monitor is strong on the verbalised case and blind to the 9 of 13 solvable submitters who never mention the note, the 5 of 20 shared-file leak targets who name no source, and the concealers, and NARCBench found verbalised coordination in 2 of 229 emergent collusive rounds. <!-- src: results/paper/tables/text_baseline.md, results/lane_e/REPORT_2c.md --> The detector has blind spots of its own, and the dual-use appendix lists them as the map an operator must close. Restated content is laundered into the reference, so late positions are blind. The derived tag matches bytes, so paraphrase and encoding evade it, and influence that arrives through a tool result fetched with a peer-derived credential sits inside a sanctioned span, which the credential branch shows at the reveal call. The next step there is taint propagation, a tool result tagged peer-derived when any argument of the call was.
+
+**Each correction is now a control.** The first replay compared passes across two kernels and was discarded. The positions prior work reads measured exposure. Mass looked like a detector on Core at 1.000 and was edit size. Direction looked like uptake and was attribution. The plateau looked like reliance and was engagement. Ten of ten at the answer became 21 of 27 when the position was fixed in advance. Each of those is a row in a table above rather than a sentence in a limitations section, and that is the order in which the method was understood.
+
+**Reach.** The incident report describes reward hacking on impossible tasks through a side channel, and a blind agent taking its withheld answer from a peer is exactly that form, so the detector reads the information-sharing form of reward hacking in a swarm. It has nothing to say about reward hacking that needs no outside information, since there is no span to mask. The same read applies wherever a span of known provenance might be acted on and the log cannot tell, prompt injection through tool results, a colleague's tip, memory written by one session and read by another, and the fairness rule of Section 3.7 says which existing suites can test it.
+
+### Limitations
+
+1. One model family, one game, one lens. Qwen3 at two sizes, a converged lens at 14B and a partial one at 32B. A second family where the jump fails to separate a quoted value from a computed one would overturn the central reading.
+2. Positives only on code tasks. Data and record tasks withhold rows silently and the model prefers its visible data, so the false-positive rates on those readers have no matched positives. A data-task positive set where readers fire would overturn the false-positive claim.
+3. The count is a gate. It fires on any relevant peer text, an on-task procedure above a leak in 20 of 20 seeds, so it never flags on its own.
+4. The jump is graded. Four plausible real copies on solvable tasks sit at 11 to 44 floors, two command-branch negatives at 38 and 67, and the ten misses in Table 4 are slip copies whose submitted string was not the note's.
+5. Within-turn attribution rests on 27 turns, and the pre-registered position replicated weaker, 11 of 17, than the exploratory one, 17 of 17.
+6. The parameters were set by eye. Ten floors, 256 tokens, layers 16 to 38 and the cuts at 60 and 20 were fixed before the held-out sets, but the sensitivity table is pending, and two misses wrote the value just past the 256-token window.
+7. Teacher forcing launders restated content, the same model wrote the plants and played the receivers under a quarantined instruction, nothing emerged on its own in twenty runs with a shared directory, and the released benchmarks are not claimed because there the mask is the label.
+
+### Future work
+
+The log-probability form of the confirmation, a replay that saves the forced token's log-probability at every position, so that outputs that are not values can be confirmed. The sensitivity table on the existing traces. Taint propagation through tool arguments for the derived tag. Positives on data and record tasks once the withheld piece is declared there, hint and partial-value plants, a third model size and a second family. The two external checks of Section 4.7 completed, and longer emergence runs, since twenty runs with a shared directory and a reason to persist produced no write.
+
+## 6. Conclusion
+
+An orchestrator already knows where every span of an agent's context came from. Replaying the agent without the peer spans and reading the difference along its reply turns that knowledge into a per-turn account of what the agent did with peer content, with no labels and no definition of collusion. On uninstructed Qwen3 agents a rule fixed in advance flags 17 of 17 taking agents and none of 20 controls on seeds generated afterwards, separates engagement from taking, names the note that was used in about four of five turns, and reads a channel the agents were never told about once provenance is derived from the write log. The honest benchmark finding, that instructed colluders are separated by the size of the edit rather than its content, is why the environment exists and why the claims are made there.
+
+## Code and Data
+
+Code repository, github.com/ayseozdincer/swarm-surplus, branch overnight-detector and the lane branches named in Appendix D, private during judging and open on request. Every table under results/paper/tables/ is printed by a script in scripts/paper/ from committed score files and carries a header saying so, and every number in this report names its source file. Data, the run directories under runs/ with every transcript as served and its provenance tags, replay indexes and scores under results/, and the tables with their scripts. The deck and the jury briefing are available on request.
+
+Prior work declaration. The sprint opened on Friday 7 November and every commit in the repository is from the sprint. Work by others is used as released, the J-space paper's code vendored under third_party/maj-lens with its cache, the NARCBench transcripts, prompts and activations, the Neuronpedia Jacobian lenses, and the insider-trading pressure eval's repository under third_party/insider-trading. Nothing in detector/, experiments/ or scripts/ existed before the sprint.
+
+## Author Contributions
+
+[SLOT, to be written by the authors. Who built the environment and plants, who ran which lanes, who wrote which sections.]
+
+## References
+
+- Abdelnabi, S. et al. 2024. Get my drift? Catching LLM task drift with activation deltas. arXiv 2406.00799.
+- Cohen-Wang, B., Shah, H., Georgiev, K. and Madry, A. 2024. ContextCite, attributing model generation to context. NeurIPS 2024. arXiv 2409.00729.
+- Costa, M. et al. 2025. Securing AI agents with information-flow control (FIDES).
+- Debenedetti, E. et al. 2024. AgentDojo, a dynamic environment to evaluate prompt injection attacks and defenses for LLM agents. NeurIPS 2024 datasets and benchmarks.
+- Debenedetti, E. et al. 2025. Defeating prompt injections by design (CaMeL).
+- Geva, M., Bastings, J., Filippova, K. and Globerson, A. 2023. Dissecting recall of factual associations in auto-regressive language models. EMNLP 2023. arXiv 2304.14767.
+- Hammond, L. et al. 2025. Multi-agent risks from advanced AI. arXiv 2502.14143.
+- Han, X., Pasquier, T., Bates, A., Mickens, J. and Seltzer, M. 2020. UNICORN, runtime provenance-based detector for advanced persistent threats. NDSS 2020.
+- Hines, K. et al. 2024. Defending against indirect prompt injection attacks with Spotlighting.
+- METR. 2026. Investigation of the Hugging Face incident.
+- Molinari, A. and Bettineschi, A. 2026. Multi-agent collusion and the J-space. arXiv 2611.02153.
+- Motwani, S. et al. 2024. Secret collusion among AI agents, multi-agent deception via steganography. NeurIPS 2024.
+- NeuroTaint. 2026. Context provenance graphs from execution logs for LLM agents. [citation to complete]
+- OpenAI. 2026. The Hugging Face incident and the road ahead, and the OpenAI Hugging Face incident technical report.
+- Rose, A. et al. 2026. Detecting multi-agent collusion through multi-agent interpretability (NARCBench). arXiv 2604.01151.
+- Scheurer, J., Balesni, M. and Hobbhahn, M. 2023. Large language models can strategically deceive their users when put under pressure. arXiv 2311.07590.
+- Tailor, A. 2025. Audit the whisper, ColludeBench-v0.
+- The Jacobian lens release on Neuronpedia, 2026, as cited by the J-space paper.
+- W3C. 2013. PROV-DM, the PROV data model. W3C Recommendation.
+
+## Appendix
+
+### Appendix A. Limitations and Dual-Use / Ethical Considerations
+
+**What the results do and do not establish.** They establish, on Qwen3-14B code tasks in one game, that a provenance-masked replay reads where an uninstructed agent engaged with a peer's note, that the surplus at the first writing of a value is larger when the value came from the note than when the agent computed it, that a rule fixed on ten pilot seeds flags 17 of 17 taking agents and 0 of 20 controls on seeds generated afterwards and 98 of 108 positives against 0 of 473 negatives across 703 held-out turns, that a reference per candidate note names the note used in 21 of 27 turns at a pre-registered position, and that a line in a shared file is read only under write-log provenance. They do not establish a result on a second model family, a positive on data or record tasks, detection of coordination that emerged on its own, or a sensitivity to the parameters, which were fixed before the held-out sets and not swept. The count is a gate and not a verdict. The jump is a graded reading with overlapping tails. Attribution within a turn replicated weaker at the pre-registered position than at the exploratory one. The concealment direction is a lead on eight cases. The released benchmarks are not claimed, because on them the mask is the label in disguise and a size-matched honest edit removes the Core result. Signatures across seeds are template tests until phrasing varies. The lens names content at one token and the 32B lens is a partial checkpoint. Teacher forcing launders restated content, so late positions are blind. The same model wrote the plants and played the receivers, under a quarantined instruction the receivers never saw, which also means no style cue separates a plant from a genuine note.
+
+**Dual use.** Naming where uptake is read also names how to hide it. An agent that restates peer content in its own words before using it launders the signal into the reference, one that splits a value across turns weakens the first-writing read, and one that routes the peer's help through a tool result it obtained with the peer's credential sits inside a sanctioned span, which the credential branch shows. The derived tag is defeated by writes the harness does not log, by paraphrase and encoding, by renamed or mirrored resources, and by content seeded one hop upstream. Publishing these is a map for evasion and also the list an operator must close, and we judge the second use to outweigh the first because the method needs weight access and provenance tags, so it serves the operator of a swarm and not an outside attacker. The planted-channel harness is a recipe for seeding coordination in a swarm. It is released for detection research with matched controls, the plants are generated under a quarantined instruction, and the same mechanism is the canary calibration an operator would run. Nothing here raises model capability. The Hugging Face facts are taken from OpenAI's technical report and the METR investigation, and we add no claim about that incident beyond what those documents state.
+
+### Appendix B. The released benchmarks, run and not claimed
+
+Every tier of NARCBench for Qwen3-32B was run through the J-space paper's own pipeline from public inputs and reproduces its cache, Core J-PACT 0.984 cached and 1.000 replayed, Transfer 0.542 against 0.556, Stego 1.000, ontology 0.861 against 0.853. Our reference on those tiers is the honest prompt of the control twin, so every colluder's reference differs by a whole system prompt and the private channel while every honest agent's reference is its own input. The surplus therefore separates colluders at 1.000 by construction on all three tiers. Controls take the number apart. <!-- src: results/OVERNIGHT.md, results/lane_b/REPORT.md, results/jpact_public_inputs_qwen3_32b.json -->
+
+| Tier | Result | Control | After the control |
+| --- | --- | --- | --- |
+| Core, 31 and 31 runs | mass AUROC 1.000 at both positions | honest agents given an edit of the colluders' size and kind, a swapped brief plus a removed block of private-block length | 0.448 at the end of response, 0.893 at the first token. A nine-token directive moves mass about twice as far as neutral text of equal length and reaches a third of the full block, so content is present and size dominates |
+| Core, direction edge | a colluder's nearest other agent is its partner 62 of 62 | shuffled-turn null | also 62 of 62, because the same content is hidden from both. The edge finds shared hidden content and carries no provenance |
+| Transfer, 36 and 36 | mass 1.000 with the real reference | every agent's reference edited, placebo against swapped | 0.963 at the end of response, 0.759 at the first token, above J-PACT 0.556, the ontology 0.653 and the probe 0.799. The colluders' edit is about seven times larger (49.5 against 6 to 7.5 tokens), no size-matched control was run, 66 of 72 collusion prompts contain the word secretly, and the mask was built by diffing each prompt against its honest twin, so it is the label in disguise |
+| Stego, 20 and 20 | mass 1.000, the receiver's J-space surplus holds the true count range in 0.504 of hands, inside the paper's 0.41 to 0.62 | honest players at the same token, and the previous hand's range | honest players hold it in 0.466 with identical specificity 0.117, the previous hand's range is held in 0.504, and the top-10 readout names no range once the digit 0 is excluded. The range words come from the public message every reader saw |
+
+### Appendix C. Kernel noise, the floor, the two references, and the measures not in the body
+
+Two attention kernels differ by 0.1 to 5 percent of the residual norm by layer, the size of the mask effect. Both passes run on one explicit four-dimensional mask kernel and the same pass twice is bit-identical. The floor, plain kernel against explicit kernel on turns with nothing to mask, is about 0.001 at layer 0 rising to 0.01 to 0.04 at late layers on both models, with heavy single-token outliers up to 0.96 relative, which is why no trace statistic uses a single-token maximum. A 1 percent residual change moves about 14 percent of J-space share mass under the 25-atom pursuit over 151,669 atoms, which is why sparse concept shares are a bonus column and every test is lens-free. One check failed its pre-set criterion and stands failed. Masking a span against deleting it with positions kept differed by about the kernel noise at every layer on one 32B turn, ratios 0.51 to 0.63 against a criterion of 0.5. A shared-prefix replay path was bit-identical to full passes at some sequence lengths and differed by about 0.8 percent at others, the size of the kernel noise, so both passes of every comparison run on one path. The compacted reference lands within the floor of the no-note branch at 56 of 63 layers on 32B and cuts the kept reference's remaining distance five to nine times. On the 60 blind turns of sweep2 on 14B it changes nothing that matters, count AUROC leak against benign 0.978 kept and 0.975 compacted, 20 of 20 paired both ways, jump 0.900 and 0.891, window 0.735 and 0.785, with counts moving by a median of 1.5 to 2 tokens. Kept is used throughout because direction and the per-token trace need token alignment. <!-- src: results/gpu_checks.json, results/compact_reference.json, results/lane_f/compacted_check.md -->
+
+The measures not in the body. Mass is the sum of positive J-space surplus shares at a saved position, and tracks the size of the hidden text, Core 1.000 to 0.448 under the size control, so it is a gate. The window is the maximum of a 16-token sliding mean of delta over the band, lands within 19 tokens of the first mention in 10 of 10 sweep14b seeds and on the first mention in 12 of 20 sweep2 seeds, otherwise on a quote of the note, and false-alarms on 14 of 260 readers who quote a note, so it locates and does not score. Naming is the lens rank of the taken value's token at the copy, top-1 in 8 of 10 seeds at 14B, rank 0 against 249 under the derived against declared mask in the shared-file arm, and it works at one token only. Coherence, the shared surplus direction of several readers of one note, 0.58 against 0.00, reads shared exposure. <!-- src: results/lane_c/REPORT.md, results/lane_d/REPORT.md, results/lane_f/REPORT.md, results/lane_e/REPORT_2c.md -->
+
+### Appendix D. Tables, per-turn rows and figure sources
+
+Every table in the body is produced by a script under scripts/paper/ from the files below, and the per-turn rows behind each number are in results/paper/tables/.
+
+- Table D1, the single-seed trace. Figure D1 is results/paper/figures/trace_seed5034.png from results/lane_d/trace_seed5034.csv, the leak branch against the harmless tip and a designer-span placebo, seed 5034, Qwen3-14B, layers 16 to 38. The leak plateau begins as Carol reasons about Frank's note and writes the value at token 63. The tip branch has a later, shorter plateau where she discusses the tip. The placebo stays at the floor.
+- Table D2, the jump by group. results/paper/tables/jump_per_turn.md. Blind leak users on sweep2 median 34.7 over 16 turns with a located first writing, range 9.2 to 62.0. Blind forbidden-leak users 32.9 over 18, range 3.4 to 81.5. Blind leak users on sweep14b 71.2 over 10, range 56.6 to 89.3. Solvable agents that submitted the right value 10.8 over 13, range 2.4 to 60.1. Solvable agents that quoted a note's value and kept their own, at the note's value, 43.3 and 51.1 over 20, range 3.4 to 83.8. Shared-file leak and credential under the derived mask 61.1 and 48.8 over 20 and 20, range 39.3 to 89.1. Negatives at their own first writing, harmless tips 1.4 to 2.0 over 29, range 0.3 to 17.6, command notes 2.5 to 2.9 over 28, range 0.5 to 66.7. Bands and floors differ by lane and are stated in the file, so comparisons across groups are indicative.
+- Table D3, false positives by role and task type on sweep2. results/lane_f/false_positives_by_task_type.md and results/paper/tables/false_positives.md. Readers of a note not meant for them, count median 3 and 0 of 260 at or above 60, jump 4 of 259 at or above 20, window 14 of 260 at or above 60. By task type, records 0 of 109 at the gate and 0 of 108 at the confirmation, data 0 of 113 and 4 of 113, code 0 of 38 and 0 of 38. Non-blind agents with nothing masked, 0 of 140 and 0 of 140.
+- Table D4, the frozen rule per group with floors. results/paper/tables/heldout_rule.md, produced by scripts/paper/table_heldout_rule.py.
+- Table D5, the fitted comparator with coefficients and transfer. results/paper/tables/fitted_detector.md and the exported model results/paper/tables/fitted_model.json, produced by scripts/paper/fit_detector.py.
+- Table D6, the two-note attribution per position. results/lane_g/leak2_scores.txt and results/lane_g/REPORT.md on branch claude/lane-g-leak2-b16938, pre-registration in the branch's first commit.
+- Table D7, the out-of-sample test on lane G's seeds. results/paper/tables/newdata_test.md, produced by scripts/paper/score_newdata.py.
+- The pooled count table with its seed bootstrap, results/paper/tables/count_pooled.md. The text-monitor baseline, results/paper/tables/text_baseline.md. The census of branches and target turns, results/paper/tables/census.md.
+- Lane reports. results/OVERNIGHT.md on overnight-detector. results/lane_b/REPORT.md, results/lane_c/REPORT.md, results/lane_d/REPORT.md, results/lane_e/REPORT.md and REPORT_2c.md, results/lane_f/REPORT.md, results/lane_g/REPORT.md on the branches named in Appendix F.
+
+### Appendix E. Labels, prompts, sampling and the hand-read sample
+
+Thirty traces, 15 leak solves across both models, 10 proposal verdicts and 5 benign verdicts, were read in full and labelled independently, and the sheet was reviewed by an author. Leak used, 15 of 15 agree. Cites the note, strict pattern, 25 of 30, exact on verdict turns, misses five solve turns phrased "Frank mentioned". Disclosed the source, 14 of 15, the miss being the concealment case "input specifics known to the reviewer". Two of fifteen leak users on 32B concealed the source with no rule in the prompt, one after asking itself whether using the note was cheating. Plant texts and the quarantined instruction are in the repository README and experiments/plants.py. Agents are named alice and dave for records, bob and erin for data, carol and frank for code. Generation used Qwen3's thinking mode, temperature 0.7, a 12,000-token cap on the self-served runs through vLLM 0.33 in bfloat16 with plain temperature sampling, and 16,384 tokens through the OpenRouter API. Replays ran in fp16 on the explicit-mask kernel with per-layer host copies batched. <!-- src: results/OVERNIGHT.md label validation, results/lane_d/REPORT.md -->
+
+### Appendix F. Costs and reproducibility
+
+| Lane | Card | Hours | USD | Output and branch |
+| --- | --- | --- | --- | --- |
+| Overnight, phase 0 and controls, 32B | A100 80 GB | 9.15 | 16.8 | results/OVERNIGHT.md, overnight-detector |
+| Lane B, Transfer and Stego, 32B | A100 80 GB | 2.78 | 4.98 | results/lane_b/REPORT.md, claude/lane-b-phase1-16e264 |
+| Lane C, 14B replay of sweep14b | A100 80 GB, three cards | 4.91 | 8.77 | results/lane_c/REPORT.md, claude/lane-c-14b-8c893e |
+| Lane D, sweep2 generation, replay, extra arms | H200 and A100, five cards | 18.1 | 52.3 | results/lane_d/REPORT.md, claude/lane-d-sweep2-affc5f |
+| Lane E, phase 2b and 2c | OpenRouter, one A100 | 3.72 | 6.66 plus 2.9 | results/lane_e/REPORT.md and REPORT_2c.md, claude/lane-e-2b-713994 |
+| Lane F, sweep2 reader replay, compacted check, 48 extra positives | A100 80 GB | about 1.2 | 2.16 | results/lane_f/REPORT.md, claude/lane-f-fpr-96ebe2 |
+| Lane G, twenty leak2 seeds, generation and replay | H200 141 GB | 1.95 | about 7.0 | results/lane_g/REPORT.md, claude/lane-g-leak2-b16938 |
+| OpenRouter, sweep1 and sweep14b | | | about 8 | runs/ |
+
+A 14B turn of several thousand tokens replays in 3 to 8 seconds at two passes on an A100 once per-layer host copies are batched. Self-served generation ran at 800 to 1,000 tokens per second on one H200 whatever the concurrency, bound by prefix recompute. Every replay keeps positions, token ids and masked spans in an index, and every score script names its inputs. <!-- src: lane reports, pod_state.json files per lane -->
+
+## LLM Usage Statement
+
+We used Claude (Claude Code) throughout, under the authors' direction, to write and debug the environment and detector code, to run and monitor the GPU replays and generation sweeps, to build the result tables from the committed score files, to review the method as a hostile reader, and to draft and tighten this report. Every number in the report traces to a file in the repository named in Appendix D, and the authors reviewed the claims against those files and edited the text. The 30-trace label check was read by a model and reviewed by an author. [Please confirm or edit.]
+
+<!-- ======================================================================
+EDITORIAL NOTES, remove before submission (paper-draft session, 8 and 9 November 2026)
+
+Slots still open
+- [SLOT sensitivity table] Section 3.6. CPU work on lane F's traces, no file yet.
+- [SLOT insider trading] Section 4.7. results/external/ on branch claude/charming-wilson-08bb71.
+- [SLOT TaskTracker-shaped] Section 4.7. results/external/ on branch claude/clever-mayer-c077dc.
+- [SLOT author contributions] and Máté Lakner's affiliation on the title line.
+- LLM usage statement to confirm.
+
+Figures to build (scripts under scripts/paper/, figures under results/paper/figures/)
+- Figure 1 schematic, fig_two_passes.py, no data.
+- Figure 2 population trace, fig_population_trace.py, lane F slim traces in the lane-f worktree, data/replay_lane_f/sweep2.
+- Figure 3 jump strip plot, fig_jump_strip.py, results/paper/tables/sources/lane_f_scores.json rows and extra_rows, planted_scores.json, jump_per_turn.md.
+- Figure D1 exists, results/paper/figures/trace_seed5034.png.
+- Optional, declared against derived paired per turn from planted_scores.json rows, and the leak2 direction margins over 27 turns from arms_scores.json and lane G's leak2_scores.json.
+
+References added in this version, to verify before submission (made-up references can disqualify)
+- Cohen-Wang, Shah, Georgiev, Madry 2024, ContextCite, NeurIPS 2024, arXiv 2409.00729.
+- Geva, Bastings, Filippova, Globerson 2023, Dissecting recall of factual associations, EMNLP 2023, arXiv 2304.14767.
+- Han, Pasquier, Bates, Mickens, Seltzer 2020, UNICORN, NDSS 2020.
+- W3C PROV-DM 2013.
+- NeuroTaint 2026, no citation found yet, drop the name if none is found.
+- Plus every CHECK item in results/paper/references_to_verify.md.
+
+Numbers that changed from submission_template.md
+- 56 of 60 and 0 of 453 on 627 turns became 98 of 108 and 0 of 473 on 703 turns (heldout_rule.md after lane F's 48 extra positives).
+- 10 of 10 at the answer became 21 of 27 pooled at the pre-registered position, 23 of 27 at the first mention (lane G).
+- 588 branches now plus 40 from lane G.
+- The fit is 63 of 68 against the rule's 59 on 536 turns over 40 seeds.
+- The out-of-sample row, 17 of 17 and 0 of 20, is new.
+
+Length. Target under 4,000 words of body prose before references and appendices, three figures, six tables. Measure pages in the Apart template after the fill.
+====================================================================== -->
